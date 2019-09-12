@@ -25,6 +25,14 @@ export default new Router({
       }
     },
     {
+      path: '/success',
+      name: 'success',
+      component: () => import('../views/Login/success.vue'),
+      meta: {
+        title: '绑定成功'
+      }
+    },
+    {
       path: '/authorizationPage',
       name: 'authorizationPage',
       component: () => import('../views/authorizationPage/authorizationPage.vue'),
