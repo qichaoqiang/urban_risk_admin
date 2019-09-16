@@ -1,18 +1,13 @@
 <template>
-  <div class="phoneAuthentication">
-    <div class="header">
-      <div class="back" @click="goBack"><img src="@/assets_zx/ic_arrow_back.png" alt=""></div>
-      商户绑定
-    </div>
-    <img src="@/assets_zx/ic_launcher.png" alt="">
+  <div class="phoneAuthentication" ref="loginPage">
+    <img style="margin-top: 30px;" src="@/assets/ic_launcher.png" alt="">
     <div class="authentication">
       <div class="authenticationInput">
-        <input :class="phoneFocus ? 'btFocus': ''" @focus="phoneFocus=true" @blur="scrollTop1" type="text" maxlength="11" v-model="phone" placeholder="手机号" />
+        <input :class="phoneFocus ? 'btFocus': ''" @focus="phoneFocus=true" @blur="scrollTop1" type="text" maxlength="11" v-model="phone" placeholder="商户后台登录手机号" />
       </div>
       <div class="authenticationInput">
-        <input :class="psdFocus ? 'btFocus': ''" @focus="psdFocus=true" @blur="scrollTop2" type="text" maxlength="16" v-model="password" placeholder="密码" />
+        <input :class="psdFocus ? 'btFocus': ''" @focus="psdFocus=true" @blur="scrollTop2" type="password" maxlength="16" v-model="password" placeholder="商户后台登录密码" />
       </div>
-      <div id="captcha"></div>
       <div class="authenticationBtn">
         <van-button class="btn" plain type="primary" @click="binding">确定</van-button>
       </div>
@@ -36,65 +31,58 @@ export default {
       phoneFocus: false,
       psdFocus: false,
       jumpUrlInfo: {},
-      verifyType: ''
+      openId: '',
+      hasBind: false 
     }
   },
   created () {
-    var that = this
+    let params = {
+      code: this.$route.query.code
+    }
+    console.log(params)
+    api.weixinHasBind(params).then(res => {
+      console.log(res)
+      if(res.code == 0){
+        this.openId = res.data.openId
+        if(res.data.hasBind == false){
+          this.hasBind = false
+        }else {
+          this.hasBind = true
+          this.$router.replace({ path: '/success' })
+        }
+      }
+    })
+    .catch((error) => {
+        console.log(error)
+    })
   },
   methods: {
     binding () {
+      if(this.hasBind == true){
+        Toast('您的微信号已经绑定过商户！')
+        return
+      }
       if (this.phone.length !== 11) {
         Toast('请输入11位合法手机号！')
         return
       }
-      if (this.verifyType === '') {
-        Toast('请先获取短信验证码！')
-        return
-      }
-      if (this.password.length !== 11) {
-        Toast('请输入11位密码！')
+      if (this.password == '' && this.password == undefined) {
+        Toast('请输入密码！')
         return
       }
       let params = {
-        clientType: 'h5',
-        authType: 'weixin',
-        verifyType: this.verifyType,
-        authKey: this.$route.query.authKey,
-        verifycode: this.password,
+        openId: this.openId,
+        password: this.password,
         phone: this.phone
       }
-      let paramsString = qs.stringify(params)
-      console.log(paramsString)
-      api.bindPhone(paramsString).then(res => {
-        if (res.code === 0) {
+      // let paramsString = qs.stringify(params)
+      console.log(params)
+      api.weixinBindPhone(params).then(res => {
+        if (res.code == 0) {
           Toast('绑定成功')
-          if (res.data.tokenType == 'login') {
-            sa.login(res.data.uid)
-            this.$store.dispatch('save_token', res.data.token)
-            if (localStorage.getItem('jumpUrl')) {
-              if (JSON.parse(localStorage.getItem('jumpUrl')).query.id) {
-                this.$router.push({
-                  path: JSON.parse(localStorage.getItem('jumpUrl')).path,
-                  query: {
-                    id: JSON.parse(localStorage.getItem('jumpUrl')).query.id,
-                    load: 'loaded'
-                  }
-                })
-              } else if (JSON.parse(localStorage.getItem('jumpUrl')).query.userId) {
-                this.$router.push({
-                  path: JSON.parse(localStorage.getItem('jumpUrl')).path,
-                  query: {
-                    userId: JSON.parse(localStorage.getItem('jumpUrl')).query.userId,
-                    load: 'loaded'
-                  }
-                })
-              }
-            }
-          }
-        } else if (res.code === 11000) {
-          // 重新加载
-          Toast('失效')
+          this.$router.push({ path: '/success' })
+        }else {
+          Toast(res.msg)
         }
       })
     },
@@ -103,11 +91,15 @@ export default {
     },
     scrollTop1 () {
       this.phoneFocus = false
-      window.scroll(0, 0);
+      if(this.phoneFocus == false && this.psdFocus == false){
+        window.scroll(0, 0);
+      }
     },
     scrollTop2 () {
       this.psdFocus = false
-      window.scroll(0, 0);
+      if(this.phoneFocus == false && this.psdFocus == false){
+        window.scroll(0, 0);
+      }
     }
   }
 }

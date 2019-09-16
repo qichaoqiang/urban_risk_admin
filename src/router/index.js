@@ -31,34 +31,6 @@ export default new Router({
       meta: {
         title: '绑定成功'
       }
-    },
-    {
-      path: '/authorizationPage',
-      name: 'authorizationPage',
-      component: () => import('../views/authorizationPage/authorizationPage.vue'),
-      meta: {
-        title: ''
-      }
-    },
-    {
-      path: '/netError',
-      name: 'netError',
-      component: () => import('../views/errorPage/netError.vue'),
-      meta: {
-        title: '网络错误'
-      }
-    },
-    {
-      path: '/404',
-      name: 'error404',
-      component: () => import('../views/errorPage/error404.vue'),
-      meta: {
-        title: '404'
-      }
-    },
-    {
-      path: '*',
-      redirect: '/404'
     }
   ],
   scrollBehavior(to, from, saveTop){

@@ -10,11 +10,11 @@ Vue.use(Toast)
 // 响应时间
 axios.defaults.timeout = 100000
 // 测试地址（内网)
-axios.defaults.baseURL = 'http://tax-advisor-wap.int.anniu-tech.com'
+axios.defaults.baseURL = 'http://tax-caishui-merchant.int.anniu-inc.com'
 // 线上环境地址
 // axios.defaults.baseURL = 'https://wap-api.taxlioner.com'
 // 本地环境地址
-// axios.defaults.baseURL = 'http://172.100.8.144:8080'
+// axios.defaults.baseURL = 'http://172.100.9.71:8080'
 
 // POST传参序列化(添加请求拦截器)
 axios.interceptors.request.use((config) => {
@@ -41,18 +41,18 @@ axios.interceptors.response.use((res) => {
     return Promise.reject(res)
   } else if (res.data.code !== 0) {
     let info = '系统异常'
-    switch (res.data.code) {
-      case 10000:
-        router.push('/bindPhone')
-        info = '您登录信息已过期'
-        break;
-      case 10001:
-        router.push('/bindPhone')
-        info = '您登录信息已过期'
-        break;
-      case 11000:
-        return Promise.resolve(res)
-    }
+    // switch (res.data.code) {
+    //   case 10000:
+    //     router.push('/bindPhone')
+    //     info = '您登录信息已过期'
+    //     break;
+    //   case 10001:
+    //     router.push('/bindPhone')
+    //     info = '您登录信息已过期'
+    //     break;
+    //   case 11000:
+    //     return Promise.resolve(res)
+    // }
     if (res.data.msg) {
       info = res.data.msg
     }
@@ -62,6 +62,7 @@ axios.interceptors.response.use((res) => {
   return Promise.resolve(res)
 }, (error) => {
   Toast('网络异常')
+  console.log(error)
   return Promise.reject(error)
 })
 

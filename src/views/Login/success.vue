@@ -1,7 +1,7 @@
 <template>
     <div class="success-h5">
         <div class="success-content">
-            <img style="display: block;width: 120px;height: 120px;margin-bottom: 16px;" src="@/assets_zx/img_page_complete.png" alt="">
+            <img style="display: block;width: 120px;height: 120px;margin-bottom: 16px;" src="@/assets/img_page_complete.png" alt="">
             <h4 style="display: block;margin-bottom: 8px;font-size: 16px;color: rgba(0,0,0,0.87);">绑定成功</h4>
             <span style="font-size: 12px;color: rgba(0,0,0,0.38);">返回服务号开始业务吧</span>
         </div>
@@ -32,31 +32,10 @@ export default {
   },
   created(){
     let status = this.$route.query.status
-    // api.getCertificationStatus().then(res => {
-    //     console.log(res)
-    //     if(res.code == 0){
-    //         if(res.data.status == 100){
-    //             this.$router.push({path: '/search-h5'})
-    //         }else if(res.data.status == 101){
-    //             this.$router.push({path: '/certification-h5'})
-    //         }else if(res.data.status == 102){
-    //             this.status  = res.data.status
-    //         }else if(res.data.status == 103){
-    //             this.status  = res.data.status
-    //         }else if(res.data.status == 999){
-    //             this.status  = res.data.status
-    //             this.failCause = res.data.failCause
-    //         }
-    //     }
-    // })
   },
   methods: {
     goSearch(){
-        api.merchantApplyReset().then(res => {
-            if(res.code == 0){
-                this.$router.push('/search-h5')
-            }
-        })
+        
     }
   }
 }
