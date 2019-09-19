@@ -9,8 +9,9 @@ Vue.use(Toast)
 
 // 响应时间
 axios.defaults.timeout = 100000
+axios.defaults.baseURL = process.env.VUE_APP_API
 // 测试地址（内网)
-axios.defaults.baseURL = 'http://tax-caishui-merchant.int.anniu-inc.com'
+// axios.defaults.baseURL = 'http://tax-caishui-merchant.int.anniu-inc.com'
 // 线上环境地址
 // axios.defaults.baseURL = 'https://wap-api.taxlioner.com'
 // 本地环境地址
