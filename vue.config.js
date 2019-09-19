@@ -7,7 +7,7 @@ module.exports = {
       if(process.env.NODE_ENV === 'production') {
           config.plugins.push(
               new ZipPlugin({
-                path: path.resolve(__dirname,config.output.path,process.env.DEPLOY === 'int' ? '../deploy/int' : '../deploy/prod'),
+                path: path.resolve(__dirname,config.output.path,process.env.VUE_APP_DEPLOY === 'sit' ? '../deploy/sit' : '../deploy/prod'),
                 filename: 'dist.zip'
               })
           )

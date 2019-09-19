@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --mode prod",
+    "build:prod": "vue-cli-service build --mode prod",
     "lint": "vue-cli-service lint",
-    "build-int": "vue-cli-service build --mode int",
-    "dev": "vue-cli-service serve --open",
-    "all": "yarn build && yarn build-int"
+    "build:sit": "vue-cli-service build --mode sit",
+    "dev": "vue-cli-service serve --open --mode dev",
+    "all": "yarn build:prod && yarn build:sit"
   },
   "dependencies": {
     "amfe-flexible": "^2.2.1",

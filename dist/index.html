@@ -1,0 +1,22 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"><link rel=icon href=/favicon.ico><title></title><script>(function(window, document) {
+        function resize() {
+          var ww = window.innerWidth
+          if (ww > window.screen.width) {
+            window.requestAnimationFrame(resize)
+          } else {
+            if (ww > 750) {
+              ww = 750
+            }
+            document.documentElement.style.fontSize = ww * 100 / 750 + 'px'
+          }
+        }
+
+        resize();
+
+        window.addEventListener('resize', resize);
+        window.addEventListener('pageshow', function (e) {
+          if (e.presisted) {
+            resize();
+          }
+        });
+      })(window, document);</script><script src=https://res2.wx.qq.com/open/js/jweixin-1.4.0.js></script><script src="https://cstaticdun.126.net/load.min.js?t=201903281201"></script><link href=/css/app.938c3c3f.css rel=preload as=style><link href=/js/app.54970b30.js rel=preload as=script><link href=/js/chunk-vendors.9bf26173.js rel=preload as=script><link href=/css/app.938c3c3f.css rel=stylesheet></head><body><div id=app></div><script src=/js/chunk-vendors.9bf26173.js></script><script src=/js/app.54970b30.js></script></body></html>
