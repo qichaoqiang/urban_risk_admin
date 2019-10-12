@@ -1,0 +1,280 @@
+<template>
+  <div class="inquiryDetail" >
+    <div class="inquiryData">
+      <div class="line">
+        <span class="label">客户名称</span>
+        <div class="data">
+          <span class="dataDetail">{{data.name}}</span>
+        </div>
+      </div>
+      <div class="line">
+        <span class="label">联系电话</span>
+        <div class="data">
+          <span class="dataDetail">{{data.phone}}</span>
+          <span class="sure" style="display:block;-webkit-transform : scale(0.84,0.84);font-family: PingFangSC-Regular;font-size: 8px;color: #FB5332;">(确定报价后显示)</span>
+        </div>
+      </div>
+      <div class="line">
+        <span class="label">询价类目</span>
+        <div class="data">
+          <span class="dataDetail">{{data.intention}}</span>
+        </div>
+      </div>
+      <div class="line">
+        <span class="label">询价时间</span>
+        <div class="data">
+          <span class="dataDetail">{{data.createTime}}</span>
+        </div>
+      </div>
+      <div class="line">
+        <span class="label">需求区域</span>
+        <div class="data">
+          <span class="dataDetail">杭州市-西湖区</span>
+        </div>
+      </div>
+    </div>
+    <div class="clientWill">
+      <div class="clientWillContent">
+        <h4>客户意向</h4>
+        <p>我在重庆市江北区，做进出口食品类型的商贸有限公司，自己有地址，希望给一个优惠价格</p>
+      </div>
+    </div>
+    <div class="consume">
+      <div class="consumeContent">
+        <h4>业务需求信息</h4>
+        <div class="consumeList">
+          <div class="consumeLine" v-for="(item,index) in data.extra" :key="index">
+            <span class="label">{{item.propName}}</span>
+            <span class="value">{{item.valueName}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="btnContent" v-show="data.status == 1">
+        <!-- <span class="notNeed">不需要</span> -->
+        <span class="offer" @click="baojia">我要报价<span class="offerNum">({{offer}}金币)</span></span>
+      </div>
+      <div class="btnContent" v-show="data.status == 2 || data.status == 3">
+        <!-- <span class="notNeed">不需要</span> -->
+        <span class="offer" @click="baojia">查看详情</span>
+      </div>
+      <div class="btnContent" v-show="data.status == 4 || data.status == 5">
+        <!-- <span class="notNeed">不需要</span> -->
+        <span class="offer" style="background: rgba(0,0,0,0.26);font-family: PingFangSC-Medium;font-size: 16px;color: #FFFFFF;">已过期</span>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import Vue from 'vue'
+import { Toast, Button, Dialog } from 'vant'
+import api from '@/api/api'
+import qs from 'qs'
+import sa from 'sa-sdk-javascript'
+Vue.use(Button)
+Vue.use(Dialog)
+Vue.use(Toast)
+export default {
+  data () {
+    return {
+      data: {},
+      intentionId: 1,
+      consumeList: [
+        
+      ],
+      offer: 200,
+      hasBind: false,
+      overdue: false,
+      success: false
+    }
+  },
+  created () {
+    let params = {
+      code: this.$route.query.code
+    }
+    console.log(params)
+    api.weixinHasBind(params).then(res => {
+      console.log(res)
+      if(res.code == 0){
+        this.openId = res.data.openId
+        if(res.data.hasBind == false){
+          this.hasBind = false
+          this.$router.push({ path: '/bindPhone' })
+        }else {
+          this.hasBind = true
+        }
+      }
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+    let data = {
+      intentionId: this.intentionId
+    }
+    // data = qs.stringify(data)
+    api.intentionDetail(data).then(res => {
+      console.log(res)
+      if(res.code == 0){
+        this.data = res.data
+        // this.data.status = 4
+        this.data.extra = JSON.parse(this.data.extra)
+      }
+    })
+  },
+  methods: {
+    binding () {
+      
+    },
+    goBack () {
+      window.history.back()
+    },
+    baojia() {
+      this.$router.push({ path: '/pay' })
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+.inquiryDetail {
+  padding-bottom: 52px;
+  width: 100%;
+  position: relative;
+  .inquiryData{
+    width: 100%;
+    background: #ffffff;
+    .line{
+      display: flex;
+      align-items: center;
+      height: 48px;
+      justify-content: space-between;
+      .label{
+        font-family: PingFangSC-Regular;
+        font-size: 14px;
+        color: rgba(0,0,0,0.60);
+        text-align: left;
+        line-height: 20px;
+        margin-left: 16px;
+      }
+      .data{
+        display: flex;
+        flex-flow: column;
+        align-items: flex-end;
+        justify-content: center;
+        margin-right: 16px;
+        .dataDetail{
+          font-family: PingFangSC-Regular;
+          font-size: 14px;
+          color: rgba(0,0,0,0.87);
+          text-align: left;
+          line-height: 20px;
+        }
+      }
+    }
+  }
+  .clientWill{
+    width: 100%;
+    background: #ffffff;
+    .clientWillContent{
+      width: 328px;
+      margin-left: auto;
+      margin-right: auto;
+      border-top: 1px solid rgba(0,0,0,0.04);
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      padding-top: 16px;
+      padding-bottom: 16px;
+      text-align: left;
+      margin-top: 12px;
+      h4{
+        font-family: PingFangSC-Medium;
+        font-size: 14px;
+        color: rgba(0,0,0,0.87);
+        text-align: left;
+      }
+      p{
+        font-family: PingFangSC-Regular;
+        font-size: 14px;
+        color: rgba(0,0,0,0.87);
+        line-height: 22px;
+        margin-top: 8px;
+      }
+    }
+  }
+  .consume{
+    width: 100%;
+    background: #ffffff;
+    .consumeContent{
+      width: 328px;
+      padding-top: 17px;
+      margin-left: auto;
+      margin-right: auto;
+      h4{
+        font-family: PingFangSC-Medium;
+        font-size: 14px;
+        color: rgba(0,0,0,0.87);
+        text-align: left;
+      }
+      .consumeList{
+        width: 100%;
+        margin-top: 8px;
+        .consumeLine{
+          display: flex;
+          align-items: center;
+          height: 48px;
+          justify-content: space-between;
+          .label{
+            font-family: PingFangSC-Regular;
+            font-size: 14px;
+            color: rgba(0,0,0,0.60);
+            text-align: left;
+            line-height: 20px;
+          }
+          .value{
+            font-family: PingFangSC-Regular;
+            font-size: 14px;
+            color: rgba(0,0,0,0.87);
+            text-align: right;
+            line-height: 20px;
+          }
+        }
+      }
+    }
+  }
+  .footer{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    .btnContent{
+      display: flex;
+      align-items: center;
+      width: 100%;
+      .notNeed{
+        display: flex;
+        width: 50%;
+        height: 52px;
+        background: #FFAD71;
+        font-family: PingFangSC-Medium;
+        font-size: 16px;
+        color: #FFFFFF;
+        align-items: center;
+        justify-content: center;
+      }
+      .offer{
+        display: flex;
+        width: 100%;
+        height: 52px;
+        background: #FF7F4A;
+        font-family: PingFangSC-Medium;
+        font-size: 16px;
+        color: #FFFFFF;
+        align-items: center;
+        justify-content: center;
+        .offerNum{
+          font-size: 12px !important;
+        }
+      }
+    }
+  }
+}
+</style>

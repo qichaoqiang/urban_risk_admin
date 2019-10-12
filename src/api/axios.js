@@ -23,11 +23,11 @@ axios.interceptors.request.use((config) => {
   if (config.method === 'post') {
     // config.data = qs.stringify(config.data)
   }
-  // let token = localStorage.getItem('token')
-  // if (token) {
+  let merchant = 1
+  if (merchant) {
     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-    // config.headers['Authorization'] = token
-  // }
+    config.headers['Authorization'] = merchant
+  }
   return config
 }, (error) => {
   Toast('错误的传参')
@@ -41,23 +41,6 @@ axios.interceptors.response.use((res) => {
     Toast('系统异常')
     return Promise.reject(res)
   } else if (res.data.code !== 0) {
-    let info = '系统异常'
-    // switch (res.data.code) {
-    //   case 10000:
-    //     router.push('/bindPhone')
-    //     info = '您登录信息已过期'
-    //     break;
-    //   case 10001:
-    //     router.push('/bindPhone')
-    //     info = '您登录信息已过期'
-    //     break;
-    //   case 11000:
-    //     return Promise.resolve(res)
-    // }
-    if (res.data.msg) {
-      info = res.data.msg
-    }
-    Toast(info)
     return Promise.reject(res)
   }
   return Promise.resolve(res)
@@ -72,7 +55,7 @@ export function fetchPost (url, params) {
   return new Promise((resolve, reject) => {
     axios.post(url, params)
       .then(response => {
-        // if (response.headers.authorization) {
+        // if (response.headers.merchantId) {
         //   store.dispatch('save_token', response.headers.authorization)
         // }
         resolve(response.data)
@@ -90,7 +73,7 @@ export function fetchGet (url, param) {
   return new Promise((resolve, reject) => {
     axios.get(url, { params: param })
       .then(response => {
-        // if (response.headers.authorization) {
+        // if (response.headers.merchantId) {
         //   store.dispatch('save_token', response.headers.authorization)
         // }
         resolve(response.data)

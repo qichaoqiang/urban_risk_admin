@@ -7,11 +7,11 @@ import router from './router/index'
 import store from './store/index'
 import '@/common/css/reset.css'
 import '@/common/css/animate.css'
-// import VConsole from 'vconsole'
+import VConsole from 'vconsole'
 
 Vue.config.productionTip = false
 /* eslint-disable no-new */
-// new VConsole()
+new VConsole()
 
 router.beforeEach((to, from, next) => {
   if (to.name === 'bindPhone') {

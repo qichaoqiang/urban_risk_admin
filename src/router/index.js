@@ -14,7 +14,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/bindPhone'
+      redirect: '/inquiryDetail'
     },
     {
       path: '/bindPhone',
@@ -22,6 +22,54 @@ export default new Router({
       component: () => import('../views/Login/bindPhone.vue'),
       meta: {
         title: '商户绑定'
+      }
+    },
+    {
+      path: '/inquiryDetail',
+      name: 'inquiryDetail',
+      component: () => import('../views/inquiry/inquiryDetail.vue'),
+      meta: {
+        title: '咨询详情'
+      }
+    },
+    {
+      path: '/myAccount',
+      name: 'myAccount',
+      component: () => import('../views/inquiry/myAccount.vue'),
+      meta: {
+        title: '我的账户'
+      }
+    },
+    {
+      path: '/reCharge',
+      name: 'reCharge',
+      component: () => import('../views/inquiry/reCharge.vue'),
+      meta: {
+        title: '充值'
+      }
+    },
+    {
+      path: '/reChargePay',
+      name: 'reChargePay',
+      component: () => import('../views/inquiry/reChargePay.vue'),
+      meta: {
+        title: '充值'
+      }
+    },
+    {
+      path: '/pay',
+      name: 'pay',
+      component: () => import('../views/inquiry/pay.vue'),
+      meta: {
+        title: '支付'
+      }
+    },
+    {
+      path: '/payResult',
+      name: 'payResult',
+      component: () => import('../views/inquiry/payResult.vue'),
+      meta: {
+        title: '支付结果'
       }
     },
     {
