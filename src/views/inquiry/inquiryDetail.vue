@@ -29,7 +29,7 @@
       <div class="line">
         <span class="label">需求区域</span>
         <div class="data">
-          <span class="dataDetail">杭州市-西湖区</span>
+          <span class="dataDetail">{{data.area}}</span>
         </div>
       </div>
     </div>
