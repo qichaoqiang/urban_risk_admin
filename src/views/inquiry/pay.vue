@@ -8,10 +8,10 @@
             <span class="num">{{data.balance}}</span>
             <span class="txt">金币</span>
           </div>
-          <!-- <div class="givingNum">
+          <div class="givingNum">
             <span class="num">{{data.bonusBalance}}</span>
             <span class="txt">赠币</span>
-          </div> -->
+          </div>
         </div>
         <span class="first">优选余额支付</span>
         <div class="reCharge" @click="reCharge">
@@ -40,7 +40,7 @@
     </div>
     <div class="promptContainer">
       <div class="promptContent">
-        <p>提示：<br />1.支付默认优先选择余额支付</p>
+        <p style="font-size: 12px;">提示：<br />1.支付默认优先选择余额支付</p>
       </div>
     </div>
     <div class="footer">
@@ -61,16 +61,24 @@ export default {
   data () {
     return {
       data: {
-        
+        balance: 0,
+        bonusBalance: 0
       },
       intentionId: 1,
     }
   },
   created () {
+    let intentionId = localStorage.getItem('intentionId')
+    if(intentionId){
+      this.intentionId = intentionId
+    }
     api.merchantDetail().then(res => {
       console.log(res)
       if(res.code == 0){
         this.data = res.data
+        if(!res.data.bonusBalance){
+          this.data.bonusBalance = 0
+        }
       }
     })
   },
@@ -106,6 +114,7 @@ export default {
     },
     reCharge() {
       this.$router.push({ path: '/reCharge' })
+      localStorage.setItem('page','pay')
     },
   }
 }
@@ -191,7 +200,7 @@ export default {
           }
         }
         .balanceNum{
-          // border-right: 1px solid #ffffff;
+          border-right: 1px solid #ffffff;
           padding-right: 12px;
         }
         .givingNum{

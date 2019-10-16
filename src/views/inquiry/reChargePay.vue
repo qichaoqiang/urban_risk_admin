@@ -8,7 +8,7 @@
             <span>剩余币数</span>
           </div>
           <div class="amountNum">
-            <span>金币:{{data.balance}}</span>
+            <span>金币:{{data.balance}}&nbsp;|&nbsp;赠币:{{data.bonusBalance}}</span>
           </div>
         </div>
         <div class="amountLine">
@@ -83,7 +83,8 @@
       </div>
     </div>
     <div class="footer" @click="recharge">
-      <span class="nextBtn" >下一步</span>
+      <!-- <span class="nextBtn" >下一步</span> -->
+      <van-button class="nextBtn" :disabled="payLoading" :loading="payLoading" loading-type="spinner" loading-text="正在发起支付..." type="primary">下一步</van-button>
     </div>
   </div>
 </template>
@@ -98,13 +99,17 @@ Vue.use(Toast)
 export default {
   data () {
     return {
-      data: {},
+      data: {
+        balance: 0,
+        bonusBalance: 0
+      },
       rechargeAmount: 0,
       bonusAmount: 0,
       packageId: undefined,
       zfb: false,
       wx: true,
-      other: false
+      other: false,
+      payLoading: false,
     }
   },
   created () {
@@ -126,6 +131,9 @@ export default {
       console.log(res)
       if(res.code == 0){
         this.data = res.data
+        if(!res.data.bonusBalance){
+          this.data.bonusBalance = 0
+        }
       }
     })
   },
@@ -150,11 +158,13 @@ export default {
         payType:  'weixin_jsapi'
       }
       console.log(data)
+      this.payLoading = true
       api.recharge(data).then(res =>{
         console.log(res)
         if(res.code == 0){
             let paySign = JSON.parse(res.data.paySign)
             let that = this
+            that.payLoading = false
             WeixinJSBridge.invoke(
             'getBrandWCPayRequest', {
               "appId": paySign.appId,     //公众号名称，由商户传入     
@@ -169,20 +179,34 @@ export default {
                 // 使用以上方式判断前端返回,微信团队郑重提示：
                 // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                 Toast.success('支付成功！')
+                let page = localStorage.getItem('page')
+                setTimeout(() => {
+                  // that.$router.replace({ path: '/pay' })
+                  if(page == 'pay'){
+                    that.$router.replace({ path: '/pay' })
+                  }else if(page == 'myAccount'){
+                    that.$router.replace({ path: '/myAccount' })
+                  }
+                },3000)
               }
-              if(res.err_msg == "get_brand_wcpay_request:cancel" ){
+              else if(res.err_msg == "get_brand_wcpay_request:cancel" ){
                 // 使用以上方式判断前端返回,微信团队郑重提示：
                 // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                 Toast.fail('取消支付！')
+                that.payLoading = false
               } 
-              if(res.err_msg == "get_brand_wcpay_request:fail" ){
+              else if(res.err_msg == "get_brand_wcpay_request:fail" ){
                 // 使用以上方式判断前端返回,微信团队郑重提示：
                 // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                 // getWeiXinConfig()
                 Toast.fail('支付失败！')
+                that.payLoading = false
               }
           })
         }
+      })
+      .catch(err => {
+        Toast.fail('支付失败！')
       })
     },
   }
@@ -328,6 +352,7 @@ export default {
       font-family: PingFangSC-Medium;
       font-size: 16px;
       color: #FFFFFF;
+      border: none;
       background: #FF7F4A;
     }
   }

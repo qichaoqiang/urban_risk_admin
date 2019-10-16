@@ -10,8 +10,7 @@
       <div class="line">
         <span class="label">联系电话</span>
         <div class="data">
-          <span class="dataDetail">{{data.phone}}</span>
-          <span class="sure" style="display:block;-webkit-transform : scale(0.84,0.84);font-family: PingFangSC-Regular;font-size: 8px;color: #FB5332;">(确定报价后显示)</span>
+          <a style="font-family: PingFangSC-Regular;font-size: 14px;text-decoration: underline;" :href="'tel:' + data.phone">{{data.phone}}</a>
         </div>
       </div>
       <div class="line">
@@ -52,22 +51,24 @@
       </div>
     </div>
     <div class="footer">
-      <div class="btnContent" v-show="data.status == 1">
-        <span class="offer" @click="baojia">我要报价<span class="offerNum">({{offer}}金币)</span></span>
+      <div class="btnContent" v-show="data.status == 1 || data.status == 2">
+        <span class="offer" @click="baojia" style="background: #5AB3A4;">反馈价格</span>
       </div>
-      <div class="btnContent" v-show="data.status == 2 || data.status == 3">
-        <span class="offer" @click="goDetail">查看详情</span>
+      <div class="btnContent" v-show="data.status == 3">
+        <span class="offer" >我的报价为￥{{data.quotedPrice}}</span>
       </div>
       <div class="btnContent" v-show="data.status == 4 || data.status == 5">
         <span class="offer" style="background: rgba(0,0,0,0.26);font-family: PingFangSC-Medium;font-size: 16px;color: #FFFFFF;">已过期</span>
       </div>
     </div>
     <van-dialog
-      v-model="showQrcode"
-      title="请前往财税鱼商家助手小程序进行查看"
+      v-model="show"
+      title="反馈价格"
       show-cancel-button
+      @confirm="sure"
+      confirmButtonColor='#FF7F4A'
     >
-      <img class="qrcode" style="display: block;width: 200px;height: 200px;margin-left: auto;margin-right: auto;margin-top: 10px;margin-bottom: 20px;" src="https://img.yzcdn.cn/vant/apple-3.jpg">
+      <input class="baojiaInput" v-model="price" type="number" placeholder="请输入反馈价格">
     </van-dialog>
   </div>
 </template>
@@ -92,16 +93,21 @@ export default {
       hasBind: false,
       overdue: false,
       success: false,
-      showQrcode: false
+      show: false,
+      price: null,
     }
   },
   created () {
     let intentionId = this.$route.query.intentionId
-    console.log(intentionId)
     if(intentionId) {
       this.intentionId = intentionId
+      this.getDetail()
+    }
+  },
+  methods: {
+    getDetail () {
       let data = {
-        intentionId: intentionId
+        intentionId: this.intentionId
         // intentionId: 1
       }
       // data = qs.stringify(data)
@@ -112,43 +118,32 @@ export default {
           this.data.extra = JSON.parse(this.data.extra)
         }
       })
-      localStorage.setItem('intentionId', intentionId)
-    }
-    let params = {
-      code: this.$route.query.code
-    }
-    api.weixinHasBind(params).then(res => {
-      console.log(res)
-      if(res.code == 0){
-        this.openId = res.data.openId
-        localStorage.setItem('openId',this.openId)
-        if(res.data.hasBind == false){
-          this.hasBind = false
-          this.$router.push({ path: '/bindPhone' })
-        }else {
-          this.hasBind = true
-          let merchant = res.data.merchant.id
-          console.log(merchant)
-          localStorage.setItem('merchant', merchant)
-        }
-      }
-    })
-    .catch((error) => {
-        console.log(error)
-    })
-  },
-  methods: {
-    binding () {
-      
     },
     goBack () {
       window.history.back()
     },
     baojia() {
-      this.$router.push({ path: '/pay?intentionId=' + this.intentionId })
+      this.show = true
     },
-    goDetail() {
-      this.$router.push({ path: '/feedback?intentionId=' + this.intentionId })
+    sure(){
+      console.log(this.price)
+      if(this.price == null || this.price <= 0){
+        Toast('请输入大于零的正整数！')
+        return
+      }
+      let data = {
+        intentionId: this.intentionId,
+        price: this.price
+      }
+      api.intentionQuotePrice(data).then(res => {
+        this.show = false
+        if(res.code == 0){
+          Toast('报价成功')
+          this.getDetail()
+        }else {
+          Toast(res.msg)
+        }
+      })
     }
   }
 }
@@ -293,6 +288,20 @@ export default {
         }
       }
     }
+  }
+  .baojiaInput{
+    height: 28px;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    width: 248px;
+    outline: none;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    margin-left: auto;
+    margin-right: auto;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: rgba(0,0,0,0.60);
+    margin-bottom: 16px;
   }
 }
 </style>

@@ -40,8 +40,14 @@ export default {
     }
     console.log(params)
     let that = this
-    setTimeout(function(){
-      that.$router.replace({ path: '/inquiryDetail' })
+    let intentionId = localStorage.getItem('intentionId')
+    setTimeout(() => {
+      that.$router.push({
+        path: '/inquiryDetail',
+        query: {
+          intentionId: intentionId
+        }
+      })
     },3000)
   },
   methods: {

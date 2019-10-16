@@ -18,12 +18,14 @@ axios.defaults.baseURL = process.env.VUE_APP_API
 // axios.defaults.baseURL = 'http://172.100.9.71:8080'
 
 // POST传参序列化(添加请求拦截器)
+const merchant = localStorage.getItem('merchant')
+// const merchant = 448
+console.log(merchant)
 axios.interceptors.request.use((config) => {
   // 在发送请求之前做某件事
   if (config.method === 'post') {
     // config.data = qs.stringify(config.data)
   }
-  let merchant = 1
   if (merchant) {
     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
     config.headers['Authorization'] = merchant
@@ -55,9 +57,6 @@ export function fetchPost (url, params) {
   return new Promise((resolve, reject) => {
     axios.post(url, params)
       .then(response => {
-        // if (response.headers.merchantId) {
-        //   store.dispatch('save_token', response.headers.authorization)
-        // }
         resolve(response.data)
       }, err => {
         reject(err)
@@ -73,9 +72,6 @@ export function fetchGet (url, param) {
   return new Promise((resolve, reject) => {
     axios.get(url, { params: param })
       .then(response => {
-        // if (response.headers.merchantId) {
-        //   store.dispatch('save_token', response.headers.authorization)
-        // }
         resolve(response.data)
       }, err => {
         reject(err)

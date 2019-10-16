@@ -8,10 +8,10 @@
             <span class="num">{{data.balance}}</span>
             <span class="txt">金币</span>
           </div>
-          <!-- <div class="givingNum">
+          <div class="givingNum">
             <span class="num">{{data.bonusBalance}}</span>
             <span class="txt">赠币</span>
-          </div> -->
+          </div>
         </div>
       </div>
       <div class="rechargeLine" @click="goRecharge">
@@ -26,25 +26,26 @@
       <div class="consumeContent">
         <h4>消费记录</h4>
         <div class="consumeList">
-          <div class="consume" v-for="(item,index) in consumeList" :key='index'>
-            <div class="detailContent">
+          <div class="consume" v-for="(item,index) in consumeList" :key='index' @click="goDetail(item)">
+            <div class="detailContent" >
               <img src="@/assets/buy.png" alt="" v-show="item.transactionType == 1">
               <img src="@/assets/ic_platform@3x.png" alt="" v-show="item.transactionType == 2 || item.transactionType == 3">
               <div class="detail" >
-                <span class="detailTxt" v-show="item.transactionType == 1">购买询价单</span>
-                <span class="detailTxt" v-show="item.transactionType == 2">平台充值</span>
-                <span class="detailTxt" v-show="item.transactionType == 3">平台赠送</span>
+                <span class="detailTxt" v-show="item.transactionType == 3">购买询价单</span>
+                <span class="detailTxt" v-show="item.transactionType == 1">平台充值</span>
+                <span class="detailTxt" v-show="item.transactionType == 2">平台赠送</span>
                 <span class="date">{{item.createTime}}</span>
               </div>
             </div>
-            <div class="amount" v-show="item.transactionType == 1">
-              <span style="color: rgba(0,0,0,0.87);">-{{item.amount}}金币</span>
+            <div class="amount" v-show="item.transactionType == 3">
+              <span style="color: rgba(0,0,0,0.87);" v-show="item.accountType == 1">-{{item.amount}}金币</span>
+              <span style="color: rgba(0,0,0,0.87);" v-show="item.accountType == 2">-{{item.amount}}赠币</span>
               <img style="display: block;width:16px; height: 16px;" src="@/assets/ic_chevron_right_small@3x.png" alt="">
             </div>
             <div class="amount add" v-show="item.transactionType == 2">
               <span style="color: #FF7F4A;">+{{item.amount}}赠币</span>
             </div>
-            <div class="amount add" v-show="item.transactionType == 3">
+            <div class="amount add" v-show="item.transactionType == 1">
               <span style="color: #FF7F4A;">+{{item.amount}}金币</span>
             </div>
           </div>
@@ -73,7 +74,10 @@ export default {
   data () {
     return {
       intentionId: 1,
-      data: {},
+      data: {
+        balance: 0,
+        bonusBalance: 0
+      },
       consumeList: [],
       total: 0,
       showLoad: false,
@@ -84,16 +88,19 @@ export default {
   },
   created () {
     //账户详情
+    pageNum = 1
     api.merchantDetail().then(res => {
       console.log(res)
       if(res.code == 0){
         this.data = res.data
+        if(!res.data.bonusBalance){
+          this.data.bonusBalance = 0
+        }
       }
     })
-
     let data = {
       pageNum: pageNum,
-      pageSize: 20,
+      pageSize: 10,
       shelf: false
     }
     this.loading = true
@@ -102,36 +109,73 @@ export default {
     api.merchantTransactionList(data).then(res => {
       console.log(res)
       if(res.code == 0){
-        this.consumeList = res.data
+        this.consumeList = res.data.items
         this.total = res.data.total
-        if(res.data.total <= 20){
+        if(res.data.total <= 10){
             this.showLoad = false
         }else{
             this.showLoad = true
         }
       }
     })
+
+    let params = {
+      code: this.$route.query.code
+    }
+    api.weixinHasBind(params).then(res => {
+      console.log(res)
+      if(res.code == 0){
+        this.openId = res.data.openId
+        localStorage.setItem('openId',this.openId)
+        if(res.data.hasBind == false){
+          this.hasBind = false
+          this.$router.push({ path: '/bindPhone' })
+        }else {
+          this.hasBind = true
+          let merchant = res.data.merchant.id
+          console.log(merchant)
+          localStorage.setItem('merchant', merchant)
+        }
+      }
+    })
+    .catch((error) => {
+        console.log(error)
+    })
   },
   methods: {
     goRecharge() {
       this.$router.push({ path: '/reCharge' })
+      localStorage.setItem('page','myAccount')
+    },
+    goDetail(item){
+      console.log(item)
+      if(item.transactionType == 3){
+        this.$router.push({
+          path: '/inquiryDetail',
+          query: {
+            intentionId: item.intentionId
+          }
+        })
+      }else {
+        return
+      }
     },
     loadingMore() {
       pageNum ++
       this.loading_more = true
       let data = {
         pageNum: pageNum,
-        pageSize: 20,
+        pageSize: 10,
         shelf: false
       }
       console.log(data)
       api.merchantTransactionList(data).then(res => {
         console.log(res)
         if(res.code == 0){
-          this.consumeList = this.consumeList.concat(res.data)
+          this.consumeList = this.consumeList.concat(res.data.items)
           this.total = res.data.total
           this.loading_more = false
-          if(res.data.items.length < 20){
+          if(res.data.items.length < 10){
               this.noMore = true
           }else{
               this.noMore = false
@@ -193,7 +237,7 @@ export default {
           }
         }
         .balanceNum{
-          // border-right: 1px solid #ffffff;
+          border-right: 1px solid #ffffff;
           padding-right: 12px;
         }
         .givingNum{
@@ -296,7 +340,7 @@ export default {
         align-items: center;
         justify-content: center;
         // margin-top: 16px;
-        border-bottom: 1px solid rgba(0,0,0,0.04);
+        // border-bottom: 1px solid rgba(0,0,0,0.04);
         cursor: pointer;
         span{
             font-size: 14px;

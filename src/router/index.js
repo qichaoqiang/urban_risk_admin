@@ -33,6 +33,14 @@ export default new Router({
       }
     },
     {
+      path: '/feedback',
+      name: 'feedback',
+      component: () => import('../views/inquiry/feedback.vue'),
+      meta: {
+        title: '反馈价格'
+      }
+    },
+    {
       path: '/myAccount',
       name: 'myAccount',
       component: () => import('../views/inquiry/myAccount.vue'),

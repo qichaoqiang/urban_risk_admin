@@ -8,10 +8,10 @@
             <span class="num">{{data.balance}}</span>
             <span class="txt">金币</span>
           </div>
-          <!-- <div class="givingNum">
+          <div class="givingNum">
             <span class="num">{{data.bonusBalance}}</span>
             <span class="txt">赠币</span>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
@@ -45,7 +45,10 @@ Vue.use(Toast)
 export default {
   data () {
     return {
-      data: {},
+      data: {
+        balance: 0,
+        bonusBalance: 0
+      },
       reChargeList: [
         {
           num: 1000,
@@ -88,6 +91,9 @@ export default {
       console.log(res)
       if(res.code == 0){
         this.data = res.data
+        if(!res.data.bonusBalance){
+          this.data.bonusBalance = 0
+        }
       }
     })
 
@@ -170,7 +176,7 @@ export default {
           }
         }
         .balanceNum{
-          // border-right: 1px solid #ffffff;
+          border-right: 1px solid #ffffff;
           padding-right: 12px;
         }
         .givingNum{

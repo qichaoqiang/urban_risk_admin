@@ -36,25 +36,32 @@ export default {
     }
   },
   created () {
-    let params = {
-      code: this.$route.query.code
-    }
-    console.log(params)
-    api.weixinHasBind(params).then(res => {
-      console.log(res)
-      if(res.code == 0){
-        this.openId = res.data.openId
-        if(res.data.hasBind == false){
-          this.hasBind = false
-        }else {
-          this.hasBind = true
-          this.$router.replace({ path: '/success' })
-        }
+    
+    let code = this.$route.query.code
+    if(code){
+      let params = {
+        code: this.$route.query.code
       }
-    })
-    .catch((error) => {
-        console.log(error)
-    })
+      console.log(params)
+      api.weixinHasBind(params).then(res => {
+        console.log(res)
+        if(res.code == 0){
+          this.openId = res.data.openId
+          if(res.data.hasBind == false){
+            this.hasBind = false
+          }else {
+            this.hasBind = true
+            this.$router.replace({ path: '/success' })
+          }
+        }
+      })
+      .catch((error) => {
+          console.log(error)
+      })
+    }else {
+      let openId = localStorage.getItem('openId')
+      this.openId = openId
+    }
   },
   methods: {
     binding () {

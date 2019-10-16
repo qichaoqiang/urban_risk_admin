@@ -38,7 +38,7 @@ export default {
 
   //报价
   intentionQuotePrice (params) {
-    return fetchGet('/intention/quotePrice', params)
+    return fetchPost('/intention/quotePrice', params)
   },
 
   //购买
