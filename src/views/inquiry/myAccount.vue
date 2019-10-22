@@ -28,24 +28,24 @@
         <div class="consumeList">
           <div class="consume" v-for="(item,index) in consumeList" :key='index' @click="goDetail(item)">
             <div class="detailContent" >
-              <img src="@/assets/buy.png" alt="" v-show="item.transactionType == 1">
-              <img src="@/assets/ic_platform@3x.png" alt="" v-show="item.transactionType == 2 || item.transactionType == 3">
+              <img src="@/assets/buy.png" alt="" v-show="item.transactionType == 3 || item.transactionType == 6">
+              <img src="@/assets/ic_platform@3x.png" alt="" v-show="item.transactionType == 1 || item.transactionType == 4 || item.transactionType == 2 ||item.transactionType == 5">
               <div class="detail" >
-                <span class="detailTxt" v-show="item.transactionType == 3">购买询价单</span>
-                <span class="detailTxt" v-show="item.transactionType == 1">平台充值</span>
-                <span class="detailTxt" v-show="item.transactionType == 2">平台赠送</span>
+                <span class="detailTxt" v-show="item.transactionType == 3 || item.transactionType == 6">购买询价单</span>
+                <span class="detailTxt" v-show="item.transactionType == 1 || item.transactionType == 4">平台充值</span>
+                <span class="detailTxt" v-show="item.transactionType == 2 || item.transactionType == 5">平台赠送</span>
                 <span class="date">{{item.createTime}}</span>
               </div>
             </div>
-            <div class="amount" v-show="item.transactionType == 3">
+            <div class="amount" v-show="item.transactionType == 3 || item.transactionType == 6">
               <span style="color: rgba(0,0,0,0.87);" v-show="item.accountType == 1">-{{item.amount}}金币</span>
               <span style="color: rgba(0,0,0,0.87);" v-show="item.accountType == 2">-{{item.amount}}赠币</span>
               <img style="display: block;width:16px; height: 16px;" src="@/assets/ic_chevron_right_small@3x.png" alt="">
             </div>
-            <div class="amount add" v-show="item.transactionType == 2">
+            <div class="amount add" v-show="item.transactionType == 2 || item.transactionType == 5">
               <span style="color: #FF7F4A;">+{{item.amount}}赠币</span>
             </div>
-            <div class="amount add" v-show="item.transactionType == 1">
+            <div class="amount add" v-show="item.transactionType == 1 || item.transactionType == 4">
               <span style="color: #FF7F4A;">+{{item.amount}}金币</span>
             </div>
           </div>
