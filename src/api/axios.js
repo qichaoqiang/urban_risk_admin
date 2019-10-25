@@ -43,6 +43,15 @@ axios.interceptors.response.use((res) => {
     Toast('系统异常')
     return Promise.reject(res)
   } else if (res.data.code !== 0) {
+    let info = '系统异常'
+    switch (res.data.code) {
+      case 500:
+        return Promise.resolve(res)
+    }
+    if(res.data.msg) {
+      info = res.data.msg
+    }
+    Toast(info)
     return Promise.reject(res)
   }
   return Promise.resolve(res)

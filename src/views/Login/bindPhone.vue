@@ -92,8 +92,6 @@ export default {
         }else {
           Toast(res.msg)
         }
-      }).catch(err => {
-        Toast(err.data.msg)
       })
     },
     goBack () {
