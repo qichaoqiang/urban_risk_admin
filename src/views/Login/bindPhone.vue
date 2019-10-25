@@ -85,12 +85,15 @@ export default {
       // let paramsString = qs.stringify(params)
       console.log(params)
       api.weixinBindPhone(params).then(res => {
+        console.log(res)
         if (res.code == 0) {
           Toast('绑定成功')
           this.$router.push({ path: '/success' })
         }else {
           Toast(res.msg)
         }
+      }).catch(err => {
+        Toast(err.data.msg)
       })
     },
     goBack () {
