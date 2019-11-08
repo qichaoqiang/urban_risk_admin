@@ -39,7 +39,7 @@
         <p>{{data.customerIntention}}</p>
       </div>
     </div>
-    <div class="consume">
+    <div class="consume" v-if="data.intentionType == 1">
       <div class="consumeContent">
         <h4>业务需求信息</h4>
         <div class="consumeList">
@@ -52,14 +52,14 @@
     </div>
     <div class="footer">
       <div class="btnContent" v-show="data.status == 1">
-        <span class="offer" @click="baojia">我要报价<span class="offerNum">({{offer}}金币)</span></span>
+        <span class="offer" @click="baojia">支付<span class="offerNum">({{data.price || ''}}金币)</span></span>
       </div>
-      <div class="btnContent" v-show="data.status == 2 || data.status == 3">
+      <!-- <div class="btnContent" v-show="data.status == 2 || data.status == 3">
         <span class="offer" @click="goDetail">查看详情</span>
       </div>
       <div class="btnContent" v-show="data.status == 4 || data.status == 5">
         <span class="offer" style="background: rgba(0,0,0,0.26);font-family: PingFangSC-Medium;font-size: 16px;color: #FFFFFF;">已过期</span>
-      </div>
+      </div> -->
     </div>
     <van-dialog
       v-model="showQrcode"
@@ -113,28 +113,30 @@ export default {
       })
       localStorage.setItem('intentionId', intentionId)
     }
-    let params = {
-      code: this.$route.query.code
-    }
-    api.weixinHasBind(params).then(res => {
-      console.log(res)
-      if(res.code == 0){
-        this.openId = res.data.openId
-        localStorage.setItem('openId',this.openId)
-        if(res.data.hasBind == false){
-          this.hasBind = false
-          this.$router.push({ path: '/bindPhone' })
-        }else {
-          this.hasBind = true
-          let merchant = res.data.merchant.id
-          console.log(merchant)
-          localStorage.setItem('merchant', merchant)
-        }
+    if(this.$route.query.code) {
+      let params = {
+        code: this.$route.query.code
       }
-    })
-    .catch((error) => {
-        console.log(error)
-    })
+      api.weixinHasBind(params).then(res => {
+        console.log(res)
+        if(res.code == 0){
+          this.openId = res.data.openId
+          localStorage.setItem('openId',this.openId)
+          if(res.data.hasBind == false){
+            this.hasBind = false
+            this.$router.push({ path: '/bindPhone' })
+          }else {
+            this.hasBind = true
+            let merchant = res.data.merchant.id
+            console.log(merchant)
+            localStorage.setItem('merchant', merchant)
+          }
+        }
+      })
+      .catch((error) => {
+          console.log(error)
+      })
+    }
   },
   methods: {
     binding () {
@@ -145,6 +147,13 @@ export default {
     },
     baojia() {
       this.$router.push({ path: '/pay?intentionId=' + this.intentionId })
+      this.$router.push({
+        path: '/pay',
+        query: {
+          intentionId: this.intentionId,
+          amount: this.data.price
+        }
+      })
     },
     goDetail() {
       this.$router.push({ path: '/feedback?intentionId=' + this.intentionId })

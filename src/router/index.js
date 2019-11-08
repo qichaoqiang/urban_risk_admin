@@ -73,6 +73,14 @@ export default new Router({
       }
     },
     {
+      path: '/consultList',
+      name: 'consultList',
+      component: () => import('../views/inquiry/consultList.vue'),
+      meta: {
+        title: '咨询栏'
+      }
+    },
+    {
       path: '/payResult',
       name: 'payResult',
       component: () => import('../views/inquiry/payResult.vue'),

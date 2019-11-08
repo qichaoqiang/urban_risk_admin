@@ -1,6 +1,11 @@
 import { fetchPost, fetchGet } from './axios'
 
 export default {
+  // 获取所有咨询栏列表
+  getConsultList (params) {
+    return fetchPost('/intention/obtainIntentionPage', params)
+  },
+
   // 获取所有社保贷列表
   getKnowleage (params) {
     return fetchPost('/knowleage_card/list', params)
@@ -44,6 +49,11 @@ export default {
   //购买
   intentionPurchase (params) {
     return fetchGet('/intention/purchase', params)
+  },
+
+  //直接购买
+  intentionCashPurchase (params) {
+    return fetchPost('/intention/cashPurchase', params)
   },
 
   //充值

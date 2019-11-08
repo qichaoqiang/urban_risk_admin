@@ -2,6 +2,12 @@
   <div class="inquiryDetail" >
     <div class="inquiryData">
       <div class="line">
+        <span class="label">服务报价（￥）</span>
+        <div class="data">
+          <span class="dataDetail" style="color: rgb(251, 83, 50)">{{data.quotedPrice}}</span>
+        </div>
+      </div>
+      <div class="line">
         <span class="label">客户名称</span>
         <div class="data">
           <span class="dataDetail">{{data.name}}</span>
@@ -52,14 +58,14 @@
     </div>
     <div class="footer">
       <div class="btnContent" v-show="data.status == 1 || data.status == 2">
-        <span class="offer" @click="baojia" style="background: #5AB3A4;">反馈价格</span>
+        <span class="offer" @click="baojia" style="background: #5AB3A4;">给客户报价</span>
       </div>
-      <div class="btnContent" v-show="data.status == 3">
+      <!-- <div class="btnContent" v-show="data.status == 3">
         <span class="offer" >我的报价为￥{{data.quotedPrice}}</span>
       </div>
       <div class="btnContent" v-show="data.status == 4 || data.status == 5">
         <span class="offer" style="background: rgba(0,0,0,0.26);font-family: PingFangSC-Medium;font-size: 16px;color: #FFFFFF;">已过期</span>
-      </div>
+      </div> -->
     </div>
     <van-dialog
       v-model="show"

@@ -115,7 +115,7 @@ export default {
   created () {
     let rechargeAmount  =  this.$route.query.rechargeAmount,
         bonusAmount = this.$route.query.bonusAmount,
-        packageId = this.$route.query.id
+        packageId = this.$route.query.id || null;
     if(rechargeAmount){
       this.rechargeAmount = rechargeAmount,
       this.bonusAmount = bonusAmount,
