@@ -87,38 +87,6 @@ export default {
     }
   },
   created () {
-    //账户详情
-    pageNum = 1
-    api.merchantDetail().then(res => {
-      console.log(res)
-      if(res.code == 0){
-        this.data = res.data
-        if(!res.data.bonusBalance){
-          this.data.bonusBalance = 0
-        }
-      }
-    })
-    let data = {
-      pageNum: pageNum,
-      pageSize: 10,
-      shelf: false
-    }
-    this.loading = true
-    this.noMore = false
-    console.log(data)
-    api.merchantTransactionList(data).then(res => {
-      console.log(res)
-      if(res.code == 0){
-        this.consumeList = res.data.items
-        this.total = res.data.total
-        if(res.data.total <= 10){
-            this.showLoad = false
-        }else{
-            this.showLoad = true
-        }
-      }
-    })
-
     let params = {
       code: this.$route.query.code
     }
@@ -129,12 +97,43 @@ export default {
         localStorage.setItem('openId',this.openId)
         if(res.data.hasBind == false){
           this.hasBind = false
-          this.$router.push({ path: '/bindPhone' })
+          // this.$router.push({ path: '/bindPhone' })
         }else {
           this.hasBind = true
           let merchant = res.data.merchant.id
           console.log(merchant)
           localStorage.setItem('merchant', merchant)
+          //账户详情
+          pageNum = 1
+          api.merchantDetail().then(res => {
+            console.log(res)
+            if(res.code == 0){
+              this.data = res.data
+              if(!res.data.bonusBalance){
+                this.data.bonusBalance = 0
+              }
+            }
+          })
+          let data = {
+            pageNum: pageNum,
+            pageSize: 10,
+            shelf: false
+          }
+          this.loading = true
+          this.noMore = false
+          console.log(data)
+          api.merchantTransactionList(data).then(res => {
+            console.log(res)
+            if(res.code == 0){
+              this.consumeList = res.data.items
+              this.total = res.data.total
+              if(res.data.total <= 10){
+                  this.showLoad = false
+              }else{
+                  this.showLoad = true
+              }
+            }
+          })
         }
       }
     })

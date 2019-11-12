@@ -17,7 +17,7 @@
         <van-button class="btn" plain type="primary" @click="binding">确定</van-button>
       </div>
     </div>
-  </div>
+  </div>  
 </template>
 <script>
 import Vue from 'vue'
