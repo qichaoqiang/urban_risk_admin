@@ -97,7 +97,7 @@ export default {
         localStorage.setItem('openId',this.openId)
         if(res.data.hasBind == false){
           this.hasBind = false
-          // this.$router.push({ path: '/bindPhone' })
+          this.$router.push({ path: '/bindPhone' })
         }else {
           this.hasBind = true
           let merchant = res.data.merchant.id
