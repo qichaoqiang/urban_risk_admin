@@ -87,6 +87,14 @@ export default new Router({
       meta: {
         title: '绑定成功'
       }
+    },
+    {
+      path: '/agreement',
+      name: 'agreement',
+      component: () => import('../views/Login/agreement.vue'),
+      meta: {
+        title: '绑定成功'
+      }
     }
   ],
   scrollBehavior(to, from, saveTop){

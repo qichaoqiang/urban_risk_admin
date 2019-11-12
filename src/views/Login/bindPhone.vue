@@ -37,7 +37,8 @@ export default {
       psdFocus: false,
       jumpUrlInfo: {},
       openId: '',
-      hasBind: false 
+      hasBind: false,
+      isAgreement: true
     }
   },
   created () {
@@ -86,6 +87,10 @@ export default {
       }
       if (this.password == '' && this.password == undefined) {
         Toast('请输入密码！')
+        return
+      }
+      if (!this.isAgreement) {
+        Toast('请先阅读并同意服务协议！')
         return
       }
       let params = {
