@@ -13,7 +13,7 @@
             <span class="txt">赠币</span>
           </div>
         </div>
-        <div class="reCharge" @click="rechargeShow = true">
+        <div class="reCharge" @click="costomRecharge">
           <span>自定义充值</span>
           <img src="@/assets/ic_recharge_arrow_1@3x.png" alt="">
         </div>
@@ -55,7 +55,6 @@ import Vue from 'vue'
 import { Toast, Button, Dialog } from 'vant'
 import api from '@/api/api'
 import qs from 'qs'
-import sa from 'sa-sdk-javascript'
 Vue.use(Toast)
 Vue.use(Button)
 Vue.use(Dialog)
@@ -125,7 +124,15 @@ export default {
     })
   },
   methods: {
+    costomRecharge() {
+      sa.track('WebCheckOnTheRechargeBtn', {
+        recharge_type: 'CUSTOM'
+      })
+    },
     reCharge() {
+      sa.track('WebCheckOnTheRechargeConfirm', {
+        recharge_amount: 'CUSTOM'
+      })
       let data = {
         rechargeAmount: this.rechargeNum,
         bonusAmount: 0,
@@ -140,6 +147,11 @@ export default {
       window.history.back()
     },
     goPay(item){
+      if(item.id) {
+        sa.track('WebCheckOnTheRechargeBtn', {
+          recharge_type: 'FIXED'
+        })
+      }
       this.$router.push({
           path: '/reChargePay',
           query: {

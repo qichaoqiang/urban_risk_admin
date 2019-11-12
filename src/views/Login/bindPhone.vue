@@ -8,11 +8,16 @@
       <div class="authenticationInput">
         <input :class="psdFocus ? 'btFocus': ''" @focus="psdFocus=true" @blur="scrollTop2" type="password" maxlength="16" v-model="password" placeholder="商户后台登录密码" />
       </div>
+      <p class="argument-agree" @click="changeAgree">
+        <img class="check" src="@/assets/checkbox_on.png" v-if="isAgreement">
+        <img class="check" src="@/assets/checkbox_off.png" v-else>
+        <span>已阅读并同意<span @click.stop="goAgreement">《财税鱼商家助手服务协议》</span></span>
+      </p>
       <div class="authenticationBtn">
         <van-button class="btn" plain type="primary" @click="binding">确定</van-button>
       </div>
     </div>
-  </div>
+  </div>  
 </template>
 <script>
 import Vue from 'vue'
@@ -32,7 +37,8 @@ export default {
       psdFocus: false,
       jumpUrlInfo: {},
       openId: '',
-      hasBind: false 
+      hasBind: false,
+      isAgreement: true
     }
   },
   created () {
@@ -64,6 +70,12 @@ export default {
     }
   },
   methods: {
+    changeAgree() {
+      this.isAgreement = !this.isAgreement;
+    },
+    goAgreement() {
+      this.$router.push('/agreement');
+    },
     binding () {
       if(this.hasBind == true){
         Toast('您的微信号已经绑定过商户！')
@@ -75,6 +87,10 @@ export default {
       }
       if (this.password == '' && this.password == undefined) {
         Toast('请输入密码！')
+        return
+      }
+      if (!this.isAgreement) {
+        Toast('请先阅读并同意服务协议！')
         return
       }
       let params = {
@@ -204,5 +220,23 @@ export default {
 #captcha {
   width: 320px;
   height: 40px;
+}
+.argument-agree {
+  margin-top: 24px;
+  width: 100%;
+  display: flex;
+  // justify-content: center;
+  .check {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+  }
+  span {
+    font-family: PingFangSC-Medium;
+    font-size: 12px;
+    color: rgba(0,0,0,0.26);
+    text-align: center;
+    line-height: 16px;
+  }
 }
 </style>

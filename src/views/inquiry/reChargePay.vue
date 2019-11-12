@@ -93,7 +93,6 @@ import Vue from 'vue'
 import { Toast, Button } from 'vant'
 import api from '@/api/api'
 import qs from 'qs'
-import sa from 'sa-sdk-javascript'
 Vue.use(Button)
 Vue.use(Toast)
 export default {

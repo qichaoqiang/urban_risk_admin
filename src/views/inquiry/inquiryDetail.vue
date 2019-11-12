@@ -75,7 +75,6 @@ import Vue from 'vue'
 import { Toast, Button, Dialog } from 'vant'
 import api from '@/api/api'
 import qs from 'qs'
-import sa from 'sa-sdk-javascript'
 Vue.use(Button)
 Vue.use(Dialog)
 Vue.use(Toast)
@@ -95,6 +94,7 @@ export default {
     }
   },
   created () {
+
     let intentionId = this.$route.query.intentionId
     console.log(intentionId)
     if(intentionId) {
@@ -109,6 +109,14 @@ export default {
         if(res.code == 0){
           this.data = res.data
           this.data.extra = JSON.parse(this.data.extra)
+          let typeList = ['预审', '询价单']
+          sa.track('WebConsultingOrder', {
+            page: this.$route.query.form || '',
+            type: typeList[this.data.intentionType],
+            service_name: this.data.intention,
+            service_code: this.data.intentionCode,
+            service_area: this.data.area
+          })
         }
       })
       localStorage.setItem('intentionId', intentionId)
@@ -146,6 +154,13 @@ export default {
       window.history.back()
     },
     baojia() {
+      let typeList = ['预审', '询价单']
+      sa.track('WebCheckOnTheOfferBtn', {
+        type: typeList[this.data.intentionType - 1],
+        service_name: this.data.intention,
+        service_code: this.data.code,
+        service_area: this.data.area
+      })
       this.$router.push({ path: '/pay?intentionId=' + this.intentionId })
       this.$router.push({
         path: '/pay',

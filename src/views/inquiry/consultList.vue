@@ -14,7 +14,7 @@
 						<div>询问类目：{{item.intention}}</div>
 						<div>需求区域：{{item.area}}</div>
 					</div>
-					<span @click.stop="stopCall"><a :href="'tel:' + item.phone"><img class="consult_item_phone" src="../../assets/ic_firm_call@3x.png"></a></span>
+					<span @click.stop="stopCall(item)"><a :href="'tel:' + item.phone"><img class="consult_item_phone" src="../../assets/ic_firm_call@3x.png"></a></span>
 				</div>
 			</div>
 		</div>
@@ -77,12 +77,19 @@
 				this.$router.push({
 					path: '/inquiryDetail',
 					query: {
-						intentionId: item.id
+						intentionId: item.id,
+						from: 'clues_page'
 					}
 				})
 			},
-			stopCall() {
-
+			stopCall(item) {
+				let typeList = ['预审', '询价单']
+				sa.track('WebCheckOnTheOfferBtn', {
+			        type: typeList[item.intentionType - 1],
+			        service_name: item.intention,
+			        service_code: item.intentionCode,
+			        service_area: item.area
+			      })
 			}
 		},
 		created() {

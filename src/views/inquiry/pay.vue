@@ -71,7 +71,6 @@ import Vue from 'vue'
 import { Toast, Button, Dialog } from 'vant'
 import api from '@/api/api'
 import qs from 'qs'
-import sa from 'sa-sdk-javascript'
 Vue.use(Button)
 Vue.use(Dialog)
 Vue.use(Toast)

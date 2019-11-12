@@ -15,7 +15,7 @@ axios.defaults.timeout = 100000
 // 线上环境地址
 // axios.defaults.baseURL = 'https://wap-api.taxlioner.com'
 // 本地环境地址
-axios.defaults.baseURL = 'http://172.100.14.26:8080'
+axios.defaults.baseURL = 'http://172.100.11.45:8080'
 
 // POST传参序列化(添加请求拦截器)
 const merchant = localStorage.getItem('merchant')
