@@ -23,7 +23,7 @@
         <div class="label">
           <span>支付所需金额</span>
         </div>
-        <span style="font-family: PingFangSC-Medium;font-size: 14px;color: #FF7F4A;text-align: center;">200金币</span>
+        <span style="font-family: PingFangSC-Medium;font-size: 14px;color: #FF7F4A;text-align: center;">{{$route.query.price}}金币</span>
       </div>
     </div>
     <div class="typeContainer">

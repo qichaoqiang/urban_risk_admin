@@ -52,7 +52,7 @@
     </div>
     <div class="footer">
       <div class="btnContent" v-show="data.status == 1">
-        <span class="offer" @click="baojia">我要报价<span class="offerNum">({{offer}}金币)</span></span>
+        <span class="offer" @click="baojia">我要报价<span class="offerNum">({{data.price}}金币)</span></span>
       </div>
       <div class="btnContent" v-show="data.status == 2 || data.status == 3">
         <span class="offer" @click="goDetail">查看详情</span>
@@ -145,6 +145,13 @@ export default {
     },
     baojia() {
       this.$router.push({ path: '/pay?intentionId=' + this.intentionId })
+      this.$router.push({ 
+        path: '/pay',
+        query: {
+          intentionId: this.intentionId,
+          price: this.data.price
+        }
+      })
     },
     goDetail() {
       this.$router.push({ path: '/feedback?intentionId=' + this.intentionId })
