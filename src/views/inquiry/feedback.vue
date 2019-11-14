@@ -32,11 +32,10 @@
         </div>
       </div>
     </div>
-    <div class="clientWill">
+    <div class="clientWill" v-if="data.customerIntention">
       <div class="clientWillContent">
         <h4>客户意向</h4>
-        <p v-if="data.customerIntention">{{data.customerIntention}}</p>
-        <p v-if="!data.customerIntention">暂无</p>
+        <p>{{data.customerIntention}}</p>
       </div>
     </div>
     <div class="consume">
