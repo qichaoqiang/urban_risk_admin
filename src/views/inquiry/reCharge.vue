@@ -138,7 +138,7 @@ export default {
         return true;
       }
       if(/[^0-9]/.test(this.rechargeNum)) {
-        Toast('充值金额必须由0-9数字组成');
+        Toast('充值金额必须为整数');
         return true;
       }
       if(this.rechargeNum < 3000 || this.rechargeNum > 50000) {
