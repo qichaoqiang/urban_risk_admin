@@ -45,7 +45,7 @@
         <p>{{data.customerIntention}}</p>
       </div>
     </div>
-    <div class="consume" v-if="data.intentionType == 1">
+    <div class="consume" v-if="data.extra && data.extra.length > 0">
       <div class="consumeContent">
         <h4>业务需求信息</h4>
         <div class="consumeList">
