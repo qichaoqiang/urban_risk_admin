@@ -61,6 +61,11 @@ export default {
     return fetchPost('/merchant/recharge', params)
   },
 
+  //自定义充值
+  customRecharge (params) {
+    return fetchPost('/merchant/customRecharge', params)
+  },
+
   //充值套餐
   rechargePackage (params) {
     return fetchPost('/merchant/rechargePackage', params)

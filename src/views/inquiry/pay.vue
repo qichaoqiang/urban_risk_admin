@@ -115,7 +115,7 @@ export default {
     pay () {
       let self = this;
       let data = {
-        amount: this.$route.query.amount,
+        amount: this.$route.query.price,
         payChannel: 'weixin',
         payType:  'weixin_jsapi',
         intentionId: this.$route.query.intentionId

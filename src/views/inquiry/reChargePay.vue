@@ -156,9 +156,9 @@ export default {
         payChannel: 'weixin',
         payType:  'weixin_jsapi'
       }
-      console.log(data)
       this.payLoading = true
-      api.recharge(data).then(res =>{
+      let recharge = this.packageId ? 'recharge' : 'customRecharge'
+      api[recharge](data).then(res =>{
         console.log(res)
         if(res.code == 0){
             let paySign = JSON.parse(res.data.paySign)
