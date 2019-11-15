@@ -74,13 +74,24 @@
 				this.getList();
 			},
 			goDetail(item) {
-				this.$router.push({
-					path: '/inquiryDetail',
-					query: {
-						intentionId: item.id,
-						from: 'clues_page'
-					}
-				})
+				if(item.status != 2) {
+					this.$router.push({
+						path: '/inquiryDetail',
+						query: {
+							intentionId: item.id,
+							from: 'clues_page'
+						}
+					})
+				}else {
+					this.$router.push({
+						path: '/feedback',
+						query: {
+							intentionId: item.id,
+							from: 'clues_page'
+						}
+					})
+				}
+				
 			},
 			stopCall(item) {
 				let typeList = ['预审', '询价单']

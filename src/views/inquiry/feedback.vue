@@ -1,7 +1,7 @@
 <template>
   <div class="inquiryDetail" >
     <div class="inquiryData">
-      <div class="line" v-if="data.status == 2">
+      <div class="line" v-if="data.status == 3">
         <span class="label">服务报价（￥）</span>
         <div class="data">
           <span class="dataDetail" style="color: rgb(251, 83, 50)">{{data.quotedPrice}}</span>

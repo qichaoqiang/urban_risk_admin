@@ -1,6 +1,12 @@
 <template>
   <div class="inquiryDetail" >
     <div class="inquiryData">
+      <div class="line" v-if="data.status == 3">
+        <span class="label">服务报价（￥）</span>
+        <div class="data">
+          <span class="dataDetail" style="color: rgb(251, 83, 50)">{{data.quotedPrice}}</span>
+        </div>
+      </div>
       <div class="line">
         <span class="label">客户名称</span>
         <div class="data">
@@ -107,14 +113,6 @@ export default {
       api.intentionDetail(data).then(res => {
         console.log(res)
         if(res.code == 0){
-          if(res.data.status == 2) {
-            this.$router.push({
-              path: '/feedback',
-              query: {
-                intentionId,
-              }
-            })
-          }
           this.data = res.data
           this.data.extra = JSON.parse(this.data.extra)
           let typeList = ['预审', '询价单']
