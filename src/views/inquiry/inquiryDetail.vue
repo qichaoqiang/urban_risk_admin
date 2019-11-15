@@ -113,16 +113,25 @@ export default {
       api.intentionDetail(data).then(res => {
         console.log(res)
         if(res.code == 0){
-          this.data = res.data
-          this.data.extra = JSON.parse(this.data.extra)
-          let typeList = ['预审', '询价单']
-          sa.track('WebConsultingOrder', {
-            page: this.$route.query.form || '',
-            type: typeList[this.data.intentionType],
-            service_name: this.data.intention,
-            service_code: this.data.intentionCode,
-            service_area: this.data.area
-          })
+          if(res.data.status == 2) {
+            this.$router.replace({
+              path: '/feedback',
+              query: {
+                intentionId,
+              }
+            })
+          }else {
+            this.data = res.data
+            this.data.extra = JSON.parse(this.data.extra)
+            let typeList = ['预审', '询价单']
+            sa.track('WebConsultingOrder', {
+              page: this.$route.query.form || '',
+              type: typeList[this.data.intentionType],
+              service_name: this.data.intention,
+              service_code: this.data.intentionCode,
+              service_area: this.data.area
+            })
+          }
         }
       })
       localStorage.setItem('intentionId', intentionId)
