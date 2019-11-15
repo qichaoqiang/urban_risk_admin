@@ -60,7 +60,7 @@
       </div>
     </div>
     <div class="footer">
-      <div class="btnContent" v-show="data.status == 1 || data.status == 2">
+      <div class="btnContent" v-show="data.status == 2">
         <span class="offer" @click="baojia" style="background: #5AB3A4;">给客户报价</span>
       </div>
       <!-- <div class="btnContent" v-show="data.status == 3">

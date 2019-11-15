@@ -107,6 +107,14 @@ export default {
       api.intentionDetail(data).then(res => {
         console.log(res)
         if(res.code == 0){
+          if(res.data.status == 2) {
+            this.$router.push({
+              path: '/feedback',
+              query: {
+                intentionId,
+              }
+            })
+          }
           this.data = res.data
           this.data.extra = JSON.parse(this.data.extra)
           let typeList = ['预审', '询价单']
