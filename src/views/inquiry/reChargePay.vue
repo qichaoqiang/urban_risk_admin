@@ -112,18 +112,18 @@ export default {
     }
   },
   created () {
-    let rechargeAmount  =  this.$route.query.rechargeAmount,
-        bonusAmount = this.$route.query.bonusAmount,
-        packageId = this.$route.query.id || null;
-    if(rechargeAmount){
-      this.rechargeAmount = rechargeAmount,
-      this.bonusAmount = bonusAmount,
-      this.packageId = packageId
-    }else {
-      this.rechargeAmount = 0,
-      this.bonusAmount = 0
-      this.packageId = ''
-    }
+    this.rechargeAmount  =  localStorage.getItem('rechargeAmount');
+        this.bonusAmount = localStorage.getItem('bonusAmount');
+        this.packageId = this.$route.query.id || null;
+    // if(rechargeAmount){
+    //   this.rechargeAmount = rechargeAmount,
+    //   this.bonusAmount = bonusAmount,
+    //   this.packageId = packageId
+    // }else {
+    //   this.rechargeAmount = 0,
+    //   this.bonusAmount = 0
+    //   this.packageId = ''
+    // }
 
     //账户详情
     api.merchantDetail().then(res => {

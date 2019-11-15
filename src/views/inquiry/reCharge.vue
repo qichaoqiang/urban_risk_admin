@@ -174,11 +174,11 @@ export default {
           recharge_type: 'FIXED'
         })
       }
+      localStorage.setItem('rechargeAmount', item.rechargeAmount);
+      localStorage.setItem('bonusAmount', item.bonusAmount);
       this.$router.push({
           path: '/reChargePay',
           query: {
-            rechargeAmount: item.rechargeAmount,
-            bonusAmount: item.bonusAmount,
             id: item.id
           }
       })
