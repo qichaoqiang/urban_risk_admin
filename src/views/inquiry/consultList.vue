@@ -7,7 +7,7 @@
 					<div class="consult_item_price" v-show="item.status == 1 || item.status == 2">未报价</div>
 					<div class="consult_item_price" v-show="item.status == 3" style="color: #FF7F4A">{{item.quotedPrice}}元</div>
 					<div class="consult_item_price" v-show="item.status == 4 || item.status == 5">已过期</div>
-					<div class="consult_item_time">2019.09.16 23:24</div>
+					<div class="consult_item_time">{{item.createTime}}</div>
 				</div>
 				<div class="consult_item_bottom">
 					<div class="consult_item_text">
