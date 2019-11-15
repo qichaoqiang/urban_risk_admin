@@ -176,7 +176,6 @@ export default {
         service_code: this.data.code,
         service_area: this.data.area
       })
-      this.$router.push({ path: '/pay?intentionId=' + this.intentionId })
       this.$router.push({ 
         path: '/pay',
         query: {
