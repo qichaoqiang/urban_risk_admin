@@ -128,6 +128,7 @@ export default {
       sa.track('WebCheckOnTheRechargeBtn', {
         recharge_type: 'CUSTOM'
       })
+      this.rechargeShow = true;
     },
     reCharge() {
       sa.track('WebCheckOnTheRechargeConfirm', {
