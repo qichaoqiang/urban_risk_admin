@@ -1,6 +1,12 @@
 <template>
   <div class="inquiryDetail" >
     <div class="inquiryData">
+      <div class="line" v-if="data.status == 2">
+        <span class="label">服务报价（￥）</span>
+        <div class="data">
+          <span class="dataDetail" style="color: rgb(251, 83, 50)">{{data.quotedPrice}}</span>
+        </div>
+      </div>
       <div class="line">
         <span class="label">客户名称</span>
         <div class="data">
@@ -9,8 +15,12 @@
       </div>
       <div class="line">
         <span class="label">联系电话</span>
+        <!-- <div class="data" v-if="data.phone">
+          <span v-if="data.phone.indexOf('*') > -1" style="font-family: PingFangSC-Regular;font-size: 14px;">{{data.phone}}</span>
+          <a v-else style="font-family: PingFangSC-Regular;font-size: 14px;text-decoration: underline;" @click="call">{{data.phone}}</a>
+        </div> -->
         <div class="data">
-          <a style="font-family: PingFangSC-Regular;font-size: 14px;text-decoration: underline;" :href="'tel:' + data.phone">{{data.phone}}</a>
+          <a id="call" style="font-family: PingFangSC-Regular;font-size: 14px;text-decoration: underline;" @click="call">17865922909</a>
         </div>
       </div>
       <div class="line">
@@ -51,14 +61,14 @@
     </div>
     <div class="footer">
       <div class="btnContent" v-show="data.status == 1 || data.status == 2">
-        <span class="offer" @click="baojia" style="background: #5AB3A4;">反馈价格</span>
+        <span class="offer" @click="baojia" style="background: #5AB3A4;">给客户报价</span>
       </div>
-      <div class="btnContent" v-show="data.status == 3">
+      <!-- <div class="btnContent" v-show="data.status == 3">
         <span class="offer" >我的报价为￥{{data.quotedPrice}}</span>
       </div>
       <div class="btnContent" v-show="data.status == 4 || data.status == 5">
         <span class="offer" style="background: rgba(0,0,0,0.26);font-family: PingFangSC-Medium;font-size: 16px;color: #FFFFFF;">已过期</span>
-      </div>
+      </div> -->
     </div>
     <van-dialog
       v-model="show"
@@ -76,7 +86,6 @@ import Vue from 'vue'
 import { Toast, Button, Dialog } from 'vant'
 import api from '@/api/api'
 import qs from 'qs'
-import sa from 'sa-sdk-javascript'
 Vue.use(Button)
 Vue.use(Dialog)
 Vue.use(Toast)
@@ -122,6 +131,13 @@ export default {
       window.history.back()
     },
     baojia() {
+      let typeList = ['预审', '询价单']
+      sa.track('WebCheckOnTheOfferBtn', {
+        type: typeList[this.data.intentionType - 1],
+        service_name: this.data.intention,
+        service_code: this.data.intentionCode,
+        service_area: this.data.area
+      })
       this.show = true
     },
     sure(){
@@ -143,6 +159,16 @@ export default {
           Toast(res.msg)
         }
       })
+    },
+    call() {
+      let typeList = ['预审', '询价单']
+      sa.track('WebCheckOnTheNumberBtn', {
+        type: typeList[this.data.intentionType - 1],
+        service_name: this.data.intention,
+        service_code: this.data.intentionCode,
+        service_area: this.data.area
+      })
+      document.getElementById('call').setAttribute('href', 'tel:17865922909');
     }
   }
 }

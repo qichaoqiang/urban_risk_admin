@@ -39,7 +39,7 @@
         <p>{{data.customerIntention}}</p>
       </div>
     </div>
-    <div class="consume">
+    <div class="consume" v-if="data.intentionType == 1">
       <div class="consumeContent">
         <h4>业务需求信息</h4>
         <div class="consumeList">
@@ -52,14 +52,14 @@
     </div>
     <div class="footer">
       <div class="btnContent" v-show="data.status == 1">
-        <span class="offer" @click="baojia">我要报价<span class="offerNum">({{data.price}}金币)</span></span>
+        <span class="offer" @click="baojia">支付<span class="offerNum">({{data.price || ''}}金币)</span></span>
       </div>
-      <div class="btnContent" v-show="data.status == 2 || data.status == 3">
+      <!-- <div class="btnContent" v-show="data.status == 2 || data.status == 3">
         <span class="offer" @click="goDetail">查看详情</span>
       </div>
       <div class="btnContent" v-show="data.status == 4 || data.status == 5">
         <span class="offer" style="background: rgba(0,0,0,0.26);font-family: PingFangSC-Medium;font-size: 16px;color: #FFFFFF;">已过期</span>
-      </div>
+      </div> -->
     </div>
     <van-dialog
       v-model="showQrcode"
@@ -75,7 +75,6 @@ import Vue from 'vue'
 import { Toast, Button, Dialog } from 'vant'
 import api from '@/api/api'
 import qs from 'qs'
-import sa from 'sa-sdk-javascript'
 Vue.use(Button)
 Vue.use(Dialog)
 Vue.use(Toast)
@@ -95,6 +94,7 @@ export default {
     }
   },
   created () {
+
     let intentionId = this.$route.query.intentionId
     console.log(intentionId)
     if(intentionId) {
@@ -109,32 +109,42 @@ export default {
         if(res.code == 0){
           this.data = res.data
           this.data.extra = JSON.parse(this.data.extra)
+          let typeList = ['预审', '询价单']
+          sa.track('WebConsultingOrder', {
+            page: this.$route.query.form || '',
+            type: typeList[this.data.intentionType],
+            service_name: this.data.intention,
+            service_code: this.data.intentionCode,
+            service_area: this.data.area
+          })
         }
       })
       localStorage.setItem('intentionId', intentionId)
     }
-    let params = {
-      code: this.$route.query.code
-    }
-    api.weixinHasBind(params).then(res => {
-      console.log(res)
-      if(res.code == 0){
-        this.openId = res.data.openId
-        localStorage.setItem('openId',this.openId)
-        if(res.data.hasBind == false){
-          this.hasBind = false
-          this.$router.push({ path: '/bindPhone' })
-        }else {
-          this.hasBind = true
-          let merchant = res.data.merchant.id
-          console.log(merchant)
-          localStorage.setItem('merchant', merchant)
-        }
+    if(this.$route.query.code) {
+      let params = {
+        code: this.$route.query.code
       }
-    })
-    .catch((error) => {
-        console.log(error)
-    })
+      api.weixinHasBind(params).then(res => {
+        console.log(res)
+        if(res.code == 0){
+          this.openId = res.data.openId
+          localStorage.setItem('openId',this.openId)
+          if(res.data.hasBind == false){
+            this.hasBind = false
+            this.$router.push({ path: '/bindPhone' })
+          }else {
+            this.hasBind = true
+            let merchant = res.data.merchant.id
+            console.log(merchant)
+            localStorage.setItem('merchant', merchant)
+          }
+        }
+      })
+      .catch((error) => {
+          console.log(error)
+      })
+    }
   },
   methods: {
     binding () {
@@ -144,6 +154,13 @@ export default {
       window.history.back()
     },
     baojia() {
+      let typeList = ['预审', '询价单']
+      sa.track('WebCheckOnTheOfferBtn', {
+        type: typeList[this.data.intentionType - 1],
+        service_name: this.data.intention,
+        service_code: this.data.code,
+        service_area: this.data.area
+      })
       this.$router.push({ path: '/pay?intentionId=' + this.intentionId })
       this.$router.push({ 
         path: '/pay',
