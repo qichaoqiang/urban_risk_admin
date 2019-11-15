@@ -93,7 +93,30 @@
 			}
 		},
 		created() {
-			this.getList();
+			if(localStorage.getItem('merchant')) {
+				this.getList();
+		    }else {
+		      	let params = {
+		        	code: this.$route.query.code
+		      	}
+		      	api.weixinHasBind(params).then(res => {
+		        	console.log(res)
+		        	if(res.code == 0){
+		          		let openId = res.data.openId
+		          		localStorage.setItem('openId', openId)
+		          		if(res.data.hasBind == false){
+		            		this.hasBind = false
+		            		this.$router.push({ path: '/bindPhone' })
+		          		}else {
+		            		this.hasBind = true
+		            		let merchant = res.data.merchant.id
+		            		console.log(merchant)
+		            		localStorage.setItem('merchant', merchant)
+							this.getList();
+		          		}
+		        	}
+		      	})
+		    }
 		}
 	}
 </script>
