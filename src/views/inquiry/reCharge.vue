@@ -42,10 +42,11 @@
       show-cancel-button
       @confirm="reCharge"
       @cancel="rechargeShow = false"
+      :before-close="beforeClose"
     >
       <div class="recharge_input_box">
         <div class="recharge_label">充值金额</div>
-        <input class="recharge_input" type="number" v-model="rechargeNum" placeholder="请输入充值金额">
+        <input class="recharge_input" type="text" v-model="rechargeNum" placeholder="请输入充值金额">
       </div>
     </van-dialog>
   </div>
@@ -131,6 +132,19 @@ export default {
       this.rechargeShow = true;
     },
     reCharge() {
+      console.log(this.rechargeNum)
+      if(!this.rechargeNum) {
+        Toast('请先输入充值金额');
+        return true;
+      }
+      if(/[^0-9]/.test(this.rechargeNum)) {
+        Toast('充值金额必须由0-9数字组成');
+        return true;
+      }
+      if(this.rechargeNum < 3000 || this.rechargeNum > 50000) {
+        Toast('充值金额范围为3000~50000');
+        return true;
+      }
       sa.track('WebCheckOnTheRechargeConfirm', {
         recharge_amount: 'CUSTOM'
       })
@@ -140,6 +154,13 @@ export default {
         id: ''
       }
       this.goPay(data);
+    },
+    beforeClose(action, done) {
+      if(action === 'confirm') {
+        done(false);
+      }else {
+        done();
+      }
     },
     binding () {
       
