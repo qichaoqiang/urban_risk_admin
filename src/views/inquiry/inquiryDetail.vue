@@ -202,8 +202,10 @@ export default {
         text-align: left;
         line-height: 20px;
         margin-left: 16px;
+        white-space: nowrap;
       }
       .data{
+        margin-left: 8px;
         display: flex;
         flex-flow: column;
         align-items: flex-end;
