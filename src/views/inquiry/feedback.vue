@@ -15,13 +15,13 @@
       </div>
       <div class="line">
         <span class="label">联系电话</span>
-        <!-- <div class="data" v-if="data.phone">
+        <div class="data" v-if="data.phone">
           <span v-if="data.phone.indexOf('*') > -1" style="font-family: PingFangSC-Regular;font-size: 14px;">{{data.phone}}</span>
-          <a v-else style="font-family: PingFangSC-Regular;font-size: 14px;text-decoration: underline;" @click="call">{{data.phone}}</a>
-        </div> -->
-        <div class="data">
-          <a id="call" style="font-family: PingFangSC-Regular;font-size: 14px;text-decoration: underline;" @click="call">17865922909</a>
+          <a v-else id="call" style="font-family: PingFangSC-Regular;font-size: 14px;text-decoration: underline;" @click="call">{{data.phone}}</a>
         </div>
+        <!-- <div class="data">
+          <a id="call" style="font-family: PingFangSC-Regular;font-size: 14px;text-decoration: underline;" @click="call">{{data.phone}}</a>
+        </div> -->
       </div>
       <div class="line">
         <span class="label">询价类目</span>
@@ -160,7 +160,7 @@ export default {
         }
       })
     },
-    call() {
+    call(item) {
       let typeList = ['预审', '询价单']
       sa.track('WebCheckOnTheNumberBtn', {
         type: typeList[this.data.intentionType - 1],
@@ -168,7 +168,7 @@ export default {
         service_code: this.data.intentionCode,
         service_area: this.data.area
       })
-      document.getElementById('call').setAttribute('href', 'tel:17865922909');
+      document.getElementById('call').setAttribute('href', 'tel:' + this.data.phone);
     }
   }
 }
