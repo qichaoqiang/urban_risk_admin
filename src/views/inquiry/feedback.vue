@@ -17,7 +17,7 @@
         <span class="label">联系电话</span>
         <div class="data" v-if="data.phone">
           <span v-if="data.phone.indexOf('*') > -1" style="font-family: PingFangSC-Regular;font-size: 14px;">{{data.phone}}</span>
-          <a v-else id="call" style="font-family: PingFangSC-Regular;font-size: 14px;text-decoration: underline;" @click="call">{{data.phone}}</a>
+          <a v-else id="call" style="font-family: PingFangSC-Regular;font-size: 14px;text-decoration: underline;color: #2a5caa" @click="call">{{data.phone}}</a>
         </div>
         <!-- <div class="data">
           <a id="call" style="font-family: PingFangSC-Regular;font-size: 14px;text-decoration: underline;" @click="call">{{data.phone}}</a>

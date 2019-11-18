@@ -17,7 +17,7 @@
         <span class="label">联系电话</span>
         <div class="data" v-if="data.phone">
           <span v-if="data.phone.indexOf('*') > -1" style="font-family: PingFangSC-Regular;font-size: 14px;">{{data.phone}}</span>
-          <a v-else id="call" style="font-family: PingFangSC-Regular;font-size: 14px;text-decoration: underline;" @click="call">{{data.phone}}</a>
+          <a v-else id="call" style="font-family: PingFangSC-Regular;font-size: 14px;text-decoration: underline;color: #2a5caa" @click="call">{{data.phone}}</a>
           <span class="sure" style="display:block;-webkit-transform : scale(0.84,0.84);font-family: PingFangSC-Regular;font-size: 8px;color: #FB5332;">(确定报价后显示)</span>
         </div>
       </div>
