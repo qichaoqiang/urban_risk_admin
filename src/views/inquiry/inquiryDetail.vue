@@ -15,8 +15,9 @@
       </div>
       <div class="line">
         <span class="label">联系电话</span>
-        <div class="data">
-          <span class="dataDetail">{{data.phone}}</span>
+        <div class="data" v-if="data.phone">
+          <span v-if="data.phone.indexOf('*') > -1" style="font-family: PingFangSC-Regular;font-size: 14px;">{{data.phone}}</span>
+          <a v-else id="call" style="font-family: PingFangSC-Regular;font-size: 14px;text-decoration: underline;" @click="call">{{data.phone}}</a>
           <span class="sure" style="display:block;-webkit-transform : scale(0.84,0.84);font-family: PingFangSC-Regular;font-size: 8px;color: #FB5332;">(确定报价后显示)</span>
         </div>
       </div>
@@ -34,8 +35,8 @@
       </div>
       <div class="line">
         <span class="label">需求区域</span>
-        <div class="data">
-          <span class="dataDetail">{{data.area}}</span>
+        <div class="data" v-if="data.area">
+          <span class="dataDetail">{{areaHandle(data.area)}}</span>
         </div>
       </div>
     </div>
@@ -186,6 +187,24 @@ export default {
     },
     goDetail() {
       this.$router.push({ path: '/feedback?intentionId=' + this.intentionId })
+    },
+    call(item) {
+      let typeList = ['预审', '询价单']
+      sa.track('WebCheckOnTheNumberBtn', {
+        type: typeList[this.data.intentionType - 1],
+        service_name: this.data.intention,
+        service_code: this.data.intentionCode,
+        service_area: this.data.area
+      })
+      document.getElementById('call').setAttribute('href', 'tel:' + this.data.phone);
+    },
+    areaHandle(area) {
+      let list = area.split('-').reverse();
+      if(list.length > 2) {
+        return `${list[1]}-${list[0]}`;
+      }else {
+        return area;
+      }
     }
   }
 }

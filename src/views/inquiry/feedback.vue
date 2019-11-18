@@ -37,8 +37,8 @@
       </div>
       <div class="line">
         <span class="label">需求区域</span>
-        <div class="data">
-          <span class="dataDetail">{{data.area}}</span>
+        <div class="data" v-if="data.area">
+          <span class="dataDetail">{{areaHandle(data.area)}}</span>
         </div>
       </div>
     </div>
@@ -169,6 +169,14 @@ export default {
         service_area: this.data.area
       })
       document.getElementById('call').setAttribute('href', 'tel:' + this.data.phone);
+    },
+    areaHandle(area) {
+      let list = area.split('-').reverse();
+      if(list.length > 2) {
+        return `${list[1]}-${list[0]}`;
+      }else {
+        return area;
+      }
     }
   }
 }

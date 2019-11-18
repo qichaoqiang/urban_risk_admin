@@ -15,7 +15,7 @@ axios.defaults.baseURL = process.env.VUE_APP_API
 // 线上环境地址
 // axios.defaults.baseURL = 'https://wap-api.taxlioner.com'
 // 本地环境地址
-// axios.defaults.baseURL = 'http://172.100.8.6:8080'
+// axios.defaults.baseURL = 'http://172.100.8.140:8080'
 
 // POST传参序列化(添加请求拦截器)
 const merchant = localStorage.getItem('merchant')
