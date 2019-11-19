@@ -25,7 +25,7 @@
     <div class="consumeContainer">
       <div class="consumeContent">
         <h4>消费记录</h4>
-        <div class="consumeList">
+        <div class="consumeList" v-if="consumeList.length > 0">
           <div class="consume" v-for="(item,index) in consumeList" :key='index' @click="goDetail(item)">
             <div class="detailContent" >
               <img src="@/assets/buy.png" alt="" v-show="item.transactionType == 3 || item.transactionType == 6">
@@ -49,6 +49,10 @@
               <span style="color: #FF7F4A;">+{{item.amount}}金币</span>
             </div>
           </div>
+        </div>
+        <div class="consult_none" v-else>
+          <img class="consult_none_icon" src="@/assets/advisory-details.png">
+          <div class="consult_none_text">暂无记录</div>
         </div>
         <div class="load_more" @click="loadingMore" v-show="showLoad &&!noMore">
             <span v-show="!loading_more">点击加载更多</span>
@@ -333,6 +337,24 @@ export default {
           .add{
             margin-right: 20px;
           }
+        }
+      }
+      .consult_none {
+        margin-top: 100px;
+        width: 100%;
+        .consult_none_icon {
+          margin: 0 auto;
+          width: 80px;
+          height: 80px;
+          display: block;
+        }
+        .consult_none_text {
+          margin-top: 16px;
+          font-family: PingFangSC-Regular;
+          font-size: 16px;
+          color: rgba(0,0,0,0.38);
+          line-height: 28px;
+          text-align: center;
         }
       }
       .load_more{
