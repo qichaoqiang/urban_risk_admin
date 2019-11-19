@@ -45,7 +45,7 @@
 		      	loading_more: false,
 		      	pageNum: 1,
 		      	total: 0,
-		      	consultList: []
+		      	consultList: [],
 			}
 		},
 		computed: {
