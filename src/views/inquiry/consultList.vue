@@ -1,6 +1,6 @@
 <template>
 	<div class="consult">
-		<div class="consult_list" v-if="consultList.length < 0">
+		<div class="consult_list" v-if="consultList.length > 0">
 			<div class="consult_item" v-for="(item, index) in consultList" :key="item.id" @click="goDetail(item)">
 				<div class="consult_item_top">
 					<div class="consult_item_name">{{item.name}}</div>
@@ -22,13 +22,13 @@
 			<img class="consult_none_icon" src="@/assets/expense-calendar.png">
 			<div class="consult_none_text">暂无线索，赶紧去抢单吧~</div>
 		</div>
-		<!-- <div class="load_more" @click="loadingMore" v-show="showLoad && !noMore">
+		<div class="load_more" @click="loadingMore" v-show="showLoad && !noMore">
             <span v-show="!loading_more">点击加载更多</span>
             <van-loading style="width: 10px;" v-show="loading_more == true" type="spinner" />
         </div>
         <div class="load_more" v-show="showLoad && noMore">
             <span>已经到底了</span>
-        </div> -->
+        </div>
 	</div>
 </template>
 
