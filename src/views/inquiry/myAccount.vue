@@ -25,7 +25,7 @@
     <div class="consumeContainer">
       <div class="consumeContent">
         <h4>消费记录</h4>
-        <div class="consumeList" v-if="consumeList.length < 0">
+        <div class="consumeList" v-if="consumeList.length > 0">
           <div class="consume" v-for="(item,index) in consumeList" :key='index' @click="goDetail(item)">
             <div class="detailContent" >
               <img src="@/assets/buy.png" alt="" v-show="item.transactionType == 3 || item.transactionType == 6">
@@ -54,13 +54,7 @@
           <img class="consult_none_icon" src="@/assets/advisory-details.png">
           <div class="consult_none_text">暂无记录</div>
         </div>
-        <!-- <div class="load_more" @click="loadingMore" v-show="showLoad &&!noMore">
-            <span v-show="!loading_more">点击加载更多</span>
-            <van-loading style="width: 10px;" v-show="loading_more == true" type="spinner" />
-        </div>
-        <div class="load_more" v-show="showLoad && noMore">
-            <span>已经到底了</span>
-        </div> -->
+        s
       </div>
     </div>
   </div>
