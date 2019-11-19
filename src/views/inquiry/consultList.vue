@@ -14,7 +14,7 @@
 						<div>询问类目：{{item.intention}}</div>
 						<div v-if="item.area">需求区域：{{areaHandle(item.area)}}</div>
 					</div>
-					<span @click.stop="stopCall(item)"><a :href="'tel:' + item.phone"><img class="consult_item_phone" src="../../assets/ic_firm_call@3x.png"></a></span>
+					<span v-if="item.phone.indexOf('*') == -1" @click.stop="stopCall(item)"><a :href="'tel:' + item.phone"><img class="consult_item_phone" src="../../assets/ic_firm_call@3x.png"></a></span>
 				</div>
 			</div>
 		</div>
