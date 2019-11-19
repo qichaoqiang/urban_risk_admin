@@ -12,7 +12,7 @@
 				<div class="consult_item_bottom">
 					<div class="consult_item_text">
 						<div>询问类目：{{item.intention}}</div>
-						<div>需求区域：{{item.area}}</div>
+						<div v-if="item.area">需求区域：{{areaHandle(item.area)}}</div>
 					</div>
 					<span @click.stop="stopCall(item)"><a :href="'tel:' + item.phone"><img class="consult_item_phone" src="../../assets/ic_firm_call@3x.png"></a></span>
 				</div>
@@ -101,7 +101,15 @@
 			        service_code: item.intentionCode,
 			        service_area: item.area
 			      })
-			}
+			},
+		    areaHandle(area) {
+		      	let list = area.split('-').reverse();
+		      	if(list.length > 2) {
+		        	return `${list[1]}-${list[0]}`;
+		      	}else {
+		        	return area;
+		      	}
+		    }
 		},
 		created() {
 			if(localStorage.getItem('merchant')) {
