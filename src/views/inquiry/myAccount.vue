@@ -25,7 +25,7 @@
     <div class="consumeContainer">
       <div class="consumeContent">
         <h4>消费记录</h4>
-        <div class="consumeList" v-if="consumeList.length > 0">
+        <div class="consumeList" v-if="consumeList.length < 0">
           <div class="consume" v-for="(item,index) in consumeList" :key='index' @click="goDetail(item)">
             <div class="detailContent" >
               <img src="@/assets/buy.png" alt="" v-show="item.transactionType == 3 || item.transactionType == 6">
@@ -54,13 +54,13 @@
           <img class="consult_none_icon" src="@/assets/advisory-details.png">
           <div class="consult_none_text">暂无记录</div>
         </div>
-        <div class="load_more" @click="loadingMore" v-show="showLoad &&!noMore">
+        <!-- <div class="load_more" @click="loadingMore" v-show="showLoad &&!noMore">
             <span v-show="!loading_more">点击加载更多</span>
             <van-loading style="width: 10px;" v-show="loading_more == true" type="spinner" />
         </div>
         <div class="load_more" v-show="showLoad && noMore">
             <span>已经到底了</span>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -198,6 +198,9 @@ export default {
 <style lang="scss" scoped>
 .myAccount{
   width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   padding-bottom: 20px;
   .balanceContainer{
     width: 100%;
@@ -277,11 +280,18 @@ export default {
     }
   }
   .consumeContainer{
+    flex: 1;
     width: 100%;
+    display: flex;
+    flex-direction: column;
     background: #ffffff;
     .consumeContent{
       width: 328px;
+      height: 100%;
       padding-top: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
       margin-left: auto;
       margin-right: auto;
       h4{
@@ -340,8 +350,12 @@ export default {
         }
       }
       .consult_none {
-        margin-top: 100px;
         width: 100%;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         .consult_none_icon {
           margin: 0 auto;
           width: 80px;
