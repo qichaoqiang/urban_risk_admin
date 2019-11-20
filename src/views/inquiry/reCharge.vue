@@ -141,8 +141,8 @@ export default {
         Toast('充值金额必须为整数');
         return true;
       }
-      if(this.rechargeNum < 3000 || this.rechargeNum > 50000) {
-        Toast('充值金额范围为3000~50000');
+      if(this.rechargeNum < 1000 || this.rechargeNum > 50000) {
+        Toast('充值金额范围为1000~50000');
         return true;
       }
       sa.track('WebCheckOnTheRechargeConfirm', {
