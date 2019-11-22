@@ -505,6 +505,7 @@
           }
           .login_input {
             margin-left: 22px;
+            width: 148px;
             font-family: PingFangSC-Regular;
             font-size: 14px;
             text-align: left;
@@ -575,6 +576,7 @@
       position: fixed;
       bottom: 0;
       width: 100%;
+      background: #fff;
       .pay {
         width: 100%;
         height: 48px;
