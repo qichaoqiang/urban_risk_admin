@@ -243,7 +243,7 @@
       },
       register() {
         // if (!this.isSend) {
-        //   this.$message({
+        //   Toast({
         //     text: '请先获取验证码',
         //     type: 'warn'
         //   })
@@ -269,7 +269,7 @@
             this.test();
           } else {
             this.handleTestDisabled = false
-            this.$message({
+            Toast({
               text: res.msg,
               type: 'warn'
             })
@@ -289,7 +289,7 @@
 
             this.pay();
           } else {
-            this.$message({
+            Toast({
               text: res.msg,
               type: 'warn'
             })
@@ -339,20 +339,20 @@
                   $('#form').html(res.data);
                 }
               }else {
-                this.$message({
+                Toast({
                   text: res.msg,
                   type: 'warn'
                 })
               }
             }).catch(err => {
-              this.$message({
+              Toast({
                 text: '网络错误,请稍后重试',
                 type: 'error'
               })
             })
           }
         }else {
-          this.$message({
+          Toast({
             text: '请勿重复点击',
             type: 'warn'
           })
