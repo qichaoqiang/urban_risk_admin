@@ -18,7 +18,7 @@
           <div class="line1" :class="{line1_none: type == 'gold'}"></div>
           <div class="select_tab_item" :class="{select_tab_item_active: type == 'experience'}" @click="select('experience')">
             <div class="select_tab_type">体验版</div>
-            <div class="select_tab_price">129元/年</div>
+            <div class="select_tab_price">129元/月</div>
           </div>
         </div>
         <div class="select_detail">
@@ -43,12 +43,12 @@
       <div class="login_box">
         <div class="login_item">
           <div class="login_text">手机号</div>
-          <input class="login_input" type="number" placeholder="请输入手机号码" v-model="phone"></input>
+          <input class="login_input" ref="login_input" type="number" placeholder="请输入手机号码" v-model="phone"></input>
         </div>
         <div class="line4"></div>
         <div class="login_item">
           <div class="login_text">验证码</div>
-          <input class="login_input" type="number" placeholder="请输入手机号码" v-model="code"></input>
+          <input class="login_input" ref="code_input" type="number" placeholder="请输入手机号码" v-model="code"></input>
           <div class="login_code_btn" :class="{login_code_btn_send: !isSend}" id="getPhoneCode" @click.stop.prevent="getCode">{{codeText}}</div>
         </div>
       </div>
@@ -236,24 +236,21 @@
       },
       getCode(){
         if(!this.isPhone) {
+          this.$refs.login_input.focus();
           Toast('请输入正确的手机号后获取')
         }else {
           this.inst && this.inst.verify();
         }
       },
       register() {
-        // if (!this.isSend) {
-        //   Toast({
-        //     text: '请先获取验证码',
-        //     type: 'warn'
-        //   })
-        //   return
-        // }
+        if(!this.isPhone) {
+          this.$refs.login_input.focus();
+          Toast('请输入正确的手机号');
+          return false;
+        }
         if (!this.code) {
-          Toast({
-            text: '请先输入验证码',
-            type: 'warn'
-          })
+          this.$refs.code_input.focus();
+          Toast('请先输入验证码')
           return
         }
         this.handleTestDisabled = true

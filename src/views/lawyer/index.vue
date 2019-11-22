@@ -114,14 +114,14 @@
 				<van-swipe :autoplay="2500" :show-indicators="false">
 				  	<van-swipe-item v-for="(item, index) in exampleList" :key="index">
 				    	<div class="example_item">
-				    		<div class="example_img" :src="item.img"></div>
+				    		<img class="example_img" :src="item.img">
 				    		<div class="example_content">
 				    			<div class="example_content_title">{{item.title}}</div>
 				    			<div class="example_content_name">—— {{item.name}}  | {{item.position}}</div>
 				    			<div class="line5"></div>
 				    			<div class="example_content_text">已开通服务 {{item.day}} 天</div>
-				    			<div class="example_content_text">电话咨询3次，累计184分钟</div>
-				    			<div class="example_content_text">长租公寓租赁合同审核1次</div>
+				    			<div class="example_content_text">电话咨询{{item.num}}次，累计{{item.time}}分钟</div>
+				    			<div class="example_content_text">{{item.content}}</div>
 				    		</div>
 				    	</div>
 				  	</van-swipe-item>
@@ -149,21 +149,32 @@
 				scrollList: [],
 				exampleList: [
 					{
-						title: '“经济不景气, 更要小心翼翼”',
-						name: 'Jane',
-						position: '外企白领',
-						day: 25,
-						num: 3,
-						time: 184,
-						img: require('@/assets/ic_pay_wechat.png')
+						title: '“买二手房就像扫雷，家庭律师就是我的排雷兵”',
+						name: '刘佳',
+						position: '家庭主妇',
+						day: 189,
+						num: 6,
+						time: 127,
+						img: require('@/assets/head.png'),
+						content: '房屋购买合同审核1次'
 					}, {
-						title: '“经济不景气, 更要小心翼翼”',
-						name: 'Jane',
-						position: '外企白领',
-						day: 25,
-						num: 3,
-						time: 184,
-						img: require('@/assets/ic_pay_alipay.png')
+						title: '“开车有风险，上路须谨慎”',
+						name: '彦平',
+						position: '私家车主',
+						day: 63,
+						num: 5,
+						time: 35,
+						img: require('@/assets/ic_pay_alipay.png'),
+						content: ''
+					}, {
+						title: '“我会花钱，但不会花冤枉钱”',
+						name: '雅琪',
+						position: '网购达人',
+						day: 196,
+						num: 15,
+						time: 271,
+						img: require('@/assets/ic_pay_alipay.png'),
+						content: ''
 					}
 				]
 			}
