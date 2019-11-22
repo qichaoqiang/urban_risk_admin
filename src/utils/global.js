@@ -25,6 +25,20 @@ export let Terminal = {
   language : (navigator.browserLanguage || navigator.language).toLowerCase()
 }
 
+let ua = navigator.userAgent
+
+export const isWechat = function () {
+  return ua.indexOf("MicroMessenger") > -1
+}
+
+export const isIOS = function () {
+  return !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+}
+
+export const isAndroid = function () {
+  return ua.indexOf('Android') > -1 || ua.indexOf('Linux') > -1
+}
+
 export let config = {
   // IM即时通信的 key
   IMAppKey: '7cb7efab05029f8c18576aa98a9cce96',

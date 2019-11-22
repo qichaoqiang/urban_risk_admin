@@ -42,7 +42,14 @@ sa.init({
 
 window.sa = sa;
 
-// sa.quick("autoTrack")
+sa.quick("autoTrack")
+// 从神策获取deviceId
+sa.quick('isReady', function() {
+  if (!localStorage.getItem('clientId')) {
+    let clientId = sa.store.getDistinctId();
+    localStorage.setItem('clientId', clientId);
+  }
+}); 
 
 router.beforeEach((to, from, next) => {
 	// sa.registerPage({})

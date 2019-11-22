@@ -15,7 +15,9 @@
 			}
 		},
 		created() {
-			
+			setTimeout(() => {
+				this.$router.replace('/result');
+			}, 3000)
 		}
 	}
 </script>

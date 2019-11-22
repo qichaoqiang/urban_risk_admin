@@ -9,14 +9,14 @@ Vue.use(Toast)
 
 // 响应时间
 axios.defaults.timeout = 100000
-axios.defaults.baseURL = process.env.VUE_APP_API
+// axios.defaults.baseURL = process.env.VUE_APP_API
 
 // 测试地址（内网)
 // axios.defaults.baseURL = 'http://credit-api.int.anniu-tech.com'
 // 线上环境地址
 // axios.defaults.baseURL = 'https://creditapi.kongapi.com'
 // 本地环境地址
-// axios.defaults.baseURL = 'http://172.100.8.140:8080'
+axios.defaults.baseURL = 'http://172.100.11.188:8080/credit_api_war_exploded'
 
 axios.interceptors.request.use((config) => {
   // 在发送请求之前做某件事
@@ -28,9 +28,9 @@ axios.interceptors.request.use((config) => {
     'Content-Type': 'application/json;charset=utf-8',
     channel: 'wap',
     sessionId: storage.get('sessionId') || '',
-    packageName: 'com.anniu.white.web',
-    clientId: storage.get('distinctId'),
-    deviceType: storage.get('deviceType'),
+    // packageName: 'com.anniu.white.web',
+    clientId: localStorage.getItem('clientId'),
+    deviceType: 'wap',
     platformFrom: storage.get('platform') || '',
     originFrom: storage.get('origin') || ''
   };

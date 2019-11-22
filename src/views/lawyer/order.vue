@@ -76,7 +76,7 @@
           <div class="pay_price_text">总计</div>
           <div class="pay_price_num">{{service[type].price}}元</div>
         </div>
-        <div class="pay_btn">确认支付</div>
+        <div class="pay_btn" @click="register">确认支付</div>
       </div>
       <div class="pay_bottom">法制文明进万家活动限时优惠 活动截止时间 2019-11-23</div>
     </div>
@@ -87,8 +87,9 @@
 <script>
   import api from '@/api/api'
   import { Toast } from 'vant'
-  import { getScript } from '@/utils/global.js'
+  import { getScript, isWechat } from '@/utils/global.js'
   import storage from 'good-storage'
+  import $ from 'zhangjia-zepto'
   export default {
     data() {
       return {
@@ -101,6 +102,7 @@
         timer: null,
         payType: 'WEIXIN_H5',
         canPay: true,
+        orderInfo: {},
         service: {
           gold: {
             detail: [
@@ -115,7 +117,8 @@
                 value: '3-5名',
               }
             ],
-            price: '899.00'
+            price: '899.00',
+            orderStatus: 2,
           },
           diamond: {
             detail: [
@@ -133,7 +136,8 @@
                 value: '3-5名',
               }
             ],
-            price: '1599.00'
+            price: '1599.00',
+            orderStatus: 3,
           },
           experience: {
             detail: [
@@ -142,7 +146,8 @@
                 value: '不限时不限次',
               }
             ],
-            price: '129.00'
+            price: '129.00',
+            orderStatus: 1,
           }
         }
       }
@@ -184,7 +189,7 @@
         }, function onload (instance) {
           self.inst = instance
         }, function onerror (err) {
-          Toast.fail('验证码初始化失败，请刷新页面');
+          Toast('验证码初始化失败，请刷新页面');
         })
       },
       sendPhoneCode() {
@@ -197,14 +202,14 @@
               platform: 'H5'
             }
           }else {
-            Toast.fail('请输入正确的手机号');
+            Toast('请输入正确的手机号');
             return false;
           }
           let self = this;
           api.sendPhoneCodeV1(data).then(res => {
             if (res.code == 0) {
               this.hasCode = true;
-              Toast.success('发送验证码成功');
+              Toast('发送验证码成功');
               let seconds = 60;
               let getCode = function () {
                 if (seconds > 0) {
@@ -245,7 +250,7 @@
         //   return
         // }
         if (!this.code) {
-          this.$message({
+          Toast({
             text: '请先输入验证码',
             type: 'warn'
           })
@@ -254,14 +259,14 @@
         this.handleTestDisabled = true
         let data = {
           deviceId: localStorage.getItem('clientId'),
-          userPhone: this.userPhone,
+          userPhone: this.phone,
           phoneCode: this.code
         };
         api.loginV1(data).then(res => {
           if (res.code === 0) {
             localStorage.sessionId = res.data.sessionId;
             // sa.login(res.data.userPhone) // 覆盖distinct_id
-            this.certification();
+            this.test();
           } else {
             this.handleTestDisabled = false
             this.$message({
@@ -272,16 +277,16 @@
         })
       },
       test() {
+        // storage.set('deviceType', this.payType)
         let obj = {
-          userPhone: this.userPhone,
-          proCode: 'blackList', // 详版
-          randomId: localStorage.getItem('randomId'),
-          pageUrl: localStorage.getItem('originUrl')
+          userPhone: this.phone,
+          orderStatus: this.service[this.type].orderStatus,
         }
         api.checkoutCounterV1(obj).then(res => {
           this.handleTestDisabled = false
           if (res.code === 0) {
-            this.this.orderInfo = res.data;
+            this.orderInfo = res.data;
+
             this.pay();
           } else {
             this.$message({
@@ -290,71 +295,67 @@
             })
           }
         }).catch(err => {
-          this.$message({
+          Toast({
             text: '网络错误,请稍后重试',
             type: 'error'
           })
         })
       },
       pay() {
-        if(this.hasShare) {
-          
-        }else {
-          if(this.canPay) {
-            let data;
-            this.canPay = false
-            setTimeout(() => {
-              this.canPay = true
-            }, 1000);
-            if (isWechat()) {
-              // 微信收银台支付
-              let data = {
-                'callback_url': `${location.origin}/pay`,
-                'mchid': '1527581321',
-                'notify_url': `${callbackUrl}orderPayjs/callback`,
-                'out_trade_no': this.orderInfo.orderId,
-                'total_fee': parseInt(this.orderInfo.orderRealAmount)
-              }
-              let stringA = `callback_url=${data.callback_url}&mchid=${data.mchid}&notify_url=${data.notify_url}&out_trade_no=${data.out_trade_no}&total_fee=${data.total_fee}&key=PDXOdDsQVBx9M8p6`
-              data.sign = md5(stringA).toUpperCase()
-              window.location.href = `https://payjs.cn/api/cashier?callback_url=${data.callback_url}&mchid=${data.mchid}&notify_url=${data.notify_url}&total_fee=${data.total_fee}&out_trade_no=${data.out_trade_no}&sign=${data.sign}`
-            } else {
-              // 阿里支付
-              let data = {
-                payWay: this.payType,
-                orderId: this.orderInfo.orderId,
-                returnUrl: `${location.origin}/pay`,
-                deviceType: this.payType
-              }
-              storage.set('deviceType', this.payType)
-              api.getPayCodeV1(data).then(res => {
-                if(res.code === 0) {
-                  if(this.payType == 'WECHAT') {
-                    let data_ = JSON.parse(res.data);
-                    let redirect_url = encodeURIComponent(data.returnUrl);
-                    location.href = `${data_.payUrl}&redirect_url=${redirect_url}`;
-                  }else {
-                    $('#form').html(res.data);
-                  }
-                }else {
-                  this.$message({
-                    text: res.msg,
-                    type: 'warn'
-                  })
-                }
-              }).catch(err => {
-                this.$message({
-                  text: '网络错误,请稍后重试',
-                  type: 'error'
-                })
-              })
+        if(this.canPay) {
+          this.canPay = false
+          setTimeout(() => {
+            this.canPay = true
+          }, 1000);
+          if (isWechat()) {
+            // 微信收银台支付
+            let data = {
+              'callback_url': `${location.origin}/pay`,
+              'mchid': '1527581321',
+              'notify_url': `${callbackUrl}orderPayjs/callback`,
+              'out_trade_no': this.orderInfo.orderId,
+              'total_fee': parseInt(this.orderInfo.orderRealAmount)
             }
-          }else {
-            this.$message({
-              text: '请勿重复点击',
-              type: 'warn'
+            let stringA = `callback_url=${data.callback_url}&mchid=${data.mchid}&notify_url=${data.notify_url}&out_trade_no=${data.out_trade_no}&total_fee=${data.total_fee}&key=PDXOdDsQVBx9M8p6`
+            data.sign = md5(stringA).toUpperCase()
+            window.location.href = `https://payjs.cn/api/cashier?callback_url=${data.callback_url}&mchid=${data.mchid}&notify_url=${data.notify_url}&total_fee=${data.total_fee}&out_trade_no=${data.out_trade_no}&sign=${data.sign}`
+          } else {
+            console.log('pay');
+            // 阿里支付
+            let data = {
+              payWay: this.payType == 'wap' ? 'ALIPAY' : 'WECHAT',
+              orderId: this.orderInfo.orderId,
+              returnUrl: `${location.origin}/pay`,
+              deviceType: this.payType
+            }
+            console.log(111);
+            api.getPayCodeV1(data).then(res => {
+              if(res.code === 0) {
+                if(this.payType == 'WEIXIN_H5') {
+                  let data_ = JSON.parse(res.data);
+                  let redirect_url = encodeURIComponent(data.returnUrl);
+                  location.href = `${data_.payUrl}&redirect_url=${redirect_url}`;
+                }else {
+                  $('#form').html(res.data);
+                }
+              }else {
+                this.$message({
+                  text: res.msg,
+                  type: 'warn'
+                })
+              }
+            }).catch(err => {
+              this.$message({
+                text: '网络错误,请稍后重试',
+                type: 'error'
+              })
             })
           }
+        }else {
+          this.$message({
+            text: '请勿重复点击',
+            type: 'warn'
+          })
         }
       },
     },
