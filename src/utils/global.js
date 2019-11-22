@@ -6,6 +6,7 @@ export let getQueryString = function (name) {
   }
   return null
 }
+
 export let Terminal = {
   // 辨别移动终端类型
   platform : function () {
@@ -35,4 +36,29 @@ export let config = {
   SC_server_prod_url: 'https://sensors-api.caishuiyu.com/sa?project=merchant',
   // 神策测试地址
   SC_server_sit_url: 'https://sensors-api.caishuiyu.com/sa?project=default',
+}
+
+export const getScript = (url, callback) => {
+    let id = document.getElementById(url)
+    if(id){
+        callback && callback()
+        return
+    }
+    let head = document.getElementsByTagName('head')[0],
+        js = document.createElement('script');
+
+    js.setAttribute('type', 'text/javascript');
+    js.setAttribute('src', url);
+    js.setAttribute('id', url);
+
+    head.appendChild(js);
+
+    let callbackFn = function(){
+        if(typeof callback === 'function'){
+            callback();
+        }
+    }
+    js.onload = function() {
+        callbackFn();
+    }
 }

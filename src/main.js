@@ -7,6 +7,7 @@ import router from './router/index'
 import store from './store/index'
 import '@/common/css/reset.css'
 import '@/common/css/animate.css'
+import '@/common/css/share.css'
 import { config } from '@/utils/global'
 // import VConsole from 'vconsole'
 
@@ -41,16 +42,11 @@ sa.init({
 
 window.sa = sa;
 
-sa.quick("autoTrack")
+// sa.quick("autoTrack")
 
 router.beforeEach((to, from, next) => {
-	sa.registerPage({
-	  	$title: to.meta.saTitle,
-	  	$screen_name: to.meta.saName,
-	})
-  if (to.name === 'bindPhone') {
-    // alert(1)
-  }
+	// sa.registerPage({})
+  document.title = to.meta.title;
   next()
 })
 
