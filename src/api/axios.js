@@ -26,7 +26,6 @@ axios.interceptors.request.use((config) => {
   config.withCredentials = false;
   config.headers = {
     'Content-Type': 'application/json;charset=utf-8',
-    Referer: location.origin,
     channel: 'wap',
     sessionId: storage.get('sessionId') || '',
     // packageName: 'com.anniu.white.web',
