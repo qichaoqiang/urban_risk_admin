@@ -2,7 +2,7 @@
 	<div class="container">
 		<img class="pay_icon" src="@/assets/img_status_error.png">
 		<div class="pay_text1">系统异常, 服务开通失败</div>
-		<div class="pay_text2">您所支付款项已全额原路退回</div>
+		<div class="pay_text2">如果您已成功支付，<br/>所支付款项已全额原路退回</div>
 		<div class="line1"></div>
 		<div class="pay_text3">
 			客服将于5分钟内与您取得联系，请稍候<br/>

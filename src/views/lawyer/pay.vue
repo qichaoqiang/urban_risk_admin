@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<img class="pay_icon" src="@/assets/img_status_done.png">
-		<div class="pay_text1">支付成功</div>
+		<div class="pay_text1">正在确认支付状态</div>
 		<div class="pay_text2">服务开通中</div>
 		<div class="pay_text3">请不要退出当前页面</div>
 	</div>
