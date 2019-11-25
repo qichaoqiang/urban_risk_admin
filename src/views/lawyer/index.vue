@@ -155,7 +155,7 @@
 						day: 189,
 						num: 6,
 						time: 127,
-						img: require('@/assets/head.png'),
+						img: require('@/assets/img_user_liujia.png'),
 						content: '房屋购买合同审核1次'
 					}, {
 						title: '“开车有风险，上路须谨慎”',
@@ -164,7 +164,7 @@
 						day: 63,
 						num: 5,
 						time: 35,
-						img: require('@/assets/ic_pay_alipay.png'),
+						img: require('@/assets/img_user_yanping.png'),
 						content: ''
 					}, {
 						title: '“我会花钱，但不会花冤枉钱”',
@@ -173,7 +173,7 @@
 						day: 196,
 						num: 15,
 						time: 271,
-						img: require('@/assets/ic_pay_alipay.png'),
+						img: require('@/assets/img_user_yaqi.png'),
 						content: ''
 					}
 				]
@@ -213,8 +213,9 @@
 				sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[0], {
 					scrollTop: document.documentElement.scrollTop,
 					rate: Math.ceil((document.documentElement.scrollTop + window.screen.height) / window.screen.height) / Math.ceil((document.body.clientHeight ) / window.screen.height)
+				}, () => {
+					location.href = 'https://anniu.qiyukf.com/client?k=394edb8ea8c46b5bbe73ed39ad18c3f7&wp=1&sid=3922410&robotShuntSwitch=0';
 				});
-				location.href = 'https://anniu.qiyukf.com/client?k=394edb8ea8c46b5bbe73ed39ad18c3f7&wp=1&sid=3922410&robotShuntSwitch=0';
 			},
 			open() {
 				sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[1], {
