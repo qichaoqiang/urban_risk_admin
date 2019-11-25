@@ -78,7 +78,7 @@
         </div>
         <div class="pay_btn" id="pay_btn" @click="register">确认支付</div>
       </div>
-      <div class="pay_bottom">法制文明进万家活动限时优惠 活动截止时间 2019-11-23</div>
+      <div class="pay_bottom">法制文明进万家活动限时优惠 活动截止时间 {{date}}</div>
     </div>
     <div class="form" id="form"></div>
   </div>
@@ -93,6 +93,7 @@
   export default {
     data() {
       return {
+        date: '',
         phone: '',
         code: '',
         isSend: true,
@@ -164,6 +165,11 @@
       }
     },
     methods: {
+      getTime() {
+        let time = new Date(new Date().getTime() + 86400000);
+        let date = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}`
+        this.date = date;
+      },
       select(type) {
         let obj = {
           gold: '黄金',
@@ -397,6 +403,7 @@
       },
     },
     created() {
+      this.getTime();
       this.setCaptcha();
     },
     mounted() {

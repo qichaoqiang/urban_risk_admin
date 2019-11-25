@@ -23,7 +23,7 @@
 						<div class="guide_right_text">现仅需</div>
 						<div class="guide_right_price">899.00<span>元/年起</span></div>
 						<div class="line2"></div>
-						<div class="guide_right_time">活动截止时间: 2019-11-20</div>
+						<div class="guide_right_time">活动截止时间: {{date}}</div>
 					</div>
 				</div>
 			</div>
@@ -146,6 +146,7 @@
 	export default {
 		data() {
 			return {
+				date: '',
 				scrollList: [],
 				exampleList: [
 					{
@@ -186,6 +187,11 @@
 
 		},
 		methods: {
+			getTime() {
+				let time = new Date(new Date().getTime() + 86400000);
+				let date = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}`
+				this.date = date;
+			},
 			createScrollData() {
 				let list = [];
 				let phone = '';
@@ -226,6 +232,7 @@
 			}
 		},
 		created() {
+			this.getTime();
 			localStorage.setItem('utm_source', this.$route.query.utm_source || '');
 	        localStorage.setItem('utm_medium', this.$route.query.utm_medium || '');
 	        localStorage.setItem('originUrl', location.href);
