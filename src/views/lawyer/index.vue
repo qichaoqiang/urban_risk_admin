@@ -21,7 +21,7 @@
 					<div class="line1"></div>
 					<div class="guide_right">
 						<div class="guide_right_text">现仅需</div>
-						<div class="guide_right_price">999.00<span>元/年起</span></div>
+						<div class="guide_right_price">899.00<span>元/年起</span></div>
 						<div class="line2"></div>
 						<div class="guide_right_time">活动截止时间: 2019-11-20</div>
 					</div>
