@@ -21,7 +21,7 @@
 			}
 		},
 		created() {
-			
+
 		}
 	}
 </script>
@@ -64,8 +64,8 @@
 		}
 		.pay_qrcode {
 			margin-top: 16px;
-			width: 120px;
-			height: 120px;
+			width: 160px;
+			height: 160px;
 		}
 	}
 </style>

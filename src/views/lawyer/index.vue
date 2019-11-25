@@ -41,7 +41,7 @@
 				<div class="list">
 					<div class="list_item">
 						<div class="list_item_left" style="padding-top: 8px;"><span>按时按次计费, <br/>收费高</span></div>
-						<div class="list_item_right" style="padding-top: 8px;"><span>全年仅需999,  <br/>不限时不限次</span></div>
+						<div class="list_item_right" style="padding-top: 8px;"><span>全年仅需899,  <br/>不限时不限次</span></div>
 					</div>
 					<div class="line3"></div>
 					<div class="list_item">

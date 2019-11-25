@@ -69,6 +69,11 @@
           </div>
         </div>
       </div>
+      <div class="argument-agree" @click="changeAgree">
+        <div class="check" v-if="isAgreement"><img src="@/assets/agreement_on.png"></div>
+        <div class="check" v-else><img src="@/assets/agreement_off.png"></div>
+        <span>支付即表示同意<span @click.stop="goAgreement">《高端家庭律师服务会员协议》</span></span>
+      </div>
     </div>
     <div class="pay_box">
       <div class="pay">
@@ -93,6 +98,7 @@
   export default {
     data() {
       return {
+        isAgreement: true,
         date: '',
         phone: '',
         code: '',
@@ -192,6 +198,12 @@
           payType
         });
         this.payType = type;
+      },
+      changeAgree() {
+        this.isAgreement = !this.isAgreement;
+      },
+      goAgreement() {
+        this.$router.push('/agreement');
       },
       setCaptcha(){
         getScript('//cstaticdun.126.net/load.min.js',()=>{
@@ -613,6 +625,28 @@
           width: 100%;
           height: 0;
           border-top: 1px solid rgba(0,0,0,0.12);
+        }
+      }
+      .argument-agree {
+        margin-top: 16px;
+        width: 100%;
+        display: flex;
+        // justify-content: center;
+        .check {
+          margin-right: 8px;
+          width: 16px;
+          height: 16px;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+        span {
+          font-family: PingFangSC-Medium;
+          font-size: 12px;
+          color: rgba(0,0,0,0.26);
+          text-align: center;
+          line-height: 16px;
         }
       }
     }

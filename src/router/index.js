@@ -47,6 +47,14 @@ export default new Router({
       meta: {
         title: '服务开通失败'
       }
+    },
+    {
+      path: '/agreement',
+      name: 'agreement',
+      component: () => import('../views/lawyer/agreement.vue'),
+      meta: {
+        title: '高端家庭律师服务会员协议'
+      }
     }
   ],
   scrollBehavior(to, from, saveTop){
