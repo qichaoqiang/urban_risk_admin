@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<img class="pay_icon" src="@/assets/img_status_done.png">
+		<img class="pay_icon" src="@/assets/img_status_done.gif">
 		<div class="pay_text1">正在确认支付状态</div>
 		<div class="pay_text2">服务开通中</div>
 		<div class="pay_text3">请不要退出当前页面</div>
@@ -15,9 +15,9 @@
 			}
 		},
 		created() {
-			setTimeout(() => {
-				this.$router.replace('/result');
-			}, 3000)
+			// setTimeout(() => {
+			// 	this.$router.replace('/result');
+			// }, 5000)
 		}
 	}
 </script>
