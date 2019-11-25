@@ -4,19 +4,19 @@
       <div class="select_tip">请选择服务</div>
       <div class="select_box">
         <div class="select_tab">
-          <div class="select_tab_item" :class="{select_tab_item_active: type == 'gold'}" @click="select('gold')">
+          <div class="select_tab_item" id="gold" :class="{select_tab_item_active: type == 'gold'}" @click="select('gold')">
             <img class="select_tab_icon" src="@/assets/ic_recomd.png">
             <div class="select_tab_type">黄金版</div>
             <div class="select_tab_price">899元/年</div>
           </div>
           <div class="line1" :class="{line1_none: type == 'experience'}"></div>
-          <div class="select_tab_item" :class="{select_tab_item_active: type == 'diamond'}" @click="select('diamond')">
+          <div class="select_tab_item" id="diamond" :class="{select_tab_item_active: type == 'diamond'}" @click="select('diamond')">
             <img class="select_tab_icon" src="@/assets/ic_recomd.png">
             <div class="select_tab_type">钻石版</div>
             <div class="select_tab_price">1599元/年</div>
           </div>
           <div class="line1" :class="{line1_none: type == 'gold'}"></div>
-          <div class="select_tab_item" :class="{select_tab_item_active: type == 'experience'}" @click="select('experience')">
+          <div class="select_tab_item" id="experience" :class="{select_tab_item_active: type == 'experience'}" @click="select('experience')">
             <div class="select_tab_type">体验版</div>
             <div class="select_tab_price">129元/月</div>
           </div>
@@ -56,7 +56,7 @@
         <div class="pay_method_item">
           <img class="pay_method_icon" src="@/assets/ic_pay_wechat.png">
           <div class="pay_method_text">微信支付</div>
-          <div class="pay_method_check" @click="payType = 'WEIXIN_H5'">
+          <div class="pay_method_check" id="WEIXIN_H5" @click="selectPayType('WEIXIN_H5')">
             <img class="pay_method_check" :src="payType == 'WEIXIN_H5' ? require('@/assets/checkbox_on.png') : require('@/assets/checkbox_off.png')">
           </div>
         </div>
@@ -64,7 +64,7 @@
         <div class="pay_method_item">
           <img class="pay_method_icon" src="@/assets/ic_pay_alipay.png">
           <div class="pay_method_text">支付宝支付</div>
-          <div class="pay_method_check" @click="payType = 'wap'">
+          <div class="pay_method_check" id="wap" @click="selectPayType('wap')">
             <img class="pay_method_check" :src="payType == 'wap' ? require('@/assets/checkbox_on.png') : require('@/assets/checkbox_off.png')">
           </div>
         </div>
@@ -76,7 +76,7 @@
           <div class="pay_price_text">总计</div>
           <div class="pay_price_num">{{service[type].price}}元</div>
         </div>
-        <div class="pay_btn" @click="register">确认支付</div>
+        <div class="pay_btn" id="pay_btn" @click="register">确认支付</div>
       </div>
       <div class="pay_bottom">法制文明进万家活动限时优惠 活动截止时间 2019-11-23</div>
     </div>
@@ -165,7 +165,27 @@
     },
     methods: {
       select(type) {
+        let obj = {
+          gold: '黄金',
+          diamond: '钻石',
+          experience: '体验'
+        }
+        let level = obj[type];
+        sa.quick('trackHeatMap', document.getElementById(type), {
+          level
+        });
         this.type = type;
+      },
+      selectPayType(type) {
+        let obj = {
+          'WEIXIN_H5': '微信支付',
+          'wap': '支付宝'
+        }
+        let payType = obj[type];
+        sa.quick('trackHeatMap', document.getElementById(type), {
+          payType
+        });
+        this.payType = type;
       },
       setCaptcha(){
         getScript('//cstaticdun.126.net/load.min.js',()=>{
@@ -235,6 +255,9 @@
         }
       },
       getCode(){
+        sa.quick('trackHeatMap', document.getElementById('getPhoneCode'), {
+          phone: this.phone
+        })
         if(!this.isPhone) {
           this.$refs.login_input.focus();
           Toast('请输入正确的手机号后获取')
@@ -243,6 +266,23 @@
         }
       },
       register() {
+        let obj1 = {
+          'WEIXIN_H5': '微信支付',
+          'wap': '支付宝'
+        }
+        let payType = obj1[this.payType];
+        let obj2 = {
+          gold: '黄金',
+          diamond: '钻石',
+          experience: '体验'
+        }
+        let level = obj2[this.type];
+        let price = this.service[this.type].price
+        sa.quick('trackHeatMap', document.getElementById('pay_btn'), {
+          payType,
+          level,
+          price
+        });
         if(!this.isPhone) {
           this.$refs.login_input.focus();
           Toast('请输入正确的手机号');

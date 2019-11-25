@@ -210,24 +210,29 @@
 				this.scrollList = list;
 			},
 			customerService() {
-				location.href = ''
+				sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[0], {
+					scrollTop: document.documentElement.scrollTop,
+					rate: Math.ceil((document.documentElement.scrollTop + window.screen.height) / window.screen.height) / Math.ceil((document.body.clientHeight ) / window.screen.height)
+				});
+				location.href = 'https://anniu.qiyukf.com/client?k=394edb8ea8c46b5bbe73ed39ad18c3f7&wp=1&sid=3922410&robotShuntSwitch=0';
 			},
 			open() {
+				sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[1], {
+					scrollTop: document.documentElement.scrollTop,
+					rate: Math.ceil((document.documentElement.scrollTop + window.screen.height) / window.screen.height) / Math.ceil((document.body.clientHeight ) / window.screen.height)
+				});
 				this.$router.push('/order');
 			}
 		},
 		created() {
-			localStorage.setItem('utm_source', this.$route.query.utm_source);
-	        localStorage.setItem('utm_medium', this.$route.query.utm_medium);
+			localStorage.setItem('utm_source', this.$route.query.utm_source || '');
+	        localStorage.setItem('utm_medium', this.$route.query.utm_medium || '');
 	        localStorage.setItem('originUrl', location.href);
 			sa.registerPage({
-		        $utm_medium: localStorage.getItem('utm_medium'),
-		        $utm_source: localStorage.getItem('utm_source'),
-		        appname:"xyH5_SEM",
-		        PlatformType: 'H5',
-		        clientId_: localStorage.getItem('clientId'),
-		        url_: location.href
+		        $utm_medium: localStorage.getItem('utm_medium') || '',
+		        $utm_source: localStorage.getItem('utm_source') || '',
 	      	});
+			sa.quick("autoTrack")
 			this.createScrollData();
 		},
 		mounted() {

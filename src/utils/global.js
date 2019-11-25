@@ -47,7 +47,7 @@ export let config = {
   // 网易云盾的 key
   captchaId: '542ca0c104ea48ffb746c922d27cdc5c',
   // 神策正式地址
-  SC_server_prod_url: 'https://sensors-api.caishuiyu.com/sa?project=merchant',
+  SC_server_prod_url: 'https://sensors-api.caishuiyu.com/sa?project=tax',
   // 神策测试地址
   SC_server_sit_url: 'https://sensors-api.caishuiyu.com/sa?project=default',
 }
