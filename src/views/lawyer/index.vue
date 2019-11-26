@@ -14,7 +14,7 @@
 			</div>
 		</div>
 		<div class="banner">
-			<div class="guide">
+			<!-- <div class="guide">
 				<div class="guide_title">• 限时特惠 法制文明进万家活动 •</div>
 				<div class="guide_content">
 					<div class="guide_left">原价<br/>13800元/年</div>
@@ -26,10 +26,10 @@
 						<div class="guide_right_time">活动截止时间: {{date}}</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<div class="content">
-			<img class="img1" src="@/assets/b_01.png">
+			<!-- <img class="img1" src="@/assets/b_01.png"> -->
 			<div class="guide1">为全国10,000个家庭提供1年高端<span>家庭律师服务</span>体验</div>
 			<div class="guide2">
 				<div class="guide2_title">名额有限 售完即止</div>
@@ -65,8 +65,8 @@
 			<div class="select_detail">
 				<div class="select_detail_item select_detail_head">
 					<div class="select_detail_key">权益项目</div>
-					<div class="select_detail_key1">服务价值</div>
-					<div class="select_detail_value" style="color: rgba(0,0,0,0.87);">细则</div>
+					<div class="select_detail_key1">权益内容</div>
+					<div class="select_detail_value" style="color: rgba(0,0,0,0.87);">市场价</div>
 				</div>
 				<div class="line2"></div>
 				<div class="select_detail_item">
@@ -96,7 +96,6 @@
 					<div class="equity_content_text2">20000元</div>
 				</div>
 			</div>
-			<img class="img1" src="@/assets/b_06.png" style="margin-top: 24px;">
 			<div class="price">
 				<div class="price_left">原价<br/>13800元/年</div>
 				<div class="price_right">
@@ -104,6 +103,7 @@
 					<div class="price_right_text2">899.00<span>元/年起</span></div>
 				</div>
 			</div>
+			<img class="img1" src="@/assets/b_06.png">
 			<img class="img1" src="@/assets/b_07.png">
 			<div class="example_title">
 				<div class="line4"></div>
@@ -309,10 +309,10 @@
 			}
 		}
 		.banner {
-			padding-top: 214px;
+			// padding-top: 214px;
 			box-sizing: border-box;
 			width: 100%;
-			height: 360px;
+			height: 214px;
 			background: url('../../assets/head.png') top no-repeat;
 			background-size: 100%;
 			.guide {
@@ -593,6 +593,7 @@
 				}
 			}
 			.price {
+				margin-top: 16px;
 				width: 328px;
 				height: 77px;
 				display: flex;
