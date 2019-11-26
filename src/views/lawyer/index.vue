@@ -129,7 +129,7 @@
 			</div>
 			<img class="img1" src="@/assets/b_08.png">
 			<img class="img1" src="@/assets/b_09.png">
-			<div class="compony">© 杭州税牛科技有限公司 浙ICP备123456-1</div>
+			<div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div>
 		</div>
 		<div class="bottom">
 			<div class="bottom_btn custom_btn" @click="customerService">咨询客服</div>
