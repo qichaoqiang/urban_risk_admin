@@ -107,7 +107,7 @@
         codeText: '获取验证码',
         validate: '',
         timer: null,
-        payType: 'WEIXIN_H5',
+        payType: 'wap',
         canPay: true,
         orderInfo: {},
         service: {
