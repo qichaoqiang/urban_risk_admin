@@ -29,7 +29,6 @@
 			</div> -->
 		</div>
 		<div class="content">
-			<!-- <img class="img1" src="@/assets/b_01.png"> -->
 			<div class="guide1">为全国10,000个家庭提供1年高端<span>家庭律师服务</span>体验</div>
 			<div class="guide2">
 				<div class="guide2_title">名额有限 售完即止</div>
@@ -103,6 +102,7 @@
 					<div class="price_right_text2">899.00<span>元/年起</span></div>
 				</div>
 			</div>
+			<img class="img1" src="@/assets/b_01.png" style="margin-top: 16px;">
 			<img class="img1" src="@/assets/b_06.png">
 			<img class="img1" src="@/assets/b_07.png">
 			<div class="example_title">
