@@ -138,7 +138,7 @@
 		</div>
 		<div class="bottom">
 			<!-- <div class="bottom_btn custom_btn" @click="customerService">咨询客服</div> -->
-			<div class="bottom_btn" @click="open">咨询律师</div>
+			<div class="bottom_btn" @click="open">开始咨询律师，有问必答</div>
 		</div>
 	</div>
 </template>
