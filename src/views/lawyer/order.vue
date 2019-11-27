@@ -6,19 +6,19 @@
         <div class="select_tab">
           <div class="select_tab_item" id="gold" :class="{select_tab_item_active: type == 'gold'}" @click="select('gold')">
             <img class="select_tab_icon" src="@/assets/ic_recomd.png">
-            <div class="select_tab_type">黄金版</div>
-            <div class="select_tab_price">899元/年</div>
+            <div class="select_tab_type">文字咨询</div>
+            <div class="select_tab_price">20元/次</div>
           </div>
           <div class="line1" :class="{line1_none: type == 'experience'}"></div>
           <div class="select_tab_item" id="diamond" :class="{select_tab_item_active: type == 'diamond'}" @click="select('diamond')">
             <img class="select_tab_icon" src="@/assets/ic_recomd.png">
-            <div class="select_tab_type">钻石版</div>
-            <div class="select_tab_price">1599元/年</div>
+            <div class="select_tab_type">电话咨询</div>
+            <div class="select_tab_price">79元/次</div>
           </div>
           <div class="line1" :class="{line1_none: type == 'gold'}"></div>
           <div class="select_tab_item" id="experience" :class="{select_tab_item_active: type == 'experience'}" @click="select('experience')">
-            <div class="select_tab_type">体验版</div>
-            <div class="select_tab_price">129元/月</div>
+            <div class="select_tab_type">包年版</div>
+            <div class="select_tab_price">399元/年</div>
           </div>
         </div>
         <div class="select_detail">
@@ -34,7 +34,7 @@
           <div class="line2" style="margin-top: 12px;"></div>
           <div class="select_detail_bottom">
             <div class="select_detail_bottom_key">服务期限</div>
-            <div class="select_detail_bottom_value" style="flex: 1">1{{type == 'experience' ? '月' : '年'}}</div>
+            <div class="select_detail_bottom_value" style="flex: 1">{{service[type].time}}</div>
             <div class="select_detail_bottom_key">金额</div>
             <div class="select_detail_bottom_value" style="color: #C38E3E;">{{service[type].price}}元</div>
           </div>
@@ -114,27 +114,45 @@
           gold: {
             detail: [
               {
-                key: '电话/网上法律咨询服务',
-                value: '不限时不限次',
+                key: '文字咨询服务，有问必答',
+                value: '7次提问， 24小时有效',
               }, {
                 key: '全天候专属VIP客服',
                 value: '1名',
-              }, {
-                key: '1+N律师组团服务',
-                value: '3-5名',
               }
             ],
-            price: '899.00',
-            orderStatus: 2,
+            price: '20.00',
+            orderStatus: 1,
+            time: '24小时'
           },
           diamond: {
             detail: [
               {
-                key: '电话/网上法律咨询服务',
-                value: '不限时不限次',
+                key: '文字咨询服务，有问必答',
+                value: '3次追问，24小时有效',
+              }, {
+                key: '电话咨询服务',
+                value: '不限时长次数，24小时有效',
+              }, {
+                key: '全天候专属VIP客服',
+                value: '1名',
+              }
+            ],
+            price: '79.00',
+            orderStatus: 2,
+            time: '24小时'
+          },
+          experience: {
+            detail: [
+              {
+                key: '文字咨询服务，有问必答',
+                value: '不限时，不限次',
+              }, {
+                key: '电话咨询服务',
+                value: '不限时，不限次',
               }, {
                 key: '起草/审查/修改法律文书',
-                value: '3份',
+                value: '1份',
               }, {
                 key: '全天候专属VIP客服',
                 value: '1名',
@@ -143,18 +161,9 @@
                 value: '3-5名',
               }
             ],
-            price: '1599.00',
+            price: '399.00',
             orderStatus: 3,
-          },
-          experience: {
-            detail: [
-              {
-                key: '电话/网上法律咨询服务',
-                value: '2次或累计30分钟',
-              }
-            ],
-            price: '129.00',
-            orderStatus: 1,
+            time: '1年'
           }
         }
       }

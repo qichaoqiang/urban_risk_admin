@@ -29,18 +29,18 @@
 			</div> -->
 		</div>
 		<div class="content">
-			<div class="guide1">为全国10,000个家庭提供1年高端<span>家庭律师服务</span>体验</div>
+			<!-- <div class="guide1">为全国10,000个家庭提供高端<span>家庭律师服务</span>体验</div>
 			<div class="guide2">
 				<div class="guide2_title">名额有限 售完即止</div>
 				目前已有 <span>8139</span> 个家庭参与活动
-			</div>
+			</div> -->
 			<img class="img1" src="@/assets/b_02.png" style="margin-top: 16px;">
 			<img class="img1" src="@/assets/b_03.png">
 			<div class="list_box">
 				<div class="list">
 					<div class="list_item">
-						<div class="list_item_left" style="padding-top: 8px;"><span>按时按次计费, <br/>收费高</span></div>
-						<div class="list_item_right" style="padding-top: 8px;"><span>全年仅需899起,  <br/>不限时不限次</span></div>
+						<div class="list_item_left" style="padding-top: 8px;"><span>免费咨询服务差, <br/>收费服务费用高</span></div>
+						<div class="list_item_right" style="padding-top: 8px;"><span>单次服务20元起,  <br/>价格实惠服务好</span></div>
 					</div>
 					<div class="line3"></div>
 					<div class="list_item">
@@ -65,31 +65,36 @@
 				<div class="select_detail_item select_detail_head">
 					<div class="select_detail_key">权益项目</div>
 					<div class="select_detail_key1">权益内容</div>
-					<div class="select_detail_value" style="color: rgba(0,0,0,0.87);">市场价</div>
+					<!-- <div class="select_detail_value" style="color: rgba(0,0,0,0.87);">市场价</div> -->
 				</div>
 				<div class="line2"></div>
 				<div class="select_detail_item">
-					<div class="select_detail_key">电话/网上法律咨询服务</div>
+					<div class="select_detail_key">文字咨询服务</div>
 					<div class="select_detail_key1">不限时不限次</div>
-					<div class="select_detail_value">200元/次</div>
+					<!-- <div class="select_detail_value">100元/次</div> -->
+				</div>
+				<div class="select_detail_item">
+					<div class="select_detail_key">法律咨询服务</div>
+					<div class="select_detail_key1">不限时不限次</div>
+					<!-- <div class="select_detail_value">200元/次</div> -->
 				</div>
 				<div class="select_detail_item">
 					<div class="select_detail_key">起草/审查/修改法律文书</div>
-					<div class="select_detail_key1">3份</div>
-					<div class="select_detail_value">800元/份</div>
+					<div class="select_detail_key1">1份</div>
+					<!-- <div class="select_detail_value">800元/份</div> -->
 				</div>
 				<div class="select_detail_item">
 					<div class="select_detail_key">全天候专属VIP客服</div>
 					<div class="select_detail_key1">1名</div>
-					<div class="select_detail_value">3000元/年</div>
+					<!-- <div class="select_detail_value">3000元/年</div> -->
 				</div>
 				<div class="select_detail_item">
 					<div class="select_detail_key">1+N律师组团服务</div>
 					<div class="select_detail_key1">3-5名</div>
-					<div class="select_detail_value">10000元/年</div>
+					<!-- <div class="select_detail_value">10000元/年</div> -->
 				</div>
 			</div>
-			<div class="equity">
+			<!-- <div class="equity">
 				<div class="equity_content">
 					<div class="equity_content_text1">权益总价值 > </div>
 					<div class="equity_content_text2">20000元</div>
@@ -101,8 +106,8 @@
 					<div class="price_right_text1">现仅需</div>
 					<div class="price_right_text2">899.00<span>元/年起</span></div>
 				</div>
-			</div>
-			<img class="img1" src="@/assets/b_01.png" style="margin-top: 16px;">
+			</div> -->
+			<!-- <img class="img1" src="@/assets/b_01.png" style="margin-top: 16px;"> -->
 			<img class="img1" src="@/assets/b_06.png">
 			<img class="img1" src="@/assets/b_07.png">
 			<div class="example_title">
@@ -520,7 +525,7 @@
 						width: 134px;
 					}
 					.select_detail_key1 {
-						text-align: center;
+						text-align: right;
 						flex-grow: 1;
 					}
 					.select_detail_value {
