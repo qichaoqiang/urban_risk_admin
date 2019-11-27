@@ -425,7 +425,7 @@
     },
     created() {
       this.getTime();
-      this.setCaptcha();
+      // this.setCaptcha();
     },
     mounted() {
 
