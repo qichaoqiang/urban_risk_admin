@@ -69,7 +69,7 @@
 				</div>
 				<div class="line2"></div>
 				<div class="select_detail_item">
-					<div class="select_detail_key">文字咨询服务</div>
+					<div class="select_detail_key">文字咨询服务，有问必答</div>
 					<div class="select_detail_key1">不限时不限次</div>
 					<!-- <div class="select_detail_value">100元/次</div> -->
 				</div>
