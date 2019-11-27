@@ -45,12 +45,12 @@
           <div class="login_text">手机号</div>
           <input class="login_input" ref="login_input" type="number" placeholder="请输入手机号码" v-model="phone"></input>
         </div>
-        <div class="line4"></div>
+        <!-- <div class="line4"></div>
         <div class="login_item">
           <div class="login_text">验证码</div>
           <input class="login_input" ref="code_input" type="number" placeholder="请输入手机号码" v-model="code"></input>
           <div class="login_code_btn" :class="{login_code_btn_send: !isSend}" id="getPhoneCode" @click.stop.prevent="getCode">{{codeText}}</div>
-        </div>
+        </div> -->
       </div>
       <div class="pay_method">
         <div class="pay_method_item">
@@ -315,16 +315,16 @@
           Toast('请输入正确的手机号');
           return false;
         }
-        if (!this.code) {
-          this.$refs.code_input.focus();
-          Toast('请先输入验证码')
-          return
-        }
+        // if (!this.code) {
+        //   this.$refs.code_input.focus();
+        //   Toast('请先输入验证码')
+        //   return
+        // }
         this.handleTestDisabled = true
         let data = {
           deviceId: localStorage.getItem('clientId'),
           userPhone: this.phone,
-          phoneCode: this.code
+          // phoneCode: this.code
         };
         api.loginV1(data).then(res => {
           if (res.code === 0) {
