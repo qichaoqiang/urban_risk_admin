@@ -137,8 +137,8 @@
 			<div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div>
 		</div>
 		<div class="bottom">
-			<div class="bottom_btn custom_btn" @click="customerService">咨询客服</div>
-			<div class="bottom_btn" @click="open">开通服务</div>
+			<!-- <div class="bottom_btn custom_btn" @click="customerService">咨询客服</div> -->
+			<div class="bottom_btn" @click="open">咨询律师</div>
 		</div>
 	</div>
 </template>
