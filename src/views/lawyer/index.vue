@@ -138,7 +138,7 @@
 		</div>
 		<div class="bottom">
 			<!-- <div class="bottom_btn custom_btn" @click="customerService">咨询客服</div> -->
-			<div class="bottom_btn" @click="open">开始咨询律师，有问必答</div>
+			<div class="bottom_btn" id="bottom_btn" @click="open">开始咨询律师，有问必答</div>
 		</div>
 	</div>
 </template>
@@ -229,7 +229,7 @@
 				});
 			},
 			open() {
-				sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[1], {
+				sa.quick('trackHeatMap', document.getElementById('bottom_btn'), {
 					scrollTop: document.documentElement.scrollTop,
 					rate: Math.ceil((document.documentElement.scrollTop + window.screen.height) / window.screen.height) / Math.ceil((document.body.clientHeight ) / window.screen.height)
 				});
