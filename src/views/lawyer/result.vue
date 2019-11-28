@@ -5,9 +5,7 @@
 		<div class="pay_text2">如果您已成功支付，<br/>所支付款项已全额原路退回</div>
 		<div class="line1"></div>
 		<div class="pay_text3">
-			客服将于5分钟内与您取得联系，请稍候<br/>
-			您也可以添加客服微信，<br/>
-			确认退款进展或索取退款凭证
+			请添加客服微信，确认退款进展
 		</div>
 		<img class="pay_qrcode" src="@/assets/QR-codeSample.png">
 	</div>
