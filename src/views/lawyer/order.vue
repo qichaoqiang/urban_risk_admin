@@ -74,7 +74,7 @@
       <div class="argument-agree" @click="changeAgree">
         <div class="check" v-if="isAgreement"><img src="@/assets/agreement_on.png"></div>
         <div class="check" v-else><img src="@/assets/agreement_off.png"></div>
-        <span>支付即表示同意<span @click.stop="goAgreement">《高端家庭律师服务会员协议》</span></span>
+        <span>支付即表示同意<span @click.stop="goAgreement">《犀牛专业律师服务会员协议》</span></span>
       </div>
     </div>
     <div class="pay_box">

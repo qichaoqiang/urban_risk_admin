@@ -21,7 +21,7 @@ export default new Router({
       name: 'index',
       component: () => import('../views/lawyer/index.vue'),
       meta: {
-        title: '犀牛律服'
+        title: '犀牛专业律师服务'
       }
     },
     {
