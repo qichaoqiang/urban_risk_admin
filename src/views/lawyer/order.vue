@@ -86,7 +86,7 @@
         <div class="pay_btn" id="pay_btn" @click="register">
           <van-loading v-if="loading_pay" size="24px" color="#ffffff" vertical></van-loading>
           <span v-if="!loading_pay">确认开始咨询律师，有问必答</span>
-          <span v-else>&nbsp;等待支付中...</span>
+          <span v-else>&nbsp;正在进入支付...</span>
         </div>
       </div>
       <div class="pay_bottom">
