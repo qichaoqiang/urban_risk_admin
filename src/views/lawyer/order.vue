@@ -329,7 +329,7 @@
         api.loginV1(data).then(res => {
           if (res.code === 0) {
             localStorage.sessionId = res.data.sessionId;
-            // sa.login(res.data.userPhone) // 覆盖distinct_id
+            sa.login(res.data.userPhone) // 覆盖distinct_id
             this.test();
           } else {
             this.handleTestDisabled = false
