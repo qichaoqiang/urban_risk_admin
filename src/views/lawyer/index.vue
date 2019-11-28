@@ -14,19 +14,22 @@
 			</div>
 		</div>
 		<div class="banner">
-			<!-- <div class="guide">
-				<div class="guide_title">• 限时特惠 法制文明进万家活动 •</div>
-				<div class="guide_content">
-					<div class="guide_left">原价<br/>13800元/年</div>
-					<div class="line1"></div>
-					<div class="guide_right">
-						<div class="guide_right_text">现仅需</div>
-						<div class="guide_right_price">899.00<span>元/年起</span></div>
-						<div class="line2"></div>
-						<div class="guide_right_time">活动截止时间: {{date}}</div>
-					</div>
+			<div class="guide">
+				<div class="guide_item">
+					<div class="guide_num">150万+</div>
+					<div class="guide_text">解决客户问题</div>
 				</div>
-			</div> -->
+				<div class="line1"></div>
+				<div class="guide_item">
+					<div class="guide_num">99.5%</div>
+					<div class="guide_text">客户满意度</div>
+				</div>
+				<div class="line1"></div>
+				<div class="guide_item">
+					<div class="guide_num">13.5亿</div>
+					<div class="guide_text">挽回用户损失</div>
+				</div>
+			</div>
 		</div>
 		<div class="content">
 			<!-- <div class="guide1">为全国10,000个家庭提供高端<span>家庭律师服务</span>体验</div>
@@ -34,13 +37,20 @@
 				<div class="guide2_title">名额有限 售完即止</div>
 				目前已有 <span>8139</span> 个家庭参与活动
 			</div> -->
-			<img class="img1" src="@/assets/b_02.png" style="margin-top: 16px;">
+			<img class="img1" src="@/assets/b_01.png">
+			<img class="img1" src="@/assets/b_02.png">
 			<img class="img1" src="@/assets/b_03.png">
+			<img class="img1" src="@/assets/b_04.png">
+			<img class="img1" src="@/assets/b_05.png">
+			<img class="img1" src="@/assets/b_06.png">
+			<img class="img1" src="@/assets/b_07.png">
+			<img class="img1" src="@/assets/b_08.png">
+			<img class="img1" src="@/assets/b_09.png">
 			<div class="list_box">
 				<div class="list">
 					<div class="list_item">
 						<div class="list_item_left" style="padding-top: 8px;"><span>免费咨询服务差, <br/>收费服务费用高</span></div>
-						<div class="list_item_right" style="padding-top: 8px;"><span>单次服务20元起,  <br/>价格实惠服务好</span></div>
+						<div class="list_item_right" style="padding-top: 8px;"><span>单次服务39元起,  <br/>价格实惠服务好</span></div>
 					</div>
 					<div class="line3"></div>
 					<div class="list_item">
@@ -50,7 +60,7 @@
 					<div class="line3"></div>
 					<div class="list_item">
 						<div class="list_item_left"><span>突发事件无法及时响应</span></div>
-						<div class="list_item_right"><span>全天候响应，<br/>随时随地随身</span></div>
+						<div class="list_item_right"><span>3分钟响应，<br/>服务实时就为</span></div>
 					</div>
 					<div class="line3"></div>
 					<div class="list_item">
@@ -58,82 +68,8 @@
 						<div class="list_item_right"><span>全程监管用户评价<br/>服务不满意无条件退款</span></div>
 					</div>
 				</div>
-				<img class="img2" src="@/assets/b_04.png">
 			</div>
-			<img class="img1" src="@/assets/b_05.png" style="margin-top: 8px">
-			<div class="select_detail">
-				<div class="select_detail_item select_detail_head">
-					<div class="select_detail_key">权益项目</div>
-					<div class="select_detail_key1">权益内容</div>
-					<!-- <div class="select_detail_value" style="color: rgba(0,0,0,0.87);">市场价</div> -->
-				</div>
-				<div class="line2"></div>
-				<div class="select_detail_item">
-					<div class="select_detail_key">文字咨询服务，有问必答</div>
-					<div class="select_detail_key1">不限时不限次</div>
-					<!-- <div class="select_detail_value">100元/次</div> -->
-				</div>
-				<div class="select_detail_item">
-					<div class="select_detail_key">法律咨询服务</div>
-					<div class="select_detail_key1">不限时不限次</div>
-					<!-- <div class="select_detail_value">200元/次</div> -->
-				</div>
-				<div class="select_detail_item">
-					<div class="select_detail_key">起草/审查/修改法律文书</div>
-					<div class="select_detail_key1">1份</div>
-					<!-- <div class="select_detail_value">800元/份</div> -->
-				</div>
-				<div class="select_detail_item">
-					<div class="select_detail_key">全天候专属VIP客服</div>
-					<div class="select_detail_key1">1名</div>
-					<!-- <div class="select_detail_value">3000元/年</div> -->
-				</div>
-				<div class="select_detail_item">
-					<div class="select_detail_key">1+N律师组团服务</div>
-					<div class="select_detail_key1">3-5名</div>
-					<!-- <div class="select_detail_value">10000元/年</div> -->
-				</div>
-			</div>
-			<!-- <div class="equity">
-				<div class="equity_content">
-					<div class="equity_content_text1">权益总价值 > </div>
-					<div class="equity_content_text2">20000元</div>
-				</div>
-			</div>
-			<div class="price">
-				<div class="price_left">原价<br/>13800元/年</div>
-				<div class="price_right">
-					<div class="price_right_text1">现仅需</div>
-					<div class="price_right_text2">899.00<span>元/年起</span></div>
-				</div>
-			</div> -->
-			<!-- <img class="img1" src="@/assets/b_01.png" style="margin-top: 16px;"> -->
-			<img class="img1" src="@/assets/b_06.png">
-			<img class="img1" src="@/assets/b_07.png">
-			<div class="example_title">
-				<div class="line4"></div>
-				<div class="example_title_content"><span>135468</span>位用户正在使用</div>
-				<div class="line4"></div>
-			</div>
-			<div class="example_list">
-				<van-swipe :autoplay="2500" :show-indicators="false">
-				  	<van-swipe-item v-for="(item, index) in exampleList" :key="index">
-				    	<div class="example_item">
-				    		<img class="example_img" :src="item.img">
-				    		<div class="example_content">
-				    			<div class="example_content_title">{{item.title}}</div>
-				    			<div class="example_content_name">—— {{item.name}}  | {{item.position}}</div>
-				    			<div class="line5"></div>
-				    			<div class="example_content_text">已开通服务 {{item.day}} 天</div>
-				    			<div class="example_content_text">电话咨询{{item.num}}次，累计{{item.time}}分钟</div>
-				    			<div class="example_content_text">{{item.content}}</div>
-				    		</div>
-				    	</div>
-				  	</van-swipe-item>
-				</van-swipe>
-			</div>
-			<img class="img1" src="@/assets/b_08.png">
-			<img class="img1" src="@/assets/b_09.png">
+			<img class="img1" src="@/assets/b_10.png" style="margin-top: 8px">
 			<div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div>
 		</div>
 		<div class="bottom">
@@ -314,85 +250,47 @@
 			}
 		}
 		.banner {
-			// padding-top: 214px;
+			padding-top: 214px;
 			box-sizing: border-box;
 			width: 100%;
-			height: 214px;
+			height: 320px;
 			background: url('../../assets/head.png') top no-repeat;
 			background-size: 100%;
 			.guide {
 				margin: 0 auto;
-				padding: 12px 16px;
+				padding: 16px 0 14px;
 				box-sizing: border-box;
 				background: #FFFFFF;
 				box-shadow: 0 8px 16px 0 rgba(0,0,0,0.04);
 				border-radius: 1px;
 				width: 328px;
-				.guide_title {
-					font-family: PingFangSC-Regular;
-					font-size: 12px;
-					color: #49559D;
-					text-align: center;
-					line-height: 18px;
-				}
-				.guide_content {
-					margin-top: 8px;
-					width: 100%;
+				display: flex;
+				align-items: center;
+				.guide_item {
+					flex: 1;
 					display: flex;
+					flex-direction: column;
 					align-items: center;
-					.guide_left {
-						padding: 0 16px 4px 8px;
-						align-self: flex-end;
+					.guide_num {
+						font-family: PingFangSC-Medium;
+						font-size: 20px;
+						color: #C38E3E;
+						text-align: center;
+						line-height: 30px;
+					}
+					.guide_text {
+						margin-top: 2px;
 						font-family: PingFangSC-Regular;
-						font-size: 13px;
+						font-size: 12px;
 						color: rgba(0,0,0,0.38);
-						text-align: left;
-						line-height: 20px;
+						text-align: center;
+						line-height: 18px;
 					}
-					.line1 {
-						width: 4px;
-						height: 80px;
-						background: #3F458C;
-					}
-					.guide_right {
-						margin-left: 16px;
-						flex: 1;
-						.guide_right_text {
-							font-family: PingFangSC-Regular;
-							font-size: 12px;
-							color: rgba(0,0,0,0.87);
-							text-align: left;
-							line-height: 18px;
-						}
-						.guide_right_price {
-							font-family: PingFangSC-Medium;
-							font-size: 30px;
-							color: #C38E3E;
-							text-align: left;
-							line-height: 36px;
-							span {
-								font-family: PingFangSC-Medium;
-								font-size: 14px;
-								color: #C38E3E;
-								text-align: left;
-								line-height: 20px;
-							}
-						}
-						.line2 {
-							margin-top: 4px;
-							width: 100%;
-							height: 1px;
-							background: rgba(0,0,0,0.12);
-						}
-						.guide_right_time {
-							margin-top: 4px;
-							font-family: PingFangSC-Regular;
-							font-size: 12px;
-							color: rgba(0,0,0,0.60);
-							text-align: left;
-							line-height: 18px;
-						}
-					}
+				}
+				.line1 {
+					width: 1px;
+					height: 32px;
+					background: rgba(0,0,0,0.12);
 				}
 			}
 		}
@@ -452,7 +350,7 @@
 			}
 			.list_box {
 				position: relative;
-				padding-top: 79px;
+				padding-top: 8px;
 				width: 100%;
 				.list {
 					margin: 0 auto;

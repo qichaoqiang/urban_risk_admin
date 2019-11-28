@@ -5,26 +5,27 @@
       <div class="select_box">
         <div class="select_tab">
           <div class="select_tab_item" id="gold" :class="{select_tab_item_active: type == 'gold'}" @click="select('gold')">
-            <img class="select_tab_icon" src="@/assets/ic_recomd.png">
-            <div class="select_tab_type">文字咨询</div>
-            <div class="select_tab_price">20元/次</div>
+            <div class="select_tab_icon" v-show="type == 'gold'">已选择</div>
+            <div class="select_tab_type">私问</div>
+            <div class="select_tab_price">39元</div>
           </div>
           <div class="line1" :class="{line1_none: type == 'experience'}"></div>
           <div class="select_tab_item" id="diamond" :class="{select_tab_item_active: type == 'diamond'}" @click="select('diamond')">
-            <img class="select_tab_icon" src="@/assets/ic_recomd.png">
-            <div class="select_tab_type">电话咨询</div>
-            <div class="select_tab_price">79元/次</div>
+            <div class="select_tab_icon" v-show="type == 'diamond'">已选择</div>
+            <div class="select_tab_type">畅问</div>
+            <div class="select_tab_price">79元</div>
           </div>
           <div class="line1" :class="{line1_none: type == 'gold'}"></div>
           <div class="select_tab_item" id="experience" :class="{select_tab_item_active: type == 'experience'}" @click="select('experience')">
-            <div class="select_tab_type">包年版</div>
-            <div class="select_tab_price">399元/年</div>
+            <div class="select_tab_icon" v-show="type == 'experience'">已选择</div>
+            <div class="select_tab_type">畅聊</div>
+            <div class="select_tab_price">119元</div>
           </div>
         </div>
         <div class="select_detail">
           <div class="select_detail_item select_detail_head">
-            <div class="select_detail_key">权益项目</div>
-            <div class="select_detail_value">细则</div>
+            <div class="select_detail_key">服务项目</div>
+            <div class="select_detail_value">服务内容</div>
           </div>
           <div class="line2"></div>
           <div class="select_detail_item" v-for="(item, index) in service[type].detail" :key="index">
@@ -40,6 +41,7 @@
           </div>
         </div>
       </div>
+      <div class="select_tip1">请填写联系方式</div>
       <div class="login_box">
         <div class="login_item">
           <div class="login_text">手机号</div>
@@ -77,11 +79,11 @@
     </div>
     <div class="pay_box">
       <div class="pay">
-        <div class="pay_price">
+        <!-- <div class="pay_price">
           <div class="pay_price_text">总计</div>
           <div class="pay_price_num">{{service[type].price}}元</div>
-        </div>
-        <div class="pay_btn" id="pay_btn" @click="register">确认支付</div>
+        </div> -->
+        <div class="pay_btn" id="pay_btn" @click="register">确认开始咨询律师，有问必答</div>
       </div>
       <div class="pay_bottom">法制文明进万家活动限时优惠 活动截止时间 {{date}}</div>
     </div>
@@ -114,28 +116,31 @@
           gold: {
             detail: [
               {
-                key: '文字咨询服务，有问必答',
-                value: '7次提问， 24小时有效',
+                key: '文字咨询服务',
+                value: '10次提问',
               }, {
                 key: '全天候专属VIP客服',
                 value: '1名',
+              }, {
+                key: '1+N律师组团服务',
+                value: '5名',
               }
             ],
-            price: '20.00',
+            price: '39.00',
             orderStatus: 1,
             time: '24小时'
           },
           diamond: {
             detail: [
               {
-                key: '文字咨询服务，有问必答',
-                value: '3次追问，24小时有效',
-              }, {
-                key: '电话咨询服务',
-                value: '不限时长次数，24小时有效',
+                key: '文字咨询服务',
+                value: '无限次提问',
               }, {
                 key: '全天候专属VIP客服',
                 value: '1名',
+              }, {
+                key: '1+N律师组团服务',
+                value: '5名',
               }
             ],
             price: '79.00',
@@ -145,25 +150,22 @@
           experience: {
             detail: [
               {
-                key: '文字咨询服务，有问必答',
-                value: '不限时，不限次',
+                key: '文字咨询服务',
+                value: '3次提问',
               }, {
                 key: '电话咨询服务',
-                value: '不限时，不限次',
-              }, {
-                key: '起草/审查/修改法律文书',
-                value: '1份',
+                value: '无限时长',
               }, {
                 key: '全天候专属VIP客服',
                 value: '1名',
               }, {
                 key: '1+N律师组团服务',
-                value: '3-5名',
+                value: '5名',
               }
             ],
-            price: '399.00',
+            price: '119.00',
             orderStatus: 3,
-            time: '1年'
+            time: '24小时'
           }
         }
       }
@@ -448,6 +450,14 @@
         line-height: 22px;
         text-align: left;
       }
+      .select_tip1 {
+        margin-top: 16px;
+        font-family: PingFangSC-Medium;
+        font-size: 16px;
+        color: rgba(0,0,0,0.87);
+        line-height: 22px;
+        text-align: left;
+      }
       .select_box {
         margin-top: 16px;
         .select_tab {
@@ -466,8 +476,15 @@
               position: absolute;
               top: 0;
               left: 0;
-              width: 32px;
+              width: 43px;
               height: 18px;
+              background: #3F458C;
+              border-radius: 0 0 6px 0;
+              font-family: PingFangSC-Medium;
+              font-size: 11px;
+              color: #FFFFFF;
+              line-height: 18px;
+              letter-spacing: -0.5px;
             }
             .select_tab_type {
               font-family: PingFangSC-Medium;
