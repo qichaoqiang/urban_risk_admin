@@ -7,7 +7,7 @@
 				<van-swipe style="height: 32px;" :autoplay="2500" vertical :show-indicators="false">
 				  	<van-swipe-item v-for="(item, index) in scrollList" :key="index">
 				    	<div class="scrollbars_item">
-				    		<span>{{item.phone}} 收到律师起草的合同 </span><span>{{item.time}}分钟前</span>
+				    		<span>{{item.phone}} 开通 {{item.content}} </span><span>{{item.time}}分钟前</span>
 				    	</div>
 				  	</van-swipe-item>
 				</van-swipe>
@@ -137,8 +137,11 @@
 				let list = [];
 				let phone = '';
 				let time = '';
+				let content = '';
 				let secondNum = [3, 5, 8, 7];
+				let index = 0;
 				let secondIndex;
+				let contentList = ['39元私问服务', '79元畅问服务', '119元畅聊服务'];
 				for(let i = 0; i < 100; i++) {
 					phone += 1;
 					secondIndex = Math.floor(Math.random() * 3);
@@ -151,7 +154,9 @@
 						}
 					}
 					time = Math.floor(Math.random() * 29) + 1;
-					list.push({phone, time});
+					index = parseInt(i % 3);
+					content = contentList[index]; 
+					list.push({phone, time, content});
 					phone = '';
 				}
 				this.scrollList = list;

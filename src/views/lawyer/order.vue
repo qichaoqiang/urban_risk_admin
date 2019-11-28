@@ -30,7 +30,7 @@
           <div class="line2"></div>
           <div class="select_detail_item" v-for="(item, index) in service[type].detail" :key="index">
             <div class="select_detail_key">{{item.key}}</div>
-            <div class="select_detail_value">{{item.value}}</div>
+            <div class="select_detail_value" :class="{bold: item.bold}">{{item.value}}</div>
           </div>
           <div class="line2" style="margin-top: 12px;"></div>
           <div class="select_detail_bottom">
@@ -83,23 +83,33 @@
           <div class="pay_price_text">总计</div>
           <div class="pay_price_num">{{service[type].price}}元</div>
         </div> -->
-        <div class="pay_btn" id="pay_btn" @click="register">确认开始咨询律师，有问必答</div>
+        <div class="pay_btn" id="pay_btn" @click="register">
+          <van-loading v-if="loading_pay" size="24px" color="#ffffff" vertical></van-loading>
+          <span v-if="!loading_pay">确认开始咨询律师，有问必答</span>
+          <span v-else>&nbsp;等待支付中...</span>
+        </div>
       </div>
-      <div class="pay_bottom">法制文明进万家活动限时优惠 活动截止时间 {{date}}</div>
+      <div class="pay_bottom">
+        <img class="pay_bottom_icon" src="@/assets/scan-complete.png">
+        您的咨询信息及咨询内容将严格保密，请放心使用
+      </div>
     </div>
     <div class="form" id="form"></div>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
   import api from '@/api/api'
-  import { Toast } from 'vant'
+  import { Toast, Loading } from 'vant'
   import { getScript, isWechat } from '@/utils/global.js'
   import storage from 'good-storage'
   import $ from 'zhangjia-zepto'
+  Vue.use(Loading)
   export default {
     data() {
       return {
+        loading_pay: false,
         isAgreement: true,
         date: '',
         phone: '',
@@ -118,6 +128,7 @@
               {
                 key: '文字咨询服务',
                 value: '10次提问',
+                bold: true,
               }, {
                 key: '全天候专属VIP客服',
                 value: '1名',
@@ -135,6 +146,7 @@
               {
                 key: '文字咨询服务',
                 value: '无限次提问',
+                bold: true,
               }, {
                 key: '全天候专属VIP客服',
                 value: '1名',
@@ -155,6 +167,7 @@
               }, {
                 key: '电话咨询服务',
                 value: '无限时长',
+                bold: true,
               }, {
                 key: '全天候专属VIP客服',
                 value: '1名',
@@ -322,6 +335,7 @@
         //   Toast('请先输入验证码')
         //   return
         // }
+        this.loading_pay = true;
         this.handleTestDisabled = true
         let data = {
           deviceId: localStorage.getItem('clientId'),
@@ -335,6 +349,7 @@
             this.test();
           } else {
             this.handleTestDisabled = false
+            this.loading_pay = false;
             Toast({
               text: res.msg,
               type: 'warn'
@@ -355,6 +370,7 @@
 
             this.pay();
           } else {
+            this.loading_pay = false;
             Toast({
               text: res.msg,
               type: 'warn'
@@ -405,6 +421,7 @@
                   $('#form').html(res.data);
                 }
               }else {
+                this.loading_pay = false;
                 Toast({
                   text: res.msg,
                   type: 'warn'
@@ -533,6 +550,10 @@
             color: rgba(0,0,0,0.38);
             text-align: left;
             line-height: 18px;
+            .bold {
+              font-weight: bold;
+              color: rgb(195, 142, 62);
+            }
           }
           .select_detail_head {
             margin-top: 0;
@@ -717,14 +738,27 @@
           color: #FFFFFF;
           text-align: center;
           line-height: 48px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
       }
       .pay_bottom {
+        width: 328px;
         font-family: PingFangSC-Regular;
-        font-size: 11px;
+        font-size: 12px;
         color: rgba(0,0,0,0.38);
         text-align: center;
         line-height: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .pay_bottom_icon {
+          margin-right: 8px;
+          width: 15px;
+          height: 18px;
+          opacity: 0.6;
+        }
       }
     }
     .form {
