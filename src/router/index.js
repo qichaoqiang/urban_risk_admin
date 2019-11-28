@@ -21,7 +21,7 @@ export default new Router({
       name: 'index',
       component: () => import('../views/lawyer/index.vue'),
       meta: {
-        title: '高端律服'
+        title: '犀牛律服'
       }
     },
     {
@@ -29,7 +29,7 @@ export default new Router({
       name: 'order',
       component: () => import('../views/lawyer/order.vue'),
       meta: {
-        title: '开通高端家庭律师服务'
+        title: '开通犀牛专业律师服务'
       }
     },
     {
@@ -53,7 +53,7 @@ export default new Router({
       name: 'agreement',
       component: () => import('../views/lawyer/agreement.vue'),
       meta: {
-        title: '高端家庭律师服务会员协议'
+        title: '犀牛专业律师服务会员协议'
       }
     }
   ],
