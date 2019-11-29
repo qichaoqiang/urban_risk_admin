@@ -6,21 +6,21 @@
         <div class="select_tab">
           <div class="select_tab_item" id="gold" :class="{select_tab_item_active: type == 'gold'}" @click="select('gold')">
             <div class="select_tab_icon" v-show="type == 'gold'">已选择</div>
-            <div class="select_tab_type">私问</div>
+            <div class="select_tab_type">文字私问</div>
             <div class="select_tab_price">39元</div>
           </div>
           <div class="line1" :class="{line1_none: type == 'experience'}"></div>
           <div class="select_tab_item" id="diamond" :class="{select_tab_item_active: type == 'diamond'}" @click="select('diamond')">
             <div class="select_tab_icon" v-show="type == 'diamond'">已选择</div>
-            <div class="select_tab_type">畅问</div>
+            <div class="select_tab_type">电话畅问</div>
             <div class="select_tab_price">79元</div>
           </div>
-          <div class="line1" :class="{line1_none: type == 'gold'}"></div>
+          <!-- <div class="line1" :class="{line1_none: type == 'gold'}"></div>
           <div class="select_tab_item" id="experience" :class="{select_tab_item_active: type == 'experience'}" @click="select('experience')">
             <div class="select_tab_icon" v-show="type == 'experience'">已选择</div>
             <div class="select_tab_type">畅聊</div>
             <div class="select_tab_price">119元</div>
-          </div>
+          </div> -->
         </div>
         <div class="select_detail">
           <div class="select_detail_item select_detail_head">
@@ -123,7 +123,7 @@
         phone: '',
         code: '',
         isSend: true,
-        type: 'gold',
+        type: 'diamond',
         codeText: '获取验证码',
         validate: '',
         timer: null,
@@ -134,8 +134,8 @@
           gold: {
             detail: [
               {
-                key: '文字咨询服务',
-                value: '10次提问',
+                key: '文字咨询服务(微信或QQ)',
+                value: '无限次提问',
                 bold: true,
               }, {
                 key: '全天候专属VIP客服',
@@ -152,8 +152,8 @@
           diamond: {
             detail: [
               {
-                key: '文字咨询服务',
-                value: '无限次提问',
+                key: '电话咨询服务',
+                value: '无限时长',
                 bold: true,
               }, {
                 key: '全天候专属VIP客服',
