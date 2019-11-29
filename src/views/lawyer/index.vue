@@ -150,7 +150,7 @@
 				let secondNum = [3, 5, 8, 7];
 				let index = 0;
 				let secondIndex;
-				let contentList = ['39元私问服务', '79元畅问服务', '119元畅聊服务'];
+				let contentList = ['39元文字私问服务', '79元电话畅问'];
 				for(let i = 0; i < 100; i++) {
 					phone += 1;
 					secondIndex = Math.floor(Math.random() * 3);
@@ -163,7 +163,7 @@
 						}
 					}
 					time = Math.floor(Math.random() * 49) + 10;
-					index = parseInt(i % 3);
+					index = parseInt(i % 2);
 					content = contentList[index]; 
 					list.push({phone, time, content});
 					phone = '';
