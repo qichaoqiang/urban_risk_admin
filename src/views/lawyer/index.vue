@@ -41,7 +41,13 @@
 			<img class="img1" src="@/assets/b_02.png">
 			<img class="img1" src="@/assets/b_03.png">
 			<img class="img1" src="@/assets/b_04.png">
-			<img class="img1" src="@/assets/b_05.png">
+			<div class="bg1">
+				<div class="countdown">
+					<div class="countdown_text">通话中</div>
+					<div class="countdown_num">{{this.hour}}:{{this.minutes}}:{{this.seconds}}</div>
+					<img class="countdown_gif" src="@/assets/phone.gif">
+				</div>
+			</div>
 			<img class="img1" src="@/assets/b_06.png">
 			<img class="img1" src="@/assets/b_07.png">
 			<img class="img1" src="@/assets/b_08.png">
@@ -87,6 +93,9 @@
 	export default {
 		data() {
 			return {
+				hour: 1,
+				minutes: '21',
+				seconds: '00',
 				date: '',
 				scrollList: [],
 				exampleList: [
@@ -175,6 +184,19 @@
 					rate: Math.ceil((document.documentElement.scrollTop + window.screen.height) / window.screen.height) / Math.ceil((document.body.clientHeight ) / window.screen.height)
 				});
 				this.$router.push('/order');
+			},
+			countdown() {
+				let time = 4860;
+				let minutes = 0;
+				let seconds = 0;
+				setInterval(() => {
+					time++;
+					this.hour = parseInt(time / 60 / 60);
+					minutes = parseInt((time % 3600) / 60);
+					this.minutes = minutes < 10 ? ('0' + minutes) : minutes;
+					seconds = time % 60;
+					this.seconds = seconds < 10 ? ('0' + seconds) : seconds;
+				}, 1000)
 			}
 		},
 		created() {
@@ -190,7 +212,7 @@
 			this.createScrollData();
 		},
 		mounted() {
-
+			this.countdown();
 		}
 	}
 </script>
@@ -307,6 +329,47 @@
 			align-items: center;
 			.img1 {
 				width: 100%;
+			}
+			.bg1 {
+				padding-top: 60px;
+				box-sizing: border-box;
+				width: 100%;
+				height: 500px;
+				background: url('../../assets/b_05.png') top no-repeat;
+				background-size: 100%;
+				.countdown {
+					position: relative;
+					margin: 0 auto;
+					padding-top: 12px;
+					box-sizing: border-box;
+					width: 180px;
+					height: 120px;
+					background: rgba(47, 51, 98, 0.8);
+					border-radius: 8px;
+					.countdown_text {
+						opacity: 0.6;
+						font-family: PingFangSC-Medium;
+						font-size: 12px;
+						color: #FFFFFF;
+						text-align: center;
+						line-height: 20px;
+					}
+					.countdown_num {
+						font-family: PingFangSC-Medium;
+						font-size: 14px;
+						color: #FFFFFF;
+						text-align: center;
+						line-height: 20px;
+					}
+					.countdown_gif {
+						position: absolute;
+						left: 50%;
+						bottom: -20px;
+						transform: translateX(-50%);
+						width: 180px;
+						height: 80px;
+					}
+				}
 			}
 			.guide1 {
 				margin-top: 16px;
