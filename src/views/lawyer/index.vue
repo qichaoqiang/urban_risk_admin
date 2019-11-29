@@ -259,7 +259,7 @@
 			box-sizing: border-box;
 			width: 100%;
 			height: 320px;
-			background: url('../../assets/head.png') top no-repeat;
+			background: url('../../assets/head.jpg') top no-repeat;
 			background-size: 100%;
 			.guide {
 				margin: 0 auto;
