@@ -94,6 +94,13 @@
         您的咨询信息及咨询内容将严格保密，请放心使用
       </div>
     </div>
+    <!-- <div class="mask" v-show="showPayAfter">
+      <div class="mask_content">
+        <div class="mask_title">等待用户支付</div>
+        <div class="mask_btn confirm" @click="confirm">我已完成支付</div>
+        <div class="mask_btn cancel" @click="cancel">取消支付</div>
+      </div>
+    </div> -->
     <div class="form" id="form"></div>
   </div>
 </template>
@@ -110,6 +117,7 @@
     data() {
       return {
         loading_pay: false,
+        showPayAfter: false,
         isAgreement: true,
         date: '',
         phone: '',
@@ -163,7 +171,8 @@
             detail: [
               {
                 key: '文字咨询服务',
-                value: '3次提问',
+                value: '无限次提问',
+                bold: true,
               }, {
                 key: '电话咨询服务',
                 value: '无限时长',
@@ -308,6 +317,9 @@
         }
       },
       register() {
+        if(this.loading_pay) {
+          return false;
+        }
         let obj1 = {
           'WEIXIN_H5': '微信支付',
           'wap': '支付宝'
@@ -367,7 +379,6 @@
           this.handleTestDisabled = false
           if (res.code === 0) {
             this.orderInfo = res.data;
-
             this.pay();
           } else {
             this.loading_pay = false;
@@ -410,18 +421,19 @@
               returnUrl: `${location.origin}/pay`,
               deviceType: this.payType
             }
-            console.log(111);
+            localStorage.setItem('payWay', data.payWay);
             api.getPayCodeV1(data).then(res => {
+              this.loading_pay = false;
               if(res.code === 0) {
                 if(this.payType == 'WEIXIN_H5') {
                   let data_ = JSON.parse(res.data);
                   let redirect_url = encodeURIComponent(data.returnUrl);
                   location.href = `${data_.payUrl}&redirect_url=${redirect_url}`;
+                  // window.open(`${data_.payUrl}&redirect_url=${redirect_url}`);
                 }else {
                   $('#form').html(res.data);
                 }
               }else {
-                this.loading_pay = false;
                 Toast({
                   text: res.msg,
                   type: 'warn'
@@ -441,6 +453,13 @@
           })
         }
       },
+      confirm() {
+        this.$router.push('/pay');
+      },
+      cancel() {
+        this.showPayAfter = false;
+        this.loading_pay = false;
+      }
     },
     created() {
       this.getTime();
@@ -758,6 +777,52 @@
           width: 15px;
           height: 18px;
           opacity: 0.6;
+        }
+      }
+    }
+    .mask {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 1001;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .mask_content {
+        width: 296px;
+        padding: 24px;
+        box-sizing: border-box;
+        background: #ffffff;
+        border-radius: 4px;
+        .mask_title {
+          font-family: PingFangSC-Medium;
+          font-size: 18px;
+          color: rgba(0, 0, 0, 0.87);
+          text-align: center;
+          line-height: 48px;
+        }
+        .mask_btn {
+          margin-top: 16px;
+          width: 100%;
+          height: 40px;
+          font-family: PingFangSC-Regular;
+          font-size: 16px;
+          color: rgba(0,0,0,0.38);
+          text-align: center;
+          line-height: 40px;
+          border-radius: 2px;
+          box-sizing: border-box;
+        }
+        .confirm {
+          background: #c38e3e;
+          color: #fff
+        }
+        .cancel {
+          border: 1px solid #c38e3e;
+          color: rgba(0, 0, 0, 0.6);
         }
       }
     }

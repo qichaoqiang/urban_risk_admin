@@ -7,7 +7,7 @@
 				<van-swipe style="height: 32px;" :autoplay="2500" vertical :show-indicators="false">
 				  	<van-swipe-item v-for="(item, index) in scrollList" :key="index">
 				    	<div class="scrollbars_item">
-				    		<span>{{item.phone}} 开通 {{item.content}} </span><span>{{item.time}}分钟前</span>
+				    		<span>{{item.phone}} 开通 {{item.content}} </span><span>{{item.time}}秒前</span>
 				    	</div>
 				  	</van-swipe-item>
 				</van-swipe>
@@ -153,7 +153,7 @@
 							phone += Math.floor(Math.random() * 10);
 						}
 					}
-					time = Math.floor(Math.random() * 29) + 1;
+					time = Math.floor(Math.random() * 49) + 10;
 					index = parseInt(i % 3);
 					content = contentList[index]; 
 					list.push({phone, time, content});
