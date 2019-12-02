@@ -66,7 +66,7 @@
 			</div>
 			<div class="tip">
 				<img class="pay_bottom_icon" src="@/assets/ic_protect.png">
-        		您的咨询信息及咨询内容将严格保密，请放心使用
+        		您的个人信息及咨询内容将严格保密，请放心咨询
 			</div>
 			<img class="img1" src="@/assets/b_01.png">
 			<div class="example_title">
@@ -162,7 +162,7 @@
 				scrollList: [],
 				exampleList: [
 					{
-						title: '“买二手房就像扫雷，家庭律师就是我的排雷兵”',
+						title: '“买二手房就像扫雷，律师就是我的排雷兵”',
 						name: '刘佳',
 						position: '家庭主妇',
 						day: 189,
