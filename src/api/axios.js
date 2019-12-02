@@ -14,9 +14,9 @@ axios.defaults.timeout = 100000
 // 测试地址（内网)
 // axios.defaults.baseURL = 'http://credit-api.int.anniu-tech.com'
 // 线上环境地址
-// axios.defaults.baseURL = 'https://good-lawyer-api.caishuiyu.com'
+axios.defaults.baseURL = 'https://good-lawyer-api.caishuiyu.com'
 // 本地环境地址
-axios.defaults.baseURL = 'http://172.100.8.116:8080/credit_api_war_exploded'
+// axios.defaults.baseURL = 'http://172.100.8.116:8080/credit_api_war_exploded'
 
 axios.interceptors.request.use((config) => {
   // 在发送请求之前做某件事
