@@ -37,20 +37,59 @@
 				<div class="guide2_title">名额有限 售完即止</div>
 				目前已有 <span>8139</span> 个家庭参与活动
 			</div> -->
-			<img class="img1" src="@/assets/b_01.png">
-			<img class="img1" src="@/assets/b_02.png">
-			<img class="img1" src="@/assets/b_03.png">
-			<img class="img1" src="@/assets/b_04.png">
-			<div class="bg1">
-				<div class="countdown">
-					<div class="countdown_text">通话中</div>
-					<div class="countdown_num">{{this.hour}}:{{this.minutes}}:{{this.seconds}}</div>
-					<img class="countdown_gif" src="@/assets/phone.gif">
+			<div class="price_box">
+				<div class="price_item price_head">
+					<div class="price_value price_value1">服务项目</div>
+					<div class="line6"></div>
+					<div class="price_value">服务内容</div>
+					<div class="line6"></div>
+					<div class="price_value">有效期</div>
+					<div class="line6"></div>
+					<div class="price_value">价格</div>
+				</div>
+				<div class="price_item price_wechat">
+					<div class="price_value price_value1">微信咨询律师</div>
+					<div class="price_value">7次提问</div>
+					<div class="line6"></div>
+					<div class="price_value">24小时</div>
+					<div class="line6"></div>
+					<div class="price_value">19.9元</div>
+				</div>
+				<div class="price_item price_phone">
+					<div class="price_value price_value1">电话咨询律师</div>
+					<div class="price_value">不限时长</div>
+					<div class="line6"></div>
+					<div class="price_value">24小时</div>
+					<div class="line6"></div>
+					<div class="price_value">79.9元</div>
 				</div>
 			</div>
-			<img class="img1" src="@/assets/b_06.png">
-			<img class="img1" src="@/assets/b_07.png">
-			<img class="img1" src="@/assets/b_08.png">
+			<div class="tip">
+				<img class="pay_bottom_icon" src="@/assets/ic_protect.png">
+        		您的咨询信息及咨询内容将严格保密，请放心使用
+			</div>
+			<img class="img1" src="@/assets/b_01.png">
+			<div class="example_title">
+				<div class="line4"></div>
+				<div class="example_title_content"><span>135468</span>位用户正在使用</div>
+				<div class="line4"></div>
+			</div>
+			<div class="example_list">
+				<van-swipe :autoplay="2500" :show-indicators="false">
+				  	<van-swipe-item v-for="(item, index) in exampleList" :key="index">
+				    	<div class="example_item">
+				    		<img class="example_img" :src="item.img">
+				    		<div class="example_content">
+				    			<div class="example_content_title">{{item.title}}</div>
+				    			<div class="example_content_name">—— {{item.name}}  | {{item.position}}</div>
+				    			<div class="line5"></div>
+				    			<div class="example_content_text">电话咨询{{item.num}}次，累计{{item.time}}分钟</div>
+				    		</div>
+				    	</div>
+				  	</van-swipe-item>
+				</van-swipe>
+			</div>
+			<img class="img1" src="@/assets/b_08.png" style="margin-top: 24px;">
 			<img class="img1" src="@/assets/b_09.png">
 			<div class="list_box">
 				<div class="list">
@@ -66,7 +105,7 @@
 					<div class="line3"></div>
 					<div class="list_item">
 						<div class="list_item_left"><span>突发事件无法及时响应</span></div>
-						<div class="list_item_right"><span>3分钟响应，<br/>服务实时就为</span></div>
+						<div class="list_item_right"><span>3分钟响应，<br/>服务实时就位</span></div>
 					</div>
 					<div class="line3"></div>
 					<div class="list_item">
@@ -75,20 +114,43 @@
 					</div>
 				</div>
 			</div>
-			<img class="img1" src="@/assets/b_10.png" style="margin-top: 8px">
+			<img class="img1" src="@/assets/b_02.png">
+			<img class="img1" src="@/assets/b_03.png">
+			<img class="img1" src="@/assets/b_04.png">
+			<div class="bg1">
+				<div class="countdown">
+					<div class="countdown_text">通话中</div>
+					<div class="countdown_num">{{this.hour}}:{{this.minutes}}:{{this.seconds}}</div>
+					<img class="countdown_gif" src="@/assets/phone.gif">
+				</div>
+			</div>
+			<img class="img1" src="@/assets/b_06.png">
+			<img class="img1" src="@/assets/b_10.png">
 			<div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div>
 		</div>
 		<div class="bottom">
-			<!-- <div class="bottom_btn custom_btn" @click="customerService">咨询客服</div> -->
-			<div class="bottom_btn" id="bottom_btn" @click="open">开始咨询律师，有问必答</div>
+			<div class="bottom_btn custom_btn" @click="register(1)">
+				<img src="@/assets/ic_consult_call.png">
+				<span>微信咨询律师</span>
+			</div>
+			<div class="bottom_btn" id="bottom_btn" @click="register(2)">
+				<img src="@/assets/ic_consult_wechat.png">
+				<span>电话咨询律师</span>
+			</div>
+		</div>
+		<div class="model" v-show="loading_pay" @click="$emit('update:show', false)">
+			<van-loading size="40px" vertical>加载中...</van-loading>
 		</div>
 	</div>
 </template>
 
 <script>
 	import Vue from 'vue'
-	import { Toast, Swipe, SwipeItem } from 'vant'
+	import { Toast, Swipe, SwipeItem, Loading } from 'vant'
+	import { isWechat } from '@/utils/global.js'
+	import api from '@/api/api'
 	Vue.use(Swipe).use(SwipeItem);
+	Vue.use(Loading);
 
 	export default {
 		data() {
@@ -127,7 +189,12 @@
 						img: require('@/assets/img_user_yaqi.png'),
 						content: ''
 					}
-				]
+				],
+				loading_pay: false,
+				type: 'diamond',
+				payType: 'WEIXIN_H5',
+				orderInfo: {},
+				canPay: true
 			}
 		},
 		watch: {
@@ -150,7 +217,7 @@
 				let secondNum = [3, 5, 8, 7];
 				let index = 0;
 				let secondIndex;
-				let contentList = ['39元文字私问服务', '79元电话畅问'];
+				let contentList = ['19.9元微信咨询服务', '79.9元电话咨询服务'];
 				for(let i = 0; i < 100; i++) {
 					phone += 1;
 					secondIndex = Math.floor(Math.random() * 3);
@@ -197,7 +264,128 @@
 					seconds = time % 60;
 					this.seconds = seconds < 10 ? ('0' + seconds) : seconds;
 				}, 1000)
-			}
+			},
+			register(status) {
+		        if(this.loading_pay) {
+		          return false;
+		        }
+		        let obj1 = {
+		          'WEIXIN_H5': '微信支付',
+		          'wap': '支付宝'
+		        }
+		        let payType = obj1[this.payType];
+		        let levelList = ['微信', '电话'];
+		        let priceList = ['19.9', '79.9'];
+		        let level = levelList[status - 1];
+		        let price = priceList[status - 1];
+		        sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[status - 1], {
+		          payType,
+		          level,
+		          price
+		        });
+		        this.orderStatus = status;
+		        this.loading_pay = true;
+		        this.handleTestDisabled = true
+		        let data = {
+		          deviceId: localStorage.getItem('clientId'),
+		        };
+		        api.loginV1(data).then(res => {
+		          if (res.code === 0) {
+		            localStorage.sessionId = res.data.sessionId;
+		            // sa.login(res.data.userPhone) // 覆盖distinct_id
+		            this.test();
+		          } else {
+		            this.handleTestDisabled = false
+		            this.loading_pay = false;
+		            Toast({
+		              text: res.msg,
+		              type: 'warn'
+		            })
+		          }
+		        })
+		      },
+		      test() {
+		        // storage.set('deviceType', this.payType)
+		        let obj = {
+		          // userPhone: this.phone,
+		          orderStatus: this.orderStatus,
+		        }
+		        api.checkoutCounterV1(obj).then(res => {
+		          this.handleTestDisabled = false
+		          if (res.code === 0) {
+		            this.orderInfo = res.data;
+		            this.pay();
+		          } else {
+		            this.loading_pay = false;
+		            Toast({
+		              text: res.msg,
+		              type: 'warn'
+		            })
+		          }
+		        }).catch(err => {
+		          Toast({
+		            text: '网络错误,请稍后重试',
+		            type: 'error'
+		          })
+		        })
+		      },
+		      pay() {
+		        if(this.canPay) {
+		          this.canPay = false
+		          setTimeout(() => {
+		            this.canPay = true
+		          }, 1000);
+		          if (isWechat()) {
+		            // 微信收银台支付
+		            let data = {
+		              'callback_url': `${location.origin}/pay`,
+		              'mchid': '1527581321',
+		              'notify_url': `${callbackUrl}orderPayjs/callback`,
+		              'out_trade_no': this.orderInfo.orderId,
+		              'total_fee': parseInt(this.orderInfo.orderRealAmount)
+		            }
+		            let stringA = `callback_url=${data.callback_url}&mchid=${data.mchid}&notify_url=${data.notify_url}&out_trade_no=${data.out_trade_no}&total_fee=${data.total_fee}&key=PDXOdDsQVBx9M8p6`
+		            data.sign = md5(stringA).toUpperCase()
+		            window.location.href = `https://payjs.cn/api/cashier?callback_url=${data.callback_url}&mchid=${data.mchid}&notify_url=${data.notify_url}&total_fee=${data.total_fee}&out_trade_no=${data.out_trade_no}&sign=${data.sign}`
+		          } else {
+		            // 阿里支付
+		            let data = {
+		              payWay: this.payType == 'wap' ? 'ALIPAY' : 'WECHAT',
+		              orderId: this.orderInfo.orderId,
+		              returnUrl: `${location.origin}/pay`,
+		              deviceType: this.payType
+		            }
+		            localStorage.setItem('payWay', data.payWay);
+		            api.getPayCodeV1(data).then(res => {
+		              this.loading_pay = false;
+		              if(res.code === 0) {
+		                if(this.payType == 'WEIXIN_H5') {
+		                  let data_ = JSON.parse(res.data);
+		                  let redirect_url = encodeURIComponent(data.returnUrl);
+		                  location.href = `${data_.payUrl}&redirect_url=${redirect_url}`;
+		                }else {
+		                  $('#form').html(res.data);
+		                }
+		              }else {
+		                Toast({
+		                  text: res.msg,
+		                  type: 'warn'
+		                })
+		              }
+		            }).catch(err => {
+		              Toast({
+		                text: '网络错误,请稍后重试',
+		                type: 'error'
+		              })
+		            })
+		          }
+		        }else {
+		          Toast({
+		            text: '请勿重复点击',
+		            type: 'warn'
+		          })
+		        }
+		    },
 		},
 		created() {
 			this.getTime();
@@ -327,6 +515,87 @@
 			display: flex;
 			flex-direction: column;
 			align-items: center;
+			.price_box {
+				margin: 0 auto;
+				width: 328px;
+				box-sizing: border-box;
+				border: 1px solid rgba(0,0,0,0.12);
+				.price_item {
+					margin-top: 2px;
+					width: 100%;
+					height: 40px;
+					display: flex;
+					align-items: center;
+					&:first-child {
+						margin-top: 0;
+					}
+					.price_value {
+						width: 73px;
+						height: 40px;
+						font-family: PingFangSC-Semibold;
+						font-size: 12px;
+						color: #3F458C;
+						text-align: center;
+						line-height: 40px;
+					}
+					.price_value1 {
+						width: 110px;
+						flex-shrink: 1;
+						padding-left: 16px;
+						box-sizing: border-box;
+						text-align: left;
+					}
+					.line6 {
+						width: 1px;
+						height: 16px;
+						background: rgba(0,0,0,0.12);
+					}
+				}
+				.price_head {
+					.price_value {
+						font-family: PingFangSC-Regular;
+						color: rgba(0,0,0,0.60);
+					}
+				}
+				.price_wechat {
+					background: #EEEFF5;
+					.price_value1 {
+						color: #FFFFFF;
+						background: #3F458C;
+					}
+				}
+				.price_phone {
+					background: #F9F3EB;
+					.price_value {
+						color: #C38E3E;
+					}
+					.price_value1 {
+						width: 110px;
+						color: #FFFFFF;
+						background: #C38E3E;
+					}
+				}
+			}
+			.tip {
+				margin-top: 16px;
+				width: 324px;
+				height: 28px;
+				border-radius: 14px;
+				font-family: PingFangSC-Regular;
+				font-size: 12px;
+				color: #3F458C;
+				text-align: center;
+				line-height: 18px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				background: #EEEFF5;
+				img {
+					margin-right: 2px;
+					width: 16px;
+					height: 16px;
+				}
+			}
 			.img1 {
 				width: 100%;
 			}
@@ -605,6 +874,7 @@
 				}
 			}
 			.example_title {
+				margin-top: 24px;
 				width: 338px;
 				display: flex;
 				align-items: center;
@@ -699,7 +969,7 @@
 			width: 100%;
 			display: flex;
 			.bottom_btn {
-				flex: 2;
+				flex: 1;
 				height: 48px;
 				background: #C38E3E;
 				box-shadow: 0 8px 16px 0 rgba(0,0,0,0.04);
@@ -707,11 +977,32 @@
 				font-size: 15px;
 				color: #FFFFFF;
 				line-height: 48px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				img {
+					margin-right: 4px;
+					width: 24px;
+					height: 24px;
+				}
 			}
 			.custom_btn {
-				flex: 1;
 				background: #3F458C;
 			}
+		}
+		.model {
+			position: fixed;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			z-index: 2000;
+			// padding-top: 25%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
 		}
 	}
 </style>
