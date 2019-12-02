@@ -130,11 +130,11 @@
 		</div>
 		<div class="bottom">
 			<div class="bottom_btn custom_btn" @click="register(1)">
-				<img src="@/assets/ic_consult_call.png">
+				<img src="@/assets/ic_consult_wechat.png">
 				<span>微信咨询律师</span>
 			</div>
 			<div class="bottom_btn" id="bottom_btn" @click="register(2)">
-				<img src="@/assets/ic_consult_wechat.png">
+				<img src="@/assets/ic_consult_call.png">
 				<span>电话咨询律师</span>
 			</div>
 		</div>
