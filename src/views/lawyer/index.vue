@@ -138,7 +138,7 @@
 				<span>电话咨询律师</span>
 			</div>
 		</div>
-		<div class="model" v-show="loading_pay" @click="$emit('update:show', false)">
+		<div class="model" v-show="loading_pay">
 			<van-loading size="40px" vertical>加载中...</van-loading>
 		</div>
 	</div>
