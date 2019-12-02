@@ -129,11 +129,11 @@
 			<div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div>
 		</div>
 		<div class="bottom">
-			<div class="bottom_btn custom_btn" @click="register(1)">
+			<div class="bottom_btn custom_btn" data-agl-cvt="7" @click="register(1)">
 				<img src="@/assets/ic_consult_wechat.png">
 				<span>微信咨询律师</span>
 			</div>
-			<div class="bottom_btn" id="bottom_btn" @click="register(2)">
+			<div class="bottom_btn" data-agl-cvt="7" id="bottom_btn" @click="register(2)">
 				<img src="@/assets/ic_consult_call.png">
 				<span>电话咨询律师</span>
 			</div>
