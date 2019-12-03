@@ -20,4 +20,9 @@ export default {
   getPayCodeV1(params) {
     return fetchPost('order/getPayCodeV1', params)
   },
+
+  // 获取订单状态
+  getOrderStatus(params) {
+    return fetchPost('order/getOrderDetailV1', params)
+  },
 }

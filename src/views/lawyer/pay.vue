@@ -14,8 +14,9 @@
 
 <script>
 	import Vue from 'vue'
-	import { Loading } from 'vant'
+	import { Toast, Loading } from 'vant'
 	import { isIOS } from '@/utils/global'
+	import api from '@/api/api'
 	Vue.use(Loading)
 	export default {
 		data() {
@@ -27,9 +28,19 @@
 			confirm() {
 				if(!this.loading_pay) {
 					this.loading_pay = true;
-					setTimeout(() => {
-						this.$router.replace('/result');
-					}, 2000)
+					let data = {
+						orderCode: localStorage.getItem('orderCode')
+					}
+					api.getOrderStatus(data).then(res => {
+						if(res.code == 0) {
+							if(res.data.orderStatus == 20) {
+								this.$router.replace('/result');
+							}else {
+								this.loading_pay = false;
+								Toast('请先完成支付')
+							}
+						}
+					})
 				}
 		    },
 		    back() {

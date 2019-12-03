@@ -329,6 +329,7 @@
 		        api.checkoutCounterV1(obj).then(res => {
 		          this.handleTestDisabled = false
 		          if (res.code === 0) {
+		          	localStorage.setItem('orderCode', res.data.orderCode)
 		            this.orderInfo = res.data;
 		            this.pay();
 		          } else {
