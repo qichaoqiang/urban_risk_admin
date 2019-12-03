@@ -49,7 +49,7 @@
 				</div>
 				<div class="price_item price_wechat">
 					<div class="price_value price_value1">微信咨询律师</div>
-					<div class="price_value">7次提问</div>
+					<div class="price_value">不限次提问</div>
 					<div class="line6"></div>
 					<div class="price_value">24小时</div>
 					<div class="line6"></div>
