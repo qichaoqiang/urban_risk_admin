@@ -295,7 +295,7 @@
 		          if (res.code === 0) {
 		            localStorage.sessionId = res.data.sessionId;
 		            // sa.login(res.data.userPhone) // 覆盖distinct_id
-		            // this.test();
+		            this.test();
 		          } else {
 		            this.handleTestDisabled = false
 		            this.loading_pay = false;
