@@ -129,13 +129,13 @@
 			<div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div>
 		</div>
 		<div class="bottom">
-			<div class="bottom_btn custom_btn" data-agl-cvt="7" @click="register(1)">
-				<img src="@/assets/ic_consult_wechat.png">
-				<span>微信咨询律师</span>
-			</div>
-			<div class="bottom_btn" data-agl-cvt="7" id="bottom_btn" @click="register(2)">
+			<div class="bottom_btn" data-agl-cvt="7" id="bottom_btn_call" @click="register(2)">
 				<img src="@/assets/ic_consult_call.png">
 				<span>电话咨询律师</span>
+			</div>
+			<div class="bottom_btn custom_btn" data-agl-cvt="7" id="bottom_btn_wechat" @click="register(1)">
+				<img src="@/assets/ic_consult_wechat.png">
+				<span>微信咨询律师</span>
 			</div>
 		</div>
 		<div class="model" v-show="loading_pay">
@@ -239,21 +239,21 @@
 				}
 				this.scrollList = list;
 			},
-			customerService() {
-				sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[0], {
-					scrollTop: document.documentElement.scrollTop,
-					rate: Math.ceil((document.documentElement.scrollTop + window.screen.height) / window.screen.height) / Math.ceil((document.body.clientHeight ) / window.screen.height)
-				}, () => {
-					location.href = 'https://anniu.qiyukf.com/client?k=394edb8ea8c46b5bbe73ed39ad18c3f7&wp=1&sid=3922410&robotShuntSwitch=0';
-				});
-			},
-			open() {
-				sa.quick('trackHeatMap', document.getElementById('bottom_btn'), {
-					scrollTop: document.documentElement.scrollTop,
-					rate: Math.ceil((document.documentElement.scrollTop + window.screen.height) / window.screen.height) / Math.ceil((document.body.clientHeight ) / window.screen.height)
-				});
-				this.$router.push('/order');
-			},
+			// customerService() {
+			// 	sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[0], {
+			// 		scrollTop: document.documentElement.scrollTop,
+			// 		rate: Math.ceil((document.documentElement.scrollTop + window.screen.height) / window.screen.height) / Math.ceil((document.body.clientHeight ) / window.screen.height)
+			// 	}, () => {
+			// 		location.href = 'https://anniu.qiyukf.com/client?k=394edb8ea8c46b5bbe73ed39ad18c3f7&wp=1&sid=3922410&robotShuntSwitch=0';
+			// 	});
+			// },
+			// open() {
+			// 	sa.quick('trackHeatMap', document.getElementById('bottom_btn'), {
+			// 		scrollTop: document.documentElement.scrollTop,
+			// 		rate: Math.ceil((document.documentElement.scrollTop + window.screen.height) / window.screen.height) / Math.ceil((document.body.clientHeight ) / window.screen.height)
+			// 	});
+			// 	this.$router.push('/order');
+			// },
 			countdown() {
 				let time = 4860;
 				let minutes = 0;
@@ -280,7 +280,7 @@
 		        let priceList = ['19.9', '79.9'];
 		        let level = levelList[status - 1];
 		        let price = priceList[status - 1];
-		        sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[status - 1], {
+		        sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[2 - status], {
 		          payType,
 		          level,
 		          price
@@ -295,7 +295,7 @@
 		          if (res.code === 0) {
 		            localStorage.sessionId = res.data.sessionId;
 		            // sa.login(res.data.userPhone) // 覆盖distinct_id
-		            this.test();
+		            // this.test();
 		          } else {
 		            this.handleTestDisabled = false
 		            this.loading_pay = false;
