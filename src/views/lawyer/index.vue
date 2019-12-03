@@ -141,6 +141,7 @@
 		<div class="model" v-show="loading_pay">
 			<van-loading size="40px" vertical>加载中...</van-loading>
 		</div>
+		<div class="form" id="form"></div>
 	</div>
 </template>
 
@@ -149,6 +150,7 @@
 	import { Toast, Swipe, SwipeItem, Loading } from 'vant'
 	import { isWechat } from '@/utils/global.js'
 	import api from '@/api/api'
+	import $ from 'zhangjia-zepto'
 	Vue.use(Swipe).use(SwipeItem);
 	Vue.use(Loading);
 
@@ -338,7 +340,7 @@
 		          if (isWechat()) {
 		            // 微信收银台支付
 		            let data = {
-		              'callback_url': `${location.origin}/pay`,
+		              'callback_url': `${location.origin}/pay${location.search}`,
 		              'mchid': '1527581321',
 		              'notify_url': `${callbackUrl}orderPayjs/callback`,
 		              'out_trade_no': this.orderInfo.orderId,
@@ -1004,5 +1006,9 @@
 			height: 100%;
 			background: rgba(0, 0, 0, 0.5);
 		}
+		.form {
+	      	height: 0;
+	      	overflow: hidden;
+	    }
 	}
 </style>

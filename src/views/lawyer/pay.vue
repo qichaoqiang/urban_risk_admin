@@ -8,7 +8,7 @@
           <van-loading v-if="loading_pay" size="24px" color="#ffffff" vertical></van-loading>
           <span>我已完成支付</span>
         </div>
-        <div class="back_btn" @click="back">返回确认订单页面</div>
+        <div class="back_btn" @click="back">返回上一页</div>
 	</div>
 </template>
 
@@ -33,10 +33,15 @@
 				}
 		    },
 		    back() {
-		    	if(localStorage.getItem('payWay') == 'ALIPAY') {
-		    		history.go(-1);
+		    	let payWay = localStorage.getItem('payWay');
+		    	if(payWay) {
+		    		if(payWay == 'ALIPAY') {
+			    		history.go(-1);
+			    	}else {
+			    		history.go(-2);
+			    	}
 		    	}else {
-		    		history.go(-2);
+		    		location.replace(`${location.origin}/pay${location.search}`)
 		    	}
 		    }
 		},
