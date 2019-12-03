@@ -95,7 +95,7 @@
 				<div class="list">
 					<div class="list_item">
 						<div class="list_item_left" style="padding-top: 8px;"><span>免费咨询服务差, <br/>收费服务费用高</span></div>
-						<div class="list_item_right" style="padding-top: 8px;"><span>单次服务39元起,  <br/>价格实惠服务好</span></div>
+						<div class="list_item_right" style="padding-top: 8px;"><span>单次服务19.9元起,  <br/>价格实惠服务好</span></div>
 					</div>
 					<div class="line3"></div>
 					<div class="list_item">
