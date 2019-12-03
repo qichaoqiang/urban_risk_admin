@@ -126,6 +126,11 @@
 			</div>
 			<img class="img1" src="@/assets/b_06.png">
 			<img class="img1" src="@/assets/b_10.png">
+			<div class="argument-agree" @click="changeAgree">
+		        <div class="check" v-if="isAgreement"><img src="@/assets/checkbox_on.png"></div>
+		        <div class="check" v-else><img src="@/assets/checkbox_off.png"></div>
+		        <span>支付即表示同意<span @click.stop="goAgreement">《犀牛专业律师服务会员协议》</span></span>
+      		</div>
 			<div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div>
 		</div>
 		<div class="bottom">
@@ -155,6 +160,7 @@
 	Vue.use(Loading);
 
 	export default {
+		name: 'index',
 		data() {
 			return {
 				hour: 1,
@@ -196,7 +202,8 @@
 				type: 'diamond',
 				payType: 'WEIXIN_H5',
 				orderInfo: {},
-				canPay: true
+				canPay: true,
+				isAgreement: true,
 			}
 		},
 		watch: {
@@ -206,6 +213,12 @@
 
 		},
 		methods: {
+			changeAgree() {
+				this.isAgreement = !this.isAgreement;
+			},
+		    goAgreement() {
+		        this.$router.push('/agreement');
+		    },
 			getTime() {
 				let time = new Date(new Date().getTime() + 86400000);
 				let date = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}`
@@ -956,6 +969,29 @@
 					}
 				}
 			}
+			.argument-agree {
+				margin-top: 16px;
+				width: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+		        .check {
+		        	margin-right: 8px;
+		        	width: 16px;
+		        	height: 16px;
+		        	img {
+		        		width: 100%;
+		        		height: 100%;
+		        	}
+		        }
+		        span {
+		        	font-family: PingFangSC-Regular;
+		        	font-size: 12px;
+		        	color: rgba(0,0,0,0.38);
+		        	text-align: center;
+		        	line-height: 16px;
+		        }
+		    }
 			.compony {
 				margin-top: 12px;
 				font-family: PingFangSC-Regular;
