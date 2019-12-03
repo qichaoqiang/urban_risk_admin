@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div class="container" :class="{container20: isIphoneX}">
 		<div class="scrollbars">
 			<div class="scrollbars_icon">最新动态</div>
 			<div class="scrollbars_icon2"></div>
@@ -133,7 +133,7 @@
       		</div>
 			<div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div>
 		</div>
-		<div class="bottom">
+		<div class="bottom" :class="{bottom20: isIphoneX}">
 			<div class="bottom_btn" data-agl-cvt="7" id="bottom_btn_call" @click="register(2)">
 				<img src="@/assets/ic_consult_call.png">
 				<span>电话咨询律师</span>
@@ -210,7 +210,9 @@
 
 		},
 		computed: {
-
+			isIphoneX(){
+		      	return /iphone/gi.test(navigator.userAgent) && ((screen.height == 812 && screen.width == 375) || (screen.height == 896 && screen.width == 414))
+		    }
 		},
 		methods: {
 			changeAgree() {
@@ -1028,6 +1030,10 @@
 				background: #3F458C;
 			}
 		}
+		.bottom20 {
+			background: #ffffff;
+			padding-bottom: 20px;
+		}
 		.model {
 			position: fixed;
 			top: 0;
@@ -1046,5 +1052,8 @@
 	      	height: 0;
 	      	overflow: hidden;
 	    }
+	}
+	.container20 {
+		padding-bottom: 92px;
 	}
 </style>
