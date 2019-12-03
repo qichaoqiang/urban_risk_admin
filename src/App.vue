@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="has-bottombar" :class="{tab_bottom: isIphoneX}">
+  <div id="app" :class="{tab_bottom: isIphoneX}">
     <keep-alive :include="keepAlive">
       <router-view />
     </keep-alive>

@@ -38,30 +38,29 @@
 				目前已有 <span>8139</span> 个家庭参与活动
 			</div> -->
 			<div class="price_box">
-				<div class="price_item price_head">
-					<div class="price_value price_value1">服务项目</div>
-					<div class="line6"></div>
-					<div class="price_value">服务内容</div>
-					<div class="line6"></div>
-					<div class="price_value">有效期</div>
-					<div class="line6"></div>
-					<div class="price_value">价格</div>
+				<img class="img1 " src="@/assets/title_price.png">
+				<div class="price_item price_item_left">
+					<div class="price_intro">
+						<div class="price_intro_text">电话咨询</div>
+						<div class="price_intro_num">79.9</div>
+						<div class="price_intro_yuan">元</div>
+					</div>
+					<div class="price_bottom">
+						<img src="@/assets/ic_price_call.png">
+						<span>24小时内不限时通话</span>
+					</div>
 				</div>
-				<div class="price_item price_wechat">
-					<div class="price_value price_value1">微信咨询律师</div>
-					<div class="price_value">不限次提问</div>
-					<div class="line6"></div>
-					<div class="price_value">24小时</div>
-					<div class="line6"></div>
-					<div class="price_value">19.9元</div>
-				</div>
-				<div class="price_item price_phone">
-					<div class="price_value price_value1">电话咨询律师</div>
-					<div class="price_value">不限时长</div>
-					<div class="line6"></div>
-					<div class="price_value">24小时</div>
-					<div class="line6"></div>
-					<div class="price_value">79.9元</div>
+				<img class="price_center" src="@/assets/price_divider.png">
+				<div class="price_item price_item_right">
+					<div class="price_intro">
+						<div class="price_intro_text">微信咨询</div>
+						<div class="price_intro_num">19.9</div>
+						<div class="price_intro_yuan">元</div>
+					</div>
+					<div class="price_bottom">
+						<img src="@/assets/ic_price_wechat.png">
+						<span>24小时内无限次提问</span>
+					</div>
 				</div>
 			</div>
 			<div class="tip">
@@ -482,18 +481,15 @@
 			}
 		}
 		.banner {
-			padding-top: 214px;
+			padding-top: 216px;
 			box-sizing: border-box;
 			width: 100%;
-			height: 320px;
+			height: 270px;
 			background: url('../../assets/head.jpg') top no-repeat;
 			background-size: 100%;
 			.guide {
 				margin: 0 auto;
-				padding: 16px 0 14px;
 				box-sizing: border-box;
-				background: #FFFFFF;
-				box-shadow: 0 8px 16px 0 rgba(0,0,0,0.04);
 				border-radius: 1px;
 				width: 328px;
 				display: flex;
@@ -533,71 +529,101 @@
 			flex-direction: column;
 			align-items: center;
 			.price_box {
-				margin: 0 auto;
+				position: relative;
+				margin: 40px auto 0;
 				width: 328px;
+				height: 100px;
 				box-sizing: border-box;
-				border: 1px solid rgba(0,0,0,0.12);
-				.price_item {
-					margin-top: 2px;
+				display: flex;
+				.img1 {
+					position: absolute;
+					top: -22px;
+					left: 0;
 					width: 100%;
-					height: 40px;
-					display: flex;
-					align-items: center;
-					&:first-child {
-						margin-top: 0;
+				}
+				.price_item {
+					padding-top: 26px;
+					flex: 1;
+					height: 100px;
+					box-sizing: border-box;
+					.price_intro {
+						display: flex;
+						.price_intro_text {
+							margin-top: 16px;
+							margin-right: 4px;
+							font-family: PingFangSC-Regular;
+							font-size: 12px;
+							color: rgba(0,0,0,0.87);
+							text-align: left;
+							line-height: 18px;
+						}
+						.price_intro_num {
+							margin-right: 2spx;
+							font-family: PingFangSC-Medium;
+							font-size: 28px;
+							color: #C38E3E;
+							line-height: 40px;
+						}
+						.price_intro_yuan {
+							margin-top: 14px;
+							font-family: PingFangSC-Medium;
+							font-size: 14px;
+							color: #C38E3E;
+							text-align: left;
+							line-height: 20px;
+						}
 					}
-					.price_value {
-						width: 73px;
-						height: 40px;
-						font-family: PingFangSC-Semibold;
-						font-size: 12px;
-						color: #3F458C;
-						text-align: center;
-						line-height: 40px;
-					}
-					.price_value1 {
-						width: 110px;
-						flex-shrink: 1;
-						padding-left: 16px;
-						box-sizing: border-box;
-						text-align: left;
-					}
-					.line6 {
-						width: 1px;
-						height: 16px;
-						background: rgba(0,0,0,0.12);
+					.price_bottom {
+						display: flex;
+						align-items: center;
+						img {
+							margin-right: 2px;
+							width: 16px;
+							height: 16px;
+						} 
+						span {
+							font-family: PingFangSC-Medium;
+							font-size: 11px;
+							color: #C38E3E;
+							text-align: left;
+							line-height: 18px;
+						}
 					}
 				}
-				.price_head {
-					.price_value {
-						font-family: PingFangSC-Regular;
-						color: rgba(0,0,0,0.60);
-					}
-				}
-				.price_wechat {
-					background: #EEEFF5;
-					.price_value1 {
-						color: #FFFFFF;
-						background: #3F458C;
-					}
-				}
-				.price_phone {
+				.price_item_left {
+					padding-left: 16px;
 					background: #F9F3EB;
-					.price_value {
-						color: #C38E3E;
+				}
+				.price_item_right {
+					padding-right: 16px;
+					background: #EEEFF5;
+					.price_intro {
+						justify-content: flex-end;
+						.price_intro_num {
+							color: #3F458C;
+						}
+						.price_intro_yuan {
+							color: #3F458C;
+						}
 					}
-					.price_value1 {
-						width: 110px;
-						color: #FFFFFF;
-						background: #C38E3E;
+					.price_bottom {
+						justify-content: flex-end;
+						span {
+							color: #3F458C;
+						}
 					}
+				}
+				.price_center {
+					width: 40px;
+					height: 100px;
+					flex-shirnk: 0;
 				}
 			}
 			.tip {
 				margin-top: 16px;
 				width: 324px;
-				height: 28px;
-				border-radius: 14px;
+				height: 30px;
+				border-radius: 1px;
 				font-family: PingFangSC-Regular;
 				font-size: 12px;
 				color: #3F458C;
