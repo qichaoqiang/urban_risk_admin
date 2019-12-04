@@ -34,7 +34,7 @@
 		    },
 		    getOrderStatus(index) {
 		    	let data = {
-					orderCode: localStorage.getItem('orderCode')
+					orderCode: this.$route.query.orderCode
 				}
 				api.getOrderStatus(data).then(res => {
 					if(res.code == 0) {

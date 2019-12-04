@@ -359,7 +359,7 @@
 		          if (isWechat()) {
 		            // 微信收银台支付
 		            let data = {
-		              'callback_url': `${location.origin}/pay${location.search}`,
+		              'callback_url': `${location.origin}/pay${location.search}&orderCode=${this.orderInfo.orderCode}`,
 		              'mchid': '1527581321',
 		              'notify_url': `${callbackUrl}orderPayjs/callback`,
 		              'out_trade_no': this.orderInfo.orderId,
@@ -373,7 +373,7 @@
 		            let data = {
 		              payWay: this.payType == 'wap' ? 'ALIPAY' : 'WECHAT',
 		              orderId: this.orderInfo.orderId,
-		              returnUrl: `${location.origin}/pay${location.search}`,
+		              returnUrl: `${location.origin}/pay${location.search}&orderCode=${this.orderInfo.orderCode}`,
 		              deviceType: this.payType
 		            }
 		            localStorage.setItem('payWay', data.payWay);
