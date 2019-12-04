@@ -571,6 +571,7 @@
 							text-align: left;
 							line-height: 18px;
 							transform: scale(0.9);
+							white-space: nowrap;
 						}
 						.price_intro_num {
 							margin-right: 2px;
