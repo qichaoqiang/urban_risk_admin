@@ -21,35 +21,40 @@
 	export default {
 		data() {
 			return {
-				loading_pay: false
+				loading_pay: false,
+				timer: null
 			}
 		},
 		methods: {
 			confirm() {
 				if(!this.loading_pay) {
 					this.loading_pay = true;
-					let data = {
-						orderCode: localStorage.getItem('orderCode')
-					}
-					api.getOrderStatus(data).then(res => {
-						if(res.code == 0) {
-							if(res.data.orderStatus == 20) {
-								let amount = Number(localStorage.getItem('price'));
-								window._agl && window._agl.push(['track', ['success', {t: 18}]])
-								_hmt.push(['_trackEvent', 'status',  'paySuccess',  'amount',  amount]);
-								this.$router.replace({
-									path: '/result',
-									query: {
-										bd_vid: this.$route.query.bd_vid
-									}
-								});
-							}else {
-								this.loading_pay = false;
-								Toast('请先完成支付')
-							}
-						}
-					})
+					this.getOrderStatus();
 				}
+		    },
+		    getOrderStatus() {
+		    	let data = {
+					orderCode: localStorage.getItem('orderCode')
+				}
+				api.getOrderStatus(data).then(res => {
+					if(res.code == 0) {
+						if(res.data.orderStatus == 20) {
+							let amount = Number(localStorage.getItem('price'));
+							window._agl && window._agl.push(['track', ['success', {t: 18}]])
+							_hmt.push(['_trackEvent', 'status',  'paySuccess',  'amount',  amount]);
+							clearInterval(this.timer);
+							this.$router.replace({
+								path: '/result',
+								query: {
+									bd_vid: this.$route.query.bd_vid
+								}
+							});
+						}else {
+							this.loading_pay = false;
+							Toast('请先完成支付')
+						}
+					}
+				})
 		    },
 		    back() {
 		    	let payWay = localStorage.getItem('payWay');
@@ -65,7 +70,9 @@
 		    }
 		},
 		created() {
-			
+			this.timer = setInterval(() => {
+				this.getOrderStatus()
+			}, 10000);
 		}
 	}
 </script>
