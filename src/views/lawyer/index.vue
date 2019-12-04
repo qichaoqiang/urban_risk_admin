@@ -634,12 +634,14 @@
 							color: rgba(0,0,0,0.38);
 							text-align: left;
 							transform: scale(0.9);
+							white-space: nowrap;
 						}
 						.price_intro_guide_text2 {
 							font-family: PingFangSC-Medium;
 							font-size: 13px;
 							color: rgba(224,12,12,0.87);
 							text-align: left;
+							white-space: nowrap;
 						}
 					}
 				}
