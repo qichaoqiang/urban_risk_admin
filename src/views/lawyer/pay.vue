@@ -29,10 +29,10 @@
 			confirm() {
 				if(!this.loading_pay) {
 					this.loading_pay = true;
-					this.getOrderStatus();
+					this.getOrderStatus(1);
 				}
 		    },
-		    getOrderStatus() {
+		    getOrderStatus(index) {
 		    	let data = {
 					orderCode: localStorage.getItem('orderCode')
 				}
@@ -51,7 +51,9 @@
 							});
 						}else {
 							this.loading_pay = false;
-							Toast('请先完成支付')
+							if(index == 1) {
+								Toast('请先完成支付')
+							}
 						}
 					}
 				})

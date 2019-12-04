@@ -373,7 +373,7 @@
 		            let data = {
 		              payWay: this.payType == 'wap' ? 'ALIPAY' : 'WECHAT',
 		              orderId: this.orderInfo.orderId,
-		              returnUrl: `${location.origin}/pay`,
+		              returnUrl: `${location.origin}/pay${location.search}`,
 		              deviceType: this.payType
 		            }
 		            localStorage.setItem('payWay', data.payWay);
@@ -383,6 +383,7 @@
 		                if(this.payType == 'WEIXIN_H5') {
 		                  let data_ = JSON.parse(res.data);
 		                  let redirect_url = encodeURIComponent(data.returnUrl);
+		                  console.log(`${data_.payUrl}&redirect_url=${redirect_url}`);
 		                  location.href = `${data_.payUrl}&redirect_url=${redirect_url}`;
 		                }else {
 		                  $('#form').html(res.data);
