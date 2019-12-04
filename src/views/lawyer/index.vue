@@ -56,7 +56,8 @@
 					</div>
 					<img class="price_bottom" src="@/assets/price_tag_wechat.png">
 					<div class="price_intro_guide">
-						<div class="price_intro_guide_text1">原价49.9元</div>
+						<div class="price_intro_guide_text2" style="color: rgba(0,0,0,.38)">原价</div>
+						<div class="price_intro_guide_text1">49.9元</div>
 						<div class="price_intro_guide_text2">-限时优惠-</div>
 					</div>
 				</div>
@@ -65,7 +66,7 @@
 				<img class="pay_bottom_icon" src="@/assets/ic_protect.png">
         		您的个人信息及咨询内容将严格保密，请放心咨询
 			</div>
-			<img class="img1" src="@/assets/b_01.png">
+			<img class="img1" src="@/assets/b_01.png" style="margin-top: 8px;">
 			<div class="example_title">
 				<div class="line4"></div>
 				<div class="example_title_content"><span>135468</span>位用户正在使用</div>
