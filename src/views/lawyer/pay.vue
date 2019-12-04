@@ -59,6 +59,7 @@
 				})
 		    },
 		    back() {
+		    	clearInterval(this.timer);
 		    	let payWay = localStorage.getItem('payWay');
 		    	if(payWay) {
 		    		if(payWay == 'ALIPAY') {
@@ -67,7 +68,7 @@
 			    		history.go(-2);
 			    	}
 		    	}else {
-		    		location.replace(`${location.origin}/pay${location.search}`)
+		    		location.replace(`${location.origin}/index${location.search}`)
 		    	}
 		    }
 		},
