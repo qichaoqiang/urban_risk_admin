@@ -34,7 +34,15 @@
 					api.getOrderStatus(data).then(res => {
 						if(res.code == 0) {
 							if(res.data.orderStatus == 20) {
-								this.$router.replace('/result');
+								let amount = Number(localStorage.getItem('price'));
+								window._agl && window._agl.push(['track', ['success', {t: 18}]])
+								_hmt.push(['_trackEvent', 'status',  'paySuccess',  'amount',  amount]);
+								this.$router.replace({
+									path: '/result',
+									query: {
+										bd_vid: this.$route.query.bd_vid
+									}
+								});
 							}else {
 								this.loading_pay = false;
 								Toast('请先完成支付')

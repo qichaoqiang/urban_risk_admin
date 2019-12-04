@@ -1,13 +1,13 @@
 <template>
 	<div class="container" :class="{container20: isIphoneX}">
-		<div class="scrollbars">
+		<div class="scrollbars" :class="{scrollbars_no: window360}">
 			<div class="scrollbars_icon">最新动态</div>
 			<div class="scrollbars_icon2"></div>
 			<div class="scrollbars_list">
 				<van-swipe style="height: 32px;" :autoplay="2500" vertical :show-indicators="false">
 				  	<van-swipe-item v-for="(item, index) in scrollList" :key="index">
 				    	<div class="scrollbars_item">
-				    		<span>{{item.phone}} 开通 {{item.content}} </span><span>{{item.time}}秒前</span>
+				    		<span>{{item.phone}}开通{{item.content}} </span><span>{{item.time}}秒前</span>
 				    	</div>
 				  	</van-swipe-item>
 				</van-swipe>
@@ -39,7 +39,7 @@
 			</div> -->
 			<div class="price_box">
 				<img class="img1 " src="@/assets/title_price.png">
-				<div class="price_item price_item_left">
+				<div class="price_item price_item_left" :class="{price_item_left_no: window360}">
 					<div class="price_intro">
 						<div class="price_intro_text">电话咨询</div>
 						<div class="price_intro_num">79.9</div>
@@ -50,8 +50,8 @@
 						<span>24小时内不限时通话</span>
 					</div>
 				</div>
-				<img class="price_center" src="@/assets/price_divider.png">
-				<div class="price_item price_item_right">
+				<img class="price_center" :class="{price_center_no: window360}" src="@/assets/price_divider.png">
+				<div class="price_item price_item_right" :class="{price_item_right_no: window360}">
 					<div class="price_intro">
 						<div class="price_intro_text">微信咨询</div>
 						<div class="price_intro_num">19.9</div>
@@ -211,6 +211,9 @@
 		computed: {
 			isIphoneX(){
 		      	return /iphone/gi.test(navigator.userAgent) && ((screen.height == 812 && screen.width == 375) || (screen.height == 896 && screen.width == 414))
+		    },
+		    window360() {
+		    	return window.innerWidth < 360
 		    }
 		},
 		methods: {
@@ -299,6 +302,7 @@
 		          level,
 		          price
 		        });
+		        localStorage.setItem('price', price)
 		        this.orderStatus = status;
 		        this.loading_pay = true;
 		        this.handleTestDisabled = true
@@ -481,6 +485,9 @@
 				}
 			}
 		}
+		.scrollbars_no {
+			padding: 0;
+		}
 		.banner {
 			padding-top: 216px;
 			box-sizing: border-box;
@@ -588,6 +595,7 @@
 							color: #C38E3E;
 							text-align: left;
 							line-height: 18px;
+							white-space: nowrap;
 						}
 					}
 				}
@@ -614,14 +622,23 @@
 						}
 					}
 				}
+				.price_item_left_no {
+					padding-left: 4px;
+				}
+				.price_item_right_no {
+					padding-left: 4px;
+				}
 				.price_center {
 					width: 40px;
 					height: 100px;
 					flex-shirnk: 0;
 				}
+				.price_center_no {
+					width: 20px;
+				}
 			}
 			.tip {
-				margin-top: 16px;
+				margin-top: 4px;
 				width: 324px;
 				height: 30px;
 				border-radius: 1px;
