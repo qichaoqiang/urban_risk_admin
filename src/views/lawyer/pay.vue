@@ -39,7 +39,7 @@
 				api.getOrderStatus(data).then(res => {
 					if(res.code == 0) {
 						if(res.data.orderStatus == 20) {
-							let amount = Number(localStorage.getItem('price'));
+							let amount = Number(this.$route.query.price);
 							window._agl && window._agl.push(['track', ['success', {t: 18}]])
 							_hmt.push(['_trackEvent', 'status',  'paySuccess',  'amount',  amount]);
 							clearInterval(this.timer);
@@ -71,7 +71,7 @@
 		    		let query = this.$route.query;
 		    		let search = '';
 		    		for(let key in query) {
-		    			if(key != 'orderCode') {
+		    			if(key != 'orderCode' && key != 'price') {
 		    				if(!search) {
 		    					search += `?${key}=${query[key]}`
 		    				}else {
