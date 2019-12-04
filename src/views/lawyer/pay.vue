@@ -68,7 +68,18 @@
 			    		history.go(-2);
 			    	}
 		    	}else {
-		    		location.replace(`${location.origin}/index${location.search}`)
+		    		let query = this.$route.query;
+		    		let search = '';
+		    		for(let key in query) {
+		    			if(key != 'orderCode') {
+		    				if(!search) {
+		    					search += `?${key}=${query[key]}`
+		    				}else {
+		    					search += `&${key}=${query[key]}`
+		    				}
+		    			}
+		    		}	
+		    		location.replace(`${location.origin}/index${search}`)
 		    	}
 		    }
 		},
