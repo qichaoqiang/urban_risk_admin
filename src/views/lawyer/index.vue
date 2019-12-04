@@ -45,10 +45,7 @@
 						<div class="price_intro_num">79.9</div>
 						<div class="price_intro_yuan">元</div>
 					</div>
-					<div class="price_bottom">
-						<img src="@/assets/ic_price_call.png">
-						<span>24小时内不限时通话</span>
-					</div>
+					<img class="price_bottom" src="@/assets/price_tag_call.png">
 				</div>
 				<img class="price_center" :class="{price_center_no: window360}" src="@/assets/price_divider.png">
 				<div class="price_item price_item_right" :class="{price_item_right_no: window360}">
@@ -57,9 +54,10 @@
 						<div class="price_intro_num">19.9</div>
 						<div class="price_intro_yuan">元</div>
 					</div>
-					<div class="price_bottom">
-						<img src="@/assets/ic_price_wechat.png">
-						<span>24小时内无限次提问</span>
+					<img class="price_bottom" src="@/assets/price_tag_wechat.png">
+					<div class="price_intro_guide">
+						<div class="price_intro_guide_text1">原价49.9元</div>
+						<div class="price_intro_guide_text2">-限时优惠-</div>
 					</div>
 				</div>
 			</div>
@@ -490,19 +488,23 @@
 			padding: 0;
 		}
 		.banner {
-			padding-top: 216px;
+			padding-top: 178px;
 			box-sizing: border-box;
 			width: 100%;
-			height: 270px;
+			height: 250px;
 			background: url('../../assets/head.jpg') top no-repeat;
 			background-size: 100%;
 			.guide {
 				margin: 0 auto;
+				padding: 9px 0 7px;
 				box-sizing: border-box;
 				border-radius: 1px;
+				box-shadow: 0 4px 8px 0 rgba(0,0,0,0.02);
 				width: 328px;
+				opacity: 0.95;
 				display: flex;
 				align-items: center;
+				background: #ffffff;
 				.guide_item {
 					flex: 1;
 					display: flex;
@@ -510,10 +512,10 @@
 					align-items: center;
 					.guide_num {
 						font-family: PingFangSC-Medium;
-						font-size: 20px;
+						font-size: 16px;
 						color: #C38E3E;
 						text-align: center;
-						line-height: 30px;
+						line-height: 22px;
 					}
 					.guide_text {
 						margin-top: 2px;
@@ -539,21 +541,24 @@
 			align-items: center;
 			.price_box {
 				position: relative;
-				margin: 40px auto 0;
+				margin: 16px auto 0;
 				width: 328px;
-				height: 100px;
+				height: 130px;
 				box-sizing: border-box;
 				display: flex;
 				.img1 {
 					position: absolute;
-					top: -22px;
+					top: -16px;
 					left: 0;
 					width: 100%;
+					z-index: 100;
 				}
 				.price_item {
+					position: relative;
+					z-index: 99;
 					padding-top: 26px;
 					flex: 1;
-					height: 100px;
+					height: 130px;
 					box-sizing: border-box;
 					.price_intro {
 						display: flex;
@@ -561,13 +566,14 @@
 							margin-top: 16px;
 							margin-right: 4px;
 							font-family: PingFangSC-Regular;
-							font-size: 12px;
-							color: rgba(0,0,0,0.87);
+							font-size: 11px;
+							color: #C38E3E;
 							text-align: left;
 							line-height: 18px;
+							transform: scale(0.9);
 						}
 						.price_intro_num {
-							margin-right: 2spx;
+							margin-right: 2px;
 							font-family: PingFangSC-Medium;
 							font-size: 28px;
 							color: #C38E3E;
@@ -583,32 +589,28 @@
 						}
 					}
 					.price_bottom {
-						display: flex;
-						align-items: center;
-						img {
-							margin-right: 2px;
-							width: 16px;
-							height: 16px;
-						} 
-						span {
-							font-family: PingFangSC-Medium;
-							font-size: 11px;
-							color: #C38E3E;
-							text-align: left;
-							line-height: 18px;
-							white-space: nowrap;
-						}
+						width: 146px;
+						height: 20px;
 					}
 				}
 				.price_item_left {
+					padding-top: 42px;
 					padding-left: 16px;
 					background: #F9F3EB;
+					.price_bottom {
+						position: absolute;
+						top: 84px;
+						left: -2px;
+					}
 				}
 				.price_item_right {
 					padding-right: 16px;
 					background: #EEEFF5;
 					.price_intro {
 						justify-content: flex-end;
+						.price_intro_text {
+							color: #3F458C;
+						}
 						.price_intro_num {
 							color: #3F458C;
 						}
@@ -617,9 +619,27 @@
 						}
 					}
 					.price_bottom {
+						position: absolute;
+						top: 66px;
+						right: -2px;
+					}
+					.price_intro_guide {
+						margin-top: 30px;
+						line-height: 18px;
+						display: flex;
 						justify-content: flex-end;
-						span {
-							color: #3F458C;
+						.price_intro_guide_text1 {
+							font-family: PingFangSC-Regular;
+							font-size: 11px;
+							color: rgba(0,0,0,0.38);
+							text-align: left;
+							transform: scale(0.9);
+						}
+						.price_intro_guide_text2 {
+							font-family: PingFangSC-Medium;
+							font-size: 13px;
+							color: rgba(224,12,12,0.87);
+							text-align: left;
 						}
 					}
 				}
@@ -631,7 +651,7 @@
 				}
 				.price_center {
 					width: 40px;
-					height: 100px;
+					height: 130px;
 					flex-shirnk: 0;
 				}
 				.price_center_no {
