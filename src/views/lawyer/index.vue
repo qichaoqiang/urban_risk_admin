@@ -56,8 +56,7 @@
 					</div>
 					<img class="price_bottom" src="@/assets/price_tag_wechat.png">
 					<div class="price_intro_guide">
-						<div class="price_intro_guide_text2" style="color: rgba(0,0,0,.38)">原价</div>
-						<div class="price_intro_guide_text1">49.9元</div>
+						<div class="price_intro_guide_text2" style="color: rgba(0,0,0,.38)">原价49.9元</div>
 						<div class="price_intro_guide_text2">-限时优惠-</div>
 					</div>
 				</div>
