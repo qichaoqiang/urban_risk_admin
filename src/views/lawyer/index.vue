@@ -73,7 +73,8 @@
 				<img class="pay_bottom_icon" src="@/assets/ic_protect.png">
         		您的个人信息及咨询内容将严格保密，请放心咨询
 			</div>
-			<img class="img1" src="@/assets/b_01.png" style="margin-top: 8px;">
+			<img class="img1" src="@/assets/b_01_b.png" style="margin-top: 8px;">
+			<img class="img1" src="@/assets/b_01_a.png">
 			<div class="example_title">
 				<div class="line4"></div>
 				<div class="example_title_content"><span>135468</span>位用户正在使用</div>
