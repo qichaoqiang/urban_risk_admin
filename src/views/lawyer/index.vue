@@ -45,7 +45,11 @@
 						<div class="price_intro_num">79.9</div>
 						<div class="price_intro_yuan">元</div>
 					</div>
-					<img class="price_bottom" src="@/assets/price_tag_call.png">
+					<div class="price_bottom">
+						<img src="@/assets/ic_price_call.png">
+						<span>24小时内不限时通话</span>
+					</div>
+					<!-- <img class="price_bottom" src="@/assets/price_tag_call.png"> -->
 				</div>
 				<img class="price_center" :class="{price_center_no: window360}" src="@/assets/price_divider.png">
 				<div class="price_item price_item_right" :class="{price_item_right_no: window360}">
@@ -54,11 +58,15 @@
 						<div class="price_intro_num">19.9</div>
 						<div class="price_intro_yuan">元</div>
 					</div>
-					<img class="price_bottom" src="@/assets/price_tag_wechat.png">
-					<div class="price_intro_guide">
+					<div class="price_bottom">
+						<img src="@/assets/ic_price_wechat.png">
+						<span>24小时内无限次提问</span>
+					</div>
+					<!-- <img class="price_bottom" src="@/assets/price_tag_wechat.png"> -->
+					<!-- <div class="price_intro_guide">
 						<div class="price_intro_guide_text2" style="color: rgba(0,0,0,.38)">原价49.9元</div>
 						<div class="price_intro_guide_text2">-限时优惠-</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<div class="tip">
@@ -543,7 +551,7 @@
 				position: relative;
 				margin: 16px auto 0;
 				width: 328px;
-				height: 130px;
+				height: 100px;
 				box-sizing: border-box;
 				display: flex;
 				.img1 {
@@ -558,7 +566,7 @@
 					z-index: 99;
 					padding-top: 26px;
 					flex: 1;
-					height: 130px;
+					height: 100px;
 					box-sizing: border-box;
 					.price_intro {
 						display: flex;
@@ -566,8 +574,8 @@
 							margin-top: 16px;
 							margin-right: 4px;
 							font-family: PingFangSC-Regular;
-							font-size: 11px;
-							color: #C38E3E;
+							font-size: 12px;
+							color: rgba(0,0,0,0.87);
 							text-align: left;
 							line-height: 18px;
 							transform: scale(0.9);
@@ -590,28 +598,43 @@
 						}
 					}
 					.price_bottom {
-						width: 146px;
-						height: 20px;
+						display: flex;
+						align-items: center;
+						img {
+							margin-right: 2px;
+							width: 16px;
+							height: 16px;
+						} 
+						span {
+							font-family: PingFangSC-Medium;
+							font-size: 11px;
+							color: #C38E3E;
+							text-align: left;
+							line-height: 18px;
+							white-space: nowrap;
+						}
+						// width: 146px;
+						// height: 20px;
 					}
+					// .price_bottom {
+					// 	width: 146px;
+					// 	height: 20px;
+					// }
 				}
 				.price_item_left {
-					padding-top: 42px;
 					padding-left: 16px;
 					background: #F9F3EB;
-					.price_bottom {
-						position: absolute;
-						top: 84px;
-						left: -2px;
-					}
+					// .price_bottom {
+					// 	position: absolute;
+					// 	top: 84px;
+					// 	left: -2px;
+					// }
 				}
 				.price_item_right {
 					padding-right: 16px;
 					background: #EEEFF5;
 					.price_intro {
 						justify-content: flex-end;
-						.price_intro_text {
-							color: #3F458C;
-						}
 						.price_intro_num {
 							color: #3F458C;
 						}
@@ -620,9 +643,7 @@
 						}
 					}
 					.price_bottom {
-						position: absolute;
-						top: 66px;
-						right: -2px;
+						justify-content: flex-end;
 					}
 					.price_intro_guide {
 						margin-top: 30px;
@@ -647,14 +668,14 @@
 					}
 				}
 				.price_item_left_no {
-					padding-left: 4px;
+					padding-left: 6px;
 				}
 				.price_item_right_no {
-					padding-left: 4px;
+					padding-right: 6px;
 				}
 				.price_center {
 					width: 40px;
-					height: 130px;
+					height: 100px;
 					flex-shirnk: 0;
 				}
 				.price_center_no {
