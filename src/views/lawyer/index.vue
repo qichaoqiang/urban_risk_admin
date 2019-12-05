@@ -644,6 +644,9 @@
 					}
 					.price_bottom {
 						justify-content: flex-end;
+						span {
+							color: #3F458C;
+						}
 					}
 					.price_intro_guide {
 						margin-top: 30px;
