@@ -39,28 +39,25 @@
 			</div> -->
 			<div class="price_box">
 				<img class="img1 " src="@/assets/title_price.png">
-				<div class="price_item price_item_left" :class="{price_item_left_no: window360}">
+				<div class="price_item price_item_left">
 					<div class="price_intro">
-						<div class="price_intro_text">电话咨询</div>
-						<div class="price_intro_num">79.9</div>
+						<div class="price_intro_text">现仅需</div>
+						<div class="price_intro_num">29.9</div>
 						<div class="price_intro_yuan">元</div>
 					</div>
 					<div class="price_bottom">
 						<img src="@/assets/ic_price_call.png">
-						<span>24小时内不限时通话</span>
+						<span>24小时内无限次提问</span>
 					</div>
 					<!-- <img class="price_bottom" src="@/assets/price_tag_call.png"> -->
 				</div>
-				<img class="price_center" :class="{price_center_no: window360}" src="@/assets/price_divider.png">
-				<div class="price_item price_item_right" :class="{price_item_right_no: window360}">
+				<img class="price_center" src="@/assets/price_line.png">
+				<div class="price_item price_item_right">
 					<div class="price_intro">
-						<div class="price_intro_text">微信咨询</div>
-						<div class="price_intro_num">19.9</div>
-						<div class="price_intro_yuan">元</div>
+						<div class="price_intro_text">原价</div>
 					</div>
 					<div class="price_bottom">
-						<img src="@/assets/ic_price_wechat.png">
-						<span>24小时内无限次提问</span>
+						<span>199元</span>
 					</div>
 					<!-- <img class="price_bottom" src="@/assets/price_tag_wechat.png"> -->
 					<!-- <div class="price_intro_guide">
@@ -68,6 +65,8 @@
 						<div class="price_intro_guide_text2">-限时优惠-</div>
 					</div> -->
 				</div>
+				<div class="price_line2"></div>
+				<div class="price_text">优惠截止时间  |  2019-12-20</div>
 			</div>
 			<div class="tip">
 				<img class="pay_bottom_icon" src="@/assets/ic_protect.png">
@@ -101,7 +100,7 @@
 				<div class="list">
 					<div class="list_item">
 						<div class="list_item_left" style="padding-top: 8px;"><span>免费咨询服务差, <br/>收费服务费用高</span></div>
-						<div class="list_item_right" style="padding-top: 8px;"><span>单次服务19.9元起,  <br/>价格实惠服务好</span></div>
+						<div class="list_item_right" style="padding-top: 8px;"><span>单次服务29.9元起,  <br/>价格实惠服务好</span></div>
 					</div>
 					<div class="line3"></div>
 					<div class="list_item">
@@ -123,13 +122,14 @@
 			<img class="img1" src="@/assets/b_02.png">
 			<img class="img1" src="@/assets/b_03.png">
 			<img class="img1" src="@/assets/b_04.png">
-			<div class="bg1">
+			<img class="img1" src="@/assets/b_05.png">
+			<!-- <div class="bg1">
 				<div class="countdown">
 					<div class="countdown_text">通话中</div>
 					<div class="countdown_num">{{this.hour}}:{{this.minutes}}:{{this.seconds}}</div>
 					<img class="countdown_gif" src="@/assets/phone.gif">
 				</div>
-			</div>
+			</div> -->
 			<img class="img1" src="@/assets/b_06.png">
 			<img class="img1" src="@/assets/b_10.png">
 			<div class="argument-agree" @click="changeAgree">
@@ -139,14 +139,19 @@
       		</div>
 			<div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div>
 		</div>
-		<div class="bottom" :class="{bottom20: isIphoneX}">
-			<div class="bottom_btn" data-agl-cvt="7" id="bottom_btn_call" @click="register(2)">
+		<div class="bottom" :class="{bottom20: isIphoneX}" @click="register(1)">
+			<!-- <div class="bottom_btn" data-agl-cvt="7" id="bottom_btn_call" @click="register(2)">
 				<img src="@/assets/ic_consult_call.png">
 				<span>电话咨询律师</span>
 			</div>
 			<div class="bottom_btn custom_btn" data-agl-cvt="7" id="bottom_btn_wechat" @click="register(1)">
 				<img src="@/assets/ic_consult_wechat.png">
 				<span>微信咨询律师</span>
+			</div> -->
+			<img class="bottom_icon" src="@/assets/ic_consult.png">
+			<div class="bottom_text">
+				<div class="bottom_text1">开始咨询律师, 有问必答</div>
+				<div class="bottom_text2">仅需29.9元, 专家律师为您答疑解惑评公道</div>
 			</div>
 		</div>
 		<div class="model" v-show="loading_pay">
@@ -295,21 +300,26 @@
 		        if(this.loading_pay) {
 		          return false;
 		        }
-		        let obj1 = {
-		          'WEIXIN_H5': '微信支付',
-		          'wap': '支付宝'
-		        }
-		        let payType = obj1[this.payType];
-		        let levelList = ['微信', '电话'];
-		        let priceList = ['19.9', '79.9'];
-		        let level = levelList[status - 1];
-		        let price = priceList[status - 1];
-		        sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[2 - status], {
-		          payType,
-		          level,
-		          price
+		        // let obj1 = {
+		        //   'WEIXIN_H5': '微信支付',
+		        //   'wap': '支付宝'
+		        // }
+		        // let payType = obj1[this.payType];
+		        // let levelList = ['微信', '电话'];
+		        // let priceList = ['29.9', '79.9'];
+		        // let level = levelList[status - 1];
+		        // let price = priceList[status - 1];
+		        // sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[2 - status], {
+		        //   payType,
+		        //   level,
+		        //   price
+		        // });
+		        sa.quick('trackHeatMap', document.getElementsByClassName('bottom_icon')[0], {
+		          payType: '微信支付',
+		          level: '微信',
+		          price: '29.9'
 		        });
-		        localStorage.setItem('price', price)
+		        localStorage.setItem('price', '29.9')
 		        this.orderStatus = status;
 		        this.loading_pay = true;
 		        this.handleTestDisabled = true
@@ -436,7 +446,7 @@
 
 <style lang="scss" scoped>
 	.container {
-		padding-bottom: 72px;
+		padding-bottom: 88px;
 		.scrollbars {
 			position: fixed;
 			z-index: 1000;
@@ -551,10 +561,12 @@
 			.price_box {
 				position: relative;
 				margin: 16px auto 0;
+				padding: 0 24px;
 				width: 328px;
-				height: 100px;
+				height: 130px;
 				box-sizing: border-box;
 				display: flex;
+				background: #F9F3EB;
 				.img1 {
 					position: absolute;
 					top: -16px;
@@ -566,8 +578,7 @@
 					position: relative;
 					z-index: 99;
 					padding-top: 26px;
-					flex: 1;
-					height: 100px;
+					height: 130px;
 					box-sizing: border-box;
 					.price_intro {
 						display: flex;
@@ -623,8 +634,7 @@
 					// }
 				}
 				.price_item_left {
-					padding-left: 16px;
-					background: #F9F3EB;
+					flex: 1;
 					// .price_bottom {
 					// 	position: absolute;
 					// 	top: 84px;
@@ -632,10 +642,12 @@
 					// }
 				}
 				.price_item_right {
-					padding-right: 16px;
-					background: #EEEFF5;
 					.price_intro {
 						justify-content: flex-end;
+						.price_intro_text {
+							margin-top: 12px;
+							color: rgba(0,0,0,0.38);
+						}
 						.price_intro_num {
 							color: #3F458C;
 						}
@@ -646,7 +658,10 @@
 					.price_bottom {
 						justify-content: flex-end;
 						span {
-							color: #3F458C;
+							font-family: PingFangSC-Medium;
+							font-size: 16px;
+							color: rgba(0,0,0,0.60);
+							line-height: 22px;
 						}
 					}
 					.price_intro_guide {
@@ -678,12 +693,33 @@
 					padding-right: 6px;
 				}
 				.price_center {
-					width: 40px;
-					height: 100px;
+					margin-top: 27px;
+					margin-right: 30px;
+					width: 16px;
+					height: 56px;
 					flex-shirnk: 0;
 				}
 				.price_center_no {
 					width: 20px;
+				}
+				.price_line2 {
+					position: absolute;
+					top: 94px;
+					left: 50%;
+					transform: translateX(-50%);
+					width: 280px;
+					height: 0;
+					border-top: 1px solid #C38E3E;
+				}
+				.price_text {
+					position: absolute;
+					top: 104px;
+					right: 24px;
+					font-family: PingFangSC-Regular;
+					font-size: 11px;
+					color: rgba(0,0,0,0.38);
+					text-align: right;
+					line-height: 18px;
 				}
 			}
 			.tip {
@@ -1099,28 +1135,52 @@
 		.bottom {
 			position: fixed;
 			bottom: 0;
+			padding-left: 16px;
+			box-sizing: border-box;
 			width: 100%;
+			height: 64px;
 			display: flex;
-			.bottom_btn {
-				flex: 1;
-				height: 48px;
-				background: #C38E3E;
-				box-shadow: 0 8px 16px 0 rgba(0,0,0,0.04);
-				font-family: PingFangSC-Medium;
-				font-size: 15px;
-				color: #FFFFFF;
-				line-height: 48px;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				img {
-					margin-right: 4px;
-					width: 24px;
-					height: 24px;
-				}
-			}
+			align-items: center;
+			background: #C38E3E;
+			box-shadow: 0 -8px 16px 0 rgba(0,0,0,0.04);
+			// .bottom_btn {
+			// 	flex: 1;
+			// 	height: 48px;
+			// 	background: #C38E3E;
+			// 	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.04);
+			// 	font-family: PingFangSC-Medium;
+			// 	font-size: 15px;
+			// 	color: #FFFFFF;
+			// 	line-height: 48px;
+			// 	display: flex;
+			// 	justify-content: center;
+			// 	align-items: center;
+			// 	img {
+			// 		margin-right: 4px;
+			// 		width: 24px;
+			// 		height: 24px;
+			// 	}
+			// }
 			.custom_btn {
 				background: #3F458C;
+			}
+			.bottom_icon {
+				width: 56px;
+				height: 56px;
+			}
+			.bottom_text {
+				.bottom_text1 {
+					font-family: PingFangSC-Medium;
+					font-size: 18px;
+					color: #FFFFFF;
+					line-height: 30px;
+				}
+				.bottom_text2 {
+					font-family: PingFangSC-Regular;
+					font-size: 12px;
+					color: rgba(255,255,255,0.70);
+					line-height: 18px;
+				}
 			}
 		}
 		.bottom20 {
@@ -1147,6 +1207,6 @@
 	    }
 	}
 	.container20 {
-		padding-bottom: 92px;
+		padding-bottom: 108px;
 	}
 </style>
