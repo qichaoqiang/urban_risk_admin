@@ -66,7 +66,7 @@
 					</div> -->
 				</div>
 				<div class="price_line2"></div>
-				<div class="price_text">优惠截止时间  |  {{this.date}}</div>
+				<div class="price_text">优惠截止时间  |  <span style="color: #c38e3e">{{this.date}}</span></div>
 			</div>
 			<div class="tip">
 				<img class="pay_bottom_icon" src="@/assets/ic_protect.png">
@@ -250,7 +250,8 @@
 				let secondNum = [3, 5, 8, 7];
 				let index = 0;
 				let secondIndex;
-				let contentList = ['19.9元微信咨询服务', '79.9元电话咨询服务'];
+				// let contentList = ['19.9元微信咨询服务', '79.9元电话咨询服务'];
+				let contentList = ['29.9元微信咨询服务', '29.9元微信咨询服务'];
 				for(let i = 0; i < 100; i++) {
 					phone += 1;
 					secondIndex = Math.floor(Math.random() * 3);
@@ -1178,12 +1179,14 @@
 						font-size: 18px;
 						color: #FFFFFF;
 						line-height: 30px;
+						text-align: left;
 					}
 					.bottom_text2 {
 						font-family: PingFangSC-Regular;
 						font-size: 12px;
 						color: rgba(255,255,255,0.70);
 						line-height: 18px;
+						text-align: left;
 					}
 				}
 			}
