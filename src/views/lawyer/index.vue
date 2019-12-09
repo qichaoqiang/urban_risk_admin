@@ -46,7 +46,7 @@
 						<div class="price_intro_yuan">元</div>
 					</div>
 					<div class="price_bottom">
-						<img src="@/assets/ic_price_call.png">
+						<img src="@/assets/ic_price_wechat_g.png">
 						<span>24小时内无限次提问</span>
 					</div>
 					<!-- <img class="price_bottom" src="@/assets/price_tag_call.png"> -->
@@ -66,7 +66,7 @@
 					</div> -->
 				</div>
 				<div class="price_line2"></div>
-				<div class="price_text">优惠截止时间  |  2019-12-20</div>
+				<div class="price_text">优惠截止时间  |  {{this.date}}</div>
 			</div>
 			<div class="tip">
 				<img class="pay_bottom_icon" src="@/assets/ic_protect.png">
@@ -148,10 +148,12 @@
 				<img src="@/assets/ic_consult_wechat.png">
 				<span>微信咨询律师</span>
 			</div> -->
-			<img class="bottom_icon" src="@/assets/ic_consult.png">
-			<div class="bottom_text">
-				<div class="bottom_text1">开始咨询律师, 有问必答</div>
-				<div class="bottom_text2">仅需29.9元, 专家律师为您答疑解惑评公道</div>
+			<div class="bottom_content">
+				<img class="bottom_icon" src="@/assets/ic_consult.png">
+				<div class="bottom_text">
+					<div class="bottom_text1">开始咨询律师, 有问必答</div>
+					<div class="bottom_text2">仅需29.9元, 专家律师为您答疑解惑评公道</div>
+				</div>
 			</div>
 		</div>
 		<div class="model" v-show="loading_pay">
@@ -1135,14 +1137,8 @@
 		.bottom {
 			position: fixed;
 			bottom: 0;
-			padding-left: 16px;
-			box-sizing: border-box;
 			width: 100%;
 			height: 64px;
-			display: flex;
-			align-items: center;
-			background: #C38E3E;
-			box-shadow: 0 -8px 16px 0 rgba(0,0,0,0.04);
 			// .bottom_btn {
 			// 	flex: 1;
 			// 	height: 48px;
@@ -1165,21 +1161,30 @@
 				background: #3F458C;
 			}
 			.bottom_icon {
+				margin-left: 16px;
 				width: 56px;
 				height: 56px;
 			}
-			.bottom_text {
-				.bottom_text1 {
-					font-family: PingFangSC-Medium;
-					font-size: 18px;
-					color: #FFFFFF;
-					line-height: 30px;
-				}
-				.bottom_text2 {
-					font-family: PingFangSC-Regular;
-					font-size: 12px;
-					color: rgba(255,255,255,0.70);
-					line-height: 18px;
+			.bottom_content {
+				width: 100%;
+				height: 64px;
+				display: flex;
+				align-items: center;
+				background: #C38E3E;
+				box-shadow: 0 -8px 16px 0 rgba(0,0,0,0.04);
+				.bottom_text {
+					.bottom_text1 {
+						font-family: PingFangSC-Medium;
+						font-size: 18px;
+						color: #FFFFFF;
+						line-height: 30px;
+					}
+					.bottom_text2 {
+						font-family: PingFangSC-Regular;
+						font-size: 12px;
+						color: rgba(255,255,255,0.70);
+						line-height: 18px;
+					}
 				}
 			}
 		}
