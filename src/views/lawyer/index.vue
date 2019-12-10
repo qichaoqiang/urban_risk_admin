@@ -42,7 +42,7 @@
 				<div class="price_item price_item_left">
 					<div class="price_intro">
 						<div class="price_intro_text">现仅需</div>
-						<div class="price_intro_num">29.9</div>
+						<div class="price_intro_num">34.9</div>
 						<div class="price_intro_yuan">元</div>
 					</div>
 					<div class="price_bottom">
@@ -100,7 +100,7 @@
 				<div class="list">
 					<div class="list_item">
 						<div class="list_item_left" style="padding-top: 8px;"><span>免费咨询服务差, <br/>收费服务费用高</span></div>
-						<div class="list_item_right" style="padding-top: 8px;"><span>单次服务29.9元起,  <br/>价格实惠服务好</span></div>
+						<div class="list_item_right" style="padding-top: 8px;"><span>单次服务34.9元起,  <br/>价格实惠服务好</span></div>
 					</div>
 					<div class="line3"></div>
 					<div class="list_item">
@@ -152,7 +152,7 @@
 				<img class="bottom_icon" src="@/assets/ic_consult.png">
 				<div class="bottom_text">
 					<div class="bottom_text1">开始咨询律师, 有问必答</div>
-					<div class="bottom_text2">仅需29.9元, 专家律师为您答疑解惑评公道</div>
+					<div class="bottom_text2">仅需34.9元, 专家律师为您答疑解惑评公道</div>
 				</div>
 			</div>
 		</div>
@@ -251,7 +251,7 @@
 				let index = 0;
 				let secondIndex;
 				// let contentList = ['19.9元微信咨询服务', '79.9元电话咨询服务'];
-				let contentList = ['29.9元微信咨询服务', '29.9元微信咨询服务'];
+				let contentList = ['34.9元微信咨询服务', '34.9元微信咨询服务'];
 				for(let i = 0; i < 100; i++) {
 					phone += 1;
 					secondIndex = Math.floor(Math.random() * 3);
@@ -320,9 +320,9 @@
 		        sa.quick('trackHeatMap', document.getElementsByClassName('bottom_icon')[0], {
 		          payType: '微信支付',
 		          level: '微信',
-		          price: '29.9'
+		          price: '34.9'
 		        });
-		        localStorage.setItem('price', '29.9')
+		        localStorage.setItem('price', '34.9')
 		        this.orderStatus = status;
 		        this.loading_pay = true;
 		        this.handleTestDisabled = true
