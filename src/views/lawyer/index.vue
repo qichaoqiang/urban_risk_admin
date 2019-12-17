@@ -58,7 +58,7 @@
 			<div class="scrollbars" :class="{scrollbars_no: window360}">
 				<img class="scrollbars_icon" src="@/assets/success-on.png">
 				<div class="scrollbars_list">
-					<van-swipe style="height: 100%;" :autoplay="2500" vertical :show-indicators="false">
+					<van-swipe style="height: 100%;" :autoplay="3000" vertical :show-indicators="false">
 					  	<van-swipe-item v-for="(item, index) in scrollList" :key="index">
 					    	<div class="scrollbars_item">{{item.name}}{{item.sex}}，{{item.phone}}，{{item.time}}分钟前已成功购买</div>
 					  	</van-swipe-item>
@@ -69,9 +69,15 @@
 			<div class="example_list">
 				<div class="swiper-container">
 					<div class="swiper-wrapper">
-						<img class="swiper-slide" src="@/assets/shuffling-1.png">
-						<img class="swiper-slide" src="@/assets/shuffling-2.png">
-						<img class="swiper-slide" src="@/assets/shuffling-3.png">
+						<div class="swiper-slide">
+							<img src="@/assets/shuffling-1.png">
+						</div>
+						<div class="swiper-slide">
+							<img src="@/assets/shuffling-2.png">
+						</div>
+						<div class="swiper-slide">
+							<img src="@/assets/shuffling-3.png">
+						</div>
 					</div>
 					<div class="swiper-button-next"></div>
     				<div class="swiper-button-prev"></div>
@@ -405,14 +411,13 @@
 			this.createScrollData();
 		},
 		mounted() {
-			this.countdown();
 			new Swiper('.swiper-container', {
 				navigation: {
 			      	nextEl: '.swiper-button-next',
 			      	prevEl: '.swiper-button-prev',
 			    },
 		      	autoplay: {
-		        	delay: 2500,
+		        	delay: 3000,
 		        	disableOnInteraction: false,
 		      	},
 		      	loop : true,
@@ -1114,9 +1119,13 @@
 					}
 					.swiper-wrapper {
 						.swiper-slide {
-							// width: 336px;
-							// height: 192px;
-							// display: block;
+							width: 336px;
+							height: 192px;
+							img {
+								width: 336px;
+								height: 192px;
+								display: block;
+							}
 						}
 					}
 				}
