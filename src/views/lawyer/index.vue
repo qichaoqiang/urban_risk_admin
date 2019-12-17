@@ -260,6 +260,10 @@
 		        if(this.loading_pay) {
 		          return false;
 		        }
+		        if(!this.isAgreement) {
+		        	Toast('请先阅读并同意易起名智慧起名服务协议');
+		        	return false;
+		        }
 		        // let obj1 = {
 		        //   'WEIXIN_H5': '微信支付',
 		        //   'wap': '支付宝'
