@@ -608,7 +608,7 @@
 				margin: 0 auto;
 				padding: 0 24px;
 				width: 312px;
-				height: 100px;
+				height: 80px;
 				box-sizing: border-box;
 				display: flex;
 				background: #F9F3EB;
@@ -622,8 +622,8 @@
 				.price_item {
 					position: relative;
 					z-index: 99;
-					padding-top: 26px;
-					height: 130px;
+					padding-top: 12px;
+					height: 80px;
 					box-sizing: border-box;
 					.price_intro {
 						display: flex;
@@ -690,7 +690,7 @@
 					.price_intro {
 						justify-content: flex-end;
 						.price_intro_text {
-							margin-top: 12px;
+							margin-top: 20px;
 							color: rgba(0,0,0,0.38);
 						}
 						.price_intro_num {
@@ -738,10 +738,10 @@
 					padding-right: 6px;
 				}
 				.price_center {
-					margin-top: 27px;
+					margin-top: 20px;
 					margin-right: 30px;
 					width: 16px;
-					height: 56px;
+					height: 40px;
 					flex-shirnk: 0;
 				}
 				.price_center_no {
