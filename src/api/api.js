@@ -13,12 +13,12 @@ export default {
 
   // 下单
   checkoutCounterV1(params) {
-    return fetchPost('order/checkoutCounterV1', params)
+    return fetchPost('order/checkoutCounterV2', params)
   },
 
   // 支付
   getPayCodeV1(params) {
-    return fetchPost('order/getPayCodeV1', params)
+    return fetchPost('order/getPayCodeV2', params)
   },
 
   // 获取订单状态

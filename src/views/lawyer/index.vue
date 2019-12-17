@@ -29,7 +29,32 @@
 				<div class="guide2_title">名额有限 售完即止</div>
 				目前已有 <span>8139</span> 个家庭参与活动
 			</div> -->
-			<img class="img1" src="@/assets/home-2.png">
+			<img class="img1" src="@/assets/home-hours.png">
+			<div class="price_box">
+				<div class="price_item price_item_left">
+					<div class="price_intro">
+						<div class="price_intro_text">现仅需</div>
+						<div class="price_intro_num">29.9</div>
+						<div class="price_intro_yuan">元</div>
+					</div>
+					<div class="price_bottom">
+						<span>原价199元</span>
+					</div>
+					<!-- <img class="price_bottom" src="@/assets/price_tag_call.png"> -->
+				</div>
+				<img class="price_center" src="@/assets/price_line.png">
+				<div class="price_item price_item_right">
+					<div class="price_intro">
+						<div class="price_intro_text">优惠截止时间<br>{{this.date}}</div>
+					</div>
+					<!-- <img class="price_bottom" src="@/assets/price_tag_wechat.png"> -->
+					<!-- <div class="price_intro_guide">
+						<div class="price_intro_guide_text2" style="color: rgba(0,0,0,.38)">原价49.9元</div>
+						<div class="price_intro_guide_text2">-限时优惠-</div>
+					</div> -->
+				</div>
+			</div>
+			<img class="img1" src="@/assets/home-icothree.png">
 			<div class="scrollbars" :class="{scrollbars_no: window360}">
 				<img class="scrollbars_icon" src="@/assets/success-on.png">
 				<div class="scrollbars_list">
@@ -194,7 +219,7 @@
 							phone += Math.floor(Math.random() * 10);
 						}
 					}
-					time = Math.floor(Math.random() * 9) + 1;
+					time = Math.floor(Math.random() * 49) + 10;
 					index = parseInt(i % 2);
 					name = this.nameList[Math.floor(Math.random() * 441) + 1]
 					sex = sexList[index]; 
@@ -336,7 +361,7 @@
 		                  let data_ = JSON.parse(res.data);
 		                  let redirect_url = encodeURIComponent(data.returnUrl);
 		                  console.log(`${data_.payUrl}&redirect_url=${redirect_url}`);
-		                  location.href = `${data_.payUrl}&redirect_url=${redirect_url}`;
+		                  // location.href = `${data_.payUrl}&redirect_url=${redirect_url}`;
 		                }else {
 		                  $('#form').html(res.data);
 		                }
@@ -419,6 +444,7 @@
 			}
 		}
 		.scrollbars {
+			margin-top: 8px;
 			width: 312px;
 			padding: 0 16px;
 			box-sizing: border-box;
@@ -441,7 +467,7 @@
 					height: 30px;
 					font-family: PingFangSC-Regular;
 			        font-size: 12px;
-			        color: rgb(255,255,255);
+			        color: #555F86;
 			        text-align: left;
 			        line-height: 30px;
 			        display: flex;
@@ -575,10 +601,10 @@
 		    }
 			.price_box {
 				position: relative;
-				margin: 16px auto 0;
+				margin: 0 auto;
 				padding: 0 24px;
-				width: 328px;
-				height: 130px;
+				width: 312px;
+				height: 100px;
 				box-sizing: border-box;
 				display: flex;
 				background: #F9F3EB;
@@ -603,7 +629,7 @@
 							font-family: PingFangSC-Regular;
 							font-size: 12px;
 							color: rgba(0,0,0,0.87);
-							text-align: left;
+							text-align: right;
 							line-height: 18px;
 							transform: scale(0.9);
 							white-space: nowrap;
@@ -635,7 +661,7 @@
 						span {
 							font-family: PingFangSC-Medium;
 							font-size: 11px;
-							color: #C38E3E;
+							color: rgba(0,0,0,0.26);
 							text-align: left;
 							line-height: 18px;
 							white-space: nowrap;
@@ -650,11 +676,11 @@
 				}
 				.price_item_left {
 					flex: 1;
-					// .price_bottom {
-					// 	position: absolute;
-					// 	top: 84px;
-					// 	left: -2px;
-					// }
+					.price_bottom {
+						span {
+							text-decoration: line-through;
+						}
+					}
 				}
 				.price_item_right {
 					.price_intro {
@@ -758,6 +784,7 @@
 				}
 			}
 			.img1 {
+				margin-top: 16px;
 				width: 100%;
 			}
 			.bg1 {
