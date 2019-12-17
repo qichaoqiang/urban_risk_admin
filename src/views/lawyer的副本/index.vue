@@ -1,71 +1,158 @@
 <template>
 	<div class="container" :class="{container20: isIphoneX}">
-		<div class="notice">
-			<img class="notice_icon" src="@/assets/home-notice.png">
-			<div class="notice_text">目前已经有{{userNum}}人参与活动</div>
+		<div class="scrollbars" :class="{scrollbars_no: window360}">
+			<div class="scrollbars_icon">最新动态</div>
+			<div class="scrollbars_icon2"></div>
+			<div class="scrollbars_list">
+				<van-swipe style="height: 32px;" :autoplay="2500" vertical :show-indicators="false">
+				  	<van-swipe-item v-for="(item, index) in scrollList" :key="index">
+				    	<div class="scrollbars_item">
+				    		<span>{{item.phone}}开通{{item.content}} </span><span>{{item.time}}秒前</span>
+				    	</div>
+				  	</van-swipe-item>
+				</van-swipe>
+			</div>
 		</div>
 		<div class="banner">
-			
+			<div class="guide">
+				<div class="guide_item">
+					<div class="guide_num">150万+</div>
+					<div class="guide_text">解决客户问题</div>
+				</div>
+				<div class="line1"></div>
+				<div class="guide_item">
+					<div class="guide_num">99.5%</div>
+					<div class="guide_text">客户满意度</div>
+				</div>
+				<div class="line1"></div>
+				<div class="guide_item">
+					<div class="guide_num">13.5亿</div>
+					<div class="guide_text">挽回用户损失</div>
+				</div>
+			</div>
 		</div>
 		<div class="content">
-			<!-- <div class="login_box">
-				<div class="login_item">
-					<div class="login_key">称呼<span>*</span></div>
-					<div class="login_input_box">
-						<img class="login_icon" src="@/assets/home-mine.png">
-						<input class="login_input" type="text" v-model="name" placeholder="请输入姓名">
-					</div>
-				</div>
-				<div class="login_item">
-					<div class="login_key">号码<span>*</span></div>
-					<div class="login_input_box">
-						<img class="login_icon" src="@/assets/home-phone.png">
-						<input class="login_input" type="text" v-model="phone" placeholder="请输入手机号">
-					</div>
-				</div>
-			</div> -->
 			<!-- <div class="guide1">为全国10,000个家庭提供高端<span>家庭律师服务</span>体验</div>
 			<div class="guide2">
 				<div class="guide2_title">名额有限 售完即止</div>
 				目前已有 <span>8139</span> 个家庭参与活动
 			</div> -->
-			<img class="img1" src="@/assets/home-2.png">
-			<div class="scrollbars" :class="{scrollbars_no: window360}">
-				<img class="scrollbars_icon" src="@/assets/success-on.png">
-				<div class="scrollbars_list">
-					<van-swipe style="height: 100%;" :autoplay="2500" vertical :show-indicators="false">
-					  	<van-swipe-item v-for="(item, index) in scrollList" :key="index">
-					    	<div class="scrollbars_item">{{item.name}}{{item.sex}}，{{item.phone}}，{{item.time}}分钟前已成功购买</div>
-					  	</van-swipe-item>
-					</van-swipe>
-				</div>
-			</div>
-			<img class="img1" src="@/assets/home-3.png">
-			<div class="example_list">
-				<div class="swiper-container">
-					<div class="swiper-wrapper">
-						<img class="swiper-slide" src="@/assets/shuffling-1.png">
-						<img class="swiper-slide" src="@/assets/shuffling-2.png">
-						<img class="swiper-slide" src="@/assets/shuffling-3.png">
+			<div class="price_box">
+				<img class="img1 " src="@/assets/title_price.png">
+				<div class="price_item price_item_left">
+					<div class="price_intro">
+						<div class="price_intro_text">现仅需</div>
+						<div class="price_intro_num">34.9</div>
+						<div class="price_intro_yuan">元</div>
 					</div>
-					<div class="swiper-button-next"></div>
-    				<div class="swiper-button-prev"></div>
+					<div class="price_bottom">
+						<img src="@/assets/ic_price_wechat_g.png">
+						<span>24小时内无限次提问</span>
+					</div>
+					<!-- <img class="price_bottom" src="@/assets/price_tag_call.png"> -->
+				</div>
+				<img class="price_center" src="@/assets/price_line.png">
+				<div class="price_item price_item_right">
+					<div class="price_intro">
+						<div class="price_intro_text">原价</div>
+					</div>
+					<div class="price_bottom">
+						<span>199元</span>
+					</div>
+					<!-- <img class="price_bottom" src="@/assets/price_tag_wechat.png"> -->
+					<!-- <div class="price_intro_guide">
+						<div class="price_intro_guide_text2" style="color: rgba(0,0,0,.38)">原价49.9元</div>
+						<div class="price_intro_guide_text2">-限时优惠-</div>
+					</div> -->
+				</div>
+				<div class="price_line2"></div>
+				<div class="price_text">优惠截止时间  |  <span style="color: #c38e3e">{{this.date}}</span></div>
+			</div>
+			<div class="tip">
+				<img class="pay_bottom_icon" src="@/assets/ic_protect.png">
+        		您的个人信息及咨询内容将严格保密，请放心咨询
+			</div>
+			<img class="img1" src="@/assets/b_01_b.png" style="margin-top: 8px;">
+			<img class="img1" src="@/assets/b_01_a.png">
+			<div class="example_title">
+				<div class="line4"></div>
+				<div class="example_title_content"><span>135468</span>位用户正在使用</div>
+				<div class="line4"></div>
+			</div>
+			<div class="example_list">
+				<van-swipe :autoplay="2500" :show-indicators="false">
+				  	<van-swipe-item v-for="(item, index) in exampleList" :key="index">
+				    	<div class="example_item">
+				    		<img class="example_img" :src="item.img">
+				    		<div class="example_content">
+				    			<div class="example_content_title">{{item.title}}</div>
+				    			<div class="example_content_name">—— {{item.name}}  | {{item.position}}</div>
+				    			<div class="line5"></div>
+				    			<div class="example_content_text">电话咨询{{item.num}}次，累计{{item.time}}分钟</div>
+				    		</div>
+				    	</div>
+				  	</van-swipe-item>
+				</van-swipe>
+			</div>
+			<img class="img1" src="@/assets/b_08.png" style="margin-top: 24px;">
+			<img class="img1" src="@/assets/b_09.png">
+			<div class="list_box">
+				<div class="list">
+					<div class="list_item">
+						<div class="list_item_left" style="padding-top: 8px;"><span>免费咨询服务差, <br/>收费服务费用高</span></div>
+						<div class="list_item_right" style="padding-top: 8px;"><span>单次服务34.9元起,  <br/>价格实惠服务好</span></div>
+					</div>
+					<div class="line3"></div>
+					<div class="list_item">
+						<div class="list_item_left"><span>单个律师时间、精力、<br/>能力有限</span></div>
+						<div class="list_item_right"><span>多对一组团服务<br/>全领域覆盖</span></div>
+					</div>
+					<div class="line3"></div>
+					<div class="list_item">
+						<div class="list_item_left"><span>突发事件无法及时响应</span></div>
+						<div class="list_item_right"><span>3分钟响应，<br/>服务实时就位</span></div>
+					</div>
+					<div class="line3"></div>
+					<div class="list_item">
+						<div class="list_item_left"><span>缺少服务售后保障</span></div>
+						<div class="list_item_right"><span>全程监管用户评价<br/>服务不满意无条件退款</span></div>
+					</div>
 				</div>
 			</div>
-			<img class="img1" src="@/assets/home-4.png">
+			<img class="img1" src="@/assets/b_02.png">
+			<img class="img1" src="@/assets/b_03.png">
+			<img class="img1" src="@/assets/b_04.png">
+			<img class="img1" src="@/assets/b_05.png">
+			<!-- <div class="bg1">
+				<div class="countdown">
+					<div class="countdown_text">通话中</div>
+					<div class="countdown_num">{{this.hour}}:{{this.minutes}}:{{this.seconds}}</div>
+					<img class="countdown_gif" src="@/assets/phone.gif">
+				</div>
+			</div> -->
+			<img class="img1" src="@/assets/b_06.png">
+			<img class="img1" src="@/assets/b_10.png">
 			<div class="argument-agree" @click="changeAgree">
-		        <div class="check" v-if="isAgreement"><img src="@/assets/chest-on.png"></div>
+		        <div class="check" v-if="isAgreement"><img src="@/assets/checkbox_on.png"></div>
 		        <div class="check" v-else><img src="@/assets/checkbox_off.png"></div>
-		        <span>支付即同意<span @click.stop="goAgreement">《易起名智慧起名服务协议》</span></span>
+		        <span>支付即表示同意<span @click.stop="goAgreement">《犀牛专业律师服务会员协议》</span></span>
       		</div>
-			<!-- <div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div> -->
+			<div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div>
 		</div>
-		<div class="bottom" id="bottom" :class="{bottom20: isIphoneX}" @click="register(1)">
+		<div class="bottom" :class="{bottom20: isIphoneX}" @click="register(1)">
+			<!-- <div class="bottom_btn" data-agl-cvt="7" id="bottom_btn_call" @click="register(2)">
+				<img src="@/assets/ic_consult_call.png">
+				<span>电话咨询律师</span>
+			</div>
+			<div class="bottom_btn custom_btn" data-agl-cvt="7" id="bottom_btn_wechat" @click="register(1)">
+				<img src="@/assets/ic_consult_wechat.png">
+				<span>微信咨询律师</span>
+			</div> -->
 			<div class="bottom_content">
-				<img class="bottom_icon" src="@/assets/wechat-pay.png">
+				<img class="bottom_icon" src="@/assets/ic_consult.png">
 				<div class="bottom_text">
-					<div class="bottom_text1">开始预约起名服务，24小时响应</div>
-					<div class="bottom_text2">仅需29.9元，专家起名，起到满意为止！</div>
+					<div class="bottom_text1">开始咨询律师, 有问必答</div>
+					<div class="bottom_text2">仅需34.9元, 专家律师为您答疑解惑评公道</div>
 				</div>
 			</div>
 		</div>
@@ -82,7 +169,6 @@
 	import { isWechat } from '@/utils/global.js'
 	import api from '@/api/api'
 	import $ from 'zhangjia-zepto'
-	import Swiper from 'swiper'
 	Vue.use(Swipe).use(SwipeItem);
 	Vue.use(Loading);
 
@@ -131,10 +217,6 @@
 				orderInfo: {},
 				canPay: true,
 				isAgreement: true,
-				name: '',
-				phone: '',
-				userNum: '',
-				nameList: ['赵', '钱', '孙', '李', '周', '吴', '郑', '王', '冯', '陈', '楮', '卫', '蒋', '沈', '韩', '杨', '朱', '秦', '尤', '许', '何', '吕', '施', '张', '孔', '曹', '严', '华', '金', '魏', '陶', '姜', '戚', '谢', '邹', '喻', '柏', '水', '窦', '章', '云', '苏', '潘', '葛', '奚', '范', '彭', '郎', '鲁', '韦', '昌', '马', '苗', '凤', '花', '方', '俞', '任', '袁', '柳', '酆', '鲍', '史', '唐', '费', '廉', '岑', '薛', '雷', '贺', '倪', '汤', '滕', '殷', '罗', '毕', '郝', '邬', '安', '常', '乐', '于', '时', '傅', '皮', '卞', '齐', '康', '伍', '余', '元', '卜', '顾', '孟', '平', '黄', '和', '穆', '萧', '尹', '姚', '邵', '湛', '汪', '祁', '毛', '禹', '狄', '米', '贝', '明', '臧', '计', '伏', '成', '戴', '谈', '宋', '茅', '庞', '熊', '纪', '舒', '屈', '项', '祝', '董', '梁', '杜', '阮', '蓝', '闽', '席', '季', '麻', '强', '贾', '路', '娄', '危', '江', '童', '颜', '郭', '梅', '盛', '林', '刁', '锺', '徐', '丘', '骆', '高', '夏', '蔡', '田', '樊', '胡', '凌', '霍', '虞', '万', '支', '柯', '昝', '管', '卢', '莫', '经', '房', '裘', '缪', '干', '解', '应', '宗', '丁', '宣', '贲', '邓', '郁', '单', '杭', '洪', '包', '诸', '左', '石', '崔', '吉', '钮', '龚', '程', '嵇', '邢', '滑', '裴', '陆', '荣', '翁', '荀', '羊', '於', '惠', '甄', '麹', '家', '封', '芮', '羿', '储', '靳', '汲', '邴', '糜', '松', '井', '段', '富', '巫', '乌', '焦', '巴', '弓', '牧', '隗', '山', '谷', '车', '侯', '宓', '蓬', '全', '郗', '班', '仰', '秋', '仲', '伊', '宫', '宁', '仇', '栾', '暴', '甘', '斜', '厉', '戎', '祖', '武', '符', '刘', '景', '詹', '束', '龙', '叶', '幸', '司', '韶', '郜', '黎', '蓟', '薄', '印', '宿', '白', '怀', '蒲', '邰', '从', '鄂', '索', '咸', '籍', '赖', '卓', '蔺', '屠', '蒙', '池', '乔', '阴', '郁', '胥', '能', '苍', '双', '闻', '莘', '党', '翟', '谭', '贡', '劳', '逄', '姬', '申', '扶', '堵', '冉', '宰', '郦', '雍', '郤', '璩', '桑', '桂', '濮', '牛', '寿', '通', '边', '扈', '燕', '冀', '郏', '浦', '尚', '农', '温', '别', '庄', '晏', '柴', '瞿', '阎', '充', '慕', '连', '茹', '习', '宦', '艾', '鱼', '容', '向', '古', '易', '慎', '戈', '廖', '庾', '终', '暨', '居', '衡', '步', '都', '耿', '满', '弘', '匡', '国', '文', '寇', '广', '禄', '阙', '东', '欧', '殳', '沃', '利', '蔚', '越', '夔', '隆', '师', '巩', '厍', '聂', '晁', '勾', '敖', '融', '冷', '訾', '辛', '阚', '那', '简', '饶', '空', '曾', '毋', '沙', '乜', '养', '鞠', '须', '丰', '巢', '关', '蒯', '相', '查', '后', '荆', '红', '游', '竺', '权', '逑', '盖', '益', '桓', '公', '仉', '督', '晋', '楚', '阎', '法', '汝', '鄢', '涂', '钦', '岳', '帅', '缑', '亢', '况', '后', '有', '琴', '归', '海', '墨', '哈', '谯', '笪', '年', '爱', '阳', '佟', '商', '牟', '佘', '佴', '伯', '赏'],
 			}
 		},
 		watch: {
@@ -160,29 +242,16 @@
 				let date = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}`
 				this.date = date;
 			},
-			getNum() {
-				let time = new Date();
-				let date = time.getDate();
-				let day = time.getDay();
-				let hours = time.getHours();
-				hours = hours < 7 ? (hours + 24) : hours;
-				let initNum = date * day % 100 + 1000;
-				for(let i = 7; i < hours; i++) {
-					initNum += day * hours % 10 + 10;
-				}
-				this.userNum = initNum;
-			},
 			createScrollData() {
 				let list = [];
 				let phone = '';
 				let time = '';
-				let name = '';
-				let sex = '';
+				let content = '';
 				let secondNum = [3, 5, 8, 7];
 				let index = 0;
 				let secondIndex;
 				// let contentList = ['19.9元微信咨询服务', '79.9元电话咨询服务'];
-				let sexList = ['先生', '女士'];
+				let contentList = ['34.9元微信咨询服务', '34.9元微信咨询服务'];
 				for(let i = 0; i < 100; i++) {
 					phone += 1;
 					secondIndex = Math.floor(Math.random() * 3);
@@ -194,11 +263,10 @@
 							phone += Math.floor(Math.random() * 10);
 						}
 					}
-					time = Math.floor(Math.random() * 9) + 1;
+					time = Math.floor(Math.random() * 49) + 10;
 					index = parseInt(i % 2);
-					name = this.nameList[Math.floor(Math.random() * 441) + 1]
-					sex = sexList[index]; 
-					list.push({phone, time, name, sex});
+					content = contentList[index]; 
+					list.push({phone, time, content});
 					phone = '';
 				}
 				this.scrollList = list;
@@ -249,12 +317,12 @@
 		        //   level,
 		        //   price
 		        // });
-		        sa.quick('trackHeatMap', document.getElementsByClassName('bottom')[0], {
+		        sa.quick('trackHeatMap', document.getElementsByClassName('bottom_icon')[0], {
 		          payType: '微信支付',
 		          level: '微信',
-		          price: '29.9'
+		          price: '34.9'
 		        });
-		        localStorage.setItem('price', '29.9')
+		        localStorage.setItem('price', '34.9')
 		        this.orderStatus = status;
 		        this.loading_pay = true;
 		        this.handleTestDisabled = true
@@ -363,7 +431,6 @@
 		},
 		created() {
 			this.getTime();
-			this.getNum();
 			localStorage.setItem('utm_source', this.$route.query.utm_source || '');
 	        localStorage.setItem('utm_medium', this.$route.query.utm_medium || '');
 	        localStorage.setItem('originUrl', location.href);
@@ -376,25 +443,14 @@
 		},
 		mounted() {
 			this.countdown();
-			new Swiper('.swiper-container', {
-				navigation: {
-			      	nextEl: '.swiper-button-next',
-			      	prevEl: '.swiper-button-prev',
-			    },
-		      	autoplay: {
-		        	delay: 2500,
-		        	disableOnInteraction: false,
-		      	},
-		      	loop : true,
-		    });
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
 	.container {
-		padding-bottom: 78px;
-		.notice {
+		padding-bottom: 88px;
+		.scrollbars {
 			position: fixed;
 			z-index: 1000;
 			top: 0;
@@ -405,45 +461,45 @@
 			background: rgba(0, 0, 0, 0.1);
 			display: flex;
 			align-items: center;
-			background: rgba(211,140,16,0.60);
-			.notice_icon {
-				width: 18px;
-				height: 18px;
-			}
-			.notice_text {
-				margin-left: 8px;
-				font-family: PingFangSC-Regular;
-				font-size: 12px;
-				color: rgba(255,255,255,0.80);
-				line-height: 18px;
-			}
-		}
-		.scrollbars {
-			width: 312px;
-			padding: 0 16px;
-			box-sizing: border-box;
-			height: 30px;
-			background: rgba(0, 0, 0, 0.1);
-			display: flex;
-			align-items: center;
-			background: #F2F3FA;
-			border-radius: 15px;
+			background: rgba(63, 69, 140, 0.6);
 			.scrollbars_icon {
+				margin-right: 6px;
+				padding: 0 2px;
+				font-family: PingFangSC-Regular;
+		        font-size: 13px;
+		        color: #ffad71;
+		        text-align: left;
+		        line-height: 18px;
+			}
+			.scrollbars_icon2 {
 				margin-right: 8px;
-				width: 20px;
-				height: 20px;
+				position: relative;
+				width: 1px;
+				height: 14px;
+				background: #F1BE71;
+				&:after {
+					position: absolute;
+					top: 50%;
+					left: 1px;
+					transform: translateY(-50%);
+					content: '';
+					width: 0;
+					height: 0;
+					border: 3px solid transparent;
+					border-left-color: #F1BE71;
+				}
 			}
 			.scrollbars_list {
 				flex: 1;
 				height: 100%;
 				.scrollbars_item {
 					width: 100%;
-					height: 30px;
+					height: 36px;
 					font-family: PingFangSC-Regular;
 			        font-size: 12px;
 			        color: rgb(255,255,255);
 			        text-align: left;
-			        line-height: 30px;
+			        line-height: 36px;
 			        display: flex;
 			        justify-content: space-between;
 			        align-items: center;
@@ -454,10 +510,11 @@
 			padding: 0;
 		}
 		.banner {
+			padding-top: 178px;
 			box-sizing: border-box;
 			width: 100%;
-			height: 230px;
-			background: url('../../assets/home-banner.png') top no-repeat;
+			height: 250px;
+			background: url('../../assets/head.jpg') top no-repeat;
 			background-size: 100%;
 			.guide {
 				margin: 0 auto;
@@ -504,75 +561,6 @@
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			.login_box {
-				padding: 0 24px;
-				box-sizing: border-box;
-				width: 100%;
-				.login_item {
-					margin-bottom: 12px;
-					&:first-child {
-						margin-bottom: 16px;
-					}
-					.login_key {
-						font-family: PingFangSC-Regular;
-						font-size: 13px;
-						color: rgba(0,0,0,0.60);
-						text-align: left;
-						line-height: 18px;
-						span {
-							color: #F2583A;
-						}
-					}
-					.login_input_box {
-						margin-top: 8px;
-						border: 1px solid #B9B0A3;
-						border-radius: 4px;
-						padding: 0 16px;
-						width: 100%;
-						height: 38px;
-						box-sizing: border-box;
-						display: flex;
-						align-items: center;
-						.login_icon {
-							margin-right: 12px;
-							width: 20px;
-							height: 20px;
-						}
-						.login_input {
-							flex: 1;
-							font-family: PingFangSC-Regular;
-							font-size: 13px;
-							color: rgba(0,0,0,0.87);
-							text-align: left;
-							line-height: 18px;
-						}
-					}
-				}
-			}
-			.argument-agree {
-				padding: 0 24px;
-				box-sizing: border-box;
-				width: 100%;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-		        .check {
-		        	margin-right: 8px;
-		        	width: 16px;
-		        	height: 16px;
-		        	img {
-		        		width: 100%;
-		        		height: 100%;
-		        	}
-		        }
-		        span {
-		        	font-family: PingFangSC-Regular;
-		        	font-size: 12px;
-		        	color: rgba(0,0,0,0.38);
-		        	text-align: center;
-		        	line-height: 16px;
-		        }
-		    }
 			.price_box {
 				position: relative;
 				margin: 16px auto 0;
@@ -1063,30 +1051,81 @@
 			.example_list {
 				margin-top: 24px;
 				width: 336px;
-				height: 192px;
+				height: 190px;
 				background: #FFFFFF;
 				border: 1px solid rgba(0,0,0,0.04);
 				box-shadow: 0 8px 16px 0 rgba(0,0,0,0.04);
 				border-radius: 1px;
 				box-sizing: border-box;
-				.swiper-container {
-					--swiper-navigation-color: #B9B0A3;
-					--swiper-navigation-size: 18px;
-					.swiper-button-next {
-						right: 8px;
-						outline: none;
+				.example_item {
+					width: 336px;
+					padding: 24px 24px 16px 16px;
+					box-sizing: border-box;
+					display: flex;
+					.example_img {
+						margin-right: 16px;
+						width: 90px;
+						height: 120px;
+						background: #F5F5F5;
+						border-radius: 45px;
 					}
-					.swiper-button-prev {
-						left: 8px;
-						outline: none;
-					}
-					.swiper-wrapper {
-						.swiper-slide {
-
+					.example_content {
+						flex: 1;
+						.example_content_title {
+							font-family: PingFangSC-Medium;
+							font-size: 16px;
+							color: #5C619E;
+							line-height: 22px;
+							text-align: left;
+						}
+						.example_content_name {
+							margin-top: 8px;
+							font-family: PingFangSC-Regular;
+							font-size: 12px;
+							color: #3F458C;
+							text-align: right;
+							line-height: 18px;
+						}
+						.line5 {
+							margin: 10px 0;
+							width: 100%;
+							height: 1px;
+							background: rgba(0,0,0,0.12);
+						}
+						.example_content_text {
+							margin-top: 2px;
+							font-family: PingFangSC-Regular;
+							font-size: 12px;
+							color: rgba(0,0,0,0.60);
+							text-align: right;
+							line-height: 18px;
 						}
 					}
 				}
 			}
+			.argument-agree {
+				margin-top: 16px;
+				width: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+		        .check {
+		        	margin-right: 8px;
+		        	width: 16px;
+		        	height: 16px;
+		        	img {
+		        		width: 100%;
+		        		height: 100%;
+		        	}
+		        }
+		        span {
+		        	font-family: PingFangSC-Regular;
+		        	font-size: 12px;
+		        	color: rgba(0,0,0,0.38);
+		        	text-align: center;
+		        	line-height: 16px;
+		        }
+		    }
 			.compony {
 				margin-top: 12px;
 				font-family: PingFangSC-Regular;
@@ -1098,10 +1137,9 @@
 		}
 		.bottom {
 			position: fixed;
-			z-index: 1000;
 			bottom: 0;
 			width: 100%;
-			height: 62px;
+			height: 64px;
 			// .bottom_btn {
 			// 	flex: 1;
 			// 	height: 48px;
@@ -1124,17 +1162,16 @@
 				background: #3F458C;
 			}
 			.bottom_icon {
-				margin-left: 24px;
-				margin-right: 16px;
-				width: 36px;
-				height: 36px;
+				margin-left: 16px;
+				width: 56px;
+				height: 56px;
 			}
 			.bottom_content {
 				width: 100%;
 				height: 64px;
 				display: flex;
 				align-items: center;
-				background: #F2583A;
+				background: #C38E3E;
 				box-shadow: 0 -8px 16px 0 rgba(0,0,0,0.04);
 				.bottom_text {
 					.bottom_text1 {
@@ -1178,6 +1215,6 @@
 	    }
 	}
 	.container20 {
-		padding-bottom: 98px;
+		padding-bottom: 108px;
 	}
 </style>

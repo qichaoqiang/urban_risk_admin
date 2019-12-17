@@ -8,6 +8,7 @@ import store from './store/index'
 import '@/common/css/reset.css'
 import '@/common/css/animate.css'
 import '@/common/css/share.css'
+import 'swiper/css/swiper.css'
 import { config } from '@/utils/global'
 // import VConsole from 'vconsole'
 
