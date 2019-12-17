@@ -365,7 +365,7 @@
 		                  let data_ = JSON.parse(res.data);
 		                  let redirect_url = encodeURIComponent(data.returnUrl);
 		                  console.log(`${data_.payUrl}&redirect_url=${redirect_url}`);
-		                  // location.href = `${data_.payUrl}&redirect_url=${redirect_url}`;
+		                  location.href = `${data_.payUrl}&redirect_url=${redirect_url}`;
 		                }else {
 		                  $('#form').html(res.data);
 		                }
