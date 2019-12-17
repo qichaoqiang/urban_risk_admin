@@ -103,13 +103,14 @@
 
 <script>
 	import Vue from 'vue'
-	import { Toast, Swipe, SwipeItem, Loading } from 'vant'
+	import { Toast, Swipe, SwipeItem, Loading, Lazyload } from 'vant'
 	import { isWechat } from '@/utils/global.js'
 	import api from '@/api/api'
 	import $ from 'zhangjia-zepto'
 	import Swiper from 'swiper'
 	Vue.use(Swipe).use(SwipeItem);
 	Vue.use(Loading);
+	Vue.use(Lazyload);
 
 	export default {
 		name: 'index',
@@ -1113,7 +1114,9 @@
 					}
 					.swiper-wrapper {
 						.swiper-slide {
-
+							// width: 336px;
+							// height: 192px;
+							// display: block;
 						}
 					}
 				}
