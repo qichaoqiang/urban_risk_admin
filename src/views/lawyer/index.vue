@@ -5,7 +5,7 @@
 			<div class="notice_text">目前已经有{{userNum}}人参与活动</div>
 		</div>
 		<div class="banner">
-			
+
 		</div>
 		<div class="content">
 			<!-- <div class="login_box">
@@ -229,7 +229,7 @@
 					time = Math.floor(Math.random() * 49) + 10;
 					index = parseInt(i % 2);
 					name = this.nameList[Math.floor(Math.random() * 441) + 1]
-					sex = sexList[index]; 
+					sex = sexList[index];
 					list.push({phone, time, name, sex});
 					phone = '';
 				}
@@ -264,6 +264,9 @@
 				}, 1000)
 			},
 			register(status) {
+
+            _hmt.push(['_trackEvent', 'order',  'click',  'amount',  amount]);
+
 		        if(this.loading_pay) {
 		          return false;
 		        }
@@ -285,12 +288,12 @@
 		        //   level,
 		        //   price
 		        // });
-		        sa.quick('trackHeatMap', document.getElementsByClassName('bottom')[0], {
+		        sa.quick('trackHeatMap', document.getElementById('bottom'), {
 		          payType: '微信支付',
 		          level: '微信',
-		          price: '29.9'
+		          price: '69'
 		        });
-		        localStorage.setItem('price', '29.9')
+		        localStorage.setItem('price', '69')
 		        this.orderStatus = status;
 		        this.loading_pay = true;
 		        this.handleTestDisabled = true
@@ -667,7 +670,7 @@
 							margin-right: 2px;
 							width: 16px;
 							height: 16px;
-						} 
+						}
 						span {
 							font-family: PingFangSC-Medium;
 							font-size: 11px;
