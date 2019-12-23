@@ -1,105 +1,126 @@
 <template>
 	<div class="container" :class="{container20: isIphoneX}">
-		<div class="notice">
+		<!-- <div class="notice">
 			<img class="notice_icon" src="@/assets/home-notice.png">
 			<div class="notice_text">目前已经有{{userNum}}人参与活动</div>
+		</div> -->
+		<div class="scrollbars" :class="{scrollbars_no: window360}">
+			<div class="scrollbars_icon">最新动态</div>
+			<div class="scrollbars_icon2"></div>
+			<div class="scrollbars_list">
+				<van-swipe style="height: 32px;" :autoplay="2500" vertical :show-indicators="false">
+				  	<van-swipe-item v-for="(item, index) in scrollList" :key="index">
+				    	<div class="scrollbars_item">
+				    		<span>{{item.phone}} 已购买企业名称策划套餐 </span><span>{{item.time}}秒前</span>
+				    	</div>
+				  	</van-swipe-item>
+				</van-swipe>
+			</div>
 		</div>
 		<div class="banner">
-
+			<div class="banner_intro">
+				<div class="banner_intro_item">
+					<div class="banner_intro_text">品牌意识强化活动优惠</div>
+					<div class="banner_intro_line"></div>
+				</div>
+				<div class="banner_intro_item">
+					<div class="banner_intro_line" style="width: 74px;"></div>
+					<div class="banner_intro_text">将于<span>{{countdownTime}}</span>后截止</div>
+				</div>
+			</div>
+			<div class="banner_price">
+				<div class="banner_price_else">市场价999元起</div>
+				<div class="banner_price_reduce">立省930元</div>
+				<div class="banner_price_now">现仅需</div>
+			</div>
+			<div class="price">
+				<div class="price_num">69</div>
+				<div class="price_yuan">元</div>
+			</div>
 		</div>
 		<div class="content">
-			<!-- <div class="login_box">
-				<div class="login_item">
-					<div class="login_key">称呼<span>*</span></div>
-					<div class="login_input_box">
-						<img class="login_icon" src="@/assets/home-mine.png">
-						<input class="login_input" type="text" v-model="name" placeholder="请输入姓名">
-					</div>
+			<img class="img1" src="@/assets/head_02.png">
+			<img class="img1" src="@/assets/body_use.jpg">
+			<img class="img1" src="@/assets/body_compare.jpg">
+			<img class="img1" src="@/assets/body_advan.png">
+			<img class="img1" src="@/assets/body_commt.png">
+			<div class="result2"><span>13128</span>位客户已使用易起名服务</div>
+			<div class="comment_box">
+				<div class="comment_title">
+					<div class="comment_title_line"></div>
+					<div class="comment_title_text">近一周客户真实评价</div>
+					<div class="comment_title_line"></div>
 				</div>
-				<div class="login_item">
-					<div class="login_key">号码<span>*</span></div>
-					<div class="login_input_box">
-						<img class="login_icon" src="@/assets/home-phone.png">
-						<input class="login_input" type="text" v-model="phone" placeholder="请输入手机号">
-					</div>
-				</div>
-			</div> -->
-			<!-- <div class="guide1">为全国10,000个家庭提供高端<span>家庭律师服务</span>体验</div>
-			<div class="guide2">
-				<div class="guide2_title">名额有限 售完即止</div>
-				目前已有 <span>8139</span> 个家庭参与活动
-			</div> -->
-			<img class="img1" src="@/assets/home-hours.png">
-			<div class="price_box">
-				<div class="price_item price_item_left">
-					<div class="price_intro">
-						<div class="price_intro_text">现仅需</div>
-						<div class="price_intro_num">69</div>
-						<div class="price_intro_yuan">元</div>
-					</div>
-					<div class="price_bottom">
-						<span>原价199元</span>
-					</div>
-					<!-- <img class="price_bottom" src="@/assets/price_tag_call.png"> -->
-				</div>
-				<img class="price_center" src="@/assets/price_line.png">
-				<div class="price_item price_item_right">
-					<div class="price_intro">
-						<div class="price_intro_text">优惠截止时间<br>{{this.date}}</div>
-					</div>
-					<!-- <img class="price_bottom" src="@/assets/price_tag_wechat.png"> -->
-					<!-- <div class="price_intro_guide">
-						<div class="price_intro_guide_text2" style="color: rgba(0,0,0,.38)">原价49.9元</div>
-						<div class="price_intro_guide_text2">-限时优惠-</div>
-					</div> -->
-				</div>
-			</div>
-			<img class="img1" src="@/assets/home-icothree.png">
-			<div class="scrollbars" :class="{scrollbars_no: window360}">
-				<img class="scrollbars_icon" src="@/assets/success-on.png">
-				<div class="scrollbars_list">
-					<van-swipe style="height: 100%;" :autoplay="3000" vertical :show-indicators="false">
-					  	<van-swipe-item v-for="(item, index) in scrollList" :key="index">
-					    	<div class="scrollbars_item">{{item.name}}{{item.sex}}，{{item.phone}}，{{item.time}}分钟前已成功购买</div>
-					  	</van-swipe-item>
-					</van-swipe>
-				</div>
-			</div>
-			<img class="img1" src="@/assets/home-3.png">
-			<div class="example_list">
-				<div class="swiper-container">
-					<div class="swiper-wrapper">
-						<div class="swiper-slide">
-							<img src="@/assets/shuffling-1.png">
-						</div>
-						<div class="swiper-slide">
-							<img src="@/assets/shuffling-2.png">
-						</div>
-						<div class="swiper-slide">
-							<img src="@/assets/shuffling-3.png">
+				<div class=" comment">
+					<div class="swiper-container comment_list">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide">
+								<div class="comment_item">
+									<div class="comment_item_title">
+										<div class="comment_item_title_icon"></div>
+										<div class="comment_item_title_text">订单号为 150****1139 的王先生</div>
+										<div class="comment_item_title_line"></div>
+									</div>
+									<div class="comment_item_content">真的不敢想象，一个名字竟然有这么多的讲究，易起名的科学起名，传统理论与现代理论相结合，五行搭配合理，值得推荐！  大数据系统分析很到位，信息资源全面，堪称行业典范。商标、域名、推广方方面面都考虑到了，真正得到的是一套方案，不单单是一个名字，强烈推荐！</div>
+								</div>
+								<div class="comment_item">
+									<div class="comment_item_title">
+										<div class="comment_item_title_icon"></div>
+										<div class="comment_item_title_text">订单号为 156****1820 的刘先生</div>
+										<div class="comment_item_title_line"></div>
+									</div>
+									<div class="comment_item_content">起名完全符合了我的要求,朗朗上口,寓意美好，内涵丰富，会推荐给有需要的朋友</div>
+								</div>
+								<div class="comment_item">
+									<div class="comment_item_title">
+										<div class="comment_item_title_icon"></div>
+										<div class="comment_item_title_text">订单号为 139****6230 的叶女士</div>
+										<div class="comment_item_title_line"></div>
+									</div>
+									<div class="comment_item_content">起的名字非常好，下次有朋友需要的话还会来找大师起名的。服务态度也很好，赞一个</div>
+								</div>
+								<div class="comment_item">
+									<div class="comment_item_title">
+										<div class="comment_item_title_icon"></div>
+										<div class="comment_item_title_text">订单号为 178****8367 的张先生</div>
+										<div class="comment_item_title_line"></div>
+									</div>
+									<div class="comment_item_content">名字起的好，下次再来，目前已经注册成功，服务过程很流畅，取得名字也非常满意，很幸运的一次就注册成功，没有反复，太省心了，哈哈。</div>
+								</div>
+								<div class="comment_item">
+									<div class="comment_item_title">
+										<div class="comment_item_title_icon"></div>
+										<div class="comment_item_title_text">订单号为 159****3382 的何女士</div>
+										<div class="comment_item_title_line"></div>
+									</div>
+									<div class="comment_item_content">在网上对比了下，你们是性价比最高的，价格不高，服务好，名字的评估是最全最科学的，名字不但很符合八字，又考虑到了传播和商标域名的申请，很厉害，下次有需要还会找你们</div>
+								</div>
+								<div class="comment_item">
+									<div class="comment_item_title">
+										<div class="comment_item_title_icon"></div>
+										<div class="comment_item_title_text">订单号为 130****7221 的李女士</div>
+										<div class="comment_item_title_line"></div>
+									</div>
+									<div class="comment_item_content">是我注册这么多家公司过程中，起名最省心的一次了，100套方案里选5个，简直不要太容易，还能直接分享给老板一起挑，实在太感谢贵公司了。每个备选名字都有很完善的分析介绍，老板看了对我很满意，下次我会介绍朋友过来的！！ 赞</div>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="swiper-button-next"></div>
-    				<div class="swiper-button-prev"></div>
 				</div>
 			</div>
-			<img class="img1" src="@/assets/home-4.png">
+			<div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div>
 			<div class="argument-agree" @click="changeAgree">
-		        <div class="check" v-if="isAgreement"><img src="@/assets/chest-on.png"></div>
+		        <div class="check" v-if="isAgreement"><img src="@/assets/checkbox_on.png"></div>
 		        <div class="check" v-else><img src="@/assets/checkbox_off.png"></div>
 		        <span>支付即同意<span @click.stop="goAgreement">《易起名智慧起名服务协议》</span></span>
       		</div>
-			<!-- <div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div> -->
-			<div class="comment">
-				<div class="comment_list"></div>
-			</div>
 		</div>
 		<div class="bottom" id="bottom" :class="{bottom20: isIphoneX}" @click="register(1)">
 			<div class="bottom_content">
-				<img class="bottom_icon" src="@/assets/wechat-pay.png">
+				<img class="bottom_icon" src="@/assets/button_arrow.gif">
 				<div class="bottom_text">
-					<div class="bottom_text1">开始预约起名服务，24小时响应</div>
-					<div class="bottom_text2">仅需69元，专家起名，起到满意为止！</div>
+					<div class="bottom_text1">马上领取100套好名字</div>
+					<div class="bottom_text2">仅需69元 / 限时活动<span>立省930元</span></div>
 				</div>
 			</div>
 		</div>
@@ -128,6 +149,7 @@
 				hour: 1,
 				minutes: '21',
 				seconds: '00',
+				countdownTime: '',
 				date: '',
 				scrollList: [],
 				exampleList: [
@@ -254,17 +276,22 @@
 			// 	this.$router.push('/order');
 			// },
 			countdown() {
-				let time = 4860;
-				let minutes = 0;
-				let seconds = 0;
-				setInterval(() => {
-					time++;
-					this.hour = parseInt(time / 60 / 60);
-					minutes = parseInt((time % 3600) / 60);
-					this.minutes = minutes < 10 ? ('0' + minutes) : minutes;
-					seconds = time % 60;
-					this.seconds = seconds < 10 ? ('0' + seconds) : seconds;
-				}, 1000)
+				let date = new Date();
+				let year = date.getFullYear();
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+				let hours = date.getHours();
+				let time = '';
+				// parseInt(date.getTime() / 1000 - 7200) % 86400
+				if(hours < 10) {
+					time = parseInt((new Date(`${year}-${month}-${day} 10:00:00`).getTime()  - date.getTime()) / 1000) % 86400
+				}else {
+					time = parseInt((new Date(`${year}-${month}-${day} 10:00:00`).getTime() + 86400000  - date.getTime()) / 1000) % 86400
+				}
+				let hours_ = parseInt(time / 3600);
+				let minutes_ = parseInt(time % 3600 / 60);
+				let seconds_ = parseInt(time % 60);
+				this.countdownTime = `${hours_}时${minutes_}分${seconds_}秒`
 			},
 			register(status) {
 
@@ -417,16 +444,17 @@
 			this.createScrollData();
 		},
 		mounted() {
-			new Swiper('.swiper-container', {
-				navigation: {
-			      	nextEl: '.swiper-button-next',
-			      	prevEl: '.swiper-button-prev',
-			    },
-		      	autoplay: {
-		        	delay: 3000,
-		        	disableOnInteraction: false,
-		      	},
-		      	loop : true,
+			this.countdown();
+			setInterval(() => {
+				this.countdown();
+			}, 1000)
+		    new Swiper('.swiper-container', {
+		    	autoplay: {
+					delay:0
+				},
+		        loop:true,//循环
+		        speed:40000,//滚动速度
+		        direction : 'vertical',
 		    });
 		}
 	}
@@ -434,6 +462,7 @@
 
 <style lang="scss" scoped>
 	.container {
+		padding-top: 36px;
 		padding-bottom: 78px;
 		.notice {
 			position: fixed;
@@ -446,7 +475,7 @@
 			background: rgba(0, 0, 0, 0.1);
 			display: flex;
 			align-items: center;
-			background: rgba(211,140,16,0.60);
+			background: #ff6044;
 			.notice_icon {
 				width: 18px;
 				height: 18px;
@@ -460,32 +489,55 @@
 			}
 		}
 		.scrollbars {
-			margin-top: 8px;
-			width: 312px;
+			position: fixed;
+			z-index: 1000;
+			top: 0;
 			padding: 0 16px;
 			box-sizing: border-box;
-			height: 30px;
+			width: 100%;
+			height: 36px;
 			background: rgba(0, 0, 0, 0.1);
 			display: flex;
 			align-items: center;
-			background: #F2F3FA;
-			border-radius: 15px;
+			background: rgba(0, 0, 0, 0.6);
 			.scrollbars_icon {
+				margin-right: 6px;
+				padding: 0 2px;
+				font-family: PingFangSC-Regular;
+		        font-size: 13px;
+		        color: #ffad71;
+		        text-align: left;
+		        line-height: 18px;
+			}
+			.scrollbars_icon2 {
 				margin-right: 8px;
-				width: 20px;
-				height: 20px;
+				position: relative;
+				width: 1px;
+				height: 14px;
+				background: #F1BE71;
+				&:after {
+					position: absolute;
+					top: 50%;
+					left: 1px;
+					transform: translateY(-50%);
+					content: '';
+					width: 0;
+					height: 0;
+					border: 3px solid transparent;
+					border-left-color: #F1BE71;
+				}
 			}
 			.scrollbars_list {
 				flex: 1;
 				height: 100%;
 				.scrollbars_item {
 					width: 100%;
-					height: 30px;
+					height: 36px;
 					font-family: PingFangSC-Regular;
 			        font-size: 12px;
-			        color: #555F86;
+			        color: rgb(255,255,255);
 			        text-align: left;
-			        line-height: 30px;
+			        line-height: 36px;
 			        display: flex;
 			        justify-content: space-between;
 			        align-items: center;
@@ -495,48 +547,133 @@
 		.scrollbars_no {
 			padding: 0;
 		}
+		// .scrollbars {
+		// 	margin-top: 8px;
+		// 	width: 312px;
+		// 	padding: 0 16px;
+		// 	box-sizing: border-box;
+		// 	height: 30px;
+		// 	background: rgba(0, 0, 0, 0.1);
+		// 	display: flex;
+		// 	align-items: center;
+		// 	background: #F2F3FA;
+		// 	border-radius: 15px;
+		// 	.scrollbars_icon {
+		// 		margin-right: 8px;
+		// 		width: 20px;
+		// 		height: 20px;
+		// 	}
+		// 	.scrollbars_list {
+		// 		flex: 1;
+		// 		height: 100%;
+		// 		.scrollbars_item {
+		// 			width: 100%;
+		// 			height: 30px;
+		// 			font-family: PingFangSC-Regular;
+		// 	        font-size: 12px;
+		// 	        color: #555F86;
+		// 	        text-align: left;
+		// 	        line-height: 30px;
+		// 	        display: flex;
+		// 	        justify-content: space-between;
+		// 	        align-items: center;
+		// 		}
+		// 	}
+		// }
+		// .scrollbars_no {
+		// 	padding: 0;
+		// }
 		.banner {
 			box-sizing: border-box;
+			padding-top: 209px;
 			width: 100%;
-			height: 230px;
-			background: url('../../assets/home-banner.png') top no-repeat;
+			height: 360px;
+			background: url('../../assets/head_01.png') top no-repeat;
 			background-size: 100%;
-			.guide {
-				margin: 0 auto;
-				padding: 9px 0 7px;
+			position: relative;
+			.banner_intro {
 				box-sizing: border-box;
-				border-radius: 1px;
-				box-shadow: 0 4px 8px 0 rgba(0,0,0,0.02);
-				width: 328px;
-				opacity: 0.95;
-				display: flex;
-				align-items: center;
-				background: #ffffff;
-				.guide_item {
-					flex: 1;
+				padding-left: 16px;
+				width: 100%;
+				.banner_intro_item {
 					display: flex;
-					flex-direction: column;
 					align-items: center;
-					.guide_num {
+					.banner_intro_text {
 						font-family: PingFangSC-Medium;
-						font-size: 16px;
-						color: #C38E3E;
-						text-align: center;
-						line-height: 22px;
-					}
-					.guide_text {
-						margin-top: 2px;
-						font-family: PingFangSC-Regular;
 						font-size: 12px;
-						color: rgba(0,0,0,0.38);
-						text-align: center;
+						color: #FFFFFF;
+						text-align: left;
 						line-height: 18px;
+						span {
+							color: #ffe208;
+						}
+					}
+					.banner_intro_line {
+						margin: 0 12px;
+						width: 90px;
+						height: 1px;
+						background: rgba(255,255,255,0.70);
 					}
 				}
-				.line1 {
-					width: 1px;
-					height: 32px;
-					background: rgba(0,0,0,0.12);
+			}
+			.banner_price {
+				margin-top: 19px;
+				box-sizing: border-box;
+				padding-left: 29px;
+				width: 100%;
+				display: flex;
+				align-items: center;
+				.banner_price_else {
+					margin-right: 8px;
+					font-family: PingFangSC-Regular;
+					font-size: 11px;
+					color: rgba(0,0,0,0.38);
+					text-align: right;
+					line-height: 18px;
+					text-decoration: line-through;
+				}
+				.banner_price_reduce {
+					margin-right: 8px;
+					width: 74px;
+					height: 20px;
+					background-image: linear-gradient(136deg, #F8826D 6%, #E93D1C 100%);
+					box-shadow: 0 2px 4px 0 rgba(255,55,17,0.20);
+					border-radius: 10px;
+					font-family: PingFangSC-Medium;
+					font-size: 12px;
+					color: #FFFFFF;
+					text-align: center;
+					line-height: 20px;
+				}
+				.banner_price_now {
+					font-family: PingFangSC-Medium;
+					font-size: 14px;
+					color: #D56242;
+					text-align: left;
+					line-height: 20px;
+				}
+			}
+			.price {
+				position: absolute;
+				top: 215px;
+				right: 12px;
+				width: 104px;
+				height: 104px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				background: url('../../assets/price_bg.png') top no-repeat;
+				background-size: 100%;
+				.price_num {
+					font-family: PingFangSC-Medium;
+					font-size: 36px;
+					color: #FFFFFF;
+					font-weight: bold;
+				}
+				.price_yuan {
+					font-family: PingFangSC-Medium;
+					font-size: 16px;
+					color: #FFFFFF;
 				}
 			}
 		}
@@ -546,50 +683,11 @@
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			.login_box {
-				padding: 0 24px;
-				box-sizing: border-box;
-				width: 100%;
-				.login_item {
-					margin-bottom: 12px;
-					&:first-child {
-						margin-bottom: 16px;
-					}
-					.login_key {
-						font-family: PingFangSC-Regular;
-						font-size: 13px;
-						color: rgba(0,0,0,0.60);
-						text-align: left;
-						line-height: 18px;
-						span {
-							color: #F2583A;
-						}
-					}
-					.login_input_box {
-						margin-top: 8px;
-						border: 1px solid #B9B0A3;
-						border-radius: 4px;
-						padding: 0 16px;
-						width: 100%;
-						height: 38px;
-						box-sizing: border-box;
-						display: flex;
-						align-items: center;
-						.login_icon {
-							margin-right: 12px;
-							width: 20px;
-							height: 20px;
-						}
-						.login_input {
-							flex: 1;
-							font-family: PingFangSC-Regular;
-							font-size: 13px;
-							color: rgba(0,0,0,0.87);
-							text-align: left;
-							line-height: 18px;
-						}
-					}
-				}
+			.swiper-container-free-mode {
+				// .swiper-wrapper {
+				//     transition-timing-function: linear;
+				//     margin: 0 auto;
+				// }
 			}
 			.argument-agree {
 				padding: 0 24px;
@@ -615,546 +713,98 @@
 		        	line-height: 16px;
 		        }
 		    }
-			.price_box {
-				position: relative;
-				margin: 0 auto;
-				padding: 0 24px;
-				width: 312px;
-				height: 80px;
-				box-sizing: border-box;
-				display: flex;
-				background: #F9F3EB;
-				.img1 {
-					position: absolute;
-					top: -16px;
-					left: 0;
-					width: 100%;
-					z-index: 100;
-				}
-				.price_item {
-					position: relative;
-					z-index: 99;
-					padding-top: 12px;
-					height: 80px;
-					box-sizing: border-box;
-					.price_intro {
-						display: flex;
-						.price_intro_text {
-							margin-top: 16px;
-							margin-right: 4px;
-							font-family: PingFangSC-Regular;
-							font-size: 12px;
-							color: rgba(0,0,0,0.87);
-							text-align: right;
-							line-height: 18px;
-							transform: scale(0.9);
-							white-space: nowrap;
-						}
-						.price_intro_num {
-							margin-right: 2px;
-							font-family: PingFangSC-Medium;
-							font-size: 28px;
-							color: #C38E3E;
-							line-height: 40px;
-						}
-						.price_intro_yuan {
-							margin-top: 14px;
-							font-family: PingFangSC-Medium;
-							font-size: 14px;
-							color: #C38E3E;
-							text-align: left;
-							line-height: 20px;
-						}
-					}
-					.price_bottom {
-						display: flex;
-						align-items: center;
-						img {
-							margin-right: 2px;
-							width: 16px;
-							height: 16px;
-						}
-						span {
-							font-family: PingFangSC-Medium;
-							font-size: 11px;
-							color: rgba(0,0,0,0.26);
-							text-align: left;
-							line-height: 18px;
-							white-space: nowrap;
-						}
-						// width: 146px;
-						// height: 20px;
-					}
-					// .price_bottom {
-					// 	width: 146px;
-					// 	height: 20px;
-					// }
-				}
-				.price_item_left {
-					flex: 1;
-					.price_bottom {
-						span {
-							text-decoration: line-through;
-						}
-					}
-				}
-				.price_item_right {
-					.price_intro {
-						justify-content: flex-end;
-						.price_intro_text {
-							margin-top: 20px;
-							color: rgba(0,0,0,0.38);
-						}
-						.price_intro_num {
-							color: #3F458C;
-						}
-						.price_intro_yuan {
-							color: #3F458C;
-						}
-					}
-					.price_bottom {
-						justify-content: flex-end;
-						span {
-							font-family: PingFangSC-Medium;
-							font-size: 16px;
-							color: rgba(0,0,0,0.60);
-							line-height: 22px;
-						}
-					}
-					.price_intro_guide {
-						margin-top: 30px;
-						line-height: 18px;
-						display: flex;
-						justify-content: flex-end;
-						.price_intro_guide_text1 {
-							font-family: PingFangSC-Regular;
-							font-size: 11px;
-							color: rgba(0,0,0,0.38);
-							text-align: left;
-							transform: scale(0.9);
-							white-space: nowrap;
-						}
-						.price_intro_guide_text2 {
-							font-family: PingFangSC-Medium;
-							font-size: 13px;
-							color: rgba(224,12,12,0.87);
-							text-align: left;
-							white-space: nowrap;
-						}
-					}
-				}
-				.price_item_left_no {
-					padding-left: 6px;
-				}
-				.price_item_right_no {
-					padding-right: 6px;
-				}
-				.price_center {
-					margin-top: 20px;
-					margin-right: 30px;
-					width: 16px;
-					height: 40px;
-					flex-shirnk: 0;
-				}
-				.price_center_no {
-					width: 20px;
-				}
-				.price_line2 {
-					position: absolute;
-					top: 94px;
-					left: 50%;
-					transform: translateX(-50%);
-					width: 280px;
-					height: 0;
-					border-top: 1px solid #C38E3E;
-				}
-				.price_text {
-					position: absolute;
-					top: 104px;
-					right: 24px;
-					font-family: PingFangSC-Regular;
-					font-size: 11px;
-					color: rgba(0,0,0,0.38);
-					text-align: right;
-					line-height: 18px;
-				}
-			}
-			.tip {
-				margin-top: 4px;
-				width: 324px;
-				height: 30px;
-				border-radius: 1px;
-				font-family: PingFangSC-Regular;
-				font-size: 12px;
-				color: #3F458C;
-				text-align: center;
-				line-height: 18px;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				background: #EEEFF5;
-				img {
-					margin-right: 2px;
-					width: 16px;
-					height: 16px;
-				}
-			}
 			.img1 {
-				margin-top: 16px;
 				width: 100%;
 			}
-			.bg1 {
-				padding-top: 60px;
-				box-sizing: border-box;
-				width: 100%;
-				height: 500px;
-				background: url('../../assets/b_05.png') top no-repeat;
-				background-size: 100%;
-				.countdown {
-					position: relative;
-					margin: 0 auto;
-					padding-top: 12px;
-					box-sizing: border-box;
-					width: 180px;
-					height: 120px;
-					background: rgba(47, 51, 98, 0.8);
-					border-radius: 8px;
-					.countdown_text {
-						opacity: 0.6;
-						font-family: PingFangSC-Medium;
-						font-size: 12px;
-						color: #FFFFFF;
-						text-align: center;
-						line-height: 20px;
-					}
-					.countdown_num {
-						font-family: PingFangSC-Medium;
-						font-size: 14px;
-						color: #FFFFFF;
-						text-align: center;
-						line-height: 20px;
-					}
-					.countdown_gif {
-						position: absolute;
-						left: 50%;
-						bottom: -20px;
-						transform: translateX(-50%);
-						width: 180px;
-						height: 80px;
-					}
-				}
-			}
-			.guide1 {
-				margin-top: 16px;
-				width: 328px;
-				background: #3F458C;
-				box-shadow: 0 8px 16px 0 rgba(0,0,0,0.12);
-				border-radius: 1px;
+			.result2 {
+				width: 223px;
+				height: 32px;
+				background: #4A4B77;
+				border-radius: 16px;
 				font-family: PingFangSC-Medium;
-				font-size: 13px;
-				color: #FFFFFF;
+				font-size: 14px;
+				color: #ffffff;
 				text-align: center;
-				line-height: 36px;
+				line-height: 32px;
 				span {
-					color: #F1BE71;
+					color: #FF8E6D;
 				}
 			}
-			.guide2 {
-				margin-top: 24px;
-				position: relative;
-				border: 1px solid #5C619E;
-				border-radius: 18px;
+			.comment_box {
+				margin-top: 8px;
 				box-sizing: border-box;
-				width: 240px;
-				height: 36px;
-				font-family: PingFangSC-Regular;
-				font-size: 12px;
-				color: rgba(0,0,0,0.87);
-				text-align: center;
-				line-height: 34px;
-				.guide2_title {
-					position: absolute;
-					top: -9px;
-					left: 50%;
-					transform: translateX(-50%);
-					padding: 0 4px;
-					font-family: PingFangSC-Regular;
-					font-size: 12px;
-					color: rgba(0,0,0,0.60);
-					text-align: left;
-					line-height: 18px;
-					background: #fff;
-				}
-				span {
-					color: #C38E3E;
-				}
-			}
-			.list_box {
-				position: relative;
-				padding-top: 8px;
-				width: 100%;
-				.list {
-					margin: 0 auto;
-					border: 1px solid rgba(0,0,0,0.12);
-					border-radius: 1px;
-					box-sizing: border-box;
-					width: 328px;
-					.list_item {
-						display: flex;
-						.list_item_left {
-							flex: 1;
-							height: 56px;
-							padding-left: 24px;
-							font-family: PingFangSC-Regular;
-							font-size: 12px;
-							color: rgba(0,0,0,0.60);
-							text-align: left;
-							line-height: 18px;
-							display: flex;
-							align-items: center;
-						}
-						.list_item_right {
-							flex: 1;
-							height: 56px;
-							background: #F9F3EB;
-							padding-left: 21px;
-							font-family: PingFangSC-Regular;
-							font-size: 12px;
-							color: rgba(0,0,0,0.60);
-							text-align: left;
-							line-height: 18px;
-							display: flex;
-							align-items: center;
-						}
-					}
-					.line3 {
-						position: absolute;
-						left: 50%;
-						transform: translateX(-50%);
-						width: 298px;
-						height: 1px;
-						background: rgba(0,0,0,0.12);
-					}
-				}
-				.img2 {
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100%;
-				}
-			}
-			.select_detail {
-				padding: 0 16px;
-				box-sizing: border-box;
-				width: 100%;
-				.select_detail_item {
-					margin-top: 4px;
-					padding: 0 8px;
-					box-sizing: border-box;
-					width: 100%;
+				padding: 16px 20px;
+				width: 336px;
+				background: linear-gradient(180deg, #FAFAFA 0%, #FEFEFE 100%);
+				.comment_title {
 					display: flex;
 					justify-content: space-between;
-					font-family: PingFangSC-Regular;
-					font-size: 12px;
-					color: rgba(0,0,0,0.38);
-					text-align: left;
-					line-height: 18px;
-					.select_detail_key {
-						text-align: left;
-						width: 134px;
-					}
-					.select_detail_key1 {
-						text-align: right;
-						flex-grow: 1;
-					}
-					.select_detail_value {
-						text-align: right;
-						width: 66px;
-						color: #C38E3E;
-					}
-				}
-				.select_detail_head {
-					margin-top: 0;
-					font-size: 13px;
-					color: rgba(0,0,0,0.87);
-				}
-				.line2 {
-					margin: 10px 0 12px;
-					width: 100%;
-					height: 0;
-					border-top: 1px solid rgba(0,0,0,0.60);
-				}
-				.select_detail_bottom {
-					width: 100%;
-					display: flex;
 					align-items: center;
-					.select_detail_bottom_key {
-						margin-right: 8px;
-						font-family: PingFangSC-Regular;
-						font-size: 14px;
-						color: rgba(0,0,0,0.87);
-						text-align: left;
-						line-height: 20px;
+					.comment_title_line {
+						width: 75px;
+						height: 1px;
+						background: #D56242;
 					}
-					.select_detail_bottom_value {
-						font-family: PingFangSC-Medium;
-						font-size: 20px;
-						color: rgba(0,0,0,0.87);
-						line-height: 30px;
-						text-align: left;
-					}
-				}
-			}
-			.equity {
-				margin-top: 25px;
-				position: relative;
-				border: 1px solid #C38E3E;
-				border-radius: 8px;
-				box-sizing: border-box;
-				width: 328px;
-				height: 16px;
-				.equity_content {
-					position: absolute;
-					top: -15px;
-					right: 12px;
-					padding: 0 4px;
-					display: flex;
-					align-items: center;
-					background: #fff;
-					.equity_content_text1 {
+					.comment_title_text {
 						font-family: PingFangSC-Medium;
 						font-size: 14px;
-						color: rgba(0,0,0,0.87);
-						text-align: left;
+						color: #D56242;
+						text-align: center;
 						line-height: 20px;
 					}
-					.equity_content_text2 {
-						font-family: PingFangSC-Medium;
-						font-size: 20px;
-						color: #C38E3E;
-						line-height: 30px;
-					}
 				}
-			}
-			.price {
-				margin-top: 16px;
-				width: 328px;
-				height: 77px;
-				display: flex;
-				align-items: center;
-				background: url('../../assets/img_price_bg.png') top no-repeat;
-				background-size: 100%;
-				.price_left {
-					padding-left: 15px;
-					box-sizing: border-box;
-					width: 133px;
-					font-family: PingFangSC-Regular;
-					font-size: 11px;
-					color: rgba(255,255,255,0.70);
-					text-align: left;
-					line-height: 18px;
-				}
-				.price_right {
-					.price_right_text1 {
-						font-family: PingFangSC-Regular;
-						font-size: 12px;
-						color: rgba(255,255,255,0.70);
-						text-align: left;
-						line-height: 18px;
-					}
-					.price_right_text2 {
-						font-family: PingFangSC-Medium;
-						font-size: 24px;
-						color: #FFFFFF;
-						line-height: 30px;
-						span {
-							font-family: PingFangSC-Medium;
-							font-size: 14px;
-							color: #FFFFFF;
-							text-align: left;
-							line-height: 20px;
-						}
-					}
-				}
-			}
-			.example_title {
-				margin-top: 24px;
-				width: 338px;
-				display: flex;
-				align-items: center;
-				.line4 {
-					flex-grow: 1;
-					height: 2px;
-					background: #5C619E;
-				}
-				.example_title_content {
-					margin: 0 4px;
-					width: 240px;
-					height: 36px;
-					font-family: PingFangSC-Medium;
-					font-size: 14px;
-					color: #FFFFFF;
-					text-align: center;
-					line-height: 36px;
-					background: #3F458C;
-					border-radius: 20px;
-					span {
-						color: #F1BE71;
-					}
-				}
-			}
-			.example_list {
-				margin-top: 24px;
-				width: 336px;
-				height: 192px;
-				background: #FFFFFF;
-				border: 1px solid rgba(0,0,0,0.04);
-				box-shadow: 0 8px 16px 0 rgba(0,0,0,0.04);
-				border-radius: 1px;
-				box-sizing: border-box;
-				.swiper-container {
-					--swiper-navigation-color: #B9B0A3;
-					--swiper-navigation-size: 18px;
-					.swiper-button-next {
-						right: 8px;
-						outline: none;
-					}
-					.swiper-button-prev {
-						left: 8px;
-						outline: none;
-					}
-					.swiper-wrapper {
-						.swiper-slide {
-							width: 336px;
-							height: 192px;
-							img {
-								width: 336px;
-								height: 192px;
-								display: block;
+				.comment {
+					width: 100%;
+					height: 272px;
+					border-radius: 4px;
+					overflow: scroll;
+					.comment_list {
+						height: 600px;
+						.swiper-wrapper {
+							transition-timing-function: linear;
+							.swiper-slide {
+								margin-top: 16px;
+								width: 100%;
+								height: 600px;
+								.comment_item {
+									margin-top: 16px;
+									width: 100%;
+									height: auto;
+									.comment_item_title {
+										display: flex;
+										align-items: center;
+										.comment_item_title_icon {
+											margin-right: 8px;
+											width: 4px;
+											height: 12px;
+											background: #4A4B77;
+										}
+										.comment_item_title_text {
+											margin-right: 5px;
+											font-family: PingFangSC-Medium;
+											font-size: 13px;
+											color: #4A4B77;
+											line-height: 16px;
+										}
+										.comment_item_title_line {
+											flex: 1;
+											height: 1px;
+											background: rgba(0,0,0,0.12);
+										}
+									}
+									.comment_item_content {
+										margin-top: 4px;
+										font-family: PingFangSC-Regular;
+										font-size: 12px;
+										color: rgba(0,0,0,0.60);
+										text-align: left;
+										line-height: 18px;
+									}
+								}
 							}
 						}
 					}
 				}
-			}
-			.comment {
-				padding: 0 16px;
-				width: 100%;
-				height: 348px;
-				background: linear-gradient(180deg, #FAFAFA 0%, #FEFEFE 100%);
-				border-radius: 4px;
-				overflow: hidden;
-				.comment_list {
-					width: 100%;
-					height: 600px;
-					animation: comment 20s linear infinite;
-					background: linear-gradient(180deg, #F00 0%, #F0F 100%);
-				}
-				@keyframes comment {
-			        100% {
-			            transform:translateY(-282px);
-			            /* -webkit-transform:translateY(-200px) */
-			        }
-			    }
 			}
 			.compony {
 				margin-top: 12px;
@@ -1193,18 +843,17 @@
 				background: #3F458C;
 			}
 			.bottom_icon {
-				margin-left: 24px;
-				margin-right: 16px;
-				width: 36px;
-				height: 36px;
+				margin: 0 16px;
+				width: 40px;
+				height: 40px;
 			}
 			.bottom_content {
 				width: 100%;
 				height: 64px;
 				display: flex;
 				align-items: center;
-				background: #F2583A;
-				box-shadow: 0 -8px 16px 0 rgba(0,0,0,0.04);
+				background-image: linear-gradient(225deg, #FFAD6A 0%, #FF3711 100%);
+				box-shadow: 0 -8px 16px 0 rgba(255,55,17,0.20);
 				.bottom_text {
 					.bottom_text1 {
 						font-family: PingFangSC-Medium;
@@ -1219,6 +868,14 @@
 						color: rgba(255,255,255,0.70);
 						line-height: 18px;
 						text-align: left;
+						span {
+							margin-left: 4px;
+							padding: 0 8px;
+							background: rgba(255, 255, 255, 0.8);
+							border-radius: 9px;
+							font-family: PingFangSC-Medium;
+							color: #F2583A;
+						}
 					}
 				}
 			}
