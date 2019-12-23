@@ -39,7 +39,7 @@
 			</div>
 		</div>
 		<div class="content">
-			<img class="img1" src="@/assets/head_02.png">
+			<img class="img1" src="@/assets/head_02.jpg">
 			<img class="img1" src="@/assets/body_use.jpg">
 			<img class="img1" src="@/assets/body_compare.jpg">
 			<img class="img1" src="@/assets/body_advan.png">
@@ -51,7 +51,7 @@
 					<div class="comment_title_text">近一周客户真实评价</div>
 					<div class="comment_title_line"></div>
 				</div>
-				<div class=" comment">
+				<div class="comment">
 					<div class="swiper-container comment_list">
 						<div class="swiper-wrapper">
 							<div class="swiper-slide">
@@ -452,6 +452,7 @@
 		    	autoplay: {
 					delay:0
 				},
+				preventInteractionOnTransition: true,
 		        loop:true,//循环
 		        speed:40000,//滚动速度
 		        direction : 'vertical',
@@ -588,7 +589,7 @@
 			padding-top: 209px;
 			width: 100%;
 			height: 360px;
-			background: url('../../assets/head_01.png') top no-repeat;
+			background: url('../../assets/head_01.jpg') top no-repeat;
 			background-size: 100%;
 			position: relative;
 			.banner_intro {
@@ -757,7 +758,7 @@
 					width: 100%;
 					height: 272px;
 					border-radius: 4px;
-					overflow: scroll;
+					overflow: hidden;
 					.comment_list {
 						height: 600px;
 						.swiper-wrapper {

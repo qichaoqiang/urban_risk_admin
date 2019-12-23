@@ -10,11 +10,11 @@ import '@/common/css/animate.css'
 import '@/common/css/share.css'
 import 'swiper/css/swiper.css'
 import { config } from '@/utils/global'
-// import VConsole from 'vconsole'
+import VConsole from 'vconsole'
 
 Vue.config.productionTip = false
 /* eslint-disable no-new */
-// new VConsole()
+new VConsole()
 
 let server_url = ''
 if (process.env.VUE_APP_DEPLOY == "prod") {
