@@ -39,6 +39,8 @@ export const isAndroid = function () {
   return ua.indexOf('Android') > -1 || ua.indexOf('Linux') > -1
 }
 
+export const test = {}
+
 export let config = {
   // IM即时通信的 key
   IMAppKey: '7cb7efab05029f8c18576aa98a9cce96',
