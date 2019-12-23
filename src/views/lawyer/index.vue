@@ -265,7 +265,7 @@
 			},
 			register(status) {
 
-            _hmt.push(['_trackEvent', 'order',  'click',  'amount',  amount]);
+            _hmt.push(['_trackEvent', 'order',  'click',  'amount',  69.00]);
 
 		        if(this.loading_pay) {
 		          return false;
@@ -404,7 +404,7 @@
 			this.getTime();
 			this.getNum();
 			localStorage.setItem('utm_source', this.$route.query.utm_source || '');
-	        localStorage.setItem('utm_medium', this.$route.query.utm_medium || '');	
+	        localStorage.setItem('utm_medium', this.$route.query.utm_medium || '');
 	        localStorage.setItem('originUrl', location.href);
 			sa.registerPage({
 		        $utm_medium: localStorage.getItem('utm_medium') || '',
