@@ -41,7 +41,7 @@
 						if(res.data.orderStatus == 20) {
 							let amount = Number(this.$route.query.price);
 							window._agl && window._agl.push(['track', ['success', {t: 18}]])
-							_hmt.push(['_trackEvent', 'status',  'paySuccess',  'amount',  amount]);
+							_hmt.push(['_trackEvent', 'order',  'paySuccess',  'amount',  amount]);
 							clearInterval(this.timer);
 							this.$router.replace({
 								path: '/result',
@@ -78,7 +78,7 @@
 		    					search += `&${key}=${query[key]}`
 		    				}
 		    			}
-		    		}	
+		    		}
 		    		location.replace(`${location.origin}/index${search}`)
 		    	}
 		    }
