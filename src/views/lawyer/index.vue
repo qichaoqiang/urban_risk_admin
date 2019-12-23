@@ -115,7 +115,7 @@
 		        <span>支付即同意<span @click.stop="goAgreement">《易起名智慧起名服务协议》</span></span>
       		</div>
 		</div>
-		<div class="bottom" id="bottom" :class="{bottom20: isIphoneX}" @click="register(1)">
+		<div data-agl-cvt="7" class="bottom" id="bottom" :class="{bottom20: isIphoneX}" @click="register(1)">
 			<div class="bottom_content">
 				<img class="bottom_icon" src="@/assets/button_arrow.gif">
 				<div class="bottom_text">
