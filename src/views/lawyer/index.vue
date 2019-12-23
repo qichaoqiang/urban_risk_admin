@@ -90,6 +90,9 @@
 		        <span>支付即同意<span @click.stop="goAgreement">《易起名智慧起名服务协议》</span></span>
       		</div>
 			<!-- <div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div> -->
+			<div class="comment">
+				<div class="comment_list"></div>
+			</div>
 		</div>
 		<div class="bottom" id="bottom" :class="{bottom20: isIphoneX}" @click="register(1)">
 			<div class="bottom_content">
@@ -1129,6 +1132,26 @@
 						}
 					}
 				}
+			}
+			.comment {
+				padding: 0 16px;
+				width: 100%;
+				height: 348px;
+				background: linear-gradient(180deg, #FAFAFA 0%, #FEFEFE 100%);
+				border-radius: 4px;
+				overflow: hidden;
+				.comment_list {
+					width: 100%;
+					height: 600px;
+					animation: comment 20s linear infinite;
+					background: linear-gradient(180deg, #F00 0%, #F0F 100%);
+				}
+				@keyframes comment {
+			        100% {
+			            transform:translateY(-282px);
+			            /* -webkit-transform:translateY(-200px) */
+			        }
+			    }
 			}
 			.compony {
 				margin-top: 12px;
