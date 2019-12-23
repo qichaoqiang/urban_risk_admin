@@ -284,9 +284,9 @@
 				let time = '';
 				// parseInt(date.getTime() / 1000 - 7200) % 86400
 				if(hours < 10) {
-					time = parseInt((new Date(`${year}-${month}-${day} 10:00:00`).getTime()  - date.getTime()) / 1000) % 86400
+					time = parseInt((new Date(year, month, day, 10, 0, 0).getTime()  - date.getTime()) / 1000) % 86400
 				}else {
-					time = parseInt((new Date(`${year}-${month}-${day} 10:00:00`).getTime() + 86400000  - date.getTime()) / 1000) % 86400
+					time = parseInt((new Date(year, month, day, 10, 0, 0).getTime() + 86400000  - date.getTime()) / 1000) % 86400
 				}
 				let hours_ = parseInt(time / 3600);
 				let minutes_ = parseInt(time % 3600 / 60);
