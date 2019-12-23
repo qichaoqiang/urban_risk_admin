@@ -34,7 +34,7 @@
 				<div class="price_item price_item_left">
 					<div class="price_intro">
 						<div class="price_intro_text">现仅需</div>
-						<div class="price_intro_num">29.9</div>
+						<div class="price_intro_num">69</div>
 						<div class="price_intro_yuan">元</div>
 					</div>
 					<div class="price_bottom">
@@ -96,7 +96,7 @@
 				<img class="bottom_icon" src="@/assets/wechat-pay.png">
 				<div class="bottom_text">
 					<div class="bottom_text1">开始预约起名服务，24小时响应</div>
-					<div class="bottom_text2">仅需29.9元，专家起名，起到满意为止！</div>
+					<div class="bottom_text2">仅需69元，专家起名，起到满意为止！</div>
 				</div>
 			</div>
 		</div>
@@ -277,7 +277,7 @@
 		        // }
 		        // let payType = obj1[this.payType];
 		        // let levelList = ['微信', '电话'];
-		        // let priceList = ['29.9', '79.9'];
+		        // let priceList = ['69', '79.9'];
 		        // let level = levelList[status - 1];
 		        // let price = priceList[status - 1];
 		        // sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[2 - status], {
@@ -288,9 +288,9 @@
 		        sa.quick('trackHeatMap', document.getElementsByClassName('bottom')[0], {
 		          payType: '微信支付',
 		          level: '微信',
-		          price: '29.9'
+		          price: '69'
 		        });
-		        localStorage.setItem('price', '29.9')
+		        localStorage.setItem('price', '69')
 		        this.orderStatus = status;
 		        this.loading_pay = true;
 		        this.handleTestDisabled = true
@@ -401,7 +401,7 @@
 			this.getTime();
 			this.getNum();
 			localStorage.setItem('utm_source', this.$route.query.utm_source || '');
-	        localStorage.setItem('utm_medium', this.$route.query.utm_medium || '');
+	        localStorage.setItem('utm_medium', this.$route.query.utm_medium || '');	
 	        localStorage.setItem('originUrl', location.href);
 			sa.registerPage({
 		        $utm_medium: localStorage.getItem('utm_medium') || '',
