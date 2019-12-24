@@ -30,7 +30,7 @@
 			</div>
 			<div class="banner_price">
 				<div class="banner_price_else">市场价999元起</div>
-				<div class="banner_price_reduce">立省989元</div>
+				<div class="banner_price_reduce">立省990元</div>
 				<div class="banner_price_now">现仅需</div>
 			</div>
 			<div class="price">
@@ -120,7 +120,7 @@
 				<img class="bottom_icon" src="@/assets/button_arrow.gif">
 				<div class="bottom_text">
 					<div class="bottom_text1">马上领取100套好名字</div>
-					<div class="bottom_text2">仅需9.9元 / 限时活动<span>立省989元</span></div>
+					<div class="bottom_text2">仅需9.9元 / 限时活动<span>立省990元</span></div>
 				</div>
 			</div>
 		</div>
