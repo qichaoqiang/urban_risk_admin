@@ -30,11 +30,11 @@
 			</div>
 			<div class="banner_price">
 				<div class="banner_price_else">市场价999元起</div>
-				<div class="banner_price_reduce">立省930元</div>
+				<div class="banner_price_reduce">立省969元</div>
 				<div class="banner_price_now">现仅需</div>
 			</div>
 			<div class="price">
-				<div class="price_num">69</div>
+				<div class="price_num">29.9</div>
 				<div class="price_yuan">元</div>
 			</div>
 		</div>
@@ -120,7 +120,7 @@
 				<img class="bottom_icon" src="@/assets/button_arrow.gif">
 				<div class="bottom_text">
 					<div class="bottom_text1">马上领取100套好名字</div>
-					<div class="bottom_text2">仅需69元 / 限时活动<span>立省930元</span></div>
+					<div class="bottom_text2">仅需29.9元 / 限时活动<span>立省969元</span></div>
 				</div>
 			</div>
 		</div>
@@ -295,7 +295,7 @@
 			},
 			register(status) {
 
-            _hmt.push(['_trackEvent', 'order',  'click',  'amount',  69.00]);
+            _hmt.push(['_trackEvent', 'order',  'click',  'amount',  29.90]);
 
 		        if(this.loading_pay) {
 		          return false;
@@ -310,7 +310,7 @@
 		        // }
 		        // let payType = obj1[this.payType];
 		        // let levelList = ['微信', '电话'];
-		        // let priceList = ['69', '79.9'];
+		        // let priceList = ['29.9', '79.9'];
 		        // let level = levelList[status - 1];
 		        // let price = priceList[status - 1];
 		        // sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[2 - status], {
@@ -321,9 +321,9 @@
 		        sa.quick('trackHeatMap', document.getElementById('bottom'), {
 		          payType: '微信支付',
 		          level: '微信',
-		          price: '69'
+		          price: '29.9'
 		        });
-		        localStorage.setItem('price', '69')
+		        localStorage.setItem('price', '29.9')
 		        this.orderStatus = status;
 		        this.loading_pay = true;
 		        this.handleTestDisabled = true
@@ -667,7 +667,7 @@
 				background-size: 100%;
 				.price_num {
 					font-family: PingFangSC-Medium;
-					font-size: 36px;
+					font-size: 26px;
 					color: #FFFFFF;
 					font-weight: bold;
 				}
