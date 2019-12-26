@@ -63,14 +63,14 @@
 						</div>
 					</div>
 				</div>
-				<div class="info_btn" @click="register">开始深度测名打分</div>
+				<div class="info_btn" id="info_btn1" @click="register">开始深度测名打分</div>
 			</div>
 		</div>
 		<div class="content">
 			<img class="img1" src="@/assets/pic-2.png">
-			<div class="info_btn" style="margin: 16px auto" @click="register">开始深度测名打分</div>
+			<div class="info_btn" id="info_btn2" style="margin: 16px auto" @click="register">开始深度测名打分</div>
 			<img class="img1" src="@/assets/pic-3.png">
-			<div class="info_btn" style="margin: 16px auto" @click="register">开始深度测名打分</div>
+			<div class="info_btn" id="info_btn3" style="margin: 16px auto" @click="register">开始深度测名打分</div>
 			<img class="img1" src="@/assets/pic-4.png">
 			<div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div>
 			<div class="argument-agree" @click="changeAgree">
