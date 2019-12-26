@@ -11,113 +11,129 @@
 				<van-swipe style="height: 32px;" :autoplay="2500" vertical :show-indicators="false">
 				  	<van-swipe-item v-for="(item, index) in scrollList" :key="index">
 				    	<div class="scrollbars_item">
-				    		<span>{{item.phone}}的公司名称综合评分100分 </span><!-- <span>{{item.time}}秒前</span> -->
+				    		<span>{{item.phone}} 已购买企业名称策划套餐 </span><span>{{item.time}}秒前</span>
 				    	</div>
 				  	</van-swipe-item>
 				</van-swipe>
 			</div>
 		</div>
 		<div class="banner">
-			<div class="info">
-				<div class="info_item">
-					<div class="info_item_title">请输入公司/店铺/品牌名称</div>
-					<div class="info_item_name">
-						<input type="text" placeholder="完整主体信息系，如北京百度网讯科技有限公司">
-					</div>
+			<div class="banner_intro">
+				<div class="banner_intro_item">
+					<div class="banner_intro_text">品牌意识强化活动优惠</div>
+					<div class="banner_intro_line"></div>
 				</div>
-				<div class="info_item">
-					<div class="info_item_title">请补充法人/负责人信息</div>
-					<div class="info_item_detail">
-						<div class="info_item_detail_label">姓名</div>
-						<div class="info_item_detail_content">
-							<input type="text">
-							<div class="info_item_detail_sex_box" @click="sex = 0">
-								<div class="info_item_detail_radio" :class="{info_item_detail_radio_active: sex == 0}"></div>
-								<div class="info_item_detail_sex">男性</div>
-							</div>
-							<div class="info_item_detail_sex_box" @click="sex = 1">
-								<div class="info_item_detail_radio" :class="{info_item_detail_radio_active: sex == 1}"></div>
-								<div class="info_item_detail_sex">女性</div>
-							</div>
-						</div>
-					</div>
-					<div class="info_item_detail" style="margin-top: 17px">
-						<div class="info_item_detail_label">生辰</div>
-						<div class="info_item_detail_content">
-							<div class="info_item_detail_select" style="width: 115px" @click="selectTime1">
-								<div class="info_item_detail_select_text">{{time1}}</div>
-								<img class="info_item_detail_select_arrow" src="@/assets/arrow-down.png">
-							</div>
-							<div class="info_item_detail_select" style="margin-right: 0" @click="selectTime2">
-								<div class="info_item_detail_select_text">{{time2}}</div>
-								<img class="info_item_detail_select_arrow" src="@/assets/arrow-down.png">
-							</div>
-							<div class="info_item_detail_sex_box" style="margin-left: 0" @click="dateType = 0">
-								<div class="info_item_detail_radio" :class="{info_item_detail_radio_active: dateType == 0}"></div>
-								<div class="info_item_detail_sex">阴历</div>
-							</div>
-							<div class="info_item_detail_sex_box" @click="dateType = 1">
-								<div class="info_item_detail_radio" :class="{info_item_detail_radio_active: dateType == 1}"></div>
-								<div class="info_item_detail_sex">阳历</div>
-							</div>
-						</div>
-					</div>
+				<div class="banner_intro_item">
+					<div class="banner_intro_line" style="width: 74px;"></div>
+					<div class="banner_intro_text">将于<span>{{countdownTime}}</span>后截止</div>
 				</div>
-				<div class="info_btn" @click="register">开始深度测名打分</div>
+			</div>
+			<div class="banner_price">
+				<div class="banner_price_else">市场价999元起</div>
+				<div class="banner_price_reduce">立省990元</div>
+				<div class="banner_price_now">现仅需</div>
+			</div>
+			<div class="price">
+				<div class="price_num">9.9</div>
+				<div class="price_yuan">元</div>
 			</div>
 		</div>
 		<div class="content">
-			<img class="img1" src="@/assets/pic-2.png">
-			<div class="info_btn" style="margin: 16px auto" @click="register">开始深度测名打分</div>
-			<img class="img1" src="@/assets/pic-3.png">
-			<div class="info_btn" style="margin: 16px auto" @click="register">开始深度测名打分</div>
-			<img class="img1" src="@/assets/pic-4.png">
+			<img class="img1" src="@/assets/head_02.jpg">
+			<img class="img1" src="@/assets/body_use.jpg">
+			<img class="img1" src="@/assets/body_compare.jpg">
+			<img class="img1" src="@/assets/body_advan.png">
+			<img class="img1" src="@/assets/body_commt.png">
+			<div class="result2"><span>13128</span>位客户已使用易起名服务</div>
+			<div class="comment_box">
+				<div class="comment_title">
+					<div class="comment_title_line"></div>
+					<div class="comment_title_text">近一周客户真实评价</div>
+					<div class="comment_title_line"></div>
+				</div>
+				<div class="comment">
+					<div class="swiper-container comment_list">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide">
+								<div class="comment_item">
+									<div class="comment_item_title">
+										<div class="comment_item_title_icon"></div>
+										<div class="comment_item_title_text">订单号为 150****1139 的王先生</div>
+										<div class="comment_item_title_line"></div>
+									</div>
+									<div class="comment_item_content">真的不敢想象，一个名字竟然有这么多的讲究，易起名的科学起名，传统理论与现代理论相结合，五行搭配合理，值得推荐！  大数据系统分析很到位，信息资源全面，堪称行业典范。商标、域名、推广方方面面都考虑到了，真正得到的是一套方案，不单单是一个名字，强烈推荐！</div>
+								</div>
+								<div class="comment_item">
+									<div class="comment_item_title">
+										<div class="comment_item_title_icon"></div>
+										<div class="comment_item_title_text">订单号为 156****1820 的刘先生</div>
+										<div class="comment_item_title_line"></div>
+									</div>
+									<div class="comment_item_content">起名完全符合了我的要求,朗朗上口,寓意美好，内涵丰富，会推荐给有需要的朋友</div>
+								</div>
+								<div class="comment_item">
+									<div class="comment_item_title">
+										<div class="comment_item_title_icon"></div>
+										<div class="comment_item_title_text">订单号为 139****6230 的叶女士</div>
+										<div class="comment_item_title_line"></div>
+									</div>
+									<div class="comment_item_content">起的名字非常好，下次有朋友需要的话还会来找大师起名的。服务态度也很好，赞一个</div>
+								</div>
+								<div class="comment_item">
+									<div class="comment_item_title">
+										<div class="comment_item_title_icon"></div>
+										<div class="comment_item_title_text">订单号为 178****8367 的张先生</div>
+										<div class="comment_item_title_line"></div>
+									</div>
+									<div class="comment_item_content">名字起的好，下次再来，目前已经注册成功，服务过程很流畅，取得名字也非常满意，很幸运的一次就注册成功，没有反复，太省心了，哈哈。</div>
+								</div>
+								<div class="comment_item">
+									<div class="comment_item_title">
+										<div class="comment_item_title_icon"></div>
+										<div class="comment_item_title_text">订单号为 159****3382 的何女士</div>
+										<div class="comment_item_title_line"></div>
+									</div>
+									<div class="comment_item_content">在网上对比了下，你们是性价比最高的，价格不高，服务好，名字的评估是最全最科学的，名字不但很符合八字，又考虑到了传播和商标域名的申请，很厉害，下次有需要还会找你们</div>
+								</div>
+								<div class="comment_item">
+									<div class="comment_item_title">
+										<div class="comment_item_title_icon"></div>
+										<div class="comment_item_title_text">订单号为 130****7221 的李女士</div>
+										<div class="comment_item_title_line"></div>
+									</div>
+									<div class="comment_item_content">是我注册这么多家公司过程中，起名最省心的一次了，100套方案里选5个，简直不要太容易，还能直接分享给老板一起挑，实在太感谢贵公司了。每个备选名字都有很完善的分析介绍，老板看了对我很满意，下次我会介绍朋友过来的！！ 赞</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="compony">© 杭州税牛科技有限公司 浙ICP备19028668号</div>
 			<div class="argument-agree" @click="changeAgree">
-		        <div class="check" v-if="isAgreement"><img src="@/assets/select_on.png"></div>
+		        <div class="check" v-if="isAgreement"><img src="@/assets/checkbox_on.png"></div>
 		        <div class="check" v-else><img src="@/assets/checkbox_off.png"></div>
 		        <span>支付即同意<span @click.stop="goAgreement">《易起名智慧起名服务协议》</span></span>
       		</div>
-			<img class="img1" src="@/assets/pic-5.png">
 		</div>
-		<!-- <div data-agl-cvt="7" class="bottom" id="bottom" :class="{bottom20: isIphoneX}" @click="register(1)">
+		<div data-agl-cvt="7" class="bottom" id="bottom" :class="{bottom20: isIphoneX}" @click="register(1)">
 			<div class="bottom_content">
 				<img class="bottom_icon" src="@/assets/button_arrow.gif">
 				<div class="bottom_text">
 					<div class="bottom_text1">马上领取100套好名字</div>
-					<div class="bottom_text2">仅需6.66元 / 限时活动<span>立省990元</span></div>
+					<div class="bottom_text2">仅需9.9元 / 限时活动<span>立省990元</span></div>
 				</div>
 			</div>
-		</div> -->
+		</div>
 		<div class="model" v-show="loading_pay">
 			<van-loading size="40px" vertical>加载中...</van-loading>
 		</div>
-		<van-popup v-model="showPicker1" position="bottom">
-			<van-datetime-picker
-				type="date"
-				v-model="currentDate"
-				:formatter="formatter"
-				:minDate="minDate"
-				:maxDate="maxDate"
-				@cancel="showPicker1 = false"
-			    @confirm="onConfirm1"
-			/>
-		</van-popup>
-		<van-popup v-model="showPicker2" position="bottom">
-			<van-picker
-			    show-toolbar
-			    :columns="timeList"
-			    @cancel="showPicker2 = false"
-			    @confirm="onConfirm2"
-			/>
-		</van-popup>
 		<div class="form" id="form"></div>
 	</div>
 </template>
 
 <script>
 	import Vue from 'vue'
-	import { Toast, Swipe, SwipeItem, Loading, Lazyload, Picker, Popup, DatetimePicker } from 'vant'
+	import { Toast, Swipe, SwipeItem, Loading, Lazyload } from 'vant'
 	import { isWechat } from '@/utils/global.js'
 	import api from '@/api/api'
 	import $ from 'zhangjia-zepto'
@@ -125,9 +141,6 @@
 	Vue.use(Swipe).use(SwipeItem);
 	Vue.use(Loading);
 	Vue.use(Lazyload);
-	Vue.use(Picker);
-	Vue.use(Popup);
-	Vue.use(DatetimePicker);
 
 	export default {
 		name: 'index',
@@ -179,16 +192,6 @@
 				phone: '',
 				userNum: '',
 				nameList: ['赵', '钱', '孙', '李', '周', '吴', '郑', '王', '冯', '陈', '楮', '卫', '蒋', '沈', '韩', '杨', '朱', '秦', '尤', '许', '何', '吕', '施', '张', '孔', '曹', '严', '华', '金', '魏', '陶', '姜', '戚', '谢', '邹', '喻', '柏', '水', '窦', '章', '云', '苏', '潘', '葛', '奚', '范', '彭', '郎', '鲁', '韦', '昌', '马', '苗', '凤', '花', '方', '俞', '任', '袁', '柳', '酆', '鲍', '史', '唐', '费', '廉', '岑', '薛', '雷', '贺', '倪', '汤', '滕', '殷', '罗', '毕', '郝', '邬', '安', '常', '乐', '于', '时', '傅', '皮', '卞', '齐', '康', '伍', '余', '元', '卜', '顾', '孟', '平', '黄', '和', '穆', '萧', '尹', '姚', '邵', '湛', '汪', '祁', '毛', '禹', '狄', '米', '贝', '明', '臧', '计', '伏', '成', '戴', '谈', '宋', '茅', '庞', '熊', '纪', '舒', '屈', '项', '祝', '董', '梁', '杜', '阮', '蓝', '闽', '席', '季', '麻', '强', '贾', '路', '娄', '危', '江', '童', '颜', '郭', '梅', '盛', '林', '刁', '锺', '徐', '丘', '骆', '高', '夏', '蔡', '田', '樊', '胡', '凌', '霍', '虞', '万', '支', '柯', '昝', '管', '卢', '莫', '经', '房', '裘', '缪', '干', '解', '应', '宗', '丁', '宣', '贲', '邓', '郁', '单', '杭', '洪', '包', '诸', '左', '石', '崔', '吉', '钮', '龚', '程', '嵇', '邢', '滑', '裴', '陆', '荣', '翁', '荀', '羊', '於', '惠', '甄', '麹', '家', '封', '芮', '羿', '储', '靳', '汲', '邴', '糜', '松', '井', '段', '富', '巫', '乌', '焦', '巴', '弓', '牧', '隗', '山', '谷', '车', '侯', '宓', '蓬', '全', '郗', '班', '仰', '秋', '仲', '伊', '宫', '宁', '仇', '栾', '暴', '甘', '斜', '厉', '戎', '祖', '武', '符', '刘', '景', '詹', '束', '龙', '叶', '幸', '司', '韶', '郜', '黎', '蓟', '薄', '印', '宿', '白', '怀', '蒲', '邰', '从', '鄂', '索', '咸', '籍', '赖', '卓', '蔺', '屠', '蒙', '池', '乔', '阴', '郁', '胥', '能', '苍', '双', '闻', '莘', '党', '翟', '谭', '贡', '劳', '逄', '姬', '申', '扶', '堵', '冉', '宰', '郦', '雍', '郤', '璩', '桑', '桂', '濮', '牛', '寿', '通', '边', '扈', '燕', '冀', '郏', '浦', '尚', '农', '温', '别', '庄', '晏', '柴', '瞿', '阎', '充', '慕', '连', '茹', '习', '宦', '艾', '鱼', '容', '向', '古', '易', '慎', '戈', '廖', '庾', '终', '暨', '居', '衡', '步', '都', '耿', '满', '弘', '匡', '国', '文', '寇', '广', '禄', '阙', '东', '欧', '殳', '沃', '利', '蔚', '越', '夔', '隆', '师', '巩', '厍', '聂', '晁', '勾', '敖', '融', '冷', '訾', '辛', '阚', '那', '简', '饶', '空', '曾', '毋', '沙', '乜', '养', '鞠', '须', '丰', '巢', '关', '蒯', '相', '查', '后', '荆', '红', '游', '竺', '权', '逑', '盖', '益', '桓', '公', '仉', '督', '晋', '楚', '阎', '法', '汝', '鄢', '涂', '钦', '岳', '帅', '缑', '亢', '况', '后', '有', '琴', '归', '海', '墨', '哈', '谯', '笪', '年', '爱', '阳', '佟', '商', '牟', '佘', '佴', '伯', '赏'],
-				sex: 0,
-				dateType: 0,
-				time1: '1982年1月1日',
-				time2: '23:00-00:59 子时',
-				showPicker1: false,
-				showPicker2: false,
-				timeList: ['23:00-00:59 子时', '01:00-02:59 丑时', '03:00-04:59 寅时', '05:00-06:59 卯时', '07:00-08:59 辰时', '09:00-10:59 巳时', '11:00-12:59 午时', '13:00-14:59 未时', '15:00-16:59 申时', '17:00-18:59 酉时', '19:00-20:59 戌时', '21:00-22:59 亥时'],
-				minDate: new Date(1900, 0, 1),
-      			maxDate: new Date(),
-      			currentDate: new Date(1982, 0, 1)
 			}
 		},
 		watch: {
@@ -203,30 +206,6 @@
 		    }
 		},
 		methods: {
-			formatter(type, value) {
-				if (type === 'year') {
-					return `${value}年`;
-				}else if (type === 'month') {
-					return `${value}月`
-				}else if (type === 'day') {
-					return `${value}日`
-				}
-				return value;
-			},
-			selectTime1() {
-				this.showPicker1 = true
-			},
-			selectTime2() {
-				this.showPicker2 = true
-			},
-			onConfirm1(value) {
-				this.time1 = `${value.getFullYear()}年${value.getMonth() + 1}月${value.getDate()}日`
-				this.showPicker1 = false
-			},
-			onConfirm2(value, index) {
-				this.time2 = value
-				this.showPicker2 = false
-			},
 			changeAgree() {
 				this.isAgreement = !this.isAgreement;
 			},
@@ -259,7 +238,7 @@
 				let secondNum = [3, 5, 8, 7];
 				let index = 0;
 				let secondIndex;
-				// let contentList = ['16.66元微信咨询服务', '76.66元电话咨询服务'];
+				// let contentList = ['19.9元微信咨询服务', '79.9元电话咨询服务'];
 				let sexList = ['先生', '女士'];
 				for(let i = 0; i < 100; i++) {
 					phone += 1;
@@ -314,9 +293,9 @@
 				let seconds_ = parseInt(time % 60);
 				this.countdownTime = `${hours_}时${minutes_}分${seconds_}秒`
 			},
-			register(e) {
-				console.log(e);
-            	_hmt.push(['_trackEvent', 'order',  'click',  'amount',  6.66]);
+			register(status) {
+
+            _hmt.push(['_trackEvent', 'order',  'click',  'amount',  9.90]);
 
 		        if(this.loading_pay) {
 		          return false;
@@ -325,13 +304,27 @@
 		        	Toast('请先阅读并同意易起名智慧起名服务协议');
 		        	return false;
 		        }
-		        sa.quick('trackHeatMap', e.target, {
+		        // let obj1 = {
+		        //   'WEIXIN_H5': '微信支付',
+		        //   'wap': '支付宝'
+		        // }
+		        // let payType = obj1[this.payType];
+		        // let levelList = ['微信', '电话'];
+		        // let priceList = ['9.9', '79.9'];
+		        // let level = levelList[status - 1];
+		        // let price = priceList[status - 1];
+		        // sa.quick('trackHeatMap', document.getElementsByClassName('bottom_btn')[2 - status], {
+		        //   payType,
+		        //   level,
+		        //   price
+		        // });
+		        sa.quick('trackHeatMap', document.getElementById('bottom'), {
 		          payType: '微信支付',
 		          level: '微信',
-		          price: '6.66'
+		          price: '9.9'
 		        });
-		        localStorage.setItem('price', '6.66')
-		        this.orderStatus = 1;
+		        localStorage.setItem('price', '9.9')
+		        this.orderStatus = status;
 		        this.loading_pay = true;
 		        this.handleTestDisabled = true
 		        let data = {
@@ -471,7 +464,7 @@
 <style lang="scss" scoped>
 	.container {
 		padding-top: 36px;
-		padding-bottom: 16px;
+		padding-bottom: 78px;
 		.notice {
 			position: fixed;
 			z-index: 1000;
@@ -591,152 +584,97 @@
 		// .scrollbars_no {
 		// 	padding: 0;
 		// }
-		.info_btn {
-			margin: 0 auto;
-			width: 296px;
-			height: 38px;
-			background: #E6543E;
-			box-shadow: 0 2px 6px 0 rgba(230,84,62,0.38);
-			border-radius: 2px;
-			font-family: PingFangSC-Medium;
-			font-size: 15px;
-			color: #FFFFFF;
-			text-align: center;
-			line-height: 38px;
-		}
 		.banner {
-			position: relative;
 			box-sizing: border-box;
+			padding-top: 209px;
 			width: 100%;
-			height: 540px;
-			background: url('../../assets/home-head.png') top no-repeat;
+			height: 360px;
+			background: url('../../assets/head_01.jpg') top no-repeat;
 			background-size: 100%;
 			position: relative;
-			.info {
-				position: absolute;
-				bottom: 0;
-				left: 50%;
-				transform: translateX(-50%);
+			.banner_intro {
 				box-sizing: border-box;
-				padding: 20px 16px 16px;
-				width: 328px;
-				background: #FFFFFF;
-				box-shadow: 0 4px 6px 0 rgba(0,0,0,0.06);
-				border-radius: 8px;
-				.info_item {
-					margin-bottom: 20px;
-					.info_item_title {
-						margin-bottom: 12px;
+				padding-left: 16px;
+				width: 100%;
+				.banner_intro_item {
+					display: flex;
+					align-items: center;
+					.banner_intro_text {
 						font-family: PingFangSC-Medium;
-						font-size: 14px;
-						color: rgba(0,0,0,0.87);
+						font-size: 12px;
+						color: #FFFFFF;
 						text-align: left;
-						line-height: 20px;
-					}
-					.info_item_name {
-						border: 1px solid rgba(0,0,0,0.26);
-						border-radius: 2px;
-						box-sizing: border-box;
-						width: 100%;
-						height: 32px;
-						input {
-							box-sizing: border-box;
-							padding-left: 16px;
-							width: 100%;
-							height: 100%;
-							font-family: PingFangSC-Regular;
-							font-size: 13px;
-							color: rgba(0,0,0,0.87);
-							text-align: left;
+						line-height: 18px;
+						span {
+							color: #ffe208;
 						}
 					}
-					.info_item_detail {
-						display: flex;
-						.info_item_detail_label {
-							margin-right: 12px;
-							font-family: PingFangSC-Regular;
-							font-size: 13px;
-							color: rgba(0,0,0,0.60);
-							text-align: left;
-							line-height: 32px;
-							flex-shrink: 0;
-						}
-						.info_item_detail_content {
-							display: flex;
-							align-items: center;
-							flex-wrap: wrap;
-							input {
-								margin-right: 8px;
-								padding: 0 8px;
-								border: 1px solid rgba(0,0,0,0.26);
-								border-radius: 2px;
-								box-sizing: border-box;
-								width: 114px;
-								height: 32px;
-								font-family: PingFangSC-Regular;
-								font-size: 13px;
-								color: rgba(0,0,0,0.87);
-								text-align: left;
-							}
-							.info_item_detail_select {
-								margin-right: 12px;
-								border: 1px solid rgba(0,0,0,0.26);
-								border-radius: 2px;
-								padding: 0 6px;
-								box-sizing: border-box;
-								width: 130px;
-								height: 32px;
-								display: flex;
-								justify-content: space-between;
-								align-items: center;
-								.info_item_detail_select_text {
-									font-family: PingFangSC-Regular;
-									font-size: 12px;
-									color: rgba(0,0,0,0.87);
-									text-align: left;
-								}
-								.info_item_detail_select_arrow {
-									width: 9px;
-									height: 5px;
-								}
-							}
-							.info_item_detail_sex_box {
-								margin-left: 16px;
-								height: 32px;
-								display: flex;
-								align-items: center;
-								flex-wrap: nowrap;
-								.info_item_detail_radio {
-									position: relative;
-									width: 16px;
-									height: 16px;
-									border-radius: 10px;
-									border: 1px solid rgba(0,0,0,0.26);
-								}
-								.info_item_detail_radio_active {
-									border: 1px solid #4855B0;
-									&:after {
-										position: absolute;
-										left: 50%;
-										top: 50%;
-										transform: translate(-50%, -50%);
-										content: '';
-										width: 10px;
-										height: 10px;
-										border-radius: 6px;
-										background: #4855B0;
-									}
-								}
-								.info_item_detail_sex {
-									margin-left: 8px;
-									font-family: PingFangSC-Regular;
-									font-size: 13px;
-									color: rgba(0,0,0,0.60);
-									text-align: left;
-								}
-							}
-						}
+					.banner_intro_line {
+						margin: 0 12px;
+						width: 90px;
+						height: 1px;
+						background: rgba(255,255,255,0.70);
 					}
+				}
+			}
+			.banner_price {
+				margin-top: 19px;
+				box-sizing: border-box;
+				padding-left: 29px;
+				width: 100%;
+				display: flex;
+				align-items: center;
+				.banner_price_else {
+					margin-right: 8px;
+					font-family: PingFangSC-Regular;
+					font-size: 11px;
+					color: rgba(0,0,0,0.38);
+					text-align: right;
+					line-height: 18px;
+					text-decoration: line-through;
+				}
+				.banner_price_reduce {
+					margin-right: 8px;
+					width: 74px;
+					height: 20px;
+					background-image: linear-gradient(136deg, #F8826D 6%, #E93D1C 100%);
+					box-shadow: 0 2px 4px 0 rgba(255,55,17,0.20);
+					border-radius: 10px;
+					font-family: PingFangSC-Medium;
+					font-size: 12px;
+					color: #FFFFFF;
+					text-align: center;
+					line-height: 20px;
+				}
+				.banner_price_now {
+					font-family: PingFangSC-Medium;
+					font-size: 14px;
+					color: #D56242;
+					text-align: left;
+					line-height: 20px;
+				}
+			}
+			.price {
+				position: absolute;
+				top: 215px;
+				right: 12px;
+				width: 104px;
+				height: 104px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				background: url('../../assets/price_bg.png') top no-repeat;
+				background-size: 100%;
+				.price_num {
+					font-family: PingFangSC-Medium;
+					font-size: 26px;
+					color: #FFFFFF;
+					font-weight: bold;
+				}
+				.price_yuan {
+					font-family: PingFangSC-Medium;
+					font-size: 16px;
+					color: #FFFFFF;
 				}
 			}
 		}
@@ -753,8 +691,6 @@
 				// }
 			}
 			.argument-agree {
-				margin-top: 8px;
-				margin-bottom: 16px;
 				padding: 0 24px;
 				box-sizing: border-box;
 				width: 100%;
@@ -969,6 +905,6 @@
 	    }
 	}
 	.container20 {
-		padding-bottom: 36px;
+		padding-bottom: 98px;
 	}
 </style>

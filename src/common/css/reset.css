@@ -70,13 +70,22 @@ textarea {
 }
 
 input::-webkit-input-placeholder{
-  color: rgba(0,0,0,0.38);
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  text-align: left;
+  color: rgba(0,0,0,0.26);
 }
 input::-moz-placeholder{
-  color: rgba(0,0,0,0.38);      
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  text-align: left;
+  color: rgba(0,0,0,0.26);
 }
 input:-ms-input-placeholder{ 
-  color: rgba(0,0,0,0.38); 
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  text-align: left;
+  color: rgba(0,0,0,0.26);
 }
 textarea.van-field__control {
   -webkit-user-select:auto; /*webkit浏览器*/
