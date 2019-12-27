@@ -85,7 +85,7 @@
 				<img class="bottom_icon" src="@/assets/button_arrow.gif">
 				<div class="bottom_text">
 					<div class="bottom_text1">马上领取100套好名字</div>
-					<div class="bottom_text2">仅需6.66元 / 限时活动<span>立省990元</span></div>
+					<div class="bottom_text2">仅需8.88元 / 限时活动<span>立省990元</span></div>
 				</div>
 			</div>
 		</div> -->
@@ -259,7 +259,6 @@
 				let secondNum = [3, 5, 8, 7];
 				let index = 0;
 				let secondIndex;
-				// let contentList = ['16.66元微信咨询服务', '76.66元电话咨询服务'];
 				let sexList = ['先生', '女士'];
 				for(let i = 0; i < 100; i++) {
 					phone += 1;
@@ -316,7 +315,7 @@
 			},
 			register(e) {
 				console.log(e);
-            	_hmt.push(['_trackEvent', 'order',  'click',  'amount',  6.66]);
+            	_hmt.push(['_trackEvent', 'order',  'click',  'amount',  8.88]);
 
 		        if(this.loading_pay) {
 		          return false;
@@ -328,9 +327,9 @@
 		        sa.quick('trackHeatMap', e.target, {
 		          payType: '微信支付',
 		          level: '微信',
-		          price: '6.66'
+		          price: '8.88'
 		        });
-		        localStorage.setItem('price', '6.66')
+		        localStorage.setItem('price', '8.88')
 		        this.orderStatus = 1;
 		        this.loading_pay = true;
 		        this.handleTestDisabled = true
