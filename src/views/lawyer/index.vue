@@ -670,7 +670,7 @@
 								border: 1px solid rgba(0,0,0,0.26);
 								border-radius: 2px;
 								box-sizing: border-box;
-								width: 114px;
+								width: 108px;
 								height: 32px;
 								font-family: PingFangSC-Regular;
 								font-size: 13px;
