@@ -27,7 +27,9 @@ module.exports = {
       //   return options
       // })
   },
+  publicPath: './',
   outputDir: './dist',
+  productionSourceMap: false,
   devServer: { 
     disableHostCheck: true,
     // host: '0.0.0.0',

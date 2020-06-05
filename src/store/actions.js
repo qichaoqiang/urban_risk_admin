@@ -1,40 +1,31 @@
 let actions = {
-  increment (context) {
-    context.commit('increment')
-  },
-  update_title (context, title) {
+  save_tradeList(context, tradeList) {
     return new Promise((resolve) => {
-      console.log('actions 接收title start')
-      console.log(title)
-      console.log('actions 接收title end')
-      context.commit('update_title', title)
+      context.commit('update_tradeList', tradeList)
       resolve()
     })
   },
-  update_preUrl (context, preUrl) {
+  save_selectIds(context, selectIds) {
     return new Promise((resolve) => {
-      console.log('actions 接收title start')
-      console.log(preUrl)
-      console.log('actions 接收title end')
-      context.commit('update_preUrl', preUrl)
+      context.commit('update_selectIds', selectIds)
       resolve()
     })
   },
-  save_token (context, token) {
+  save_levelIds(context, levelIds) {
     return new Promise((resolve) => {
-      context.commit('update_token', token)
+      context.commit('update_levelIds', levelIds)
       resolve()
     })
-  },
-  save_jumpUrl (context, jumpUrl) {
+  }, 
+  save_resizeCount(context, resizeCount) {
     return new Promise((resolve) => {
-      context.commit('update_jumpUrl', jumpUrl)
+      context.commit('update_resizeCount', resizeCount)
       resolve()
     })
-  },
-  save_payInfo (context, payInfo) {
+  }, 
+  save_hasMenu(context, hasMenu) {
     return new Promise((resolve) => {
-      context.commit('update_payInfo', payInfo)
+      context.commit('update_hasMenu', hasMenu)
       resolve()
     })
   }

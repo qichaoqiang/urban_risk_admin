@@ -1,26 +1,19 @@
 let mutations = {
-  increment (state) {
-    // mutate state
-    state.count++
+  update_tradeList(state, tradeList) {
+    state.tradeList = tradeList
   },
-  update_title (state, title) {
-    state.title = title
+  update_selectIds(state, selectIds) {
+    state.selectIds = selectIds
   },
-  update_preUrl(state, preUrl) {
-    state.preUrl = preUrl
+  update_levelIds(state, levelIds) {
+    state.levelIds = levelIds
+  }, 
+  update_resizeCount(state, resizeCount) {
+    state.resizeCount = resizeCount
   },
-  update_token(state, token) {
-    state.token = token
-    localStorage.setItem('token', token)
+  update_hasMenu(state, hasMenu) {
+    state.hasMenu = hasMenu
   },
-  update_jumpUrl(state, jumpUrl) {
-    state.jumpUrl = jumpUrl
-    localStorage.setItem('jumpUrl', jumpUrl)
-  },
-  update_payInfo(state, payInfo) {
-    state.payInfo = payInfo
-    localStorage.setItem('payInfo', payInfo)
-  }
 }
 
 export default mutations

@@ -1,13 +1,9 @@
 let state = {
-  todos: [
-    { id: 1, text: '...', done: true },
-    { id: 2, text: '...', done: false }
-  ],
-  count: 0,
-  title: '',
-  jumpUrl: '',
-  token: '',
-  payInfo: ''
+  tradeList: [],
+  selectIds: '',
+  levelIds: '',
+  resizeCount: 0,
+  hasMenu: false
 }
 
 export default state

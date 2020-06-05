@@ -54,18 +54,13 @@ export let config = {
   SC_server_sit_url: 'https://sensors-api.caishuiyu.com/sa?project=default',
 }
 
+// 自动生成script标签
 export const getScript = (url, callback) => {
-    let id = document.getElementById(url)
-    if(id){
-        callback && callback()
-        return
-    }
     let head = document.getElementsByTagName('head')[0],
         js = document.createElement('script');
 
     js.setAttribute('type', 'text/javascript');
     js.setAttribute('src', url);
-    js.setAttribute('id', url);
 
     head.appendChild(js);
 

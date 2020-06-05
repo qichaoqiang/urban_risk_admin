@@ -1,24 +1,18 @@
 let getters = {
-  doneTodos: state => {
-    return state.todos.filter(todo => todo.done)
+  getTradeList: state => {
+    return state.tradeList
   },
-  getCount: state => {
-    return state.count
+  getSelectIds: state => {
+    return state.getSelectIds
   },
-  getPreUrl: state => {
-    return state.preUrl
+  getLevelIds: state => {
+    return state.levelIds
   },
-  getToken: state => {
-    let token = localStorage.getItem('token')
-    return token
+  getResizeCounr: state => {
+    return state.resizeCount
   },
-  getJumpUrl: state => {
-    let jumpUrl = localStorage.getItem('jumpUrl')
-    return jumpUrl
-  },
-  getPayInfo: state => {
-    let payInfo = localStorage.getItem('payInfo')
-    return payInfo
+  getHasMenu: state => {
+    return state.hasMenu
   }
 }
 

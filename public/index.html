@@ -3,82 +3,16 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"> -->
     <meta content="telephone=no" name="format-detection"/>
     <!-- <link rel="icon" href="<%= BASE_URL %>favicon.ico"> -->
     <link rel="icon" href="./favicon.ico">
+    <script type="text/javascript" src="http://api.tianditu.gov.cn/api?v=4.0&tk=701640b81eacb6c191dd460f74393688"></script>
+    <script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=RVP7SocR2eKQ6boYH1g9Ikx5tGQ4qSMB"></script>
     <title></title>
-    <script>
-      (function(window, document) {
-        function resize() {
-          var ww = window.innerWidth
-          if (ww > window.screen.width) {
-            window.requestAnimationFrame(resize)
-          } else {
-            if (ww > 750) {
-              ww = 750
-            }
-            document.documentElement.style.fontSize = ww * 100 / 750 + 'px'
-          }
-        }
-
-        resize();
-
-        window.addEventListener('resize', resize);
-        window.addEventListener('pageshow', function (e) {
-          if (e.presisted) {
-            resize();
-          }
-        });
-        document.addEventListener('touchstart',function (event) {
-            if(event.touches.length>1){
-                event.preventDefault();
-            }
-        })
-        var lastTouchEnd=0;
-        document.addEventListener('touchend',function (event) {
-            var now=(new Date()).getTime();
-            if(now-lastTouchEnd<=300){
-                event.preventDefault();
-            }
-            lastTouchEnd=now;
-        },false)
-      })(window, document);
-    </script>
-    <script>
-      var _hmt = _hmt || [];
-      (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?591d7e725dce817155bd32f7fcf7b818";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
-    </script>
-    <script src="https://res2.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
-    <script src="https://cstaticdun.126.net/load.min.js?t=201903281201"></script>
   </head>
   <body>
-    <script type="text/javascript">
-        window._agl = window._agl || [];
-        (function () {
-            _agl.push(
-                ['production', '_f7L2XwGXjyszb4d1e2oxPybgD']
-            );
-            (function () {
-                var agl = document.createElement('script');
-                agl.type = 'text/javascript';
-                agl.async = true;
-                agl.src = 'https://fxgate.baidu.com/angelia/fcagl.js?production=_f7L2XwGXjyszb4d1e2oxPybgD';
-                var s = document.getElementsByTagName('script')[0];
-                s.parentNode.insertBefore(agl, s);
-            })();
-        })();
-    </script>
-    <!-- <script src="http://wechatfe.github.io/vconsole/lib/vconsole.min.js"></script>
-    <script>
-      var vConsole = new VConsole();
-    </script> -->
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>

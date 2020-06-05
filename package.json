@@ -1,8 +1,9 @@
 {
-  "name": "shuiwushi",
+  "name": "urban_risk_admin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start": "npm run dev",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --mode prod",
     "build:prod": "vue-cli-service build --mode prod",
@@ -12,18 +13,21 @@
     "all": "yarn build:prod && yarn build:sit"
   },
   "dependencies": {
-    "amfe-flexible": "^2.2.1",
-    "autoprefixer": "^9.5.1",
     "axios": "^0.18.0",
+    "babel-plugin-component": "^1.1.1",
     "core-js": "^2.6.5",
+    "echarts": "^4.6.0",
+    "element-ui": "^2.13.2",
     "es6-promise": "^4.2.6",
     "good-storage": "^1.1.0",
+    "jquery": "^3.4.1",
     "qs": "^6.7.0",
-    "sa-sdk-javascript": "^1.13.5",
     "swiper": "^5.2.1",
     "vant": "^1.6.17",
+    "view-design": "^4.0.2",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.3",
+    "vue-hot-reload-api": "^2.3.3",
+    "vue-router": "^3.3.1",
     "vuex": "^3.0.1",
     "zhangjia-zepto": "^1.2.0",
     "zip-webpack-plugin": "^3.0.0"
@@ -38,12 +42,13 @@
     "babel-polyfill": "^6.26.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "less": "^3.11.1",
+    "less-loader": "^5.0.0",
     "node-sass": "^4.11.0",
     "postcss-pxtorem": "^4.0.1",
     "sass-loader": "^7.1.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
-    "vconsole": "^3.3.0",
     "vue-cli-plugin-mand": "^0.3.0",
     "vue-template-compiler": "^2.5.21"
   }

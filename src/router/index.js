@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import storage from 'good-storage'
+import store from '@/store/index'
 
 Router.prototype.goBack = function () {
   this.isBack = true
@@ -9,99 +11,30 @@ Router.prototype.goBack = function () {
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
-      redirect: '/index'
-    },
-    // {
-    //   path: '/index',
-    //   name: 'index',
-    //   component: () => import('../views/lawyer/index.vue'),
-    //   meta: {
-    //     title: '犀牛专业律师服务'
-    //   }
-    // },
-    // {
-    //   path: '/order',
-    //   name: 'order',
-    //   component: () => import('../views/lawyer/order.vue'),
-    //   meta: {
-    //     title: '开通犀牛专业律师服务'
-    //   }
-    // },
-    // {
-    //   path: '/pay',
-    //   name: 'pay',
-    //   component: () => import('../views/lawyer/pay.vue'),
-    //   meta: {
-    //     title: '服务开通中'
-    //   }
-    // },
-    // {
-    //   path: '/result',
-    //   name: 'result',
-    //   component: () => import('../views/lawyer/result.vue'),
-    //   meta: {
-    //     title: '服务开通失败'
-    //   }
-    // },
-    // {
-    //   path: '/agreement',
-    //   name: 'agreement',
-    //   component: () => import('../views/lawyer/agreement.vue'),
-    //   meta: {
-    //     title: '犀牛专业律师服务会员协议'
-    //   }
-    // },
-    {
-      path: '/index',
-      name: 'index',
-      component: () => import('../views/lawyer/index.vue'),
-      meta: {
-        title: '易起名智慧起名服务'
-      }
+      redirect: '/login',
     },
     {
-      path: '/order',
-      name: 'order',
-      component: () => import('../views/lawyer/order.vue'),
+      path: '/login',
+      name: 'login',
+      component: resolve => require(['@/views/login/login.vue'], resolve),
       meta: {
-        title: '开通易起名智慧起名服务'
-      }
+        hideInMenu: true,
+        notCache: true,
+        title: '登录'
+      },
     },
-    {
-      path: '/pay',
-      name: 'pay',
-      component: () => import('../views/lawyer/pay.vue'),
-      meta: {
-        title: '服务开通中'
-      }
-    },
-    {
-      path: '/result',
-      name: 'result',
-      component: () => import('../views/lawyer/result.vue'),
-      meta: {
-        title: '服务开通失败'
-      }
-    },
-    {
-      path: '/agreement',
-      name: 'agreement',
-      component: () => import('../views/lawyer/agreement.vue'),
-      meta: {
-        title: '易起名智慧起名服务会员协议'
-      }
-    }
+    // {
+    //   path: '/login',
+    //   name: 'login',
+    //   component: () => import('../views/login/login.vue'),
+    //   meta: {
+    //     title: '登录'
+    //   }
+    // }
   ],
-  // scrollBehavior(to, from, saveTop){
-  //   if (saveTop) {
-  //     return saveTop
-  //   } else {
-  //     return { x: 0, y: 0 }
-  //   }
-  // }
 })
