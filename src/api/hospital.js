@@ -10,15 +10,15 @@ export default {
     return fetchGet(`/api/yiyuan/${params}`)
   },
   // 危险化学品保存
-  addWhItem(params) {
+  addWhyyItem(params) {
     return fetchPost('/api/yiyuanweixianhuaxuepin', params)
   },
   // 危险化学品列表
-  getWhItemList(params) {
+  getWhyyItemList(params) {
     return fetchGet('/api/yiyuanweixianhuaxuepin', params)
   },
   // 危险化学品删除
-  deleteWhItem(id) {
+  deleteWhyyItem(id) {
     return fetchDelete(`/api/yiyuanweixianhuaxuepin/${id}`)
   },
   // 液氮保存

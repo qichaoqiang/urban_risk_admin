@@ -61,22 +61,24 @@
 		</div>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}尾矿库规模信息`" v-model="showWkkgmModel" @on-visible-change="wkkgmModelChange">
 			<div>
-				<Form :model="wkkgmForm" label-position="left" :label-width="180">
-					<FormItem label="当前坝高（米）">
+				<Form :model="wkkgmForm" ref="wkkgm" :rules="wkkgmRules" hide-required-mark label-position="left" :label-width="180">
+					<FormItem label="当前坝高（米）" prop="dqbg">
 			        	<InputNumber :min="0" v-model="wkkgmForm.dqbg"></InputNumber>
 			        </FormItem>
-			        <FormItem label="当前总库容（万立方）">
+			        <FormItem label="当前总库容（万立方）" prop="dqzkr">
 			        	<InputNumber :min="0" v-model="wkkgmForm.dqzkr"></InputNumber>
 			        </FormItem>
-			        <FormItem label="汇水面积（平方千米）">
+			        <FormItem label="汇水面积（平方千米）" prop="hsmj">
 			        	<InputNumber :min="0" v-model="wkkgmForm.hsmj"></InputNumber>
 			        </FormItem>
 			        <FormItem label="尾矿库等别">
 			        	<Row type="flex" align="middle" :gutter="20">
 	            			<Col>
-	            				<Select clearable v-model="wkkgmForm.wkkdb" placeholder="请选择">
-					                <Option v-for="item in wkkdbList" :key="item" :value="item">{{item}}</Option>
-					            </Select>
+	            				<FormItem prop="wkkdb">
+		            				<Select clearable v-model="wkkgmForm.wkkdb" placeholder="请选择">
+						                <Option v-for="item in wkkdbList" :key="item" :value="item">{{item}}</Option>
+						            </Select>
+						        </FormItem>
 	            			</Col>
 	            			<Col>
 	            				<Poptip placement="right" width="500">
@@ -90,39 +92,39 @@
 	            			</Col>
 	            		</Row>
 			        </FormItem>
-			        <FormItem label="填报时间">
+			        <FormItem label="填报时间" prop="tbsj">
 			            <DatePicker type="date" v-model="wkkgmForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWkkgmModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveWkkgm">保存</Button>
+		        <Button type="primary" size="large" :loading="wkkgmLoading" @click="saveWkkgm">保存</Button>
 	        </div>
 		</Modal>
 
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}下游情况`" v-model="showXyqkwkkModel" @on-visible-change="xyqkwkkModelChange">
 			<div>
-				<Form :model="xyqkwkkForm" label-position="left" :label-width="120">
-					<FormItem label="名称">
+				<Form :model="xyqkwkkForm" ref="xyqkwkk" :rules="xyqkwkkRules" hide-required-mark label-position="left" :label-width="120">
+					<FormItem label="名称" prop="mc">
 			        	<Input clearable v-model="xyqkwkkForm.mc"></Input>
 			        </FormItem>
-			        <FormItem label="类型">
+			        <FormItem label="类型" prop="lx">
 			        	<Select clearable v-model="xyqkwkkForm.lx" placeholder="请选择">
 			                <Option v-for="item in lxList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
 			        </FormItem>
-			        <FormItem label="人数">
+			        <FormItem label="人数" prop="rs">
 			        	<InputNumber :min="0" v-model="xyqkwkkForm.rs"></InputNumber>
 			        </FormItem>
-			        <FormItem label="距离（米）">
+			        <FormItem label="距离（米）" prop="jl">
 			        	<InputNumber :min="0" v-model="xyqkwkkForm.jl"></InputNumber>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showXyqkwkkModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveXyqkwkk">保存</Button>
+		        <Button type="primary" size="large" :loading="xyqkwkkLoading" @click="saveXyqkwkk">保存</Button>
 	        </div>
 		</Modal>
 	</div>
@@ -146,7 +148,7 @@
 		data() {
 			return {
 				id: '',
-				gkdx_id: this.$storage.get('gkdx_id'),
+				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				sjcccpId: '',
 				ckyhbzsc_id: '',	
 				ccss_id: '',
@@ -156,6 +158,8 @@
 				showLngModel: false,
 				showWkkgmModel: false,
 				showXyqkwkkModel: false,
+				wkkgmLoading: false,
+				xyqkwkkLoading: false,
 				modeType: '',
 				modeType2: '',
 				map: null,
@@ -251,25 +255,37 @@
 				areaList: [],
 				wkkgmColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.wkkgmPage.pageIndex- 1) * this.wkkgmPage.pageSize + 1);
+				        }
                     }, {
                         title: '当前坝高（米）',
                         key: 'dqbg',
+                        minWidth: 140
                     }, {
                         title: '当前总库容（万立方）',
                         key: 'dqzkr',
+                        minWidth: 180
                     }, {
                         title: '汇水面积（平方千米）',
                         key: 'hsmj',
+                        minWidth: 180
                     }, {
                         title: '尾矿库等别',
                         key: 'wkkdb',
+                        minWidth: 110
                     }, {
                         title: '填报时间',
                         key: 'tbsj',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -325,22 +341,33 @@
 				],
 				xyqkwkkColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.xyqkwkkPage.pageIndex- 1) * this.xyqkwkkPage.pageSize + 1);
+				        }
                     }, {
                         title: '名称',
                         key: 'mc',
+                        minWidth: 80
                     }, {
                         title: '类型',
                         key: 'lx',
+                        minWidth: 80
                     }, {
                         title: '人数',
                         key: 'rs',
+                        minWidth: 80
                     }, {
                         title: '距离（米）',
                         key: 'jl',
+                        minWidth: 110
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -363,8 +390,14 @@
 				nzzldwList: ['吨', '立方', 'KG', 'L'],
 				ckyhbzscColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '仓库名称',
                         key: 'ckmc',
@@ -388,6 +421,7 @@
                         key: 'tbsj',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -421,28 +455,41 @@
 				},
 				ccssColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '储存设施单元名称',
                         key: 'ccssdymc',
+                        minWidth: 160
                     }, {
                         title: '类型',
                         key: 'lx',
+                        minWidth: 80
                     }, {
                         title: '重大危险源',
                         key: 'zdwxy',
+                        minWidth: 110
                     }, {
                         title: '危险化学品',
                         slot: 'wxhxp',
+                        minWidth: 110
                     }, {
                         title: '投用时间',
                         key: 'tysj',
+                        minWidth: 120
                     }, {
                         title: '当前状态',
                         key: 'dqzt',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -466,8 +513,14 @@
 				},
 				sjcccpColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '产品类别',
                         key: 'cplb',
@@ -482,6 +535,7 @@
                         key: 'hyl',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -506,8 +560,14 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         key: 'mgmbmc',
@@ -522,6 +582,7 @@
                         key: 'rysl',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -536,7 +597,7 @@
 					lngAndLat: '',
 					qyfw: ''
 				},
-				fwList: ['东', '南', '西', '北'],
+				fwList: ['东', '南', '西', '北', '东北', '东南', '西北', '西南'],
 				mgmblxList: ['医院', '养老院', '学校', '政府机构', '商场', '居住区', '监狱', '宗教', '车站', '码头', '铁路', '公路', '林区', '工厂', '矿山', '河流', '其他'],
 				rimPage: {
 					pageSize: 10,
@@ -550,7 +611,23 @@
 
 		},
 		computed: {
-
+			wkkgmRules() {
+				return {
+					dqbg: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					dqzkr: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					hsmj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					wkkdb: [{ required: true, message: '请选择', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
+			xyqkwkkRules() {
+				return {
+					mc: [{ required: true, message: '请选择', trigger: 'change' }],
+					lx: [{ required: true, message: '请选择', trigger: 'change' }],
+					rs: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					jl: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			handleSpan ({ row, column, rowIndex, columnIndex }) {
@@ -717,13 +794,16 @@
 			},
 			wkkgmModelChange(status) {
 				if(!status) {
-					this.wkkgmForm = {
-						dqbg: 0,
-						dqzkr: 0,
-						hsmj: 0,
-						wkkdb: '',
-						tbsj: ''
-					}
+					this.$nextTick(() => {
+						this.wkkgmForm = {
+							dqbg: 0,
+							dqzkr: 0,
+							hsmj: 0,
+							wkkdb: '',
+							tbsj: ''
+						}
+						this.$refs.wkkgm.resetFields();
+					})
 				}
 			},
 			async removeWkkgm(row) {
@@ -732,20 +812,26 @@
 				this.getWkkgmList()
 			},
 			async saveWkkgm() {
-				let params = {
-					...this.wkkgmForm,
-					tbsj: this.wkkgmForm.tbsj ? getDate(new Date(this.wkkgmForm.tbsj).getTime(), 'date') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addWkkgmInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showWkkgmModel = false
-					this.getWkkgmList()
-				}
+				this.$refs.wkkgm.validate(async valid => {
+                    if (valid) {
+                    	this.wkkgmLoading = true
+						let params = {
+							...this.wkkgmForm,
+							tbsj: this.wkkgmForm.tbsj ? getDate(new Date(this.wkkgmForm.tbsj).getTime(), 'date') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addWkkgmInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showWkkgmModel = false
+							this.getWkkgmList()
+						}
+							this.wkkgmLoading = false
+                    }
+                })
 			},
 			async getXyqkwkkList_() {
 				let params = {
@@ -795,12 +881,15 @@
 			},
 			xyqkwkkModelChange(status) {
 				if(!status) {
-					this.xyqkwkkForm = {
-						mc: '',
-						lx: '',
-						rs: 0,
-						jl: 0
-					}
+					this.$nextTick(() => {
+						this.xyqkwkkForm = {
+							mc: '',
+							lx: '',
+							rs: 0,
+							jl: 0
+						}
+						this.$refs.xyqkwkk.resetFields();
+					})
 				}
 			},
 			async removeXyqkwkk(row) {
@@ -809,20 +898,26 @@
 				this.getXyqkwkkList()
 			},
 			async saveXyqkwkk() {
-				let params = {
-					...this.xyqkwkkForm,
-					tbsj: this.xyqkwkkForm.tbsj ? getDate(new Date(this.xyqkwkkForm.tbsj).getTime(), 'date') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addXyqkwkkInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showXyqkwkkModel = false
-					this.getXyqkwkkList()
-				}
+				this.$refs.xyqkwkk.validate(async valid => {
+                    if (valid) {
+                    	this.xyqkwkkLoading = true
+						let params = {
+							...this.xyqkwkkForm,
+							tbsj: this.xyqkwkkForm.tbsj ? getDate(new Date(this.xyqkwkkForm.tbsj).getTime(), 'date') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addXyqkwkkInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showXyqkwkkModel = false
+							this.getXyqkwkkList()
+						}
+							this.xyqkwkkLoading = false
+                    }
+                })
 			},
 			handleChangeCkyhbzPage(val) {
 				this.ckyhbzscPage.pageIndex = val

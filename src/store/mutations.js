@@ -14,6 +14,9 @@ let mutations = {
   update_hasMenu(state, hasMenu) {
     state.hasMenu = hasMenu
   },
+  update_fxylb(state, fxylb) {
+    state.fxylb = fxylb
+  },
 }
 
 export default mutations

@@ -71,10 +71,10 @@
 					<part-title text="建筑物信息"></part-title>
 					<Form :model="addressInfo" label-position="left" :label-width="140" style="width: 600px">
 				        <FormItem label="占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.zdmj" placeholder="占地面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.zdmj" placeholder="占地面积"></InputNumber>
 				        </FormItem>
 				        <FormItem label="建筑面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.jzmj" placeholder="建筑面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.jzmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -113,16 +113,16 @@
 					<part-title text="医院规模"></part-title>
 					<Form :model="mostForm" label-position="left" inline :label-width="140">
 				        <FormItem label="从业人员" style="margin-right: 100px">
-				        	<InputNumber clearable v-model="mostForm.cyrs"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.cyrs"></InputNumber>
 				        </FormItem>
 				        <FormItem label="日均门诊人数" style="margin-right: 100px">
-				        	<InputNumber clearable v-model="mostForm.rjmzrs"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.rjmzrs"></InputNumber>
 				        </FormItem>
 				        <FormItem label="床位数" style="margin-right: 100px">
-				        	<InputNumber clearable v-model="mostForm.cws"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.cws"></InputNumber>
 				        </FormItem>
 				        <FormItem label="日均床位使用量" style="margin-right: 100px">
-				        	<InputNumber clearable v-model="mostForm.rjcwsyl"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.rjcwsyl"></InputNumber>
 				        </FormItem>
 					</Form>
 					<part-title text="危险化学品"></part-title>
@@ -266,7 +266,7 @@
 			        	<Input clearable v-model="whForm.Ch"></Input>
 			        </FormItem>
 			        <FormItem label="数量">
-			        	<InputNumber clearable :min="0" v-model="whForm.sl"></InputNumber>
+			            <InputNumber :min="0" v-model="whForm.sl"></InputNumber>
 			        </FormItem>
 			        <FormItem label="储存位置">
 			        	<Input clearable v-model="whForm.ccwz"></Input>
@@ -291,16 +291,16 @@
 			        	<Input clearable v-model="ydForm.wz"></Input>
 			        </FormItem>
 			        <FormItem label="容量">
-			            <InputNumber clearable v-model="ydForm.rl"></InputNumber>
+			            <InputNumber :min="0" v-model="ydForm.rl"></InputNumber>
 			        </FormItem>
 			        <FormItem label="数量">
-			            <InputNumber clearable :min="0" v-model="ydForm.sl"></InputNumber>
+			            <InputNumber :min="0" v-model="ydForm.sl"></InputNumber>
 			        </FormItem>
 			        <FormItem label="压力">
-			            <InputNumber clearable v-model="ydForm.yl"></InputNumber>
+			            <InputNumber :min="0" v-model="ydForm.yl"></InputNumber>
 			        </FormItem>
 			        <FormItem label="年使用量(kg)">
-			        	<InputNumber clearable v-model="ydForm.nsyl"></InputNumber>
+			        	<InputNumber :min="0" v-model="ydForm.nsyl"></InputNumber>
 			        </FormItem>
 			        <FormItem label="储罐/钢瓶检验有效期">
 			        	<DatePicker type="date" v-model="ydForm.jyyxq"></DatePicker>
@@ -452,8 +452,14 @@
 				areaList: [],
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpmc',
@@ -471,6 +477,7 @@
                         key: 'nsyl',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -490,8 +497,14 @@
 				},
 				ydColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '名称',
                         key: 'mc',
@@ -518,6 +531,7 @@
                         key: 'jydw',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -540,8 +554,14 @@
 				},
 				riskLiauidColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '名称',
                         key: 'mc',
@@ -559,6 +579,7 @@
                         key: 'hsdw',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 

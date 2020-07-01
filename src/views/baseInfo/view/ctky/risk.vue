@@ -1,220 +1,18 @@
 <template>
 	<div class="page">
 		<Spin fix v-show="loading"></Spin>
-		<div v-show="step == 1">
-			<Row type="flex" justify="center">
-				<Col>
-					<div class="title">请完善{{step == 1 ? '企业' : '风险'}}信息</div>
-					<part-title text="基本信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
-						<FormItem label="企业名称">
-				            {{baseInfo.qymc}}
-				        </FormItem>
-				        <FormItem label="运行状态">
-				            <Select clearable v-model="baseInfo.yxzt" placeholder="运行状态">
-				                <Option v-for="item in yxztList" :key="item" :value="item">{{item}}</Option>
-				            </Select>
-				        </FormItem>
-				        <FormItem label="是否在工业园区">
-				        	<Row type="flex" :gutter="20">
-				        		<Col span="6">
-						        	<Select clearable v-model="baseInfo.sfzgyyq" placeholder="请选择">
-						                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
-						            </Select>
-				        		</Col>
-				        		<Col span="18">
-				        			<Input clearable v-show="baseInfo.sfzgyyq == 1" v-model="baseInfo.yqmc" placeholder="工业园区名称"></Input>
-				        		</Col>
-				        	</Row>
-				        </FormItem>
-				        <FormItem label="安全生产标准化">
-				        	<Input clearable v-model="baseInfo.aqscbzh" placeholder="安全生产标准化"></Input>
-				        </FormItem>
-				        <FormItem label="职工人数">
-				            <InputNumber :min="0" v-model="baseInfo.zgrs"></InputNumber>
-				        </FormItem>
-				        <FormItem label="管理人员">
-				            <InputNumber :min="0" v-model="baseInfo.glrysl"></InputNumber>
-				        </FormItem>
-				        <FormItem label="行业门类">
-				        	<Cascader 
-				        		clearable 
-				        		change-on-select
-			        			v-model="baseInfo.hyml" 
-			        			:data="industryList" 
-			        			:load-data="loadIndustry" 
-			        			placeholder="行业门类"></Cascader>
-				        </FormItem>
-				        <FormItem label="行业代码">
-				            <Input clearable v-model="baseInfo.hydm" placeholder="行业代码"></Input>
-				        </FormItem>
-				        <FormItem label="统一社会信用代码">
-				            <Input clearable v-model="baseInfo.tyshxydm" placeholder="统一社会信用代码"></Input>
-				        </FormItem>
-				        <FormItem label="注册地址">
-				        	<Input clearable v-model="baseInfo.zcdz" placeholder="注册地址"></Input>
-				        </FormItem>
-				        <FormItem label="企业基本简况">
-				            <Input clearable v-model="baseInfo.qyjbjk" type="textarea" placeholder="企业基本简况"></Input>
-				        </FormItem>
-					</Form>
-				</Col>	
-			</Row>	
-			<div class="line"></div>
-			<Row type="flex" justify="center">
-				<Col>
-					<part-title text="位置信息"></part-title>
-					<Form :model="addressInfo" label-position="left" :label-width="140" style="width: 600px">
-				        <FormItem label="生产地址">
-				        	<Input clearable v-model="addressInfo.scdz" placeholder="生产地址"></Input>
-				        </FormItem>
-				        <FormItem label="占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.zdmj" placeholder="占地面积"></InputNumber>
-				        </FormItem>
-				        <FormItem label="建筑面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.jzmj" placeholder="建筑面积"></InputNumber>
-				        </FormItem>
-				        <FormItem label="经纬度">
-				        	<div @click="openLngModal">
-			        			<Input 
-			        				readonly 
-			        				v-model="addressInfo.lngAndLat" 
-			        				icon="md-pin" 
-			        				placeholder="经纬度" />
-			        		</div>
-				        </FormItem>
-				        <FormItem label="企业范围">
-				        	<div @click.stop="openAreaModal">
-			        			<Input 
-			        				readonly 
-			        				v-model="addressInfo.qyfw" 
-			        				icon="md-pin" 
-			        				placeholder="企业范围" />
-			        		</div>
-				        </FormItem>
-					</Form>
-				</Col>	
-			</Row>	
-			<div class="line"></div>
-			<Row type="flex" justify="center">
-				<Col>
-					<part-title text="联系人信息"></part-title>
-					<Form :model="contactInfo" label-position="left" :label-width="140" style="width: 600px">
-				        <FormItem label="企业负责人">
-				        	<Row type="flex" :gutter="20">
-					        	<Col span="8">
-				        			<Input clearable v-model="contactInfo.qyfzr" :data="areaList" placeholder="姓名"></Input>
-				        		</Col>
-				        		<Col span="16">
-				        			<Input clearable v-model="contactInfo.qyfzrdh" placeholder="电话"></Input>
-				        		</Col>
-				        	</Row>
-				        </FormItem>
-				        <FormItem label="分管安全负责人">
-				        	<Row type="flex" :gutter="20">
-					        	<Col span="8">
-				        			<Input clearable v-model="contactInfo.fgaqfzr" :data="areaList" placeholder="姓名"></Input>
-				        		</Col>
-				        		<Col span="16">
-				        			<Input clearable v-model="contactInfo.fgaqfzrdh" placeholder="电话"></Input>
-				        		</Col>
-				        	</Row>
-				        </FormItem>
-				        <FormItem label="经办人">
-				        	<Row type="flex" :gutter="20">
-					        	<Col span="8">
-				        			<Input clearable v-model="contactInfo.jbr" :data="areaList" placeholder="姓名"></Input>
-				        		</Col>
-				        		<Col span="16">
-				        			<Input clearable v-model="contactInfo.jbrdh" placeholder="电话"></Input>
-				        		</Col>
-				        		<Col span="24">
-				        			<Input clearable v-model="contactInfo.jbryx" placeholder="邮箱"></Input>
-				        		</Col>
-				        	</Row>
-				        </FormItem>
-					</Form>
-				</Col>	
-			</Row>	
-			<Row type="flex" justify="center">
-				<Col>
-					<Button type="primary" style="margin: 0 auto; width: 200px;" @click="nextStep">完成</Button>
-				</Col>
-			</Row>
-		</div>
-		<div v-show="step == 2">
-			<Row type="flex" justify="center">
+		<div>
+			<Row type="flex" justify="center" style="height: 100%">
 				<Col span="22">
 					<div class="title">请完善风险信息</div>
-					<part-title text="危险化学品" :btns="['add']" @add="openWhModel"></part-title>
-					<Table :columns="whColumns" :data="whData">
-						<template slot-scope="{ row }" slot="sfzdjg">
-							<span>{{sfzgyyqList.find(item => item.value === row.sfzdjg).name}}</span>
-						</template>
-						<template slot-scope="{ row }" slot="sfbzp">
-							<span>{{sfzgyyqList.find(item => item.value === row.sfbzp).name}}</span>
-						</template>
-						<template slot-scope="{ row }" slot="action">
-				            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editWhModel(row)">编辑</Button>
-				            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWh(row)">
-						        <Button type="error" size="small" ghost>删除</Button>
-						    </Poptip>
-				        </template>
-					</Table>
-					<Row type="flex" justify="end">
-						<Page
-		                    size="small"
-		                    style="margin-top: 10px"
-		                    :page-size="whPage.pageSize"
-		                    :total="whPage.totalRow"
-		                    show-elevator
-		                    show-total
-		                    show-sizer
-		                    @on-change="handleChangeWhPage"
-		                    @on-page-size-change="handleChangeWhPageSize"
-		                />
-					</Row>
-					<part-title text="危化品重大危险源" :btns="['add']" @add="openWhRiskModel"></part-title>
-					<Table :columns="whRiskColumns" :data="whRiskData">
-						<template slot-scope="{ row }" slot="name">
-				            <span class="link">{{row.name}}</span>
-				        </template>
-				        <template slot-scope="{ row }" slot="level">
-				            <div :style="{ margin: '0 auto', width: '40px', height: '20px', background: row.color}"></div>
-				        </template>
-						<template slot-scope="{ row }" slot="action">
-				            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editWhRiskModel(row)">编辑</Button>
-				            
-				            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWhRisk(row)">
-						        <Button type="error" size="small" ghost>删除</Button>
-						    </Poptip>
-				        </template>
-					</Table>
-					<Row type="flex" justify="end">
-						<Page
-		                    size="small"
-		                    style="margin-top: 10px"
-		                    :page-size="whRiskPage.pageSize"
-		                    :total="whRiskPage.totalRow"
-		                    show-elevator
-		                    show-total
-		                    show-sizer
-		                    @on-change="handleChangeWhRiskPage"
-		                    @on-page-size-change="handleChangeWhRiskPageSize"
-		                />
-					</Row>
-					<part-title text="工艺信息"></part-title>
-					<Row type="flex" justify="end">
-						<Col span="23">
-							<part-title text="涉爆粉尘工艺" :btns="['add']" @add="openSbfcgyModel"></part-title>
-							<Row type="flex" :gutter="100">
-								<Col>工艺数量：{{sbfcgyNum.gysl || 0}}</Col>
-								<Col>涉粉作业总人数：{{sbfcgyNum.zyzrs || 0}}</Col>
-							</Row>
-							<Table :columns="sbfcgyColumns" :data="sbfcgyData">
+					<Tabs value="name1">
+				        <TabPane label="车辆信息" name="name1">
+						    <part-title text="车辆信息" :btns="['add']" @add="openClxxctModel"></part-title>
+						    <div>车辆数量合计：{{clslhj}}</div>
+							<Table :columns="clxxctColumns" :data="clxxctData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editSbfcgyModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeSbfcgy(row)">
+						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editClxxctModel(row)">编辑</Button>
+						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeClxxct(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -223,23 +21,23 @@
 								<Page
 				                    size="small"
 				                    style="margin-top: 10px"
-				                    :page-size="sbfcgyPage.pageSize"
-				                    :total="sbfcgyPage.totalRow"
+				                    :page-size="clxxctPage.pageSize"
+				                    :total="clxxctPage.totalRow"
 				                    show-elevator
 				                    show-total
 				                    show-sizer
-				                    @on-change="handleChangeSbfcgyPage"
-				                    @on-page-size-change="handleChangeSbfcgyPageSize"
+				                    @on-change="handleChangeClxxctPage"
+				                    @on-page-size-change="handleChangeClxxctPageSize"
 				                />
 							</Row>
-							<part-title text="重点监管危险工艺" :btns="['add']" @add="openMainRiskModel"></part-title>
-							<Table :columns="mainRiskColumns" :data="mainRiskData">
-								<template slot-scope="{ row }" slot="name">
-						            <span class="link">{{row.name}}</span>
-						        </template>
+				        </TabPane>
+				        <TabPane label="线路信息" name="name2">
+				        	<part-title text="线路信息" :btns="['add']" @add="openXlxxModel"></part-title>
+				        	<div>线路数量：{{xlsl}}</div>
+							<Table :columns="xlxxColumns" :data="xlxxData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editMainRiskModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeMainRisk(row)">
+						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editXlxxModel(row)">编辑</Button>
+						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeXlxx(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -248,51 +46,45 @@
 								<Page
 				                    size="small"
 				                    style="margin-top: 10px"
-				                    :page-size="mainRiskPage.pageSize"
-				                    :total="mainRiskPage.totalRow"
+				                    :page-size="xlxxPage.pageSize"
+				                    :total="xlxxPage.totalRow"
 				                    show-elevator
 				                    show-total
 				                    show-sizer
-				                    @on-change="handleChangeMainRiskPage"
-				                    @on-page-size-change="handleChangeMainRiskPageSize"
+				                    @on-change="handleChangeXlxxPage"
+				                    @on-page-size-change="handleChangeXlxxPageSize"
 				                />
 							</Row>
-						</Col>
-					</Row>
-					<part-title text="周边情况" :btns="['add']" @add="openRimModel"></part-title>
-					<Table :columns="rimColumns" :data="rimData">
-						<template slot-scope="{ row }" slot="name">
-				            <span class="link">{{row.name}}</span>
-				        </template>
-						<template slot-scope="{ row }" slot="action">
-				            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editRimModel(row)">编辑</Button>
-				            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeRim(row)">
-						        <Button type="error" size="small" ghost>删除</Button>
-						    </Poptip>
-				        </template>
-					</Table>
-					<Row type="flex" justify="end">
-						<Page
-		                    size="small"
-		                    style="margin-top: 10px"
-		                    :page-size="rimPage.pageSize"
-		                    :total="rimPage.totalRow"
-		                    show-elevator
-		                    show-total
-		                    show-sizer
-		                    @on-change="handleChangeRimPage"
-		                    @on-page-size-change="handleChangeRimPageSize"
-		                />
-					</Row>
+				        </TabPane>
+				        <TabPane label="运营状况" name="name3">
+				        	<part-title text="运营状况" :btns="['add']" @add="openYyqkModel"></part-title>
+							<Table :columns="yyqkColumns" :data="yyqkData">
+								<template slot-scope="{ row }" slot="action">
+						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editYyqkModel(row)">编辑</Button>
+						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeYyqk(row)">
+								        <Button type="error" size="small" ghost>删除</Button>
+								    </Poptip>
+						        </template>
+							</Table>
+							<Row type="flex" justify="end">
+								<Page
+				                    size="small"
+				                    style="margin-top: 10px"
+				                    :page-size="yyqkPage.pageSize"
+				                    :total="yyqkPage.totalRow"
+				                    show-elevator
+				                    show-total
+				                    show-sizer
+				                    @on-change="handleChangeYyqkPage"
+				                    @on-page-size-change="handleChangeYyqkPageSize"
+				                />
+							</Row>
+				        </TabPane>
+				    </Tabs>
 				</Col>	
 			</Row>	
-			<!-- <Row type="flex" justify="center" style="margin-top: 24px">
-				<Col>
-					<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo">完成</Button>
-				</Col>
-			</Row> -->
 		</div>
-		<Modal title="企业经纬度标注" v-model="showLngModel">
+		<Modal width="1000" title="企业经纬度标注" v-model="showLngModel">
 			<div id="lng_box" class="area_box"></div>
 			<div slot="footer">
 	            <Row type="flex" align="middle" justify="space-between">
@@ -308,7 +100,7 @@
 	            </Row>
 	        </div>
 		</Modal>
-		<Modal title="企业范围标注" v-model="showAreaModel">
+		<Modal width="1000" title="企业范围标注" v-model="showAreaModel">
 			<div id="area_box" class="area_box"></div>
 			<div slot="footer">
 	            <Row type="flex" align="middle" justify="space-between">
@@ -324,265 +116,94 @@
 	            </Row>
 	        </div>
 		</Modal>
-		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}危险化学品`" v-model="showWhModel" @on-visible-change="whModelChange">
+		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}车辆信息`" v-model="showClxxctModel" @on-visible-change="clxxctModelChange">
 			<div>
-				<Form :model="whForm" label-position="left" :label-width="140">
-					<FormItem label="化学品名称">
-			        	<Input clearable v-model="whForm.hxpm"></Input>
-			        </FormItem>
-			        <FormItem label="别名">
-			        	<Input clearable v-model="whForm.bm"></Input>
-			        </FormItem>
-			        <FormItem label="CAS号">
-			        	<Input clearable v-model="whForm.cas"></Input>
-			        </FormItem>
-			        <FormItem label="是否重点监管">
-			            <Select clearable v-model="whForm.sfzdjg" placeholder="请选择">
-			                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="是否爆炸品">
-			            <Select clearable v-model="whForm.sfbzp" placeholder="请选择">
-			                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="是否剧毒化学品">
-			            <Select clearable v-model="whForm.sfjdhxp" placeholder="请选择">
-			                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="火灾危险性等级">
-			            <Select clearable v-model="whForm.hzwxxdj" placeholder="请选择">
-			                <Option v-for="item in hzwxxdjList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="化学品状态">
-			            <Select clearable v-model="whForm.hxpzt" placeholder="请选择">
-			                <Option v-for="item in hxpztList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="年中转量">
-			        	<Row type="flex" align="middle">
-	            			<Col>
-			        			<Input clearable v-model="whForm.nzzl"></Input>
-	            			</Col>
-	            			<Col>
-	            				<Select clearable v-model="whForm.nzzldw" placeholder="单位">
-					                <Option v-for="item in nzzldwList" :key="item" :value="item">{{item}}</Option>
-					            </Select>
-	            			</Col>
-	            		</Row>
-			        </FormItem>
-			        <FormItem label="最大存储量">
-			            <Row type="flex" align="middle">
-	            			<Col>
-			        			<Input clearable v-model="whForm.zdccl"></Input>
-	            			</Col>
-	            			<Col>
-	            				<Select clearable v-model="whForm.zdccldw" placeholder="单位">
-					                <Option v-for="item in nzzldwList" :key="item" :value="item">{{item}}</Option>
-					            </Select>
-	            			</Col>
-	            		</Row>
-			        </FormItem>
-			        <FormItem label="MSDS">
-			        	<Input clearable v-model="whForm.msds"></Input>
-			        </FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveWh">保存</Button>
-	        </div>
-		</Modal>
-		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}危化品重大危险源`" v-model="showWhRiskModel" @on-visible-change="whRiskModelChange">
-			<div>
-				<Form :model="whRiskForm" label-position="left" :label-width="140">
-					<FormItem label="重大危险单元名称">
-			        	<Input clearable v-model="whRiskForm.zdwxydymc"></Input>
-			        </FormItem>
-			        <FormItem label="重大危险源等级">
-			        	<Select clearable v-model="whRiskForm.zdwxydj" placeholder="请选择">
-			                <Option v-for="item in hzwxxdjList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="危险化学品">
-			        	<Input clearable v-model="whRiskForm.wxhxp"></Input>
-			        </FormItem>
-			        <FormItem label="投用时间">
-			        	<DatePicker type="date" v-model="whRiskForm.tysj"  placeholder="请选择"></DatePicker>
-			        </FormItem>
-			        <FormItem label="当前状态">
-			            <Select clearable v-model="whRiskForm.dqzt" placeholder="请选择">
-			                <Option v-for="item in dqztList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="地图">
-			            <Button type="primary" ghost>编辑</Button>
-			        </FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveWhRisk">保存</Button>
-	        </div>
-		</Modal>
-		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}涉爆粉尘工艺`" v-model="showSbfcgyModel" @on-visible-change="sbfcgyModelChange">
-			<div>
-				<Form :model="sbfcgyForm" label-position="left" :label-width="140">
-					<FormItem label="粉尘工艺名称">
-			        	<Input clearable v-model="sbfcgyForm.sfgymc"></Input>
-			        </FormItem>
-			        <FormItem label="粉尘名称">
-			        	<Input clearable v-model="sbfcgyForm.fcmc"></Input>
-			        </FormItem>
-			        <FormItem label="粉尘类型">
-			        	<Select clearable v-model="sbfcgyForm.fclx" placeholder="请选择">
-			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="作业人数">
-			            <InputNumber :min="0" v-model="sbfcgyForm.zyrs"></InputNumber>
-			        </FormItem>
-			        <FormItem label="当前状态">
-			            <Select clearable v-model="sbfcgyForm.dqzt" placeholder="请选择">
-			                <Option v-for="item in dqztList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="除尘设施">
-			        	<Select clearable v-model="sbfcgyForm.ccss" placeholder="请选择">
-			                <Option v-for="item in ccssList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem v-if="sbfcgyForm.ccss == '有'" label="添加除尘设施">
-			        	<Button type="primary" icon="ios-add" ghost @click="openDeviceModel"></Button>
-			        </FormItem>
-				</Form>
-				<div v-show="modeType == 2">
-					<part-title text="除尘设施" :btns="['add']" @add="openRimModel"></part-title>
-				<Row type="flex" :gutter="100">
-					<Col>数量：{{deviceNum.zsl || 0}}</Col>
-					<Col>运行数量：{{deviceNum.yxsl || 0}}</Col>
-				</Row>
-				<Table v-if="sbfcgyForm.ccss == '有'" :columns="deviceColumns" :data="deviceData">
-					<template slot-scope="{ row }" slot="name">
-			            <span class="link">{{row.name}}</span>
-			        </template>
-					<template slot-scope="{ row }" slot="action">
-			            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editDeviceModel(row)">编辑</Button>
-			            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeDevice(row)">
-					        <Button type="error" size="small" ghost>删除</Button>
-					    </Poptip>
-			        </template>
-				</Table>
-				<Row type="flex" justify="end">
-					<Page
-	                    size="small"
-	                    style="margin-top: 10px"
-	                    :page-size="devicePage.pageSize"
-	                    :total="devicePage.totalRow"
-	                    show-elevator
-	                    show-total
-	                    show-sizer
-	                    @on-change="handleChangeDevicePage"
-	                    @on-page-size-change="handleChangeDevicePageSize"
-	                />
-				</Row>
-				</div>
-				
-			</div>
-			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveSbfcgy">保存</Button>
-	        </div>
-		</Modal>
-		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}除尘设施`" v-model="showDeviceModel" @on-visible-change="deviceModelChange">
-			<div>
-				<Form :model="deviceForm" label-position="left" :label-width="140">
-					<FormItem label="除尘设施名称">
-			        	<Input clearable v-model="deviceForm.ccssmc"></Input>
-			        </FormItem>
-			        <FormItem label="类型">
-			        	<Select clearable v-model="deviceForm.lx" placeholder="请选择">
-			                <Option v-for="item in lxList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="投用时间">
-			            <DatePicker type="date" v-model="deviceForm.tysj"  placeholder="请选择"></DatePicker>
-			        </FormItem>
-			        <FormItem label="运行状态">
-			            <Select clearable v-model="deviceForm.yxzt" placeholder="请选择">
-			                <Option v-for="item in dqztList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveDevice">保存</Button>
-	        </div>
-		</Modal>
-		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}重点监管危险工艺`" v-model="showMainRiskModel">
-			<div>
-				<Form :model="mainRiskForm" label-position="left" :label-width="140">
-					<FormItem label="工艺名称">
-			        	<Input clearable v-model="mainRiskForm.name"></Input>
-			        </FormItem>
-			        <FormItem label="危险工艺类型">
-			        	<Select clearable v-model="mainRiskForm.name" placeholder="请选择">
-			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="工艺操作人数">
-			            <InputNumber :min="0" v-model="mainRiskForm.num"></InputNumber>
-			        </FormItem>
-			        <FormItem label="自控系统">
-			            <Select clearable v-model="mainRiskForm.name" placeholder="请选择">
-			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
+				<Form :model="clxxctForm" ref="clxxct" :rules="clxxctRules" hide-required-mark label-position="left" :label-width="140">
+					<FormItem label="车辆类型" prop="cllx">
+			        	<Select readonly v-model="clxxctForm.cllx">
+			                <Option v-for="item in cllxList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
 			        </FormItem>	
-			        <FormItem label="安全系统">
-			            <Select clearable v-model="mainRiskForm.name" placeholder="请选择">
-			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
+					<FormItem label="载客人数" prop="zkrs">
+			        	<InputNumber :min="0" v-model="clxxctForm.zkrs"></InputNumber>
+			        </FormItem>	
+			        <FormItem label="车辆技术等级" prop="cljsdj">
+			        	<Select v-model="clxxctForm.cljsdj">
+			                <Option v-for="item in cljsdjList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
+			        </FormItem>	
+			        <FormItem label="车辆投用时间" prop="cltysj">
+			            <DatePicker type="date" v-model="clxxctForm.cltysj"  placeholder="请选择"></DatePicker>
+			        </FormItem>
+			        <FormItem label="填报时间" prop="tbsj">
+			            <DatePicker type="date" v-model="clxxctForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveMainRisk">保存</Button>
+	            <!-- <Button type="text" size="large" @click="showClxxctModel = false">取消</Button> -->
+		        <Button type="primary" size="large" :loading="clxxctLoading" @click="saveClxxct">保存</Button>
 	        </div>
 		</Modal>
-		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}周边情况`" v-model="showRimModel">
+		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}线路信息`" v-model="showXlxxModel"  @on-visible-change="xlxxModelChange">
 			<div>
-				<Form :model="rimForm" label-position="left" :label-width="140">
-					<FormItem label="敏感目标名称">
-			        	<Input clearable v-model="rimForm.name"></Input>
+				<Form :model="xlxxForm" ref="xlxx" :rules="xlxxRules" hide-required-mark label-position="left" :label-width="140">
+			        <FormItem label="线路名称">
+			        	<Row type="flex" :gutter="20">
+			        		<Col :span="12">
+				        		<FormItem prop="xlqd">
+				        			<Input clearable v-model="xlxxForm.xlqd"  placeholder="起点"></Input>
+				        		</FormItem>
+			        		</Col>
+			        		<Col :span="12">
+				        		<FormItem prop="xlzd">
+				        			<Input clearable v-model="xlxxForm.xlzd"  placeholder="终点"></Input>
+				        		</FormItem>
+			        		</Col>
+			        	</Row>
 			        </FormItem>
-			        <FormItem label="方位">
-			        	<Select clearable v-model="rimForm.name" placeholder="请选择">
-			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
+			        <FormItem label="线路类型" prop="xllx">
+			        	<Select clearable v-model="xlxxForm.xllx">
+			                <Option v-for="item in xllxList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
 			        </FormItem>
-			        <FormItem label="目标类型">
-			            <Select clearable v-model="rimForm.name" placeholder="请选择">
-			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="目标距离(m)">
-			        	<InputNumber :min="0" v-model="rimForm.num"></InputNumber>
+			        <FormItem label="运行时长（小时）" prop="yxszxs">
+			        	<InputNumber :min="0" v-model="xlxxForm.yxszxs"></InputNumber>
 			        </FormItem>	
-			        <FormItem label="人员数量">
-			        	<InputNumber :min="0" v-model="rimForm.num"></InputNumber>
+			        <FormItem label="线路地质灾害情况" prop="xldzzhqk">
+			        	<Select clearable multiple v-model="xlxxForm.xldzzhqk">
+			                <Option v-for="item in xldzzhqkList" :key="item" :value="item">{{item}}</Option>
+			            </Select>
 			        </FormItem>
-			        <FormItem label="地图">
-			            <Button type="primary" ghost>编辑</Button>
+			        <FormItem label="线路交通组成" prop="xljtzc">
+			        	<Select clearable multiple v-model="xlxxForm.xljtzc">
+			                <Option v-for="item in xljtzcList" :key="item" :value="item">{{item}}</Option>
+			            </Select>
+			        </FormItem>
+					<FormItem label="填报时间" prop="tbsj">
+			            <DatePicker type="date" v-model="xlxxForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveMainRisk">保存</Button>
+		        <Button type="primary" size="large" :loading="xlxxLoading" @click="saveXlxx">保存</Button>
+	        </div>
+		</Modal>
+		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}运营状况`" v-model="showYyqkModel"  @on-visible-change="yyqkModelChange">
+			<div>
+				<Form :model="yyqkForm" ref="yyqk" :rules="yyqkRules" hide-required-mark label-position="left" :label-width="140">
+			        <FormItem label="近5日日平均发客量" prop="jwrpjfkl">
+			        	<InputNumber :min="0" v-model="yyqkForm.jwrpjfkl"></InputNumber>
+			        </FormItem>
+					<FormItem label="填报时间" prop="tbsj">
+			            <DatePicker type="date" v-model="yyqkForm.tbsj"  placeholder="请选择"></DatePicker>
+			        </FormItem>
+				</Form>
+			</div>
+			<div slot="footer">
+	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
+		        <Button type="primary" size="large" :loading="yyqkLoading" @click="saveYyqk">保存</Button>
 	        </div>
 		</Modal>
 	</div>
@@ -591,6 +212,8 @@
 <script>
 	import api from '@/api/api'
 	import partTitle from '@/components/title'
+	import lng from '../../components/lng'
+	import qyfw from '../../components/qyfw'
 	import tablejs from '@/common/js/table'
 	import areajs from '@/common/js/area'
 	import industryjs from '@/common/js/industry'
@@ -600,56 +223,36 @@
 	export default {
 		name: '',
 		mixins: [tablejs, areajs, industryjs, lngjs, datePickerjs],
-		components: { partTitle },
+		components: { partTitle, lng, qyfw },
 		data() {
 			return {
 				id: '',
 				gkdx_id: this.$storage.get('userInfo').gkdx_id,
+				zaqId: '',
+				gdtrq_id: '',	
+				ccss_id: '',
 				loading: true,
 				step: 2,	
 				showAreaModel: false,
 				showLngModel: false,
-				showWhModel: false,
-				showWhRiskModel: false,
-				showSbfcgyModel: false,
-				showDeviceModel: false,
-				showMainRiskModel: false,
-				showRimModel: false,
+				showClxxctModel: false,
+				showXlxxModel: false,
+				showYyqkModel: false,
+				clxxctLoading: false,
+				xlxxLoading: false,
+				yyqkLoading: false,
 				modeType: '',
+				modeType2: '',
 				map: null,
 				polygonTool: null,
 				baseInfo: {
-					qymc: '企业名称',
-					tyshxydm: '',
-					zcdz: '',
-					status: '',
-					sfzgyyq: '',
-					yqmc: '',
-					zgrs: 0,
-					glrysl: 0,
-					hyml: [],
-					hydm: '',
-					aqscbzh: '',
-					qyjbjk: '',
-					yxzt: ''
+					sjdcgd: 0,
+					sjdctfl: 0
 				},
-				addressInfo: {
-					scdz: '',
-					lngAndLat: '',
-					qyfw: '',
-					zdmj: 0,
-					jzmj: 0,
-				},
-				contactInfo: {
-					jbr: '',
-					jbrdh: '',
-					jbryx: '',
-					qyfzr: '',
-					qyfzrdh: '',
-					fgaqfzr: '',
-					fgaqfzrdh: ''
-				},
-				yxztList: ['生产', '停工', '改造', '搬迁'],
+				sdxsList: ['单向交通', '双向交通', '人车混行'],
+				sdcdList: ['特长隧道', '长隧道', '中长隧道', '短隧道'],
+				jxxsList: ['毗邻隧道', '连续隧道', '桥隧相接', '坡路隧道相连（上坡）', '坡路隧道相连（下坡）'],
+				sdyhdjList: ['一类', '二类', '三类', '四类', '五类', '未评定'],
 				sfzgyyqList: [
 					{
 						value: 0,
@@ -675,244 +278,150 @@
 					}
 				],
 				areaList: [],
-				whColumns: [
+				clxxctColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.clxxctPage.pageIndex- 1) * this.clxxctPage.pageSize + 1);
+				        },
                     }, {
-                        title: '化学品名称',
-                        key: 'hxpm',
+                        title: '车辆类型',
+                        key: 'cllx',
+                        minWidth: 100,
                     }, {
-                        title: 'CAS号',
-                        key: 'cas',
+                        title: '载客人数',
+                        key: 'zkrs',
+                        minWidth: 100,
                     }, {
-                        title: '是否重点监管',
-                        slot: 'sfzdjg',
+                        title: '车辆技术等级',
+                        key: 'cljsdj',
+                        minWidth: 120,
                     }, {
-                        title: '是否爆炸品',
-                        slot: 'sfbzp',
+                        title: '车辆投用时间',
+                        key: 'cltysj',
+                        minWidth: 120,
                     }, {
-                        title: '火灾风险等级',
-                        key: 'hzwxxdj',
-                    }, {
-                        title: 'MSDS',
-                        key: 'msds',
+                        title: '填报时间',
+                        key: 'tbsj',
+                        minWidth: 100,
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
 				],
-				whData: [],
-				whForm: {
-					hxpm: '',
-					bm: '',
-					cas: '',
-					sfzdjg: '',
-					sfbzp: '',
-					sfjdhxp: '',
-					hzwxxdj: '',
-					hxpzt: '',
-					msds: '',
-					nzzl: 0,
-					nzzldw: '',
-					zdccl: 0,
-					zdccldw: '',
+				clxxctData: [],
+				clxxctForm: {
+					cllx: '',
+					zkrs: 0,
+					cljsdj: '',
+					cltysj: '',
+					tbsj: '',
 				},
-				whPage: {
+				cllxList: ['大型', '中型', '小型'],
+				cljsdjList: ['一级', '二级', '三级'],
+				clxxctPage: {
 					pageSize: 10,
 					pageIndex: 1,
 					totalRow: 0
 				},
-				hzwxxdjList: ['甲', '乙', '丙', '丁', '戊'],
-				hxpztList: ['气体', '液化气体', '液体', '固体'],
-				nzzldwList: ['吨', '立方', 'KG', 'L'],
-				whRiskColumns: [
+				clslhj: 0,
+				xlxxColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.xlxxPage.pageIndex- 1) * this.xlxxPage.pageSize + 1);
+				        }
                     }, {
-                        title: '重大危险源单元名称',
-                        key: 'zdwxydymc',
+                        title: '线路名称',
+                        key: 'xlmc',
+                        minWidth: 100
                     }, {
-                        title: '重大危险源等级',
-                        key: 'zdwxydj',
+                        title: '线路类型',
+                        key: 'xllx',
+                        minWidth: 100
                     }, {
-                        title: '危险化学品',
-                        key: 'wxhxp',
+                        title: '运行时长（小时）',
+                        key: 'yxszxs',
+                        minWidth: 160
                     }, {
-                        title: '投用时间',
-                        key: 'tysj',
+                        title: '线路地质灾害情况',
+                        key: 'xldzzhqk',
+                        minWidth: 160
                     }, {
-                        title: '当前状态',
-                        key: 'dqzt',
+                        title: '线路交通组成',
+                        key: 'xljtzc',
+                        minWidth: 120
+                    }, {
+                        title: '填报时间',
+                        key: 'tbsj',
+                        minWidth: 100,
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
 				],
-				whRiskData: [],
-				whRiskForm: {
-					zdwxydymc: '',
-					zdwxydj: '',
-					wxhxp: '',
-					tysj: '',
-					dqzt: ''
+				xlxxData: [],
+				xlxxForm: {
+					xlqd: '',
+					xlzd: '',
+					xllx: '',
+					yxszxs: 0,
+					xldzzhqk: [],
+					xljtzc: [],
+					tbsj: ''
 				},
-				dqztList: ['运行', '停运', '检修'],
-				whRiskPage: {
+				xllxList: ['一类', '二类', '三类', '四类客运班线', '旅游客车'],
+				xldzzhqkList: ['地震活动频繁区', '滑坡', '泥石流', '塌方', '临水区域'],
+				xljtzcList: ['高速公路', '国省道路', '普通公路'],
+				xlxxPage: {
 					pageSize: 10,
 					pageIndex: 1,
 					totalRow: 0
 				},
-				sbfcgyColumns: [
+				xlsl: 0,
+				yyqkColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.yyqkPage.pageIndex- 1) * this.yyqkPage.pageSize + 1);
+				        }
                     }, {
-                        title: '涉粉工艺名称',
-                        key: 'sfgymc',
+                        title: '近5日日平均发客量',
+                        key: 'jwrpjfkl',
+                        minWidth: 170
                     }, {
-                        title: '粉尘名称',
-                        key: 'fcmc',
-                    }, {
-                        title: '粉尘类型',
-                        key: 'fclx',
-                    }, {
-                        title: '作业人数',
-                        key: 'zyrs',
-                    }, {
-                        title: '当前状态',
-                        key: 'dqzt',
+                        title: '填报时间',
+                        key: 'tbsj',
+                        minWidth: 80
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
 				],
-				sbfcgyData: [],
-				sbfcgyForm: {
-					sfgymc: '',
-					fcmc: '',
-					fclx: '',
-					zyrs: 0,
-					ccss: '',
-					dqzt: ''
+				yyqkData: [],
+				yyqkForm: {
+					jwrpjfkl: 0,
+					tbsj: ''
 				},
-				ccssList: ['有', '无'],
-				sbfcgyPage: {
-					pageSize: 10,
-					pageIndex: 1,
-					totalRow: 0
-				},
-				sbfcgyNum: {
-					gysl: 0,
-					zyzrs: 0
-				},
-				deviceColumns: [
-					{
-                        title: '序号',
-                        type: 'index',
-                    }, {
-                        title: '除尘设施名称',
-                        key: 'ccssmc',
-                    }, {
-                        title: '类型',
-                        key: 'lx',
-                    }, {
-                        title: '投用时间',
-                        key: 'tysj',
-                    }, {
-                        title: '运行状态',
-                        key: 'yxzt',
-                    },{
-                        title: '操作',
-                        width: 150,
-                        slot: 'action',
-                    }, 
-				],
-				deviceData: [],
-				deviceForm: {
-					sbfcgy_id: '',
-					ccssmc: '',
-					lx: '',
-					tysj: '',
-					yxzt: ''
-				},
-				lxList: ['湿式除尘', '干法布袋式除尘', '静电除尘', '旋风除尘', '其他'],
-				devicePage: {
-					pageSize: 10,
-					pageIndex: 1,
-					totalRow: 0
-				},
-				deviceNum: {
-					zsl: 0,
-					yxsl: 0
-				},
-				mainRiskColumns: [
-					{
-                        title: '序号',
-                        type: 'index',
-                    }, {
-                        title: '工艺名称',
-                        slot: 'gymc',
-                    }, {
-                        title: '危险工艺类型',
-                        key: 'wxgylx',
-                    }, {
-                        title: '工艺操作人数',
-                        key: 'sjczrs',
-                    },{
-                        title: '操作',
-                        width: 150,
-                        slot: 'action',
-                    }, 
-				],
-				mainRiskData: [],
-				mainRiskForm: {
-					num: 0,
-					name: '',
-				},
-				mainRiskPage: {
-					pageSize: 10,
-					pageIndex: 1,
-					totalRow: 0
-				},
-				rimColumns: [
-					{
-                        title: '序号',
-                        type: 'index',
-                    }, {
-                        title: '敏感目标名称',
-                        slot: 'name',
-                    }, {
-                        title: '方位',
-                        key: 'cas',
-                    }, {
-                        title: '目标类型',
-                        key: 'cas',
-                    }, {
-                        title: '人员数量',
-                        key: 'cas',
-                    },{
-                        title: '操作',
-                        width: 150,
-                        slot: 'action',
-                    }, 
-				],
-				rimData: [
-					{	
-						name: 'hahaha',
-						cas: 1111,
-						color: 'red'
-					}
-				],
-				rimForm: {
-					num: 0,
-					name: '',
-				},
-				rimPage: {
+				yyqkPage: {
 					pageSize: 10,
 					pageIndex: 1,
 					totalRow: 0
@@ -924,63 +433,69 @@
 
 		},
 		computed: {
-
+			clxxctRules() {
+				return {
+					cllx: [{ required: true, message: '请选择', trigger: 'change' }],
+					zkrs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					cljsdj: [{ required: true, message: '请选择', trigger: 'change' }],
+					cltysj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
+			xlxxRules() {
+				return {
+					xlqd: [{ required: true, message: '请输入', trigger: 'change' }],
+					xlzd: [{ required: true, message: '请输入', trigger: 'change' }],
+					yxszxs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					xllx: [{ required: true, message: '请选择', trigger: 'change' }],
+					xldzzhqk: [{ required: true, type: 'array', message: '请输入', trigger: 'change' }],
+					xljtzc: [{ required: true, type: 'array', message: '请输入', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
+			yyqkRules() {
+				return {
+					jwrpjfkl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
-			getBaseInfo() {
+			async getBaseInfo() {
 				this.loading = true
-				let whParams = {
+				let clxxctParams = {
 					gkdx_id: this.gkdx_id,
-					per_page: this.whPage.pageSize,
-					page: this.whPage.pageIndex,
+					per_page: this.clxxctPage.pageSize,
+					page: this.clxxctPage.pageIndex,
 				}
-				let whRiskParams = {
+				let xlxxParams = {
 					gkdx_id: this.gkdx_id,
-					per_page: this.whRiskPage.pageSize,
-					page: this.whRiskPage.pageIndex,
+					per_page: this.xlxxPage.pageSize,
+					page: this.xlxxPage.pageIndex,
 				}
-				let sbfcgyParams = {
+				let yyqkParams = {
 					gkdx_id: this.gkdx_id,
-					per_page: this.sbfcgyPage.pageSize,
-					page: this.sbfcgyPage.pageIndex,
+					per_page: this.yyqkPage.pageSize,
+					page: this.yyqkPage.pageIndex,
 				}
-				let mainRiskParams = {
-					gkdx_id: this.gkdx_id,
-					per_page: this.mainRiskPage.pageSize,
-					page: this.mainRiskPage.pageIndex,
-				}
-				let rimParams = {
-					gkdx_id: this.gkdx_id,
-					per_page: this.rimPage.pageSize,
-					page: this.rimPage.pageIndex,
-				}
-				Promise.all([api.getWhsbfcList(whParams), api.getWhRiskList(whRiskParams), api.getSbfcgyList(sbfcgyParams), api.getMainRiskList(mainRiskParams), api.getRimList(rimParams)]).then((result) => {
-				  	let whRes = result[0], whRiskRes = result[1], sbfcgyRes = result[2], mainRiskRes = result[3], rimRes = result[3]
-				  	if(whRes.status_code == 200) {
-				  		this.whData = whRes.data.data
-				  		this.whPage.totalRow = whRes.data.total
+				Promise.all([api.getClxxctList(clxxctParams), api.getXlxxList(xlxxParams), api.getYyqkList(xlxxParams)]).then((result) => {
+				  	let clxxctRes = result[0], xlxxRes = result[1], yyqkRes = result[2]
+				  	if(clxxctRes.status_code == 200) {
+				  		this.clxxctData = clxxctRes.data.data
+				  		this.clslhj = clxxctRes.clslhj || 0
+				  		this.clxxctPage.totalRow = clxxctRes.data.total
 				  	}
-				  	if(whRiskRes.status_code == 200) {
-				  		this.whRiskData = whRiskRes.data.data
-				  		this.whRiskPage.totalRow = whRiskRes.data.total
+				  	if(xlxxRes.status_code == 200) {
+				  		this.xlxxData = xlxxRes.data.data
+				  		this.xlsl = xlxxRes.xlsl || 0
+				  		this.xlxxPage.totalRow = xlxxRes.data.total
 				  	}
-				  	if(sbfcgyRes.status_code == 200) {
-				  		this.sbfcgyData = sbfcgyRes.data.data
-				  		this.sbfcgyPage.totalRow = sbfcgyRes.data.total
-				  		let { gysl, zyzrs } = sbfcgyRes
-				  		this.sbfcgyNum = { gysl, zyzrs }
-				  	}
-				  	if(mainRiskRes.status_code == 200) {
-				  		this.mainRiskData = mainRiskRes.data.data
-				  		this.mainRiskPage.totalRow = mainRiskRes.data.total
-				  	}
-				  	if(rimRes.status_code == 200) {
-				  		this.rimData = rimRes.data.data
-				  		this.rimPage.totalRow = rimRes.data.total
+				  	if(yyqkRes.status_code == 200) {
+				  		this.yyqkData = yyqkRes.data.data
+				  		this.yyqkPage.totalRow = yyqkRes.data.total
 				  	}
 				  	this.loading = false   
 				}).catch((error) => {
-				  	console.log(error)
 				  	this.loading = false
 				})
 			},
@@ -1006,79 +521,27 @@
 					}else {
 						this.$router.replace('/baseInfo')
 					}
-					// this.loading = true
-					// window.scrollTo(0, 0)
-					// this.step++
-					// if(this.$route.query.type == 2) {
-					// 	this.gkdx_id = this.form.gkdx_id
-					// }else {
-					// 	let { status_code, data } = await api.getSbfcBase()
-					// 	if(status_code == 200) {
-					// 		this.gkdx_id = data.data[0].gkdx_id
-					// 	}
-					// }
-					// let whParams = {
-					// 	gkdx_id: this.gkdx_id,
-					// 	per_page: this.whPage.pageSize,
-					// 	page: this.whPage.pageIndex,
-					// }
-					// let whRiskParams = {
-					// 	gkdx_id: this.gkdx_id,
-					// 	per_page: this.whRiskPage.pageSize,
-					// 	page: this.whRiskPage.pageIndex,
-					// }
-					// let sbfcgyParams = {
-					// 	gkdx_id: this.gkdx_id,
-					// 	per_page: this.sbfcgyPage.pageSize,
-					// 	page: this.sbfcgyPage.pageIndex,
-					// }
-					// let mainRiskParams = {
-					// 	gkdx_id: this.gkdx_id,
-					// 	per_page: this.mainRiskPage.pageSize,
-					// 	page: this.mainRiskPage.pageIndex,
-					// }
-					// let rimParams = {
-					// 	gkdx_id: this.gkdx_id,
-					// 	per_page: this.rimPage.pageSize,
-					// 	page: this.rimPage.pageIndex,
-					// }
-					// Promise.all([api.getWhsbfcList(whParams), api.getWhRiskList(whRiskParams), api.getSbfcgyList(sbfcgyParams), api.getMainRiskList(mainRiskParams), api.getRimList(rimParams)]).then((result) => {
-					//   	let whRes = result[0], whRiskRes = result[1], sbfcgyRes = result[2], mainRiskRes = result[3], rimRes = result[3]
-					//   	if(whRes.status_code == 200) {
-					//   		this.whData = whRes.data.data
-					//   		this.whPage.totalRow = whRes.data.total
-					//   	}
-					//   	if(whRiskRes.status_code == 200) {
-					//   		this.whRiskData = whRiskRes.data.data
-					//   		this.whRiskPage.totalRow = whRiskRes.data.total
-					//   	}
-					//   	if(sbfcgyRes.status_code == 200) {
-					//   		this.sbfcgyData = sbfcgyRes.data.data
-					//   		this.sbfcgyPage.totalRow = sbfcgyRes.data.total
-					//   		let { gysl, zyzrs } = sbfcgyRes
-					//   		this.sbfcgyNum = { gysl, zyzrs }
-					//   	}
-					//   	if(mainRiskRes.status_code == 200) {
-					//   		this.mainRiskData = mainRiskRes.data.data
-					//   		this.mainRiskPage.totalRow = mainRiskRes.data.total
-					//   	}
-					//   	if(rimRes.status_code == 200) {
-					//   		this.rimData = rimRes.data.data
-					//   		this.rimPage.totalRow = rimRes.data.total
-					//   	}
-					//   	this.loading = false   
-					// }).catch((error) => {
-					//   	console.log(error)
-					//   	this.loading = false
-					// })
 				}
 			},
-			saveInfo() {
-				this.$Message.success('保存成功')
-				if(this.$route.query.type == 2) {
-					this.$router.back()
-				}else {
-					this.$router.replace('/baseInfo')
+			async saveInfo1() {
+				let params = {
+					gkdx_id: this.gkdx_id,
+					sjdcgd: this.baseInfo.sjdcgd,
+					sjdctfl: this.baseInfo.sjdctfl,
+				}
+				let { status_code, message } = await api.addSkdbBase(params);
+				if(status_code == 200) {
+					this.$Message.success('保存成功')
+				}
+			},
+			async saveInfo2() {
+				let params = {
+					gkdx_id: this.gkdx_id,
+					fjs: this.baseInfo.fjs,
+				}
+				let { status_code, message } = await api.addSkdbBase(params);
+				if(status_code == 200) {
+					this.$Message.success('保存成功')
 				}
 			},
 			openAreaModal() {	
@@ -1137,443 +600,269 @@
 				this.polygonTool = null;
 				this.showAreaModel = false
 			},
-			handleChangeWhPage(val) {
-				this.whPage.pageIndex = val
-				this.getWhsbfcList()
-			},
-			handleChangeWhPageSize(val) {
-				this.whPage.pageSize = val
-				this.getWhsbfcList()
-			},
-			async getWhsbfcList() {
+			async getClxxctList_() {
 				let params = {
 					gkdx_id: this.gkdx_id,
-					per_page: this.whPage.pageSize,
-					page: this.whPage.pageIndex,
+					per_page: 1000,
+					page: this.clxxctPage.pageIndex,
 				}
-				let { status_code, data } = await api.getWhsbfcList(params)
+				let { status_code, data } = await api.getClxxctList(params)
 				if(status_code == 200) {
-					this.whData = data.data
-					this.whPage.totalRow = data.total
+					this.clxxctList = data.data
 				}
 			},
-			openWhModel() {
-				this.modeType = 1;
-				this.showWhModel = true
+			handleChangeClxxctPage(val) {
+				this.clxxctPage.pageIndex = val
+				this.getClxxctList()
 			},
-			editWhModel(row) {
-				this.whForm = {
-					hxpm: row.hxpm,
-					bm: row.bm,
-					cas: row.cas,
-					sfzdjg: row.sfzdjg,
-					sfbzp: row.sfbzp,
-					sfjdhxp: row.sfjdhxp,
-					hzwxxdj: row.hzwxxdj,
-					hxpzt: row.hxpzt,
-					msds: row.msds,
-					nzzl: row.nzzl,
-					nzzldw: row.nzzldw,
-					zdccl: row.zdccl,
-					zdccldw: row.zdccldw,
+			handleChangeClxxctPageSize(val) {
+				this.clxxctPage.pageSize = val
+				this.getClxxctList()
+			},
+			async getClxxctList() {
+				let params = {
+					gkdx_id: this.gkdx_id,
+					per_page: this.clxxctPage.pageSize,
+					page: this.clxxctPage.pageIndex,
+				}
+				let res = await api.getClxxctList(params)
+				let { status_code, data } = res
+				if(status_code == 200) {
+					this.clxxctData = data.data
+					this.clslhj = res.clslhj || 0
+					this.clxxctPage.totalRow = data.total
+				}
+			},
+			openClxxctModel() {
+				this.modeType = 1;
+				this.showClxxctModel = true
+			},
+			editClxxctModel(row) {
+				this.clxxctForm = {
+					cllx: row.cllx,
+					zkrs: row.zkrs ? Number(row.zkrs) : 0,
+					cljsdj: row.cljsdj,
+					cltysj: row.cltysj ? new Date(row.cltysj) : '',
+					tbsj: row.tbsj ? new Date(row.tbsj) : '',
 				}
 				this.id = row.id
 				this.modeType = 2;
-				this.showWhModel = true
+				this.showClxxctModel = true
 			},
-			whModelChange(status) {
+			clxxctModelChange(status) {
 				if(!status) {
-					this.whForm = {
-						hxpm: '',
-						bm: '',
-						cas: '',
-						sfzdjg: '',
-						sfbzp: '',
-						sfjdhxp: '',
-						hzwxxdj: '',
-						hxpzt: '',
-						msds: '',
-						nzzl: 0,
-						nzzldw: '',
-						zdccl: 0,
-						zdccldw: '',
-					}
+					this.$nextTick(() => {
+						this.clxxctForm = {
+							cllx: '',
+							zkrs: 0,
+							cljsdj: '',
+							cltysj: '',
+							tbsj: '',
+						}
+						this.$refs.clxxct.resetFields();
+					})
 				}
 			},
-			async removeWh(row) {
-				let { status_code } = await api.deleteWhsbfcInfo(row.id)
+			async removeClxxct(row) {
+				let { status_code } = await api.deleteClxxctInfo(row.id)
 				status_code == 200 && this.$Message.success('删除成功')
-				this.getWhsbfcList()
+				this.getClxxctList()
 			},
-			async saveWh() {
-				let params = {
-					...this.whForm,
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addWhsbfcInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showWhModel = false
-					this.getWhsbfcList()
-				}
+			async saveClxxct() {
+				this.$refs.clxxct.validate(async valid => {
+                    if (valid) {
+                    	this.clxxctLoading = true
+						let params = {
+							...this.clxxctForm,
+							cltysj: this.clxxctForm.cltysj ? getDate(new Date(this.clxxctForm.cltysj).getTime(), 'year') : '',
+							tbsj: this.clxxctForm.tbsj ? getDate(new Date(this.clxxctForm.tbsj).getTime(), 'year') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addClxxctInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showClxxctModel = false
+							this.getClxxctList()
+						}
+                    	this.clxxctLoading = false
+                    }
+                })
 			},
-			handleChangeWhRiskPage(val) {
-				this.whRiskPage.pageIndex = val
-				this.getWhRiskList()
+			handleChangeXlxxPage(val) {
+				this.xlxxPage.pageIndex = val
+				this.getXlxxList()
 			},
-			handleChangeWhRiskPageSize(val) {
-				this.whRiskPage.pageSize = val
-				this.getWhRiskList()
+			handleChangeXlxxPageSize(val) {
+				this.xlxxPage.pageSize = val
+				this.getXlxxList()
 			},
-			async getWhRiskList() {
+			async getXlxxList() {
 				let params = {
 					gkdx_id: this.gkdx_id,
-					per_page: this.whRiskPage.pageSize,
-					page: this.whRiskPage.pageIndex,
+					per_page: this.xlxxPage.pageSize,
+					page: this.xlxxPage.pageIndex,
 				}
-				let { status_code, data } = await api.getWhRiskList(params)
+				let res = await api.getXlxxList(params)
+				let { status_code, data } = res
 				if(status_code == 200) {
-					this.whRiskData = data.data
-					this.whRiskPage.totalRow = data.total
+					this.xlxxData = data.data
+					this.xlsl = res.xlsl || 0
+					this.xlxxPage.totalRow = data.total
 				}
 			},
-			openWhRiskModel() {
+			openXlxxModel() {
 				this.modeType = 1;
-				this.showWhRiskModel = true
+				this.showXlxxModel = true
 			},
-			editWhRiskModel(row) {
-				this.whRiskForm = {
-					zdwxydymc: row.zdwxydymc,
-					zdwxydj: row.zdwxydj,
-					wxhxp: row.wxhxp,
-					tysj: row.tysj ? new Date(row.tysj) : '',
-					dqzt: row.dqzt,
+			editXlxxModel(row) {
+				this.xlxxForm = {
+					xlqd: row.xlmc ? row.xlmc.split('-')[0] : '',
+					xlzd: row.xlmc ? row.xlmc.split('-')[1] : '',
+					xllx: row.xllx,
+					yxszxs: row.yxszxs ? Number(row.yxszxs) : 0,
+					xldzzhqk: row.xldzzhqk ? row.xldzzhqk.split(',') : [],
+					xljtzc: row.xljtzc ? row.xljtzc.split(',') : [],
+					tbsj: row.tbsj ? new Date(row.tbsj) : '',
 				}
 				this.id = row.id
 				this.modeType = 2;
-				this.showWhRiskModel = true
+				this.showXlxxModel = true
 			},
-			whRiskModelChange(status) {
+			xlxxModelChange(status) {
 				if(!status) {
-					this.whRiskForm = {
-						zdwxydymc: '',
-						zdwxydj: '',
-						wxhxp: '',
-						tysj: '',
-						dqzt: ''
-					}
+					this.$nextTick(() => {
+						this.xlxxForm = {
+							xlqd: '',
+							xlzd: '',
+							xllx: '',
+							yxszxs: 0,
+							xldzzhqk: [],
+							xljtzc: [],
+							tbsj: ''
+						}
+						this.$refs.xlxx.resetFields();
+					})
 				}
 			},
-			async removeWhRisk(row) {
-				let { status_code } = await api.deleteWhRiskInfo(row.id)
+			async removeXlxx(row) {
+				let { status_code } = await api.deleteXlxxInfo(row.id)
 				status_code == 200 && this.$Message.success('删除成功')
-				this.getWhRiskList()
+				this.getXlxxList()
 			},
-			async saveWhRisk() {
-				let params = {
-					...this.whRiskForm,
-					tysj: this.whRiskForm.tysj ? getDate(new Date(this.whRiskForm.tysj).getTime(), 'date') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addWhRiskInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showWhRiskModel = false
-					this.getWhRiskList()
-				}
+			async saveXlxx() {
+				this.$refs.xlxx.validate(async valid => {
+                    if (valid) {
+                    	this.xlxxLoading = true
+						let params = {
+							...this.xlxxForm,
+							xlmc: `${this.xlxxForm.xlqd}-${this.xlxxForm.xlzd}`,
+							xldzzhqk: this.xlxxForm.xldzzhqk.join(','),
+							xljtzc: this.xlxxForm.xljtzc.join(','),
+							tbsj: this.xlxxForm.tbsj ? getDate(new Date(this.xlxxForm.tbsj).getTime(), 'year') : '',
+							gkdx_id: this.gkdx_id
+						}
+						delete params.lngAndLat
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addXlxxInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showXlxxModel = false
+							this.getXlxxList()
+						}
+                    	this.xlxxLoading = false
+                    }
+                })
 			},
-			handleChangeSbfcgyPage(val) {
-				this.sbfcgyPage.pageIndex = val
-				this.getSbfcgyList()
+			handleChangeYyqkPage(val) {
+				this.yyqkPage.pageIndex = val
+				this.getYyqkList()
 			},
-			handleChangeSbfcgyPageSize(val) {
-				this.sbfcgyPage.pageSize = val
-				this.getSbfcgyList()
+			handleChangeYyqkPageSize(val) {
+				this.yyqkPage.pageSize = val
+				this.getYyqkList()
 			},
-			async getSbfcgyList() {
+			async getYyqkList() {
 				let params = {
 					gkdx_id: this.gkdx_id,
-					per_page: this.sbfcgyPage.pageSize,
-					page: this.sbfcgyPage.pageIndex,
+					per_page: this.yyqkPage.pageSize,
+					page: this.yyqkPage.pageIndex,
 				}
-				let { status_code, data } = await api.getSbfcgyList(params)
+				let { status_code, data } = await api.getYyqkList(params)
 				if(status_code == 200) {
-					this.sbfcgyData = data.data
-					this.sbfcgyPage.totalRow = data.total
+					this.yyqkData = data.data.filter(item => item.gkdx_id == this.gkdx_id)
+					this.yyqkPage.totalRow = data.total
 				}
 			},
-			openSbfcgyModel() {
+			openYyqkModel() {
 				this.modeType = 1;
-				this.showSbfcgyModel = true
+				this.showYyqkModel = true
 			},
-			editSbfcgyModel(row) {
-				this.sbfcgyForm = {
-					sfgymc: row.sfgymc,
-					fcmc: row.fcmc,
-					fclx: row.fclx,
-					zyrs: row.zyrs,
-					ccss: row.ccss,
-					dqzt: row.dqzt
+			editYyqkModel(row) {
+				this.yyqkForm = {
+					jwrpjfkl: row.jwrpjfkl ? Number(row.jwrpjfkl) : 0,
+					tbsj: row.tbsj ? new Date(row.tbsj) : '',
 				}
 				this.id = row.id
 				this.modeType = 2;
-				this.showSbfcgyModel = true
+				this.showYyqkModel = true
 			},
-			sbfcgyModelChange(status) {
+			yyqkModelChange(status) {
 				if(!status) {
-					this.sbfcgyForm = {
-						sfgymc: '',
-						fcmc: '',
-						fclx: '',
-						zyrs: 0,
-						ccss: '',
-						dqzt: ''
-					}
+					this.$nextTick(() => {
+						this.yyqkForm = {
+							jwrpjfkl: 0,
+							tbsj: ''
+						}
+						this.$refs.yyqk.resetFields();
+					})
 				}
 			},
-			async removeSbfcgy(row) {
-				let { status_code } = await api.deleteSbfcgyInfo(row.id)
+			async removeYyqk(row) {
+				let { status_code } = await api.deleteYyqkInfo(row.id)
 				status_code == 200 && this.$Message.success('删除成功')
-				this.getSbfcgyList()
+				this.getYyqkList()
 			},
-			async saveSbfcgy() {
-				let params = {
-					...this.sbfcgyForm,
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addSbfcgyInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showSbfcgyModel = false
-					this.getSbfcgyList()
-				}
-			},
-			handleChangeDevicePage(val) {
-				this.devicePage.pageIndex = val
-				this.getDeviceList()
-			},
-			handleChangeDevicePageSize(val) {
-				this.devicePage.pageSize = val
-				this.getDeviceList()
-			},
-			async getDeviceList() {
-				let params = {
-					gkdx_id: this.gkdx_id,
-					per_page: this.devicePage.pageSize,
-					page: this.devicePage.pageIndex,
-				}
-				let { status_code, data } = await api.getDeviceList(params)
-				if(status_code == 200) {
-					this.deviceData = data.data
-					this.devicePage.totalRow = data.total
-				}
-			},
-			openDeviceModel() {
-				this.modeType = 1;
-				this.showDeviceModel = true
-			},
-			editDeviceModel(row) {
-				this.deviceForm = {
-					sfgymc: row.sfgymc,
-					fcmc: row.fcmc,
-					fclx: row.fclx,
-					zyrs: row.zyrs,
-					ccss: row.ccss,
-					dqzt: row.dqzt
-				}
-				this.id = row.id
-				this.modeType = 2;
-				this.showDeviceModel = true
-			},
-			deviceModelChange(status) {
-				if(!status) {
-					this.deviceForm = {
-						sfgymc: '',
-						fcmc: '',
-						fclx: '',
-						zyrs: 0,
-						ccss: '',
-						dqzt: ''
-					}
-				}
-			},
-			async saveDevice() {
-				let params = {
-					...this.deviceForm,
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addDeviceInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showDeviceModel = false
-					this.getDeviceList()
-				}
-			},
-			async removeDevice(row) {
-				let { status_code } = await api.deleteDeviceInfo(row.id)
-				status_code == 200 && this.$Message.success('删除成功')
-				this.getDeviceList()
-			},
-			handleChangeMainRiskPage(val) {
-				this.mainRiskPage.pageIndex = val
-				this.getMainRiskList()
-			},
-			handleChangeMainRiskPageSize(val) {
-				this.mainRiskPage.pageSize = val
-				this.getMainRiskList()
-			},
-			async getMainRiskList() {
-				let params = {
-					gkdx_id: this.gkdx_id,
-					per_page: this.mainRiskPage.pageSize,
-					page: this.mainRiskPage.pageIndex,
-				}
-				let { status_code, data } = await api.getMainRiskList(params)
-				if(status_code == 200) {
-					this.mainRiskData = data.data
-					this.mainRiskPage.totalRow = data.total
-				}
-			},
-			openMainRiskModel() {
-				this.modeType = 1;
-				this.showMainRiskModel = true
-			},
-			editMainRiskModel(row) {
-				this.mainRiskForm = {
-					zdwxydymc: row.zdwxydymc,
-					zdwxydj: row.zdwxydj,
-					wxhxp: row.wxhxp,
-					tysj: row.tysj ? new Date(row.tysj) : '',
-					dqzt: row.dqzt,
-				}
-				this.id = row.id
-				this.modeType = 2;
-				this.showMainRiskModel = true
-			},
-			mainRiskModelChange(status) {
-				if(!status) {
-					this.mainRiskForm = {
-						zdwxydymc: '',
-						zdwxydj: '',
-						wxhxp: '',
-						tysj: '',
-						dqzt: ''
-					}
-				}
-			},
-			async removeMainRisk(row) {
-				let { status_code } = await api.deleteMainRiskInfo(row.id)
-				status_code == 200 && this.$Message.success('删除成功')
-				this.getMainRiskList()
-			},
-			async saveMainRisk() {
-				let params = {
-					...this.mainRiskForm,
-					tysj: this.mainRiskForm.tysj ? getDate(new Date(this.mainRiskForm.tysj).getTime(), 'date') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addMainRiskInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showMainRiskModel = false
-					this.getMainRiskList()
-				}
-			},
-			handleChangeRimPage(val) {
-				this.rimPage.pageIndex = val
-				this.getRimList()
-			},
-			handleChangeRimPageSize(val) {
-				this.rimPage.pageSize = val
-				this.getRimList()
-			},
-			async getRimList() {
-				let params = {
-					gkdx_id: this.gkdx_id,
-					per_page: this.rimPage.pageSize,
-					page: this.rimPage.pageIndex,
-				}
-				let { status_code, data } = await api.getRimList(params)
-				if(status_code == 200) {
-					this.rimData = data.data
-					this.rimPage.totalRow = data.total
-				}
-			},
-			openRimModel() {
-				this.modeType = 1;
-				this.showRimModel = true
-			},
-			editRimModel(row) {
-				this.rimForm = {
-					zdwxydymc: row.zdwxydymc,
-					zdwxydj: row.zdwxydj,
-					wxhxp: row.wxhxp,
-					tysj: row.tysj ? new Date(row.tysj) : '',
-					dqzt: row.dqzt,
-				}
-				this.id = row.id
-				this.modeType = 2;
-				this.showRimModel = true
-			},
-			rimModelChange(status) {
-				if(!status) {
-					this.rimForm = {
-						zdwxydymc: '',
-						zdwxydj: '',
-						wxhxp: '',
-						tysj: '',
-						dqzt: ''
-					}
-				}
-			},
-			async removeRim(row) {
-				let { status_code } = await api.deleteRimInfo(row.id)
-				status_code == 200 && this.$Message.success('删除成功')
-				this.getRimList()
-			},
-			async saveRim() {
-				let params = {
-					...this.rimForm,
-					tysj: this.rimForm.tysj ? getDate(new Date(this.rimForm.tysj).getTime(), 'date') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addRimInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showRimModel = false
-					this.getRimList()
-				}
+			async saveYyqk() {
+				this.$refs.yyqk.validate(async valid => {
+                    if (valid) {
+                    	this.yyqkLoading = true
+						let params = {
+							...this.yyqkForm,
+							tbsj: this.yyqkForm.tbsj ? getDate(new Date(this.yyqkForm.tbsj).getTime(), 'year') : '',
+							gkdx_id: this.gkdx_id
+						}
+						delete params.lngAndLat
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addYyqkInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showYyqkModel = false
+							this.getYyqkList()
+						}
+                    	this.yyqkLoading = false
+                    }
+                })
 			},
 		},
 		created() {
 			this.getBaseInfo()
 		},
 		mounted() {
-
+			
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
 	.page {
+		height: 100%;
 		margin-bottom: 24px;
 		.line {
 			width: 100%;

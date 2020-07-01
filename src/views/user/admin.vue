@@ -2,7 +2,9 @@
 	<div class="user_container">
 		<Row type="flex" justify="space-between" align="middle">
 			<div class="title">管理员账号管理</div>
-			<Button v-if="hasAuth('guanliyuan_store')" type="primary" icon="ios-add" @click="openAdminModel"></Button>
+			<Button v-if="hasAuth('guanliyuan_store')" type="primary" @click="openAdminModel" style="width: 60px">
+				<Icon type="ios-add" size="28" />
+			</Button>
 		</Row>
 		<div v-if="hasAuth('guanliyuan')">
 			<Divider />
@@ -48,24 +50,24 @@
 	            />
 			</Row>
 		</div>
-		<Modal :title="`${modelTypeList[modeType - 1]}管理员账号`" v-model="showAdminModel" @on-visible-change="adminModelChange">
-			<Form :disabled="modeType == 3" :model="adminForm" label-position="left" :label-width="120">
-				<FormItem label="用户名">
+		<Modal width="820" :title="`${modelTypeList[modeType - 1]}管理员账号`" v-model="showAdminModel" @on-visible-change="adminModelChange">
+			<Form :disabled="modeType == 3" :model="adminForm" ref="admin" :rules="adminRules" hide-required-mark label-position="left" :label-width="120">
+				<FormItem label="用户名" prop="username">
 		        	<Input clearable v-model="adminForm.username"></Input>
 		        </FormItem>
-		        <FormItem label="密码">
-		        	<Input clearable type="password" v-model="adminForm.password"></Input>
+		        <FormItem label="密码" prop="password">
+		        	<Input autocomplete="new-password" clearable type="password" v-model="adminForm.password"></Input>
 		        </FormItem>
-		        <FormItem label="姓名">
+		        <FormItem label="姓名" prop="nickname">
 		        	<Input clearable v-model="adminForm.nickname"></Input>
 		        </FormItem>
-		        <FormItem label="邮箱">
+		        <FormItem label="邮箱" prop="email">
 		        	<Input type="email" clearable v-model="adminForm.email"></Input>
 		        </FormItem>
-		        <FormItem label="联系电话">
+		        <FormItem label="联系电话" prop="tel">
 		        	<Input clearable type="tel" v-model="adminForm.tel"></Input>
 		        </FormItem>
-		        <FormItem label="角色">
+		        <FormItem label="角色" prop="role_id">
 		        	<Select clearable v-model="adminForm.role_id" style="width: 100%">
 		                <Option v-for="item in roleData" :key="item.role_id" :value="item.role_id">{{item.role_name}}</Option>
 		            </Select>
@@ -78,7 +80,7 @@
 		            	:data="areaList" 
 		            	:load-data="loadArea"></Cascader>
 		        </FormItem>
-		        <FormItem label="管辖项目">
+		        <FormItem label="管辖项目" prop="xm_id">
 		        	<Select clearable multiple v-model="adminForm.xm_id" style="width: 100%">
 		                <Option v-for="item in projectData" :key="item.xm_id" :value="item.xm_id">{{item.xmmc}}</Option>
 		            </Select>
@@ -86,7 +88,7 @@
 			</Form>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button v-if="modeType != 3" type="primary" size="large" @click="saveAdmin">保存</Button>
+		        <Button v-if="modeType != 3" type="primary" size="large" :loading="adminLoading" @click="saveAdmin">保存</Button>
 	        </div>
 		</Modal>
 	</div>
@@ -102,6 +104,7 @@
 		data() {
 			return {
 				showAdminModel: false,
+				adminLoading: false,
 				modeType: '',
 				searchForm: {
 					username: '',
@@ -111,10 +114,14 @@
 				adminData: [],
 				adminColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.adminPage.pageIndex- 1) * this.adminPage.pageSize + 1);
+				        }
                     }, {
                         title: '用户名',
                         key: 'username',
@@ -176,7 +183,17 @@
 
 		},
 		computed: {
-
+			adminRules() {
+				return {
+					username: [{ required: true, message: '请输入', trigger: 'change' }],
+					// password: [{ required: this.modeType == 1, message: '请输入', trigger: 'change' }],
+					nickname: [{ required: true, message: '请输入', trigger: 'change' }],
+					email: [{ required: true, message: '请输入', trigger: 'change' }],
+					tel: [{ required: true, message: '请输入', trigger: 'change' }],
+					role_id: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					xm_id: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			openAdminModel() {
@@ -242,18 +259,20 @@
 			},
 			adminModelChange(status) {
 				if(!status) {
-					this.adminForm = {
-						username: '',
-						password: '',
-						nickname: '',
-						email: '',
-						tel: '',
-						role_id: '',
-						quyu: [],
-						xm_id: []
-					}
-					console.log(authData)
-					this.authData = JSON.parse(JSON.stringify(authData))
+					this.$nextTick(() => {
+						this.adminForm = {
+							username: '',
+							password: '',
+							nickname: '',
+							email: '',
+							tel: '',
+							role_id: '',
+							quyu: [],
+							xm_id: []
+						}
+						this.authData = JSON.parse(JSON.stringify(authData))
+						this.$refs.admin.resetFields();
+					})
 				}
 			},
 			async removeAdmin(row) {
@@ -262,21 +281,27 @@
 				this.getAdminList()
 			},
 			async saveAdmin() {
-				let params = {
-					...this.adminForm,
-					quyu_id: this.adminForm.quyu[0] ? this.adminForm.quyu[this.adminForm.quyu.length - 1] : '',
-					xm_id: this.adminForm.xm_id.join(',')
-				}
-				delete params.quyu
-				if(this.modeType == 2) {
-					params.admin_id = this.admin_id
-				}
-				let { status_code, message } = await api.addAdminItem(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showAdminModel = false
-					this.getAdminList()
-				}
+				this.$refs.admin.validate(async valid => {
+                    if (valid) {
+                    	this.adminLoading = true
+						let params = {
+							...this.adminForm,
+							quyu_id: this.adminForm.quyu[0] ? this.adminForm.quyu[this.adminForm.quyu.length - 1] : '',
+							xm_id: this.adminForm.xm_id.join(',')
+						}
+						delete params.quyu
+						if(this.modeType == 2) {
+							params.admin_id = this.admin_id
+						}
+						let { status_code, message } = await api.addAdminItem(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showAdminModel = false
+							this.getAdminList()
+						}
+						this.adminLoading = false
+                    }
+                })
 			},
 			handleAuthData(data, list) {
 	            data.map(item => {
@@ -311,7 +336,6 @@
 				return this.roleData.find(item => item.role_id == id) ? this.roleData.find(item => item.role_id == id).role_name : ''
 			},
 			getQuyu(id) {
-				console.log(this.areaList.find(item => item.value == id))
 				return this.areaList.find(item => item.value == id) ? this.areaList.find(item => item.value == id).label : ''
 			}
 		},

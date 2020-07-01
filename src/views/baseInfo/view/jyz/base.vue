@@ -11,8 +11,8 @@
 					</Row>
 					<part-title text="基本信息"></part-title>
 					<Form disabled :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
-						<FormItem label="经营单位">
-				            {{baseInfo.jydw}}
+						<FormItem label="站场名称">
+				            {{baseInfo.zcmc}}
 				        </FormItem>
 				        <FormItem label="运行状态">
 				            <Select clearable v-model="baseInfo.yxzt" placeholder="运行状态">
@@ -27,6 +27,9 @@
 				            	:data="areaList" 
 				            	:load-data="loadArea" 
 				            	placeholder="所属区域"></Cascader>
+				        </FormItem>
+				        <FormItem label="经营单位">
+				        	<Input clearable v-model="baseInfo.jydw" placeholder="经营单位"></Input>
 				        </FormItem>
 				        <FormItem label="经营范围">
 				        	<Input clearable v-model="baseInfo.jyfw" placeholder="经营范围"></Input>
@@ -92,10 +95,10 @@
 					<part-title text="建筑物信息"></part-title>
 					<Form disabled :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
 				        <FormItem label="占地面积（㎡）">
-				        	<InputNumber clearable v-model="baseInfo.zdmj" placeholder="占地面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="baseInfo.zdmj" placeholder="占地面积"></InputNumber>
 				        </FormItem>
 				        <FormItem label="建筑面积（㎡）">
-				        	<InputNumber clearable v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -663,8 +666,14 @@
 				areaList: [],
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpm',
@@ -685,6 +694,7 @@
                         key: 'msds',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -715,8 +725,14 @@
 				nzzldwList: ['吨', '立方', 'KG', 'L'],
 				whRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '重大危险源单元名称',
                         key: 'zdwxydymc',
@@ -734,6 +750,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -754,8 +771,14 @@
 				},
 				sbfcgyColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '涉粉工艺名称',
                         key: 'sfgymc',
@@ -773,6 +796,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -798,8 +822,14 @@
 				},
 				deviceColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '除尘设施名称',
                         key: 'ccssmc',
@@ -814,6 +844,7 @@
                         key: 'yxzt',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -838,8 +869,14 @@
 				},
 				mainRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '工艺名称',
                         slot: 'gymc',
@@ -851,6 +888,7 @@
                         key: 'sjczrs',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -867,8 +905,14 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         slot: 'name',
@@ -883,6 +927,7 @@
                         key: 'cas',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -917,8 +962,8 @@
 				let { status_code, data, message } = await api.getJyzBase(this.gkdx_id);
 				if(status_code == 0) {
 					this.form = data;
-					let { jydw, tyshxydm, zcdz, zgrs, glrysl, hyml, hydm, aqjyxkzbh, yxq, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, zddz, lngAndLat, zdfw, zdmj, jzmj, jyfw, jyzdj } = this.form
-					this.baseInfo = { jydw, tyshxydm, zcdz, hydm, aqjyxkzbh, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, zddz, zdfw, jyfw, jyzdj }
+					let { zcmc, jydw, tyshxydm, zcdz, zgrs, glrysl, hyml, hydm, aqjyxkzbh, yxq, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, zddz, lngAndLat, zdfw, zdmj, jzmj, jyfw, jyzdj } = this.form
+					this.baseInfo = { zcmc, jydw, tyshxydm, zcdz, hydm, aqjyxkzbh, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, zddz, zdfw, jyfw, jyzdj }
 					this.baseInfo.zgrs = zgrs ? Number(zgrs) : 0
 					this.baseInfo.glrysl = glrysl ? Number(glrysl) : 0
 					this.baseInfo.zdmj = zdmj ? Number(zdmj) : 0

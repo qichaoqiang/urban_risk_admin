@@ -64,8 +64,8 @@
 								</Row>
 				        </TabPane>
 				        <TabPane label="重大危险源" name="name2">
-				        	<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
-					        	<FormItem label="重大危险源">
+				        	<Form :model="baseInfo" ref="baseInfo" :rules="baseInfoRules" hide-required-mark  label-position="left" :label-width="140" style="width: 600px">
+					        	<FormItem label="重大危险源" prop="zdwxy">
 						        	<Select clearable v-model="baseInfo.zdwxy" placeholder="请选择">
 						                <Option v-for="item in zdwxyList" :key="item" :value="item">{{item}}</Option>
 						            </Select>
@@ -140,105 +140,95 @@
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}储罐信息`" v-model="showCgModel" @on-visible-change="cgModelChange">
 			<div>
-				<Form :model="cgForm" label-position="left" :label-width="160">
-					<FormItem label="储罐名称">
+				<Form :model="cgForm" ref="cg" :rules="cgRules" hide-required-mark label-position="left" :label-width="160">
+					<FormItem label="储罐名称" prop="cgmc">
 			        	<Input clearable v-model="cgForm.cgmc"></Input>
 			        </FormItem>
-					<FormItem label="介质">
+					<FormItem label="介质" prop="jz">
 						<Select clearable v-model="cgForm.jz" placeholder="请选择">
 			                <Option v-for="item in jzList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
 			        </FormItem>
-			        <FormItem label="容积(m³)">
+			        <FormItem label="容积(m³)" prop="rj">
 			        	<InputNumber :min="0" v-model="cgForm.rj"></InputNumber>
 			        </FormItem>
-			        <FormItem label="数量">
+			        <FormItem label="数量" prop="sl">
 			        	<InputNumber :min="0" v-model="cgForm.sl"></InputNumber>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveCg">保存</Button>
+		        <Button type="primary" size="large" :loading="cgLoading" @click="saveCg">保存</Button>
 	        </div>
 		</Modal>
 
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}加油量`" v-model="showJylModel" @on-visible-change="jylModelChange">
 			<div>
-				<Form :model="jylForm" label-position="left" :label-width="150">
+				<Form :model="jylForm" ref="jyl" :rules="jylRules" hide-required-mark label-position="left" :label-width="150">
 					<FormItem label="近5日平均加油量(m³)">
 						<Row type="flex" align="middle">
-	            			<Col>
-			        			汽油：
+							<Col>
+	            				汽油：
 	            			</Col>
 	            			<Col style="margin-right: 20px">
-	            				<InputNumber :min="0" v-model="jylForm.jwrpjjyl_qy"></InputNumber>
+	            				<FormItem prop="jwrpjjyl_qy">
+	            					<InputNumber :min="0" v-model="jylForm.jwrpjjyl_qy"></InputNumber>
+	            				</FormItem>
 	            			</Col>
 	            			<Col>
-			        			柴油：
+	            				柴油：
 	            			</Col>
 	            			<Col>
-	            				<InputNumber :min="0" v-model="jylForm.jwrpjjyl_cy"></InputNumber>
+	            				<FormItem prop="jwrpjjyl_cy">
+	            					<InputNumber :min="0" v-model="jylForm.jwrpjjyl_cy"></InputNumber>
+	            				</FormItem>
 	            			</Col>
 	            		</Row>
 	            	</FormItem>
-			        <FormItem label="填报时间">
+			        <FormItem label="填报时间" prop="tbsj">
 			            <DatePicker type="date" v-model="jylForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveJyl">保存</Button>
+		        <Button type="primary" size="large" :loading="jylLoading" @click="saveJyl">保存</Button>
 	        </div>
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}周边环境`" v-model="showRimModel"  @on-visible-change="rimModelChange">
 			<div>
-				<Form :model="rimForm" label-position="left" :label-width="140">
-					<FormItem label="敏感目标名称">
+				<Form :model="rimForm" ref="rim" :rules="rimRules" hide-required-mark label-position="left" :label-width="140">
+					<FormItem label="敏感目标名称" prop="mgmbmc">
 			        	<Input clearable v-model="rimForm.mgmbmc"></Input>
 			        </FormItem>
-			        <FormItem label="方位">
+			        <FormItem label="方位" prop="fw">
 			        	<Select clearable v-model="rimForm.fw" placeholder="请选择">
 			                <Option v-for="item in fwList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
 			        </FormItem>
-			        <FormItem label="敏感目标类型">
+			        <FormItem label="敏感目标类型" prop="mgmblx">
 			            <Select clearable v-model="rimForm.mgmblx" placeholder="请选择">
 			                <Option v-for="item in mgmblxList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
 			        </FormItem>
-			        <FormItem label="敏感目标距离(m)">
+			        <FormItem label="敏感目标距离(m)" prop="mgmbjl">
 			        	<InputNumber :min="0" v-model="rimForm.mgmbjl"></InputNumber>
 			        </FormItem>	
-			        <FormItem label="人员数量">
+			        <FormItem label="人员数量" prop="rysl">
 			        	<InputNumber :min="0" v-model="rimForm.rysl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="经纬度">
+			        <FormItem label="经纬度" prop="lngAndLat">
 			        	<lng :lngAndLat.sync="rimForm.lngAndLat"></lng>
-			        	<!-- <div @click="openLngModal">
-		        			<Input 
-		        				readonly 
-		        				v-model="rimForm.lngAndLat" 
-		        				icon="md-pin" 
-		        				placeholder="经纬度" />
-		        		</div> -->
 			        </FormItem>
-			        <FormItem label="区域范围">
+			        <FormItem label="区域范围" prop="qyfw">
 			        	<qyfw :qyfw.sync="rimForm.qyfw"></qyfw>
-			        	<!-- <div @click.stop="openAreaModal">
-		        			<Input 
-		        				readonly 
-		        				v-model="rimForm.qyfw" 
-		        				icon="md-pin" 
-		        				placeholder="区域范围" />
-		        		</div> -->
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveRim">保存</Button>
+		        <Button type="primary" size="large" :loading="rimLoading" @click="saveRim">保存</Button>
 	        </div>
 		</Modal>
 	</div>
@@ -278,6 +268,9 @@
 				showGqscModel: false,
 				showJylModel: false,
 				showRimModel: false,
+				cgLoading: false,
+				jylLoading: false,
+				rimLoading: false,
 				modeType: '',
 				modeType2: '',
 				map: null,
@@ -329,8 +322,14 @@
 				areaList: [],
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpm',
@@ -351,6 +350,7 @@
                         key: 'msds',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -382,8 +382,14 @@
 				sxflList: ['最终产品', '中间产品', '原料'],
 				whRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '重大危险源单元名称',
                         key: 'zdwxydymc',
@@ -401,6 +407,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -421,22 +428,33 @@
 				},
 				cgColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.cgPage.pageIndex- 1) * this.cgPage.pageSize + 1);
+				        }
                     }, {
                         title: '储罐名称',
                         key: 'cgmc',
+                        minWidth: 100
                     }, {
                         title: '介质',
                         key: 'jz',
+                        minWidth: 100
                     }, {
                         title: '容积(m³)',
                         key: 'rj',
+                        minWidth: 120
                     }, {
                         title: '数量',
                         key: 'sl',
+                        minWidth: 80
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -471,16 +489,25 @@
 				},
 				jylColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.jylPage.pageIndex- 1) * this.jylPage.pageSize + 1);
+				        }
                     }, {
                         title: '近5日平均加油量(m³)',
                         slot: 'jyl',
+                        minWidth: 180
                     }, {
                         title: '填报时间',
                         key: 'tbsj',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -502,22 +529,33 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.rimPage.pageIndex- 1) * this.rimPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         key: 'mgmbmc',
+                         minWidth: 120
                     }, {
                         title: '方位',
                         key: 'fw',
+                         minWidth: 80
                     }, {
                         title: '目标类型',
                         key: 'mgmblx',
+                         minWidth: 100
                     }, {
                         title: '人员数量',
                         key: 'rysl',
+                         minWidth: 100
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -532,12 +570,18 @@
 					lngAndLat: '',
 					qyfw: ''
 				},
-				fwList: ['东', '南', '西', '北'],
+				fwList: ['东', '南', '西', '北', '东北', '东南', '西北', '西南'],
 				mgmblxList: ['医院', '养老院', '学校', '政府机构', '商场', '居住区', '监狱', '宗教', '车站', '码头', '铁路', '公路', '林区', '工厂', '矿山', '河流', '其他'],
 				rimPage: {
 					pageSize: 10,
 					pageIndex: 1,
 					totalRow: 0
+				},
+				cgSum: {
+					qygsl: '',
+					qygzrj: '',
+					cygsl: '',
+					cygzrj: ''
 				},
 				form: {}
 			}
@@ -546,7 +590,37 @@
 
 		},
 		computed: {
-
+			baseInfoRules() {
+				return {
+					zdwxy: [{ required: true, message: '请选择', trigger: 'change' }],
+				}
+			},
+			cgRules() {
+				return {
+					cgmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					jz: [{ required: true, message: '请选择', trigger: 'change' }],
+					rj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					sl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
+			jylRules() {
+				return {
+					jwrpjjyl_cy: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					jwrpjjyl_qy: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
+			rimRules() {
+				return {
+					mgmbmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					// fw: [{ required: true, message: '请选择', trigger: 'change' }],
+					// mgmblx: [{ required: true, message: '请选择', trigger: 'change' }],
+     //            	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+     //            	qyfw: [{ required: true, message: '请选择', trigger: 'change' }],
+					// mgmbjl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					// rysl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			async getBaseInfo() {
@@ -592,9 +666,10 @@
 				  	this.loading = false
 				})
 				let { status_code, data, message } = await api.getJyzBase(this.gkdx_id);
-				if(status_code == 200) {
+				if(status_code == 0) {
 					this.form = data;
-					this.baseInfo = { zdwxy: data.zdwxy}
+					console.log(data)
+					this.baseInfo = { zdwxy: data.zdwxy || ''}
 				}
 			},
 			async nextStep() {
@@ -622,14 +697,18 @@
 				}
 			},
 			async saveInfo() {
-				let params = {
-					gkdx_id: this.gkdx_id,
-					...this.baseInfo
-				}
-				let { status_code, message } = await api.addJyzBase(params);
-				if(status_code == 200) {
-					this.$Message.success('保存成功')
-				}
+				this.$refs.baseInfo.validate(async valid => {
+                    if (valid) {
+                    	let params = {
+							gkdx_id: this.gkdx_id,
+							...this.baseInfo
+						}
+						let { status_code, message } = await api.addJyzBase(params);
+						if(status_code == 200) {
+							this.$Message.success('保存成功')
+						}
+                    }
+                })
 			},
 			openAreaModal() {	
 				this.showAreaModel = true;
@@ -825,12 +904,15 @@
 			},
 			cgModelChange(status) {
 				if(!status) {
-					this.cgForm = {
-						cgmc: '',
-						jz: '',
-						rj: 0,
-						sl: 0,
-					}
+					this.$nextTick(() => {
+						this.cgForm = {
+							cgmc: '',
+							jz: '',
+							rj: 0,
+							sl: 0,
+						}
+						this.$refs.cg.resetFields();
+					})
 				}
 			},
 			async removeCg(row) {
@@ -839,20 +921,26 @@
 				this.getCgList()
 			},
 			async saveCg() {
-				let params = {
-					...this.cgForm,
-					tysj: this.cgForm.tysj ? getDate(new Date(this.cgForm.tysj).getTime(), 'date') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addCgInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showCgModel = false
-					this.getCgList()
-				}
+				this.$refs.cg.validate(async valid => {
+                    if (valid) {
+                    	this.cgLoading = true
+						let params = {
+							...this.cgForm,
+							tysj: this.cgForm.tysj ? getDate(new Date(this.cgForm.tysj).getTime(), 'date') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addCgInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showCgModel = false
+							this.getCgList()
+						}
+							this.cgLoading = false
+                    }
+                })
 			},
 			handleChangeJylPage(val) {
 				this.jylPage.pageIndex = val
@@ -890,11 +978,14 @@
 			},
 			jylModelChange(status) {
 				if(!status) {
-					this.jylForm = {
-						jwrpjjyl_qy: 0,
-						jwrpjjyl_cy: 0,
-						tbsj: '',
-					}
+					this.$nextTick(() => {
+						this.jylForm = {
+							jwrpjjyl_qy: 0,
+							jwrpjjyl_cy: 0,
+							tbsj: '',
+						}
+						this.$refs.jyl.resetFields();
+					})
 				}
 			},
 			async removeJyl(row) {
@@ -903,20 +994,26 @@
 				this.getJylList()
 			},
 			async saveJyl() {
-				let params = {
-					...this.jylForm,
-					tbsj: this.jylForm.tbsj ? getDate(new Date(this.jylForm.tbsj).getTime(), 'year') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addJylInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showJylModel = false
-					this.getJylList()
-				}
+				this.$refs.jyl.validate(async valid => {
+                    if (valid) {
+                    	this.jylLoading = true
+						let params = {
+							...this.jylForm,
+							tbsj: this.jylForm.tbsj ? getDate(new Date(this.jylForm.tbsj).getTime(), 'year') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addJylInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showJylModel = false
+							this.getJylList()
+						}
+							this.jylLoading = false
+                    }
+                })
 			},
 			handleChangeRimPage(val) {
 				this.rimPage.pageIndex = val
@@ -958,15 +1055,18 @@
 			},
 			rimModelChange(status) {
 				if(!status) {
-					this.rimForm = {
-						mgmbmc: '',
-						mgmblx: '',
-						fw: '',
-						mgmbjl: 0,
-						rysl: 0,
-						lngAndLat: '',
-						qyfw: ''
-					}
+					this.$nextTick(() => {
+						this.rimForm = {
+							mgmbmc: '',
+							mgmblx: '',
+							fw: '',
+							mgmbjl: 0,
+							rysl: 0,
+							lngAndLat: '',
+							qyfw: ''
+						}
+						this.$refs.rim.resetFields();
+					})
 				}
 			},
 			async removeRim(row) {
@@ -975,22 +1075,28 @@
 				this.getRimList()
 			},
 			async saveRim() {
-				let params = {
-					...this.rimForm,
-					jd: this.rimForm.lngAndLat.split(' ')[0],
-					wd: this.rimForm.lngAndLat.split(' ')[1],
-					gkdx_id: this.gkdx_id
-				}
-				delete params.lngAndLat
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addRimInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showRimModel = false
-					this.getRimList()
-				}
+				this.$refs.rim.validate(async valid => {
+                    if (valid) {
+                    	this.rimLoading = true
+						let params = {
+							...this.rimForm,
+							jd: this.rimForm.lngAndLat.split(' ')[0],
+							wd: this.rimForm.lngAndLat.split(' ')[1],
+							gkdx_id: this.gkdx_id
+						}
+						delete params.lngAndLat
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addRimInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showRimModel = false
+							this.getRimList()
+						}
+							this.rimLoading = false
+                    }
+                })
 			},
 		},
 		created() {

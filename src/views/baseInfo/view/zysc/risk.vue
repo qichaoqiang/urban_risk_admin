@@ -252,10 +252,14 @@
 				areaList: [],
 				zyscRlxxColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.zyscRlxxPage.pageIndex- 1) * this.zyscRlxxPage.pageSize + 1);
+				        },
                     }, {
                         title: '近一周日均人流量',
                         key: 'jyzrjrll',
@@ -288,10 +292,14 @@
 				dqztList: ['运行', '停运', '检修'],
 				gdtrqColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.gdtrqPage.pageIndex- 1) * this.gdtrqPage.pageSize + 1);
+				        },
                     }, {
                         title: '近一月用气量（立方/月）',
                         key: 'jyyyql',
@@ -332,10 +340,14 @@
 				},
 				yhsyqColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.yhsyqPage.pageIndex- 1) * this.yhsyqPage.pageSize + 1);
+				        },
                     }, {
                         title: '钢瓶规格（L）',
                         key: 'gpgg',
@@ -368,10 +380,14 @@
 				},
 				cjrlColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.cjrlPage.pageIndex- 1) * this.cjrlPage.pageSize + 1);
+				        },
                     }, {
                         title: '近一月使用量（kg/月）',
                         key: 'jyysyl',
@@ -399,10 +415,14 @@
 				},
 				elseColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.elsePage.pageIndex- 1) * this.elsePage.pageSize + 1);
+				        },
                     }, {
                         title: '近一月使用量（kg/月）',
                         key: 'jyysyl',

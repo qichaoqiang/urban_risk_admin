@@ -258,7 +258,7 @@
 			            </Select>
 			        </FormItem>
 			        <FormItem label="载客人数">
-			        	<InputNumber clearable :min='0' v-model="clForm.zkrs"></InputNumber>
+			            <InputNumber :min="0" v-model="clForm.zkrs"></InputNumber>
 			        </FormItem>
 			        <FormItem label="车辆技术等级">
 			            <Select clearable v-model="clForm.cljsdj" placeholder="请选择">
@@ -290,7 +290,7 @@
 			            </Select>
 			        </FormItem>
 			        <FormItem label="运行时长（小时）">
-			        	<InputNumber clearable :min='0' v-model="xlForm.yxszxs"></InputNumber>
+			            <InputNumber :min="0" v-model="xlForm.yxszxs"></InputNumber>
 			        </FormItem>
 			        <FormItem label="线路地质灾害情况">
 			            <Input clearable v-model="xlForm.xldzzhqk"></Input>
@@ -403,8 +403,14 @@
 				yxztList: ['运行', '停运'],
 				clColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '车辆类型',
                         key: 'cllx',
@@ -422,6 +428,7 @@
                         key: 'tbsj',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -443,8 +450,14 @@
 				},
 				xlColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '线路名称',
                         key: 'xlmc',
@@ -465,6 +478,7 @@
                         key: 'tbsj',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -487,8 +501,14 @@
 				},
 				yyColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '近5日日平均发客量',
                         key: 'jwrpjfkl',
@@ -497,6 +517,7 @@
                         key: 'tbsj',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 

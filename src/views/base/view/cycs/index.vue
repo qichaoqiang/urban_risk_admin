@@ -6,23 +6,27 @@
 				<Col>
 					<div class="title">请完善{{step == 1 ? '企业' : '风险'}}信息</div>
 					<part-title text="基本信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
+					<Form :model="baseInfo" ref="baseInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 						<FormItem label="商家名称">
 				            {{baseInfo.sjmc}}
 				        </FormItem>
 				        <FormItem label="经营场所类型">
 				        	<Row type="flex" :gutter="20">
 				        		<Col span="6">
-						            <Select clearable v-model="baseInfo.jycslx" placeholder="经营场所类型">
-						                <Option v-for="item in jycslxList" :key="item" :value="item">{{item}}</Option>
-						            </Select>
+					        		<FormItem prop="jycslx">
+							            <Select clearable v-model="baseInfo.jycslx">
+							                <Option v-for="item in jycslxList" :key="item" :value="item">{{item}}</Option>
+							            </Select>
+							        </FormItem>
 				        		</Col>
 				        		<Col span="18">
-				        			<Input clearable v-show="baseInfo.jycslx == '其他'" v-model="baseInfo.jycslx_" placeholder="请输入经营场所类型"></Input>
+									<FormItem prop="jycslx_">
+				        				<Input clearable v-show="baseInfo.jycslx == '其他'" v-model="baseInfo.jycslx_" placeholder="请输入经营场所类型"></Input>
+				        			</FormItem>
 				        		</Col>
 				        	</Row>
 				        </FormItem>
-				        <FormItem label="所属区域">
+				        <FormItem label="所属区域" prop="quyu">
 				            <Cascader 
 				            	clearable 
 				            	change-on-select
@@ -31,53 +35,42 @@
 				            	:load-data="loadArea" 
 				            	placeholder="所属区域"></Cascader>
 				        </FormItem>
-				        <FormItem label="经营规模">
+				        <FormItem label="经营规模" prop="jygm">
 				        	<Select clearable v-model="baseInfo.jygm" placeholder="经营规模">
 				                <Option v-for="item in jygmList" :key="item" :value="item">{{item}}</Option>
 				            </Select>
 				        </FormItem>
-				        <FormItem label="商家业态">
+				        <FormItem label="商家业态" prop="sjyt">
 				        	<Select clearable v-model="baseInfo.sjyt" placeholder="商家业态">
 				                <Option v-for="item in sjytList" :key="item" :value="item">{{item}}</Option>
 				            </Select>
 				        </FormItem>
-				        <FormItem label="食品安全等级">
+				        <FormItem label="食品安全等级" prop="spaqdj">
 				        	<Select clearable v-model="baseInfo.spaqdj" placeholder="食品安全等级">
 				                <Option v-for="item in spaqdjList" :key="item" :value="item">{{item}}</Option>
 				            </Select>
 				        </FormItem>
-				        <FormItem label="主要燃料类型">
-				        	<Select clearable v-model="baseInfo.zyrllx" placeholder="主要燃料类型">
-				                <Option v-for="item in zyrllxList" :key="item" :value="item">{{item}}</Option>
-				            </Select>
-				        </FormItem>
-				        <FormItem label="营业时间">
+				        <FormItem label="营业时间" prop="yysj">
 				        	<TimePicker type="timerange" confirm v-model="baseInfo.yysj" placeholder="营业时间"></TimePicker>
 				        </FormItem>
-				        <FormItem label="营业状态">
+				        <FormItem label="营业状态" prop="yyzt">
 				        	<Select clearable v-model="baseInfo.yyzt" placeholder="营业状态">
 				                <Option v-for="item in yyztList" :key="item" :value="item">{{item}}</Option>
 				            </Select>
 				        </FormItem>
-				        <FormItem label="商铺地址">
+				        <FormItem label="商铺地址" prop="spdz">
 				        	<Input clearable v-model="baseInfo.spdz" placeholder="商铺地址"></Input>
 				        </FormItem>
-				        <FormItem label="经纬度">
-				        	<div @click="openLngModal">
-			        			<Input 
-			        				readonly 
-			        				v-model="baseInfo.lngAndLat" 
-			        				icon="md-pin" 
-			        				placeholder="经纬度" />
-			        		</div>
+				        <FormItem label="经纬度" prop="lngAndLat">
+				        	<lng :lngAndLat.sync="baseInfo.lngAndLat"></lng>
 				        </FormItem>
-				        <FormItem label="职工人数">
+				        <FormItem label="职工人数" prop="zgrs">
 				            <InputNumber :min="0" v-model="baseInfo.zgrs"></InputNumber>
 				        </FormItem>
-				        <FormItem label="就餐人员">
+				        <FormItem label="就餐人员" prop="jcrs">
 				            <InputNumber :min="0" v-model="baseInfo.jcrs"></InputNumber>
 				        </FormItem>
-				        <FormItem label="行业门类">
+				        <FormItem label="行业门类" prop="hyml">
 				        	<Cascader 
 				        		clearable 
 				        		change-on-select
@@ -86,16 +79,16 @@
 			        			:load-data="loadIndustry" 
 			        			placeholder="行业门类"></Cascader>
 				        </FormItem>
-				        <FormItem label="行业代码">
+				        <FormItem label="行业代码" prop="hydm">
 				            <Input clearable v-model="baseInfo.hydm" placeholder="行业代码"></Input>
 				        </FormItem>
-				        <FormItem label="经营单位">
+				        <FormItem label="经营单位" prop="jydw">
 				        	<Input clearable v-model="baseInfo.jydw" placeholder="经营单位"></Input>
 				        </FormItem>
-				        <FormItem label="注册地址">
+				        <FormItem label="注册地址" prop="zcdz">
 				        	<Input clearable v-model="baseInfo.zcdz" placeholder="注册地址"></Input>
 				        </FormItem>
-				        <FormItem label="统一社会信用代码">
+				        <FormItem label="统一社会信用代码" prop="tyshxydm">
 				            <Input clearable v-model="baseInfo.tyshxydm" placeholder="统一社会信用代码"></Input>
 				        </FormItem>
 					</Form>
@@ -105,9 +98,9 @@
 			<Row type="flex" justify="center">
 				<Col>
 					<part-title text="建筑物信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
-				        <FormItem label="经营场所面积（㎡）">
-				        	<InputNumber clearable v-model="baseInfo.jycsmj" placeholder="占地面积"></InputNumber>
+					<Form :model="baseInfo" ref="jzInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
+				        <FormItem label="经营场所面积（㎡）" prop="jycsmj">
+				        	<InputNumber :min="0" v-model="baseInfo.jycsmj" placeholder="占地面积"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -116,17 +109,23 @@
 			<Row type="flex" justify="center">
 				<Col>
 					<part-title text="联系人信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
+					<Form :model="baseInfo" ref="contactInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 				        <FormItem label="经办人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input clearable v-model="baseInfo.jbr" :data="areaList" placeholder="姓名"></Input>
+					        		<FormItem prop="jbr">
+				        				<Input clearable v-model="baseInfo.jbr" :data="areaList" placeholder="姓名"></Input>
+					        		</FormItem>
 				        		</Col>
 				        		<Col span="16">
-				        			<Input clearable v-model="baseInfo.jbrdh" placeholder="电话"></Input>
+				        			<FormItem prop="jbrdh">
+				        				<Input clearable v-model="baseInfo.jbrdh" placeholder="电话"></Input>
+					        		</FormItem>
 				        		</Col>
 				        		<Col span="24">
-				        			<Input clearable v-model="baseInfo.jbryx" placeholder="邮箱"></Input>
+				        			<FormItem prop="jbryx">
+				        				<Input clearable v-model="baseInfo.jbryx" placeholder="邮箱"></Input>
+					        		</FormItem>
 				        		</Col>
 				        	</Row>
 				        </FormItem>
@@ -136,156 +135,6 @@
 			<Row type="flex" justify="center">
 				<Col>
 					<Button type="primary" style="margin: 0 auto; width: 200px;" @click="nextStep">完成</Button>
-				</Col>
-			</Row>
-		</div>
-		<div v-show="step == 2">
-			<Row type="flex" justify="center">
-				<Col span="22">
-					<div class="title">请完善风险信息</div>
-					<part-title text="危险化学品" :btns="['add']" @add="openWhModel"></part-title>
-					<Table :columns="whColumns" :data="whData">
-						<template slot-scope="{ row }" slot="sfzdjg">
-							<span>{{sfzgyyList.find(item => item.value === row.sfzdjg).name}}</span>
-						</template>
-						<template slot-scope="{ row }" slot="sfbzp">
-							<span>{{sfzgyyList.find(item => item.value === row.sfbzp).name}}</span>
-						</template>
-						<template slot-scope="{ row }" slot="action">
-				            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editWhModel(row)">编辑</Button>
-				            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWh(row)">
-						        <Button type="error" size="small" ghost>删除</Button>
-						    </Poptip>
-				        </template>
-					</Table>
-					<Row type="flex" justify="end">
-						<Page
-		                    size="small"
-		                    style="margin-top: 10px"
-		                    :page-size="whPage.pageSize"
-		                    :total="whPage.totalRow"
-		                    show-elevator
-		                    show-total
-		                    show-sizer
-		                    @on-change="handleChangeWhPage"
-		                    @on-page-size-change="handleChangeWhPageSize"
-		                />
-					</Row>
-					<part-title text="危化品重大危险源" :btns="['add']" @add="openWhRiskModel"></part-title>
-					<Table :columns="whRiskColumns" :data="whRiskData">
-						<template slot-scope="{ row }" slot="name">
-				            <span class="link">{{row.name}}</span>
-				        </template>
-				        <template slot-scope="{ row }" slot="level">
-				            <div :style="{ margin: '0 auto', width: '40px', height: '20px', background: row.color}"></div>
-				        </template>
-						<template slot-scope="{ row }" slot="action">
-				            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editWhRiskModel(row)">编辑</Button>
-				            
-				            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWhRisk(row)">
-						        <Button type="error" size="small" ghost>删除</Button>
-						    </Poptip>
-				        </template>
-					</Table>
-					<Row type="flex" justify="end">
-						<Page
-		                    size="small"
-		                    style="margin-top: 10px"
-		                    :page-size="whRiskPage.pageSize"
-		                    :total="whRiskPage.totalRow"
-		                    show-elevator
-		                    show-total
-		                    show-sizer
-		                    @on-change="handleChangeWhRiskPage"
-		                    @on-page-size-change="handleChangeWhRiskPageSize"
-		                />
-					</Row>
-					<part-title text="工艺信息"></part-title>
-					<Row type="flex" justify="end">
-						<Col span="23">
-							<part-title text="涉爆粉尘工艺" :btns="['add']" @add="openSbfcgyModel"></part-title>
-							<Row type="flex" :gutter="100">
-								<Col>工艺数量：{{sbfcgyNum.gysl || 0}}</Col>
-								<Col>涉粉作业总人数：{{sbfcgyNum.zyzrs || 0}}</Col>
-							</Row>
-							<Table :columns="sbfcgyColumns" :data="sbfcgyData">
-								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editSbfcgyModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeSbfcgy(row)">
-								        <Button type="error" size="small" ghost>删除</Button>
-								    </Poptip>
-						        </template>
-							</Table>
-							<Row type="flex" justify="end">
-								<Page
-				                    size="small"
-				                    style="margin-top: 10px"
-				                    :page-size="sbfcgyPage.pageSize"
-				                    :total="sbfcgyPage.totalRow"
-				                    show-elevator
-				                    show-total
-				                    show-sizer
-				                    @on-change="handleChangeSbfcgyPage"
-				                    @on-page-size-change="handleChangeSbfcgyPageSize"
-				                />
-							</Row>
-							<part-title text="重点监管危险工艺" :btns="['add']" @add="openMainRiskModel"></part-title>
-							<Table :columns="mainRiskColumns" :data="mainRiskData">
-								<template slot-scope="{ row }" slot="name">
-						            <span class="link">{{row.name}}</span>
-						        </template>
-								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editMainRiskModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeMainRisk(row)">
-								        <Button type="error" size="small" ghost>删除</Button>
-								    </Poptip>
-						        </template>
-							</Table>
-							<Row type="flex" justify="end">
-								<Page
-				                    size="small"
-				                    style="margin-top: 10px"
-				                    :page-size="mainRiskPage.pageSize"
-				                    :total="mainRiskPage.totalRow"
-				                    show-elevator
-				                    show-total
-				                    show-sizer
-				                    @on-change="handleChangeMainRiskPage"
-				                    @on-page-size-change="handleChangeMainRiskPageSize"
-				                />
-							</Row>
-						</Col>
-					</Row>
-					<part-title text="周边情况" :btns="['add']" @add="openRimModel"></part-title>
-					<Table :columns="rimColumns" :data="rimData">
-						<template slot-scope="{ row }" slot="name">
-				            <span class="link">{{row.name}}</span>
-				        </template>
-						<template slot-scope="{ row }" slot="action">
-				            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editRimModel(row)">编辑</Button>
-				            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeRim(row)">
-						        <Button type="error" size="small" ghost>删除</Button>
-						    </Poptip>
-				        </template>
-					</Table>
-					<Row type="flex" justify="end">
-						<Page
-		                    size="small"
-		                    style="margin-top: 10px"
-		                    :page-size="rimPage.pageSize"
-		                    :total="rimPage.totalRow"
-		                    show-elevator
-		                    show-total
-		                    show-sizer
-		                    @on-change="handleChangeRimPage"
-		                    @on-page-size-change="handleChangeRimPageSize"
-		                />
-					</Row>
-				</Col>	
-			</Row>	
-			<Row type="flex" justify="center" style="margin-top: 24px">
-				<Col>
-					<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo">完成</Button>
 				</Col>
 			</Row>
 		</div>
@@ -321,270 +170,13 @@
 	            </Row>
 	        </div>
 		</Modal>
-		<Modal :title="`${modeType == 1 ? '新增' : '编辑'}危险化学品`" v-model="showWhModel" @on-visible-change="whModelChange">
-			<div>
-				<Form :model="whForm" label-position="left" :label-width="140">
-					<FormItem label="化学品名称">
-			        	<Input clearable v-model="whForm.hxpm"></Input>
-			        </FormItem>
-			        <FormItem label="别名">
-			        	<Input clearable v-model="whForm.bm"></Input>
-			        </FormItem>
-			        <FormItem label="CAS号">
-			        	<Input clearable v-model="whForm.cas"></Input>
-			        </FormItem>
-			        <FormItem label="是否重点监管">
-			            <Select clearable v-model="whForm.sfzdjg" placeholder="请选择">
-			                <Option v-for="item in sfzgyyList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="是否爆炸品">
-			            <Select clearable v-model="whForm.sfbzp" placeholder="请选择">
-			                <Option v-for="item in sfzgyyList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="是否剧毒化学品">
-			            <Select clearable v-model="whForm.sfjdhxp" placeholder="请选择">
-			                <Option v-for="item in sfzgyyList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="火灾危险性等级">
-			            <Select clearable v-model="whForm.hzwxxdj" placeholder="请选择">
-			                <Option v-for="item in hzwxxdjList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="化学品状态">
-			            <Select clearable v-model="whForm.hxpzt" placeholder="请选择">
-			                <Option v-for="item in hxpztList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="年中转量">
-			        	<Row type="flex" align="middle">
-	            			<Col>
-			        			<Input clearable v-model="whForm.nzzl"></Input>
-	            			</Col>
-	            			<Col>
-	            				<Select clearable v-model="whForm.nzzldw" placeholder="单位">
-					                <Option v-for="item in nzzldwList" :key="item" :value="item">{{item}}</Option>
-					            </Select>
-	            			</Col>
-	            		</Row>
-			        </FormItem>
-			        <FormItem label="最大存储量">
-			            <Row type="flex" align="middle">
-	            			<Col>
-			        			<Input clearable v-model="whForm.zdccl"></Input>
-	            			</Col>
-	            			<Col>
-	            				<Select clearable v-model="whForm.zdccldw" placeholder="单位">
-					                <Option v-for="item in nzzldwList" :key="item" :value="item">{{item}}</Option>
-					            </Select>
-	            			</Col>
-	            		</Row>
-			        </FormItem>
-			        <FormItem label="MSDS">
-			        	<Input clearable v-model="whForm.msds"></Input>
-			        </FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveWh">保存</Button>
-	        </div>
-		</Modal>
-		<Modal :title="`${modeType == 1 ? '新增' : '编辑'}危化品重大危险源`" v-model="showWhRiskModel" @on-visible-change="whRiskModelChange">
-			<div>
-				<Form :model="whRiskForm" label-position="left" :label-width="140">
-					<FormItem label="重大危险单元名称">
-			        	<Input clearable v-model="whRiskForm.zdwxydymc"></Input>
-			        </FormItem>
-			        <FormItem label="重大危险源等级">
-			        	<Select clearable v-model="whRiskForm.zdwxydj" placeholder="请选择">
-			                <Option v-for="item in hzwxxdjList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="危险化学品">
-			        	<Input clearable v-model="whRiskForm.wxhxp"></Input>
-			        </FormItem>
-			        <FormItem label="投用时间">
-			        	<DatePicker type="date" v-model="whRiskForm.tysj"  placeholder="请选择"></DatePicker>
-			        </FormItem>
-			        <FormItem label="当前状态">
-			            <Select clearable v-model="whRiskForm.dqzt" placeholder="请选择">
-			                <Option v-for="item in dqztList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="地图">
-			            <Button type="primary" ghost>编辑</Button>
-			        </FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveWhRisk">保存</Button>
-	        </div>
-		</Modal>
-		<Modal :title="`${modeType == 1 ? '新增' : '编辑'}涉爆粉尘工艺`" width="800px" v-model="showSbfcgyModel" @on-visible-change="sbfcgyModelChange">
-			<div>
-				<Form :model="sbfcgyForm" label-position="left" :label-width="140">
-					<FormItem label="粉尘工艺名称">
-			        	<Input clearable v-model="sbfcgyForm.sfgymc"></Input>
-			        </FormItem>
-			        <FormItem label="粉尘名称">
-			        	<Input clearable v-model="sbfcgyForm.fcmc"></Input>
-			        </FormItem>
-			        <FormItem label="粉尘类型">
-			        	<Select clearable v-model="sbfcgyForm.fclx" placeholder="请选择">
-			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="作业人数">
-			            <InputNumber :min="0" v-model="sbfcgyForm.zyrs"></InputNumber>
-			        </FormItem>
-			        <FormItem label="当前状态">
-			            <Select clearable v-model="sbfcgyForm.dqzt" placeholder="请选择">
-			                <Option v-for="item in dqztList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="除尘设施">
-			        	<Select clearable v-model="sbfcgyForm.ccss" placeholder="请选择">
-			                <Option v-for="item in ccssList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem v-if="sbfcgyForm.ccss == '有'" label="添加除尘设施">
-			        	<Button type="primary" icon="ios-add" ghost @click="openDeviceModel"></Button>
-			        </FormItem>
-				</Form>
-				<part-title text="除尘设施" :btns="['add']" @add="openRimModel"></part-title>
-				<Row type="flex" :gutter="100">
-					<Col>数量：{{deviceNum.zsl || 0}}</Col>
-					<Col>运行数量：{{deviceNum.yxsl || 0}}</Col>
-				</Row>
-				<Table v-if="sbfcgyForm.ccss == '有'" :columns="deviceColumns" :data="deviceData">
-					<template slot-scope="{ row }" slot="name">
-			            <span class="link">{{row.name}}</span>
-			        </template>
-					<template slot-scope="{ row }" slot="action">
-			            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editDeviceModel(row)">编辑</Button>
-			            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeDevice(row)">
-					        <Button type="error" size="small" ghost>删除</Button>
-					    </Poptip>
-			        </template>
-				</Table>
-				<Row type="flex" justify="end">
-					<Page
-	                    size="small"
-	                    style="margin-top: 10px"
-	                    :page-size="devicePage.pageSize"
-	                    :total="devicePage.totalRow"
-	                    show-elevator
-	                    show-total
-	                    show-sizer
-	                    @on-change="handleChangeDevicePage"
-	                    @on-page-size-change="handleChangeDevicePageSize"
-	                />
-				</Row>
-			</div>
-			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveSbfcgy">保存</Button>
-	        </div>
-		</Modal>
-		<Modal :title="`${modeType == 1 ? '新增' : '编辑'}除尘设施`" v-model="showDeviceModel" @on-visible-change="deviceModelChange">
-			<div>
-				<Form :model="deviceForm" label-position="left" :label-width="140">
-					<FormItem label="除尘设施名称">
-			        	<Input clearable v-model="deviceForm.ccssmc"></Input>
-			        </FormItem>
-			        <FormItem label="类型">
-			        	<Select clearable v-model="deviceForm.lx" placeholder="请选择">
-			                <Option v-for="item in lxList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="投用时间">
-			            <DatePicker type="date" v-model="deviceForm.tysj"  placeholder="请选择"></DatePicker>
-			        </FormItem>
-			        <FormItem label="运行状态">
-			            <Select clearable v-model="deviceForm.yxzt" placeholder="请选择">
-			                <Option v-for="item in dqztList" :key="item" :value="item">{{item}}</Option>
-			            </Select>
-			        </FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveDevice">保存</Button>
-	        </div>
-		</Modal>
-		<Modal :title="`${modeType == 1 ? '新增' : '编辑'}重点监管危险工艺`" v-model="showMainRiskModel">
-			<div>
-				<Form :model="mainRiskForm" label-position="left" :label-width="140">
-					<FormItem label="工艺名称">
-			        	<Input clearable v-model="mainRiskForm.name"></Input>
-			        </FormItem>
-			        <FormItem label="危险工艺类型">
-			        	<Select clearable v-model="mainRiskForm.name" placeholder="请选择">
-			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="工艺操作人数">
-			            <InputNumber :min="0" v-model="mainRiskForm.num"></InputNumber>
-			        </FormItem>
-			        <FormItem label="自控系统">
-			            <Select clearable v-model="mainRiskForm.name" placeholder="请选择">
-			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>	
-			        <FormItem label="安全系统">
-			            <Select clearable v-model="mainRiskForm.name" placeholder="请选择">
-			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveMainRisk">保存</Button>
-	        </div>
-		</Modal>
-		<Modal :title="`${modeType == 1 ? '新增' : '编辑'}周边情况`" v-model="showRimModel">
-			<div>
-				<Form :model="rimForm" label-position="left" :label-width="140">
-					<FormItem label="敏感目标名称">
-			        	<Input clearable v-model="rimForm.name"></Input>
-			        </FormItem>
-			        <FormItem label="方位">
-			        	<Select clearable v-model="rimForm.name" placeholder="请选择">
-			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="目标类型">
-			            <Select clearable v-model="rimForm.name" placeholder="请选择">
-			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
-			            </Select>
-			        </FormItem>
-			        <FormItem label="目标距离(m)">
-			        	<InputNumber :min="0" v-model="rimForm.num"></InputNumber>
-			        </FormItem>	
-			        <FormItem label="人员数量">
-			        	<InputNumber :min="0" v-model="rimForm.num"></InputNumber>
-			        </FormItem>
-			        <FormItem label="地图">
-			            <Button type="primary" ghost>编辑</Button>
-			        </FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveMainRisk">保存</Button>
-	        </div>
-		</Modal>
 	</div>
 </template>
 
 <script>
 	import api from '@/api/api'
 	import partTitle from '@/components/title'
+	import lng from '../../../baseInfo/components/lng'
 	import tablejs from '@/common/js/table'
 	import areajs from '@/common/js/area'
 	import industryjs from '@/common/js/industry'
@@ -594,11 +186,11 @@
 	export default {
 		name: '',
 		mixins: [tablejs, areajs, industryjs, lngjs, datePickerjs],
-		components: { partTitle },
+		components: { partTitle, lng },
 		data() {
 			return {
 				id: '',
-				gkdx_id: '',
+				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				loading: true,
 				step: 1,	
 				showAreaModel: false,
@@ -667,274 +259,95 @@
 					}
 				],
 				areaList: [],
-				whColumns: [
-					{
-                        title: '序号',
-                        type: 'index',
-                    }, {
-                        title: '化学品名称',
-                        key: 'hxpm',
-                    }, {
-                        title: 'CAS号',
-                        key: 'cas',
-                    }, {
-                        title: '是否重点监管',
-                        slot: 'sfzdjg',
-                    }, {
-                        title: '是否爆炸品',
-                        slot: 'sfbzp',
-                    }, {
-                        title: '火灾风险等级',
-                        key: 'hzwxxdj',
-                    }, {
-                        title: 'MSDS',
-                        key: 'msds',
-                    }, {
-                        title: '操作',
-                        width: 150,
-                        slot: 'action',
-                    }, 
-				],
-				whData: [],
-				whForm: {
-					hxpm: '',
-					bm: '',
-					cas: '',
-					sfzdjg: '',
-					sfbzp: '',
-					sfjdhxp: '',
-					hzwxxdj: '',
-					hxpzt: '',
-					msds: '',
-					nzzl: 0,
-					nzzldw: '',
-					zdccl: 0,
-					zdccldw: '',
-				},
-				whPage: {
-					pageSize: 10,
-					pageIndex: 1,
-					totalRow: 0
-				},
-				hzwxxdjList: ['甲', '乙', '丙', '丁', '戊'],
-				hxpztList: ['气体', '液化气体', '液体', '固体'],
-				nzzldwList: ['吨', '立方', 'KG', 'L'],
-				whRiskColumns: [
-					{
-                        title: '序号',
-                        type: 'index',
-                    }, {
-                        title: '重大危险源单元名称',
-                        key: 'zdwxydymc',
-                    }, {
-                        title: '重大危险源等级',
-                        key: 'zdwxydj',
-                    }, {
-                        title: '危险化学品',
-                        key: 'wxhxp',
-                    }, {
-                        title: '投用时间',
-                        key: 'tysj',
-                    }, {
-                        title: '当前状态',
-                        key: 'dqzt',
-                    }, {
-                        title: '操作',
-                        width: 150,
-                        slot: 'action',
-                    }, 
-				],
-				whRiskData: [],
-				whRiskForm: {
-					zdwxydymc: '',
-					zdwxydj: '',
-					wxhxp: '',
-					tysj: '',
-					dqzt: ''
-				},
-				dqztList: ['运行', '停运', '检修'],
-				whRiskPage: {
-					pageSize: 10,
-					pageIndex: 1,
-					totalRow: 0
-				},
-				sbfcgyColumns: [
-					{
-                        title: '序号',
-                        type: 'index',
-                    }, {
-                        title: '涉粉工艺名称',
-                        key: 'sfgymc',
-                    }, {
-                        title: '粉尘名称',
-                        key: 'fcmc',
-                    }, {
-                        title: '粉尘类型',
-                        key: 'fclx',
-                    }, {
-                        title: '作业人数',
-                        key: 'zyrs',
-                    }, {
-                        title: '当前状态',
-                        key: 'dqzt',
-                    }, {
-                        title: '操作',
-                        width: 150,
-                        slot: 'action',
-                    }, 
-				],
-				sbfcgyData: [],
-				sbfcgyForm: {
-					sfgymc: '',
-					fcmc: '',
-					fclx: '',
-					zyrs: 0,
-					ccss: '',
-					dqzt: ''
-				},
-				ccssList: ['有', '无'],
-				sbfcgyPage: {
-					pageSize: 10,
-					pageIndex: 1,
-					totalRow: 0
-				},
-				sbfcgyNum: {
-					gysl: 0,
-					zyzrs: 0
-				},
-				deviceColumns: [
-					{
-                        title: '序号',
-                        type: 'index',
-                    }, {
-                        title: '除尘设施名称',
-                        key: 'ccssmc',
-                    }, {
-                        title: '类型',
-                        key: 'lx',
-                    }, {
-                        title: '投用时间',
-                        key: 'tysj',
-                    }, {
-                        title: '运行状态',
-                        key: 'yxzt',
-                    },{
-                        title: '操作',
-                        width: 150,
-                        slot: 'action',
-                    }, 
-				],
-				deviceData: [],
-				deviceForm: {
-					sbfcgy_id: '',
-					ccssmc: '',
-					lx: '',
-					tysj: '',
-					yxzt: ''
-				},
-				lxList: ['湿式除尘', '干法布袋式除尘', '静电除尘', '旋风除尘', '其他'],
-				devicePage: {
-					pageSize: 10,
-					pageIndex: 1,
-					totalRow: 0
-				},
-				deviceNum: {
-					zsl: 0,
-					yxsl: 0
-				},
-				mainRiskColumns: [
-					{
-                        title: '序号',
-                        type: 'index',
-                    }, {
-                        title: '工艺名称',
-                        slot: 'gymc',
-                    }, {
-                        title: '危险工艺类型',
-                        key: 'wxgylx',
-                    }, {
-                        title: '工艺操作人数',
-                        key: 'sjczrs',
-                    },{
-                        title: '操作',
-                        width: 150,
-                        slot: 'action',
-                    }, 
-				],
-				mainRiskData: [],
-				mainRiskForm: {
-					num: 0,
-					name: '',
-				},
-				mainRiskPage: {
-					pageSize: 10,
-					pageIndex: 1,
-					totalRow: 0
-				},
-				rimColumns: [
-					{
-                        title: '序号',
-                        type: 'index',
-                    }, {
-                        title: '敏感目标名称',
-                        slot: 'name',
-                    }, {
-                        title: '方位',
-                        key: 'cas',
-                    }, {
-                        title: '目标类型',
-                        key: 'cas',
-                    }, {
-                        title: '人员数量',
-                        key: 'cas',
-                    },{
-                        title: '操作',
-                        width: 150,
-                        slot: 'action',
-                    }, 
-				],
-				rimData: [
-					{	
-						name: 'hahaha',
-						cas: 1111,
-						color: 'red'
-					}
-				],
-				rimForm: {
-					num: 0,
-					name: '',
-				},
-				rimPage: {
-					pageSize: 10,
-					pageIndex: 1,
-					totalRow: 0
-				},
 				form: {}
 			}
 		},
 		watch: {
-
+			'baseInfo.jycslx'(val) {
+				console.log(val)
+			}
 		},
 		computed: {
-
+			rules() {
+				const validatoryysj = (rule, value, callback) => {
+					if (!value[0] || !value[1]) {
+						callback(new Error('请选择'));
+	                } else {
+	                    callback();
+	                }
+				}
+				return {
+                	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                	hyml: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	zcdz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	hydm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jycslx: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jycslx_: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jygm: [{ required: true, message: '请选择', trigger: 'change' }],
+                	sjyt: [{ required: true, message: '请选择', trigger: 'change' }],
+                	spaqdj: [{ required: true, message: '请选择', trigger: 'change' }],
+                	tyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	yysj: [{ required: true, validator: validatoryysj, message: '请选择', trigger: 'change' }],
+                	yyzt: [{ required: true, message: '请选择', trigger: 'change' }],
+                	spdz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	zgrs: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+                	jcrs: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+                	jycsmj: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+                	jbr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jydw: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jbrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jbryx: [{ required: true, message: '请输入', trigger: 'change' }],
+                	qyfzr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	qyfzrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+                	fgaqfzr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	fgaqfzrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
-			getBaseInfo() {
-				if(this.$route.query.type == '2') {
-					let baseInfo = this.$storage.get('baseInfo')
-					baseInfo.hyml = []
-					baseInfo.quyu = []
-					this.baseInfo = baseInfo
-					this.baseInfo = this.$storage.get('baseInfo')
-					this.baseInfo = this.$storage.get('baseInfo')
-					this.form = this.$storage.get('form')
-					this.getQy()
-					this.getHy()
-				}else {
-					this.loading = false
+			async getBaseInfo() {
+				let { status_code, data, message } = await api.getCycsBase(this.gkdx_id);
+				if(status_code == 0) {
+					this.form = data;
+					let { sjmc, tyshxydm, zcdz, zgrs, jcrs, hydm, jygm, sjyt, spaqdj, yysjks, yysjjz, yyzt, jydw, jycslx, jbr, jbrdh, jbryx, spdz, lngAndLat, jycsmj, zyrllx } = this.form
+					this.baseInfo = { sjmc, tyshxydm, zcdz, hydm, jygm, sjyt, spaqdj, yysjks, yysjjz, yyzt, jydw, jbr, jbrdh, jbryx, spdz, lngAndLat, zyrllx, jycslx, jycslx_: '', yysj: [], zgrs, jcrs, jycsmj, quyu: [], hyml: [] }
+					if(jycslx) {
+						this.baseInfo.jycslx = this.jycslxList.includes(jycslx) ? jycslx : '其他'
+						this.baseInfo.jycslx_ = this.jycslxList.includes(jycslx) ? '' : jycslx
+					}else {
+						this.baseInfo.jycslx = ''
+						this.baseInfo.jycslx_ = ''
+					}
+					yysjks = yysjks ? yysjks : ''
+					yysjjz = yysjjz ? yysjjz : ''
+					this.baseInfo.yysj = [yysjks, yysjjz];
+					this.baseInfo.zgrs = zgrs ? Number(zgrs) : 0
+					this.baseInfo.jcrs = jcrs ? Number(jcrs) : 0
+					this.baseInfo.jycsmj = jycsmj ? Number(jycsmj) : 0
+					this.baseInfo.lngAndLat = this.form.jd && this.form.wd ? `${this.form.jd} ${this.form.wd}` : ''
+					this.getHy();
+					this.getQy();
 				}
 			},
 			async nextStep() {
+				this.$refs.baseInfo.validate((valid) => {
+                    if (valid) {
+                        this.$refs.jzInfo.validate((valid) => {
+		                    if (valid) {
+		                    	this.$refs.contactInfo.validate((valid) => {
+				                    if (valid) {
+				                        this.submit()
+				                    }
+				                })
+		                    }
+		                })
+                    }
+                })
+                this.$refs.jzInfo.validate((valid) => {})
+                this.$refs.contactInfo.validate((valid) => {})
+			},
+			async submit() {
 				let params = {
 					...this.baseInfo,
 					yysjks: this.baseInfo.yysj[0],
@@ -954,15 +367,9 @@
 				let { status_code, message } = await api.addCycsBase(params);
 				if(status_code == 200) {
 					this.$Message.success('保存成功')
-					if(this.$route.query.type == 2) {
+					if(this.$route.name == 'base') {
 						this.$storage.set('gkdx_id', this.form.gkdx_id)
 						this.$router.back()
-					}else {
-						let { status_code, data } = await api.getCycsBase()
-						if(status_code == 200) {
-							this.$storage.set('gkdx_id', data.data[0].gkdx_id)
-						}
-						this.$router.replace('/baseInfo')
 					}
 				}
 			},

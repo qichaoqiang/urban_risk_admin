@@ -82,10 +82,14 @@
 				accountData: [],
 				accountColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.accountPage.pageIndex- 1) * this.accountPage.pageSize + 1);
+				        }
                     }, {
                         title: '用户名',
                         key: 'username',

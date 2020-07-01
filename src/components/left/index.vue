@@ -1,6 +1,6 @@
 <template>
 	<div class="left_box">
-		<title-top name="总览"></title-top>
+		<title-top name="风险统计"></title-top>
 		<div class="overview_data">
 			<div class="overview_item">
 				<div class="overview_key">风险数量</div>
@@ -17,7 +17,7 @@
 			<risk-bar id="1"></risk-bar>
 			<div class="overview_line"></div>
 			<title-top name="分行业"></title-top>
-			<risk-bar id="2"></risk-bar>
+			<risk-hy id="2"></risk-hy>
 		</div>
 		<div v-else>
 			<overview></overview>
@@ -33,6 +33,7 @@
 	import Overview from './overview'
 	import TradeOrder from './tradeOrder'
 	import RiskBar from './riskBar'
+	import RiskHy from './riskHy'
 	export default {
 		name: '',
 		data() {
@@ -50,7 +51,8 @@
 			Overview,
 			TitleTop,
 			TradeOrder,
-			RiskBar
+			RiskBar,
+			RiskHy
 		},
 		watch: {
 

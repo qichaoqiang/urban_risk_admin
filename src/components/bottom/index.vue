@@ -23,8 +23,8 @@
 		name: '',
 		data() {
 			return {
+				dateList: [],
 				selectIndex: 1,
-				dateList: ['01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-01', '01-02'],
 				valueList: [820, 932, 901, 934, 1290, 1330, 1320, 820, 932, 901, 934, 1290, 1330, 1320, 820, 932, 901, 934, 1290, 1330, 1320, 820, 932, 901, 934, 1290, 1330, 1320, 820, 932],
 				myChart: null
 			}
@@ -65,6 +65,24 @@
 			}
 		},
 		methods: {
+			setDataList() {
+				let list = []
+				let time = new Date().getTime();
+				let step = 24 * 60 * 60 * 1000
+				for(let i = 0; i < 30; i++) {
+					let date = new Date(time)
+					let month = date.getMonth() + 1
+					if(month < 10) {
+						month ='0' + month
+					}
+					let day = date.getDate()
+					if(day < 10) {
+						day ='0' + day
+					}
+					list.push(`${month}-${day}`)
+				}
+				this.dateList = list
+			},
 			draw() {
 				let self = this;
 				let axisConfig = {
@@ -148,6 +166,7 @@
 
 		},
 		mounted() {
+			this.setDataList()
 			this.draw();
 		}
 	}

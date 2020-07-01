@@ -31,7 +31,7 @@
 				            <Input clearable v-model="baseInfo.djbh" placeholder="登记编号"></Input>
 				        </FormItem>
 				        <FormItem label="在册人数">
-				            <InputNumber clearable v-model="baseInfo.zcrs" placeholder="在册人数"></InputNumber>
+				            <InputNumber :min="0" v-model="baseInfo.zcrs" placeholder="在册人数"></InputNumber>
 				        </FormItem>
 				        <FormItem label="投用时间">
 				            <DatePicker type="date" v-model="baseInfo.tysj"  placeholder="投用时间"></DatePicker>
@@ -69,10 +69,10 @@
 				        	<Input clearable v-model="addressInfo.csdz" placeholder="场所地址"></Input>
 				        </FormItem>
 				        <FormItem label="占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.zdmj" placeholder="占地面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.zdmj" placeholder="占地面积"></InputNumber>
 				        </FormItem>
 				        <FormItem label="建筑面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.jzmj" placeholder="建筑面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.jzmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 				        <FormItem label="经纬度">
 				        	<div @click="openLngModal">

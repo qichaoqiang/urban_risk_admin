@@ -3,13 +3,12 @@
 		<div class="trade_item" :class="{trade_item1: level == 1}" v-for="item in data" :style="{'padding-left': left}">
 			<div class="trade_father" @click="handleClickItem(item)" :class="{selected: selectIds.includes(item.id + '')}">
 				<div class="check" @click.stop.prevent="handleSelect(item)"></div>
-				<img class="icon" v-if="level <= 2" :src="require(`../../assets/trade/icon-${item.id}${item.selected ? 'on' : ''}.png`)">	
-				<span :class="`text${level}`">{{item.info}}</span>
+				<!-- <img class="icon" v-if="level <= 2" :src="require(`../../assets/trade/icon-${item.id}${item.selected ? 'on' : ''}.png`)">	 -->
+				<span :class="`text${level}`">{{item.fxylbmc}}</span>
 				<div class="arrow" v-if="item.children && item.children.length >= 1" :class="{arrow_rotate1: item.showChildren, arrow_rotate2: !item.showChildren}">
 					<Icon type="md-arrow-dropdown" size="12px" :color="item.selected ? '#10F6FF' : '#fff'" />
 				</div>
 			</div>
-			<!-- <trade-father :level="level" :item="item" @clickItem="handleClickItem" @selectItem="handleSelect"></trade-father> -->
 			<div class="trade_brother" :id="'trade_brother' + item.id" v-if="item.children && item.children.length >= 1">
 				<trade 
 					:data="item.children" 
@@ -82,7 +81,7 @@
 					
 				}
 				this.data.forEach(item => {
-					if(item.parentId == this.selectData.selectId) {
+					if(item.parent_id == this.selectData.selectId) {
 						item.selected = this.selectData.selectAll
 						this.setCurrentData(item);
 					}
@@ -108,9 +107,9 @@
 				})
 				this.selectIdList = selectIdList;
 				if(selectIdList.length == this.data.length) {
-					this.$emit('selectFather', this.data[0].parentId, 1);
+					this.$emit('selectFather', this.data[0].parent_id, 1);
 				}else {
-					this.$emit('selectFather', this.data[0].parentId, 2);
+					this.$emit('selectFather', this.data[0].parent_id, 2);
 				}
 				this.updateSelectIds(item);
 			},

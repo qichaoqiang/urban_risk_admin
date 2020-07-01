@@ -8,8 +8,8 @@
 					<Tabs value="name1">
 				        <TabPane label="开采规模" name="name1">
 						    <part-title text="开采规模" ref="xxx" :btns="['add']" @add="openKcgmdxkModel"></part-title>
-							<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
-						        <FormItem label="设计开采深度（米）">
+							<Form :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
+						        <FormItem label="设计开采深度（米）" prop="sjkcsd">
 						        	<InputNumber :min="0" v-model="baseInfo.sjkcsd"></InputNumber>
 						        </FormItem>
 						    </Form>
@@ -41,13 +41,13 @@
 							</Row>
 				        </TabPane>
 				        <TabPane label="作业情况" name="name2">
-				        	<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
-						        <FormItem label="开拓方式">
+				        	<Form :model="baseInfo" ref="baseInfo2" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
+						        <FormItem label="开拓方式" prop="ktfs">
 						        	<Select clearable v-model="baseInfo.ktfs" placeholder="开拓方式">
 						                <Option v-for="item in ktfsList" :key="item" :value="item">{{item}}</Option>
 						            </Select>
 						        </FormItem>
-						        <FormItem label="爆破作业">
+						        <FormItem label="爆破作业" prop="bpzy">
 						        	<Select clearable v-model="baseInfo.bpzy" placeholder="爆破作业">
 						                <Option v-for="item in bpzyList" :key="item" :value="item">{{item}}</Option>
 						            </Select>
@@ -60,11 +60,11 @@
 							</Row>
 				        </TabPane>
 				        <TabPane label="矿山条件" name="name3">
-				        	<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
-						        <FormItem label="水文条件">
+				        	<Form :model="baseInfo" ref="baseInfo3" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
+						        <FormItem label="水文条件" prop="swtj">
 						        	<Input clearable v-model="baseInfo.swtj" type="textarea" placeholder="水文条件"></Input>
 						        </FormItem>
-						        <FormItem label="地质条件">
+						        <FormItem label="地质条件" prop="dztj">
 						        	<Input clearable v-model="baseInfo.dztj" type="textarea" placeholder="地质条件"></Input>
 						        </FormItem>
 						    </Form>
@@ -80,21 +80,21 @@
 		</div>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}开采规模信息`" v-model="showKcgmdxkModel" @on-visible-change="kcgmdxkModelChange">
 			<div>
-				<Form :model="kcgmdxkForm" label-position="left" :label-width="210">
-					<FormItem label="采空区总规模（万立方）">
+				<Form :model="kcgmdxkForm" ref="kcgmdxk" :rules="kcgmdxkRules" hide-required-mark label-position="left" :label-width="210">
+					<FormItem label="采空区总规模（万立方）" prop="ckqzgm">
 			        	<InputNumber :min="0" v-model="kcgmdxkForm.ckqzgm"></InputNumber>
 			        </FormItem>
-			        <FormItem label="单个最大采空区规模（万立方）">
+			        <FormItem label="单个最大采空区规模（万立方）" prop="dgzdckqgm">
 			        	<InputNumber :min="0" v-model="kcgmdxkForm.dgzdckqgm"></InputNumber>
 			        </FormItem>
-			        <FormItem label="填报时间">
+			        <FormItem label="填报时间" prop="tbsj">
 			            <DatePicker type="date" v-model="kcgmdxkForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showKcgmdxkModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveKcgmdxk">保存</Button>
+		        <Button type="primary" size="large" :loading="kcgmdxkLoading" @click="saveKcgmdxk">保存</Button>
 	        </div>
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}仓库信息`" v-model="showCkyhbzModel" @on-visible-change="ckyhbzscModelChange">
@@ -276,6 +276,7 @@
 				showGqscModel: false,
 				showMainRiskModel: false,
 				showRimModel: false,
+				kcgmdxkLoading: false,
 				modeType: '',
 				modeType2: '',
 				map: null,
@@ -356,19 +357,29 @@
 				areaList: [],
 				kcgmdxkColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.kcgmdxkPage.pageIndex- 1) * this.kcgmdxkPage.pageSize + 1);
+				        }
                     }, {
                         title: '采空区总规模（万立方）',
                         key: 'ckqzgm',
+                        minWidth: 200
                     }, {
                         title: '单个最大采空区规模（万立方）',
                         key: 'dgzdckqgm',
+                        minWidth: 240
                     }, {
                         title: '填报时间',
                         key: 'tbsj',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -393,8 +404,14 @@
 				nzzldwList: ['吨', '立方', 'KG', 'L'],
 				ckyhbzscColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.ckyhbzscPage.pageIndex- 1) * this.ckyhbzscPage.pageSize + 1);
+				        }
                     }, {
                         title: '仓库名称',
                         key: 'ckmc',
@@ -418,6 +435,7 @@
                         key: 'tbsj',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -451,8 +469,14 @@
 				},
 				ccssColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.ccssPage.pageIndex- 1) * this.ccssPage.pageSize + 1);
+				        }
                     }, {
                         title: '储存设施单元名称',
                         key: 'ccssdymc',
@@ -473,6 +497,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -496,8 +521,14 @@
 				},
 				sjcccpColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.sjcccpPage.pageIndex- 1) * this.sjcccpPage.pageSize + 1);
+				        }
                     }, {
                         title: '产品类别',
                         key: 'cplb',
@@ -512,6 +543,7 @@
                         key: 'hyl',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -536,8 +568,14 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.rimPage.pageIndex- 1) * this.rimPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         key: 'mgmbmc',
@@ -552,6 +590,7 @@
                         key: 'rysl',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -566,7 +605,7 @@
 					lngAndLat: '',
 					qyfw: ''
 				},
-				fwList: ['东', '南', '西', '北'],
+				fwList: ['东', '南', '西', '北', '东北', '东南', '西北', '西南'],
 				mgmblxList: ['医院', '养老院', '学校', '政府机构', '商场', '居住区', '监狱', '宗教', '车站', '码头', '铁路', '公路', '林区', '工厂', '矿山', '河流', '其他'],
 				rimPage: {
 					pageSize: 10,
@@ -580,7 +619,22 @@
 
 		},
 		computed: {
-
+			baseInfoRules() {
+				return {
+					sjkcsd: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					ktfs: [{ required: true, message: '请选择', trigger: 'change' }],
+					bpzy: [{ required: true, message: '请选择', trigger: 'change' }],
+					swtj: [{ required: true, message: '请输入', trigger: 'change' }],
+					dztj: [{ required: true, message: '请输入', trigger: 'change' }],
+				}
+			},
+			kcgmdxkRules() {
+				return {
+					ckqzgm: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					dgzdckqgm: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			async getBaseInfo() {
@@ -588,13 +642,13 @@
 				let { status_code, data, message } = await api.getKsqydxkBase(this.gkdx_id);
 				if(status_code == 0) {
 					this.form = data;
-					let { qymc, tyshxydm, zcdz, sfzgyyq, yqmc, hyml, hydm, aqscxkz, zgrs, glrysl, ksjk, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, ksdz, lngAndLat, kqfw, zdmj, jzmj, kcsj, jyfw, ktfs, bpzy, swtj, dztj, sjkcsd, kckz } = this.form
-					this.baseInfo = { qymc, tyshxydm, zcdz, sfzgyyq, yqmc, hydm, aqscxkz, zgrs, glrysl, ksjk, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, ksdz, kqfw, jyfw, ktfs, bpzy, swtj, dztj, kckz }
-					this.baseInfo.zgrs = zgrs ? Number(zgrs) : 0
-					this.baseInfo.glrysl = glrysl ? Number(glrysl) : 0
-					this.baseInfo.kcsj = kcsj ? new Date(kcsj) : '',
-					this.baseInfo.sjkcsd = sjkcsd ? Number(sjkcsd) : 0
-					this.baseInfo.lngAndLat = this.form.jd && this.form.wd ? `${(this.form.jd - 0).toFixed(2)} ${(this.form.wd - 0).toFixed(2)}` : ''
+					this.baseInfo = {
+						sjkcsd: data.sjkcsd ? Number(data.sjkcsd) : 0,
+						ktfs: data.ktfs || '',
+						bpzy: data.bpzy || '',
+						swtj: data.swtj || '',
+						dztj: data.dztj || '',
+					}
 				}
 				let kcgmdxkParams = {
 					gkdx_id: this.gkdx_id,
@@ -638,36 +692,48 @@
 				}
 			},
 			async saveInfo1() {
-				let params = {
-					sjkcsd: this.baseInfo.sjkcsd,
-					gkdx_id: this.form.gkdx_id
-				}
-				let { status_code, message } = await api.addKsqydxkBase(params);
-				if(status_code == 200) {
-					this.$Message.success('保存成功')
-				}
+				this.$refs.baseInfo1.validate(async valid => {
+                    if (valid) {
+						let params = {
+							sjkcsd: this.baseInfo.sjkcsd,
+							gkdx_id: this.form.gkdx_id
+						}
+						let { status_code, message } = await api.addKsqydxkBase(params);
+						if(status_code == 200) {
+							this.$Message.success('保存成功')
+						}
+                    }
+                })
 			},
 			async saveInfo2() {
-				let params = {
-					ktfs: this.baseInfo.ktfs,
-					bpzy: this.baseInfo.bpzy,
-					gkdx_id: this.form.gkdx_id
-				}
-				let { status_code, message } = await api.addKsqydxkBase(params);
-				if(status_code == 200) {
-					this.$Message.success('保存成功')
-				}
+				this.$refs.baseInfo2.validate(async valid => {
+                    if (valid) {
+						let params = {
+							ktfs: this.baseInfo.ktfs,
+							bpzy: this.baseInfo.bpzy,
+							gkdx_id: this.form.gkdx_id
+						}
+						let { status_code, message } = await api.addKsqydxkBase(params);
+						if(status_code == 200) {
+							this.$Message.success('保存成功')
+						}
+                    }
+                })
 			},
 			async saveInfo3() {
-				let params = {
-					swtj: this.baseInfo.swtj,
-					dztj: this.baseInfo.dztj,
-					gkdx_id: this.form.gkdx_id
-				}
-				let { status_code, message } = await api.addKsqydxkBase(params);
-				if(status_code == 200) {
-					this.$Message.success('保存成功')
-				}
+				this.$refs.baseInfo3.validate(async valid => {
+                    if (valid) {
+						let params = {
+							swtj: this.baseInfo.swtj,
+							dztj: this.baseInfo.dztj,
+							gkdx_id: this.form.gkdx_id
+						}
+						let { status_code, message } = await api.addKsqydxkBase(params);
+						if(status_code == 200) {
+							this.$Message.success('保存成功')
+						}
+                    }
+                })
 			},
 			openAreaModal() {	
 				this.showAreaModel = true;
@@ -772,11 +838,14 @@
 			},
 			kcgmdxkModelChange(status) {
 				if(!status) {
-					this.kcgmdxkForm = {
-						ckqzgm: 0,
-						dgzdckqgm: 0,
-						tbsj: ''
-					}
+					this.$nextTick(() => {
+						this.kcgmdxkForm = {
+							ckqzgm: 0,
+							dgzdckqgm: 0,
+							tbsj: ''
+						}
+						this.$refs.kcgmdxk.resetFields();
+					})
 				}
 			},
 			async removeKcgmdxk(row) {
@@ -785,20 +854,26 @@
 				this.getKcgmdxkList()
 			},
 			async saveKcgmdxk() {
-				let params = {
-					...this.kcgmdxkForm,
-					tbsj: this.kcgmdxkForm.tbsj ? getDate(new Date(this.kcgmdxkForm.tbsj).getTime(), 'date') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addKcgmdxkInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showKcgmdxkModel = false
-					this.getKcgmdxkList()
-				}
+				this.$refs.kcgmdxk.validate(async valid => {
+                    if (valid) {
+                    	this.kcgmdxkLoading = true
+						let params = {
+							...this.kcgmdxkForm,
+							tbsj: this.kcgmdxkForm.tbsj ? getDate(new Date(this.kcgmdxkForm.tbsj).getTime(), 'date') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addKcgmdxkInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showKcgmdxkModel = false
+							this.kcgmdxkLoading = false
+							this.getKcgmdxkList()
+						}
+                    }
+                })
 			},
 			handleChangeCkyhbzPage(val) {
 				this.ckyhbzscPage.pageIndex = val

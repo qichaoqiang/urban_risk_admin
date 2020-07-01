@@ -32,7 +32,7 @@ module.exports = {
   productionSourceMap: false,
   devServer: { 
     disableHostCheck: true,
-    // host: '0.0.0.0',
+    host: '0.0.0.0',
     port: 8080
   },
   // eslint 如果要用的话 请在项目一开始就使用它，不要在项目进行一半的时候使用，那样会对你造成很大的困扰

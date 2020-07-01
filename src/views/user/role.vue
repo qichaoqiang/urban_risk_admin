@@ -2,7 +2,9 @@
 	<div class="user_container">
 		<Row type="flex" justify="space-between" align="middle">
 			<div class="title">角色管理</div>
-			<Button v-if="hasAuth('juese_store')" type="primary" icon="ios-add" @click="openRoleModel"></Button>
+			<Button v-if="hasAuth('juese_store')" type="primary" @click="openRoleModel" style="width: 60px">
+				<Icon type="ios-add" size="28" />
+			</Button>
 		</Row>
 		<div v-if="hasAuth('juese')">
 			<Divider />
@@ -38,25 +40,26 @@
 			</Row>
 		</div>
 		<Modal width="820" :title="`${modelTypeList[modeType - 1]}角色`" v-model="showRoleModel" @on-visible-change="roleModelChange">
-			<Form :disabled="modeType == 3" :model="roleForm" label-position="left" :label-width="120">
-				<FormItem label="角色名称">
+			<Form :disabled="modeType == 3" :model="roleForm" ref="role" :rules="roleRules" hide-required-mark label-position="left" :label-width="120">
+				<FormItem label="角色名称" prop="role_name">
 		        	<Input clearable v-model="roleForm.role_name"></Input>
 		        </FormItem>
-		        <FormItem label="排序">
-		        	<InputNumber clearable :min="0" v-model="roleForm.role_weight"></InputNumber>
+		        <FormItem label="排序" prop="role_weight">
+		        	<InputNumber :min="0" v-model="roleForm.role_weight"></InputNumber>
 		        </FormItem>
-		        <FormItem label="描述">
+		        <FormItem label="描述" prop="role_description">
 		            <Input clearable type="textarea" v-model="roleForm.role_description"></Input>
 		        </FormItem>
 		        <FormItem label="权限">
 		        	<div style="max-height: 400px; overflow: scroll;">
-		        		<Tree ref="tree" :load-data="loadData" :data="authData" show-checkbox></Tree>
+		        		 <!-- :load-data="loadData" -->
+		        		<Tree ref="tree" :data="authData" show-checkbox></Tree>
 		        	</div>
 		        </FormItem>
 			</Form>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button v-if="modeType != 3" type="primary" size="large" @click="saveRole">保存</Button>
+		        <Button v-if="modeType != 3" type="primary" size="large" :loading="roleLoading" @click="saveRole">保存</Button>
 	        </div>
 		</Modal>
 	</div>
@@ -70,6 +73,7 @@
 		data() {
 			return {
 				showRoleModel: false,
+				roleLoading: false,
 				modeType: '',
 				searchForm: {
 					role_name: ''
@@ -78,10 +82,14 @@
 				roleData: [],
 				roleColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.rolePage.pageIndex- 1) * this.rolePage.pageSize + 1);
+				        }
                     }, {
                         title: '角色名称',
                         key: 'role_name',
@@ -133,7 +141,13 @@
 
 		},
 		computed: {
-
+			roleRules() {
+				return {
+					role_name: [{ required: true, message: '请输入', trigger: 'change' }],
+					role_weight: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					role_description: [{ required: true, message: '请输入', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			// async getFxylbData(parent_id) {
@@ -214,11 +228,8 @@
 						}
 						return item_
 					})
-					console.log(list_)
 					list = [...list, ...list_]
-					console.log(list)
 				}
-				console.log(list)
 				callback(list);
             },
 			async getAuthList() {
@@ -245,6 +256,9 @@
 					}
 					return list
 				}
+				let fxylb = {
+					title: '管辖行业',
+				}
 				let params = {
 					per_page: 1000,
 					page: 1,
@@ -255,42 +269,41 @@
 				}else {
 					this.fxylbData = []
 				}
-				let fxylb = {
-					title: '管辖行业',
-				}
 				let authIds = this.role_jurisdiction.split(',')
-				fxylb.children = this.fxylbData.map(item => {
+				let fxylbData = this.fxylbData.filter(item => item.parent_id === 0)
+				fxylb.children = fxylbData.map(item => {
 					let item_ = {
 						title: item.fxylbmc,
 						id_: item.id,
-						dm: item.dm
+						dm: item.dm,
+						yzj: item.yzj
 					}
-					if(item.yzj == 1) {
-						item_.loading = false
-						item_.children = []
-					}else {
-						item_.children = [
-							{
-								title: '列表',
-								id: `${item.dm}`
-							}, {
-								title: '添加',
-								id: `${item.dm}_store`
-							}, {
-								title: '详情',
-								id: `${item.dm}_show`
-							}, {
-								title: '修改',
-								id: `${item.dm}_update`
-							}, {
-								title: '删除',
-								id: `${item.dm}_destroy`
-							}
-						]
-						item_.children.forEach(item => {
-							item.checked = authIds.includes(item.id)
-						})
-					}
+					// if(item.yzj == 1) {
+					// 	// item_.loading = false
+					// 	item_.children = []
+					// }else {
+					// 	item_.children = [
+					// 		{
+					// 			title: '列表',
+					// 			id: `${item.dm}`
+					// 		}, {
+					// 			title: '添加',
+					// 			id: `${item.dm}_store`
+					// 		}, {
+					// 			title: '详情',
+					// 			id: `${item.dm}_show`
+					// 		}, {
+					// 			title: '修改',
+					// 			id: `${item.dm}_update`
+					// 		}, {
+					// 			title: '删除',
+					// 			id: `${item.dm}_destroy`
+					// 		}
+					// 	]
+					// 	item_.children.forEach(item => {
+					// 		item.checked = authIds.includes(item.id)
+					// 	})
+					// }
 					return item_
 				})
 				let childrenList = [
@@ -317,6 +330,64 @@
 				fxylb.children = [...childrenList, ...fxylb.children]
 				let auth = map(this.auth)
 				this.authData = [...auth, fxylb]
+				if(fxylb.children && fxylb.children.length > 0) {
+					fxylb.children.forEach(item => {
+						this.getFxylxAuth(item)
+					})
+				}
+			},
+			async getFxylxAuth(item) {
+				let children1 = [
+					{
+						title: '列表',
+						id: `${item.dm}`
+					}, {
+						title: '添加',
+						id: `${item.dm}_store`
+					}, {
+						title: '详情',
+						id: `${item.dm}_show`
+					}, {
+						title: '修改',
+						id: `${item.dm}_update`
+					}, {
+						title: '删除',
+						id: `${item.dm}_destroy`
+					}
+				]
+				if(item.yzj === 1) {
+					let params = {
+						parent_id: item.id_,
+						per_page: 1000,
+						page: 1,
+					}
+					let fxylbData
+					let { status_code, data } = await api.getFxylbList(params)
+					if(status_code == 200) {
+						fxylbData = data.data
+						let authIds = this.role_jurisdiction.split(',')
+						let children2 = fxylbData.map(elem => {
+							let item_ = {
+								title: elem.fxylbmc,
+								id_: elem.id,
+								dm: elem.dm,
+								yzj: elem.yzj,
+								checked: authIds.includes(elem.id)
+							}
+							return item_
+						})
+						item.children = [...children1, ...children2]
+						if(item.children && item.children.length > 0) {
+							item.children.forEach(child => {
+								this.getFxylxAuth(child)
+							})
+						}
+					}else {
+						item.children = children1
+					}
+				}else if(item.yzj === 0) {
+					item.children = children1
+				}
 			},
 			handleChangeRolePage(val) {
 				this.rolePage.pageIndex = val
@@ -371,14 +442,18 @@
 			},
 			roleModelChange(status) {
 				if(!status) {
-					this.roleForm = {
-						role_name: '',
-						role_weight: 0,
-						role_description: '',
-						role_jurisdiction: '',
-					}
-					this.setAuthData()
-					this.role_jurisdiction = '';
+					this.$nextTick(() => {
+						this.roleForm = {
+							role_name: '',
+							role_weight: 0,
+							role_description: '',
+							role_jurisdiction: '',
+						}
+						this.authData = []
+						this.setAuthData()
+						this.role_jurisdiction = '';
+						this.$refs.role.resetFields();
+					})
 				}
 			},
 			async removeRole(row) {
@@ -387,29 +462,34 @@
 				this.getRoleList()
 			},
 			async saveRole() {
-				let list = this.$refs.tree.getCheckedNodes().filter(item => item.id)
-				let ids = [...new Set(list.map(item => item.id))].join(',')
-				let params = {
-					...this.roleForm,
-					role_jurisdiction: ids
-				}
-				if(this.modeType == 2) {
-					params.role_id = this.role_id
-				}
-				let { status_code, message } = await api.addRoleItem(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showRoleModel = false
-					this.getRoleList()
-				}
-				if(this.modeType == 2 && this.role_id == this.$storage.get('userInfo').role_id) {
-					api.getRoleInfo(this.role_id).then(res1 => {
-	                    if(res1.status_code == 0) {
-	                        this.$storage.set('authList', res1.data.role_jurisdiction.split(','))
-	                    }
-	                })
-				}
-				
+				this.$refs.role.validate(async valid => {
+                    if (valid) {
+                    	this.roleLoading = true
+						let list = this.$refs.tree.getCheckedNodes().filter(item => item.id)
+						let ids = [...new Set(list.map(item => item.id))].join(',')
+						let params = {
+							...this.roleForm,
+							role_jurisdiction: ids
+						}
+						if(this.modeType == 2) {
+							params.role_id = this.role_id
+						}
+						let { status_code, message } = await api.addRoleItem(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showRoleModel = false
+							this.getRoleList()
+						}
+						this.roleLoading = false
+						if(this.modeType == 2 && this.role_id == this.$storage.get('userInfo').role_id) {
+							api.getRoleInfo(this.role_id).then(res1 => {
+			                    if(res1.status_code == 0) {
+			                        this.$storage.set('authList', res1.data.role_jurisdiction.split(','))
+			                    }
+			                })
+						}
+                    }
+                })
 			},
 			handleAuthData(data, list) {
 	            data.map(item => {

@@ -7,23 +7,23 @@
 					<Tabs value="name1">
 				        <TabPane label="医院规模" name="name1">
 							<part-title text="医院规模"></part-title>
-							<Form :model="mostForm" label-position="left" inline :label-width="120">
-						        <FormItem label="从业人员" style="margin-right: 100px">
-						        	<InputNumber clearable v-model="mostForm.cyrs"></InputNumber>
+							<Form :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules" hide-required-mark label-position="left" inline :label-width="120">
+						        <FormItem label="从业人员" prop="cyrs" style="margin-right: 100px">
+						        	<InputNumber :min="0" v-model="baseInfo.cyrs"></InputNumber>
 						        </FormItem>
-						        <FormItem label="日均门诊人数" style="margin-right: 100px">
-						        	<InputNumber clearable v-model="mostForm.rjmzrs"></InputNumber>
+						        <FormItem label="日均门诊人数" prop="rjmzrs" style="margin-right: 100px">
+						        	<InputNumber :min="0" v-model="baseInfo.rjmzrs"></InputNumber>
 						        </FormItem>
-						        <FormItem label="床位数" style="margin-right: 100px">
-						        	<InputNumber clearable v-model="mostForm.cws"></InputNumber>
+						        <FormItem label="床位数" prop="cws" style="margin-right: 100px">
+						        	<InputNumber :min="0" v-model="baseInfo.cws"></InputNumber>
 						        </FormItem>
-						        <FormItem label="日均床位使用量" style="margin-right: 100px">
-						        	<InputNumber clearable v-model="mostForm.rjcwsyl"></InputNumber>
+						        <FormItem label="日均床位使用量" prop="rjcwsyl" style="margin-right: 100px">
+						        	<InputNumber :min="0" v-model="baseInfo.rjcwsyl"></InputNumber>
 						        </FormItem>
 							</Form>
 							<Row type="flex" justify="center" style="margin-top: 24px">
 								<Col>
-									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo">完成</Button>
+									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo1">完成</Button>
 								</Col>
 							</Row>
 				        </TabPane>
@@ -53,7 +53,7 @@
 						                    @on-page-size-change="handleChangeWhPageSize"
 						                />
 									</Row>
-									<part-title text="液氮" :btns="['add']" @add="openYdModel"></part-title>
+									<part-title text="液氧" :btns="['add']" @add="openYdModel"></part-title>
 									<Table :columns="ydColumns" :data="ydData">
 										<template slot-scope="{ row }" slot="action">
 								            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editYdModel(row)">编辑</Button>
@@ -109,21 +109,21 @@
 				        </TabPane>
 				        <TabPane label="火灾危险" name="name3">
 				        	<part-title text="火灾危险"></part-title>
-							<Form :model="mostForm" label-position="left" inline :label-width="100">
-						        <FormItem label="消防重点单位" style="margin-right: 120px">
-						            <Select clearable v-model="mostForm.xfzddw" placeholder="请选择">
+							<Form :model="baseInfo" ref="baseInfo2" :rules="baseInfoRules" hide-required-mark label-position="left" inline :label-width="100">
+						        <FormItem label="消防重点单位" prop="xfzddw" style="margin-right: 120px">
+						            <Select clearable v-model="baseInfo.xfzddw" placeholder="请选择">
 						                <Option v-for="item in xfzddwList" :key="item.value" :value="item.value">{{item.name}}</Option>
 						            </Select>
 						        </FormItem>
-						        <FormItem label="火灾高危单位" style="margin-right: 120px">
-						            <Select clearable v-model="mostForm.hzgwdw" placeholder="请选择">
+						        <FormItem label="火灾高危单位" prop="hzgwdw" style="margin-right: 120px">
+						            <Select clearable v-model="baseInfo.hzgwdw" placeholder="请选择">
 						                <Option v-for="item in xfzddwList" :key="item.value" :value="item.value">{{item.name}}</Option>
 						            </Select>
 						        </FormItem>
 							</Form>
 							<Row type="flex" justify="center" style="margin-top: 24px">
 								<Col>
-									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo">完成</Button>
+									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo2">完成</Button>
 								</Col>
 							</Row>
 				        </TabPane>
@@ -165,86 +165,86 @@
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}化学品`" v-model="showWhModel" @on-visible-change="whModelChange">
 			<div>
-				<Form :model="whForm" label-position="left" :label-width="120">
-					<FormItem label="化学品名称">
+				<Form :model="whForm" ref="wh" :rules="whRules" hide-required-mark label-position="left" :label-width="120">
+					<FormItem label="化学品名称" prop="hxpmc">
 			        	<Input clearable v-model="whForm.hxpmc"></Input>
 			        </FormItem>
-			        <FormItem label="CAS">
+			        <FormItem label="CAS" prop="Ch">
 			        	<Input clearable v-model="whForm.Ch"></Input>
 			        </FormItem>
-			        <FormItem label="数量">
-			        	<InputNumber clearable :min="0" v-model="whForm.sl"></InputNumber>
+			        <FormItem label="数量" prop="sl">
+			            <InputNumber :min="0" v-model="whForm.sl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="储存位置">
+			        <FormItem label="储存位置" prop="ccwz">
 			        	<Input clearable v-model="whForm.ccwz"></Input>
 			        </FormItem>
-			        <FormItem label="年使用量(kg)">
-			        	<Input clearable v-model="whForm.nsyl"></Input>
+			        <FormItem label="年使用量(kg)" prop="nsyl">
+			            <InputNumber :min="0" v-model="whForm.nsyl"></InputNumber>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveWh">保存</Button>
+		        <Button type="primary" size="large" :loading="modelLoading" @click="saveWh">保存</Button>
 	        </div>
 		</Modal>
-		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}液氮`" v-model="showYdModel" @on-visible-change="ydModelChange">
+		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}液氧`" v-model="showYdModel" @on-visible-change="ydModelChange">
 			<div>
-				<Form :model="ydForm" label-position="left" :label-width="160">
-					<FormItem label="名称">
+				<Form :model="ydForm" ref="yd" :rules="ydRules" hide-required-mark label-position="left" :label-width="160">
+					<FormItem label="名称" prop="mc">
 			        	<Input clearable v-model="ydForm.mc"></Input>
 			        </FormItem>
-			        <FormItem label="位置">
+			        <FormItem label="位置" prop="wz">
 			        	<Input clearable v-model="ydForm.wz"></Input>
 			        </FormItem>
-			        <FormItem label="容量">
-			            <InputNumber clearable v-model="ydForm.rl"></InputNumber>
+			        <FormItem label="容量" prop="rl">
+			            <InputNumber :min="0" v-model="ydForm.rl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="数量">
-			            <InputNumber clearable :min="0" v-model="ydForm.sl"></InputNumber>
+			        <FormItem label="数量" prop="sl">
+			            <InputNumber :min="0" v-model="ydForm.sl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="压力">
-			            <InputNumber clearable v-model="ydForm.yl"></InputNumber>
+			        <FormItem label="压力" prop="yl">
+			            <InputNumber :min="0" v-model="ydForm.yl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="年使用量(kg)">
-			        	<InputNumber clearable v-model="ydForm.nsyl"></InputNumber>
+			        <FormItem label="年使用量(kg)" prop="nsyl">
+			            <InputNumber :min="0" v-model="ydForm.nsyl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="储罐/钢瓶检验有效期">
+			        <FormItem label="储罐/钢瓶检验有效期" prop="jyyxq">
 			        	<DatePicker type="date" v-model="ydForm.jyyxq"></DatePicker>
 			        </FormItem>
-			        <FormItem label="检验单位">
+			        <FormItem label="检验单位" prop="jydw">
 			        	<Input clearable v-model="ydForm.jydw"></Input>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showYdModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveYd">保存</Button>
+		        <Button type="primary" size="large" :loading="modelLoading" @click="saveYd">保存</Button>
 	        </div>
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}危险废液`" v-model="showRiskLiauidModel" @on-visible-change="riskLiauidModelChange">
 			<div>
-				<Form :model="riskLiauidForm" label-position="left" :label-width="120">
-					<FormItem label="名称">
+				<Form :model="riskLiauidForm" ref="riskLiauid" :rules="riskLiauidRules" hide-required-mark label-position="left" :label-width="120">
+					<FormItem label="名称" prop="mc">
 			        	<Input clearable v-model="riskLiauidForm.mc"></Input>
 			        </FormItem>
-			        <FormItem label="位置">
+			        <FormItem label="位置" prop="wz">
 			        	<Input clearable v-model="riskLiauidForm.wz"></Input>
 			        </FormItem>
-			        <FormItem label="数量">
-			        	<Input clearable v-model="riskLiauidForm.sl"></Input>
+			        <FormItem label="数量" prop="sl">
+			            <InputNumber :min="0" v-model="riskLiauidForm.sl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="回收周期">
+			        <FormItem label="回收周期" prop="hszq">
 			        	<Input clearable v-model="riskLiauidForm.hszq"></Input>
 			        </FormItem>
-			        <FormItem label="回收单位">
+			        <FormItem label="回收单位" prop="hsdw">
 			        	<Input clearable v-model="riskLiauidForm.hsdw"></Input>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">	
 	            <!-- <Button type="text" size="large" @click="showYdModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveRiskLiauid">保存</Button>
+		        <Button type="primary" size="large" :loading="modelLoading" @click="saveRiskLiauid">保存</Button>
 	        </div>
 		</Modal>
 	</div>
@@ -286,34 +286,12 @@
 				showXfModel: false,
 				showMainRiskModel: false,
 				showSpecialModel: false,
+				modelLoading: false,
 				modeType: '',
 				map: null,
 				polygonTool: null,
 				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				baseInfo: {
-					yymc: '医院',
-					yylx: '',
-					jbdw: '',
-					zcdjdz: '',
-					tyshxydm: '',
-					quyu: [],
-					jctysj: '',
-					hydm: '',
-					yydj: [],
-				},
-				addressInfo: {
-					yydz: '',
-					zdmj: 0,
-					jzmj: 0,
-					lngAndLat: '',	
-					yyfw: ''	
-				},
-				contactInfo: {
-					jbr: '',
-					jbrdh: '',
-					jbryx: '',
-				},
-				mostForm: {
 					cyrs: 0,
 					rjmzrs: 0,
 					cws: 0,
@@ -359,25 +337,37 @@
 				areaList: [],
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.whPage.pageIndex- 1) * this.whPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpmc',
+                        minWidth: 110
                     }, {
                         title: 'CAS',
                         key: 'Ch',
+                        minWidth: 100
                     }, {
                         title: '数量',
                         key: 'sl',
+                        minWidth: 80
                     }, {
                         title: '储存位置',
                         key: 'ccwz',
+                        minWidth: 100
                     }, {
                         title: '年使用量(kg)',
                         key: 'nsyl',
+                        minWidth: 140
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -397,34 +387,49 @@
 				},
 				ydColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.ydPage.pageIndex- 1) * this.ydPage.pageSize + 1);
+				        }
                     }, {
                         title: '名称',
                         key: 'mc',
+                        minWidth: 80
                     }, {
                         title: '位置',
                         key: 'wz',
+                        minWidth: 80
                     }, {
                         title: '容量',
                         key: 'rl',
+                        minWidth: 80
                     }, {
                         title: '数量',
                         key: 'sl',
+                        minWidth: 80
                     }, {
                         title: '压力',
                         key: 'yl',
+                        minWidth: 80
                     }, {
                         title: '年使用量(kg)',
                         key: 'nsyl',
+                        minWidth: 140
                     }, {
                         title: '储罐/钢瓶检验有效期',
                         key: 'jyyxq',
+                        minWidth: 180
                     }, {
                         title: '检验单位',
                         key: 'jydw',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -447,25 +452,37 @@
 				},
 				riskLiauidColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.riskLiauidPage.pageIndex- 1) * this.riskLiauidPage.pageSize + 1);
+				        }
                     }, {
                         title: '名称',
                         key: 'mc',
+                        minWidth: 80
                     }, {
                         title: '位置',
                         key: 'wz',
+                        minWidth: 80
                     }, {
                         title: '数量',
                         key: 'sl',
+                        minWidth: 80
                     }, {
                         title: '回收周期',
                         key: 'hszq',
+                        minWidth: 100
                     }, {
                         title: '回收单位',
                         key: 'hsdw',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -496,7 +513,46 @@
 
 		},
 		computed: {
-
+			baseInfoRules() {
+				return {
+					cyrs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					rjmzrs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					cws: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					rjcwsyl: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					xfzddw: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					hzgwdw: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
+			whRules() {
+				return {
+					hxpmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					Ch: [{ required: true, message: '请输入', trigger: 'change' }],
+					sl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					ccwz: [{ required: true, message: '请输入', trigger: 'change' }],
+					nsyl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
+			ydRules() {
+				return {
+					mc: [{ required: true, message: '请输入', trigger: 'change' }],
+					wz: [{ required: true, message: '请输入', trigger: 'change' }],
+					rl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					sl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					yl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					nsyl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					jyyxq: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
+					jydw: [{ required: true, message: '请输入', trigger: 'change' }],
+				}
+			},
+			riskLiauidRules() {
+				return {
+					mc: [{ required: true, message: '请输入', trigger: 'change' }],
+					wz: [{ required: true, message: '请输入', trigger: 'change' }],
+					sl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					hsdw: [{ required: true, message: '请输入', trigger: 'change' }],
+					hszq: [{ required: true, message: '请输入', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			async getBaseInfo() {
@@ -541,30 +597,16 @@
 				let { status_code, data, message } = await api.getHospitalBase(this.gkdx_id);
 				if(status_code == 0) {
 					this.form = data;
-					let { jbr, jbrdh, jbryx, yymc, jbdw, zcdjdz, tyshxydm, yydz, quyu_id, jd, wd, yyfw, jctysj, yylx, hydm, yydj, zdmj, jzmj, cyrs, rjmzrs, cws, rjcwsyl, xfzddw, hzgwdw } = this.form
-					this.baseInfo = { yymc, jbdw, zcdjdz, tyshxydm, yylx, hydm }
-					this.baseInfo.jctysj = this.form.jctysj ? new Date(this.form.jctysj) : '';
-					this.baseInfo.yydj = this.form.yydj ? this.form.yydj.split(',') : [];
-					this.addressInfo = { yydz, yyfw }
-					this.addressInfo.zdmj = zdmj ? Number(zdmj) : 0
-					this.addressInfo.jzmj = jzmj ? Number(jzmj) : 0
-					this.addressInfo.lngAndLat = this.form.jd && this.form.wd ? `${(this.form.jd - 0).toFixed(6)} ${(this.form.wd - 0).toFixed(6)}` : ''
-					this.contactInfo = { jbr, jbrdh, jbryx }
-					this.mostForm = { cyrs, rjmzrs, cws, rjcwsyl, xfzddw, hzgwdw }
+					this.baseInfo = { 
+						cyrs: data.cyrs ? Number(data.cyrs) : 0,
+						rjmzrs: data.rjmzrs ? Number(data.rjmzrs) : 0,
+						cws: data.cws ? Number(data.cws) : 0,
+						rjcwsyl: data.rjcwsyl ? Number(data.rjcwsyl) : 0,
+						xfzddw: data.xfzddw ? Number(data.xfzddw) : 0,
+						hzgwdw: data.hzgwdw ? Number(data.hzgwdw) : 0,
+					}
 					this.getQy()
-					// this.getHy()
 				}
-				// if(this.$route.query.type == '2') {
-				// 	let baseInfo = this.$storage.get('baseInfo')
-				// 	this.baseInfo = baseInfo
-				// 	this.addressInfo = this.$storage.get('addressInfo')
-				// 	this.contactInfo = this.$storage.get('contactInfo')
-				// 	this.mostForm = this.$storage.get('mostForm')
-				// 	this.form = this.$storage.get('form')
-				// 	this.getQy()
-				// }else {
-				// 	this.loading = false
-				// }
 			},
 			async nextStep() {
 				let params = {
@@ -633,20 +675,37 @@
 					})
 				}
 			},
-			async saveInfo() {
-				let params = {
-					...this.mostForm,
-					gkdx_id: this.gkdx_id
-				}
-				let { status_code, message } = await api.addHospitalBase(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					// if(this.$route.query.type == 2) {
-					// 	this.$router.back()
-					// }else {
-					// 	this.$router.replace('/baseInfo')
-					// }
-				}
+			async saveInfo1() {
+				this.$refs.baseInfo1.validate(async valid => {
+                    if (valid) {
+                        let params = {
+                        	gkdx_id: this.gkdx_id,
+							cyrs: this.baseInfo.cyrs,
+							rjmzrs: this.baseInfo.rjmzrs,
+							cws: this.baseInfo.cws,
+							rjcwsyl: this.baseInfo.rjcwsyl,
+						}
+						let { status_code, message } = await api.addHospitalBase(params);
+						if(status_code == 200) {
+							this.$Message.success('保存成功')
+						}
+                    }
+                })
+			},
+			async saveInfo2() {
+				this.$refs.baseInfo2.validate(async valid => {
+                    if (valid) {
+                        let params = {
+							gkdx_id: this.gkdx_id,
+							xfzddw: this.baseInfo.xfzddw,
+							hzgwdw: this.baseInfo.hzgwdw,
+						}
+						let { status_code, message } = await api.addHospitalBase(params);
+						if(status_code == 200) {
+							this.$Message.success('保存成功')
+						}
+                    }
+                })
 			},
 			openAreaModal() {	
 				this.showAreaModel = true;
@@ -714,13 +773,16 @@
 			},
 			whModelChange(status) {
 				if(!status) {
-					this.whForm = {
-						hxpmc: '',
-						Ch: '',
-						sl: 0,
-						nsyl: 0,
-						ccwz: ''
-					}
+					this.$nextTick(() => {
+						this.whForm = {
+							hxpmc: '',
+							Ch: '',
+							sl: 0,
+							nsyl: 0,
+							ccwz: ''
+						}
+						this.$refs.wh.resetFields();
+					})
 				}
 			},
 			async getWhItemList() {
@@ -757,19 +819,25 @@
 				this.getWhItemList()
 			},
 			async saveWh() {
-				let params = {
-					...this.whForm,
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addWhyyItem(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showWhModel = false
-					this.getWhItemList()
-				}
+				this.$refs.wh.validate(async valid => {
+                    if (valid) {
+                    	this.modelLoading = true
+						let params = {
+							...this.whForm,
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addWhyyItem(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showWhModel = false
+							this.getWhItemList()
+						}
+							this.modelLoading = false
+                    }
+                })
 			},
 			handleChangeYdPage(val) {
 				this.ydPage.pageIndex = val
@@ -781,16 +849,19 @@
 			},
 			ydModelChange(status) {
 				if(!status) {
-					this.ydForm = {
-						mc: '',
-						wz: '',
-						rl: 0,
-						sl: 0,
-						yl: 0,
-						nsyl: 0,
-						jyyxq: '',
-						jydw: ''
-					}
+					this.$nextTick(() => {
+						this.ydForm = {
+							mc: '',
+							wz: '',
+							rl: 0,
+							sl: 0,
+							yl: 0,
+							nsyl: 0,
+							jyyxq: '',
+							jydw: ''
+						}
+						this.$refs.yd.resetFields();
+					})
 				}
 			},
 			async getYdItemList() {
@@ -830,20 +901,26 @@
 				this.getYdItemList()
 			},
 			async saveYd() {
-				let params = {
-					...this.ydForm,
-					jyyxq: this.ydForm.jyyxq ? getDate(new Date(this.ydForm.jyyxq).getTime(), 'date') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addYdItem(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showYdModel = false
-					this.getYdItemList()
-				}
+				this.$refs.yd.validate(async valid => {
+                    if (valid) {
+                    	this.modelLoading = true
+						let params = {
+							...this.ydForm,
+							jyyxq: this.ydForm.jyyxq ? getDate(new Date(this.ydForm.jyyxq).getTime(), 'date') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addYdItem(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showYdModel = false
+							this.getYdItemList()
+						}
+							this.modelLoading = false
+                    }
+                })
 			},
 			handleChangeRiskLiauidPage(val) {
 				this.riskLiauidPage.pageIndex = val
@@ -855,13 +932,16 @@
 			},
 			riskLiauidModelChange(status) {
 				if(!status) {
-					this.riskLiauidForm = {
-						mc: '',
-						wz: '',
-						sl: 0,
-						hszq: '',
-						hsdw: ''
-					}
+					this.$nextTick(() => {
+						this.riskLiauidForm = {
+							mc: '',
+							wz: '',
+							sl: 0,
+							hszq: '',
+							hsdw: ''
+						}
+						this.$refs.riskLiauid.resetFields();
+					})
 				}
 			},
 			async getRiskLiauidItemList() {
@@ -898,19 +978,25 @@
 				this.getRiskLiauidItemList()
 			},
 			async saveRiskLiauid() {
-				let params = {
-					...this.riskLiauidForm,
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addRiskLiauidItem(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showRiskLiauidModel = false
-					this.getRiskLiauidItemList()
-				}
+				this.$refs.riskLiauid.validate(async valid => {
+                    if (valid) {
+                    	this.modelLoading = true
+						let params = {
+							...this.riskLiauidForm,
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addRiskLiauidItem(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showRiskLiauidModel = false
+							this.getRiskLiauidItemList()
+						}
+                    		this.modelLoading = false
+                    }
+                })
 			},
 		},
 		created() {

@@ -26,7 +26,7 @@
 				            <Input clearable v-model="baseInfo.djbh" placeholder="登记编号"></Input>
 				        </FormItem>
 				        <FormItem label="在册人数">
-				            <InputNumber clearable v-model="baseInfo.zcrs" placeholder="在册人数"></InputNumber>
+				            <InputNumber :min="0" v-model="baseInfo.zcrs" placeholder="在册人数"></InputNumber>
 				        </FormItem>
 				        <FormItem label="投用时间">
 				            <DatePicker type="date" v-model="baseInfo.tysj"  placeholder="投用时间"></DatePicker>
@@ -82,10 +82,10 @@
 					<part-title text="建筑物信息"></part-title>
 					<Form :model="addressInfo" label-position="left" :label-width="140" style="width: 600px">
 				        <FormItem label="占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.zdmj" placeholder="占地面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.zdmj" placeholder="占地面积"></InputNumber>
 				        </FormItem>
 				        <FormItem label="建筑面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.jzmj" placeholder="建筑面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.jzmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -134,10 +134,10 @@
 					<part-title text="人员活动"></part-title>
 					<Form :model="mostForm" label-position="left" :label-width="140">
 				        <FormItem label="最多容纳人数">
-				        	<InputNumber clearable v-model="mostForm.zdkrnrs"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.zdkrnrs"></InputNumber>
 				        </FormItem>
 				        <FormItem label="活动频次(次/月)">
-				        	<InputNumber clearable v-model="mostForm.hdpc"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.hdpc"></InputNumber>
 				        </FormItem>
 					</Form>
 					<part-title text="消防重点单位"></part-title>

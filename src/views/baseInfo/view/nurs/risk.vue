@@ -61,45 +61,45 @@
 				</Col>	
 			</Row>	
 		</div>
-		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}工作负荷`" v-model="showGzfhModel">
+		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}工作负荷`" v-model="showGzfhModel" @on-visible-change="gzfhModelChange">
 			<div>
-				<Form :model="gzfhForm" label-position="left" :label-width="120">
-					<FormItem label="从业人数">
-			        	<InputNumber clearable :min="0" v-model="gzfhForm.cyrs"></InputNumber>
+				<Form :model="gzfhForm" ref="gzfh" :rules="gzfhRules" hide-required-mark label-position="left" :label-width="120">
+					<FormItem label="从业人数" prop="cyrs">
+			            <InputNumber :min="0" v-model="gzfhForm.cyrs"></InputNumber>
 			        </FormItem>
-			        <FormItem label="核定床位数">
-			        	<InputNumber clearable :min="0" v-model="gzfhForm.hdcws"></InputNumber>
+			        <FormItem label="核定床位数" prop="hdcws">
+			            <InputNumber :min="0" v-model="gzfhForm.hdcws"></InputNumber>
 			        </FormItem>
-			        <FormItem label="入住人数">
-			        	<InputNumber clearable :min="0" v-model="gzfhForm.rzrs"></InputNumber>
+			        <FormItem label="入住人数" prop="rzrs">
+			            <InputNumber :min="0" v-model="gzfhForm.rzrs"></InputNumber>
 			        </FormItem>
-			        <FormItem label="填报时间">
+			        <FormItem label="填报时间" prop="tbsj">
 			        	<DatePicker type="date" v-model="gzfhForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showGzfhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveGzfh">保存</Button>
+		        <Button type="primary" size="large" :loading="gzfhLoading" @click="saveGzfh">保存</Button>
 	        </div>
 		</Modal>
-		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}收住对象`" v-model="showSzdxModel">
+		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}收住对象`" v-model="showSzdxModel" @on-visible-change="szdxModelChange">
 			<div>
-				<Form :model="szdxForm" label-position="left" :label-width="120">
-			        <FormItem label="自理型人数">
-			        	<InputNumber clearable :min="0" v-model="szdxForm.zlxrs"></InputNumber>
+				<Form :model="szdxForm" ref="szdx" :rules="szdxRules" hide-required-mark label-position="left" :label-width="120">
+			        <FormItem label="自理型人数" prop="zlxrs">
+			            <InputNumber :min="0" v-model="szdxForm.zlxrs"></InputNumber>
 			        </FormItem>
-					<FormItem label="护理型人数">
-			        	<InputNumber clearable :min="0" v-model="szdxForm.hlxrs"></InputNumber>
+					<FormItem label="护理型人数" prop="hlxrs">
+			            <InputNumber :min="0" v-model="szdxForm.hlxrs"></InputNumber>
 			        </FormItem>
-			        <FormItem label="填报时间">
+			        <FormItem label="填报时间" prop="tbsj">
 			        	<DatePicker type="date" v-model="szdxForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showSzdxModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveSzdx">保存</Button>
+		        <Button type="primary" size="large" :loading="szdxLoading" @click="saveSzdx">保存</Button>
 	        </div>
 		</Modal>
 	</div>
@@ -141,6 +141,8 @@
 				showXfModel: false,
 				showMainRiskModel: false,
 				showSpecialModel: false,
+				gzfhLoading: false,
+				szdxLoading: false,
 				modeType: '',
 				map: null,
 				polygonTool: null,
@@ -195,22 +197,33 @@
 				areaList: [],
 				gzfhColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.gzfhPage.pageIndex- 1) * this.gzfhPage.pageSize + 1);
+				        }
                     }, {
                         title: '从业人数',
                         key: 'cyrs',
+                        minWidth: 100
                     }, {
                         title: '核定床位数',
                         key: 'hdcws',
+                        minWidth: 110
                     }, {
                         title: '入住人数',
                         key: 'rzrs',
+                        minWidth: 100
                     }, {
                         title: '填报时间',
                         key: 'tbsj',
+                        minWidth: 120
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -229,19 +242,29 @@
 				},
 				szdxColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.szdxPage.pageIndex- 1) * this.szdxPage.pageSize + 1);
+				        }
                     }, {
                         title: '自理型人数',
                         key: 'zlxrs',
+                        minWidth: 110
                     }, {
                         title: '护理型人数',
                         key: 'hlxrs',
+                        minWidth: 110
                     }, {
                         title: '填报时间',
                         key: 'tbsj',
+                        minWidth: 120
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -267,7 +290,21 @@
 
 		},
 		computed: {
-
+			gzfhRules() {
+				return {
+					cyrs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					hdcws: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					rzrs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
+			szdxRules() {
+				return {	
+					zlxrs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					hlxrs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			async getBaseInfo() {
@@ -380,12 +417,15 @@
 			},
 			gzfhModelChange(status) {
 				if(!status) {
-					this.gzfhForm = {
-						cyrs: 0,
-						hdcws: 0,
-						rzrs: 0,
-						tbsj: ''
-					}
+					this.$nextTick(() => {
+						this.gzfhForm = {
+							cyrs: 0,
+							hdcws: 0,
+							rzrs: 0,
+							tbsj: ''
+						}
+						this.$refs.gzfh.resetFields();
+					})
 				}
 			},
 			async getGzfhItemList() {
@@ -421,20 +461,26 @@
 				this.getGzfhItemList()
 			},
 			async saveGzfh() {
-				let params = {
-					...this.gzfhForm,
-					tbsj: this.gzfhForm.tbsj ? getDate(new Date(this.gzfhForm.tbsj).getTime(), 'date') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addGzfhItem(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showGzfhModel = false
-					this.getGzfhItemList()
-				}
+				this.$refs.gzfh.validate(async valid => {
+                    if (valid) {
+                    	this.gzfhLoading = true
+						let params = {
+							...this.gzfhForm,
+							tbsj: this.gzfhForm.tbsj ? getDate(new Date(this.gzfhForm.tbsj).getTime(), 'date') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addGzfhItem(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showGzfhModel = false
+							this.getGzfhItemList()
+						}
+							this.gzfhLoading = false
+                    }
+                })
 			},
 			handleChangeSzdxPage(val) {
 				this.szdxPage.pageIndex = val
@@ -446,11 +492,14 @@
 			},
 			szdxModelChange(status) {
 				if(!status) {
-					this.szdxForm = {
-						zlxrs: 0,
-						hlxrs: 0,
-						tbsj: ''
-					}
+					this.$nextTick(() => {
+						this.szdxForm = {
+							zlxrs: 0,
+							hlxrs: 0,
+							tbsj: ''
+						}
+						this.$refs.szdx.resetFields();
+					})
 				}
 			},
 			async getSzdxItemList() {
@@ -485,20 +534,26 @@
 				this.getSzdxItemList()
 			},
 			async saveSzdx() {
-				let params = {
-					...this.szdxForm,
-					tbsj: this.szdxForm.tbsj ? getDate(new Date(this.szdxForm.tbsj).getTime(), 'date') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addSzdxItem(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showSzdxModel = false
-					this.getSzdxItemList()
-				}
+				this.$refs.szdx.validate(async valid => {
+                    if (valid) {
+                    	this.szdxLoading = true
+						let params = {
+							...this.szdxForm,
+							tbsj: this.szdxForm.tbsj ? getDate(new Date(this.szdxForm.tbsj).getTime(), 'date') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addSzdxItem(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showSzdxModel = false
+							this.getSzdxItemList()
+						}
+							this.szdxLoading = false
+                    }
+                })
 			},
 		},
 		created() {

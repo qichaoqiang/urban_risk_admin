@@ -21,22 +21,16 @@
 				            <DatePicker type="date" v-model="baseInfo.jctysj"  placeholder="建成投用时间"></DatePicker>
 				        </FormItem>
 				        <FormItem label="学校地址">
-				        	<Input clearable v-model="addressInfo.xxdz" placeholder="学校地址"></Input>
+				        	<Input clearable v-model="baseInfo.xxdz" placeholder="学校地址"></Input>
 				        </FormItem>
 				        <FormItem label="经纬度">
-				        	<div @click="openLngModal">
-			        			<Input 
-			        				readonly 
-			        				v-model="addressInfo.lngAndLat" 
-			        				icon="md-pin" 
-			        				placeholder="经纬度" />
-			        		</div>
+				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
 				        </FormItem>
 				        <FormItem label="学校范围">
 				        	<div @click.stop="openAreaModal">
 			        			<Input 
 			        				readonly 
-			        				v-model="addressInfo.xxfw" 
+			        				v-model="baseInfo.xxfw" 
 			        				icon="md-pin" 
 			        				placeholder="学校范围" />
 			        		</div>
@@ -66,12 +60,12 @@
 			<Row type="flex" justify="center">
 				<Col>
 					<part-title text="建筑物信息"></part-title>
-					<Form :model="addressInfo" label-position="left" :label-width="170" style="width: 600px">
+					<Form :model="baseInfo" label-position="left" :label-width="170" style="width: 600px">
 				        <FormItem label="学校占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.xxzdmj" placeholder="占地面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="baseInfo.xxzdmj" placeholder="占地面积"></InputNumber>
 				        </FormItem>
 				        <FormItem label="学校建筑占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.jxjzzdmj" placeholder="建筑面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="baseInfo.jxjzzdmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -80,17 +74,17 @@
 			<Row type="flex" justify="center">
 				<Col>
 					<part-title text="联系人信息"></part-title>
-					<Form :model="addressInfo" label-position="left" :label-width="170" style="width: 600px">
+					<Form :model="baseInfo" label-position="left" :label-width="170" style="width: 600px">
 				        <FormItem label="经办人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input clearable v-model="contactInfo.jbr" :data="areaList" placeholder="姓名"></Input>
+				        			<Input clearable v-model="baseInfo.jbr" :data="areaList" placeholder="姓名"></Input>
 				        		</Col>
 				        		<Col span="16">
-				        			<Input clearable v-model="contactInfo.jbrdh" placeholder="电话"></Input>
+				        			<Input clearable v-model="baseInfo.jbrdh" placeholder="电话"></Input>
 				        		</Col>
 				        		<Col span="24">
-				        			<Input clearable v-model="contactInfo.jbryx" placeholder="邮箱"></Input>
+				        			<Input clearable v-model="baseInfo.jbryx" placeholder="邮箱"></Input>
 				        		</Col>
 				        	</Row>
 				        </FormItem>
@@ -110,10 +104,10 @@
 					<part-title text="人员组成"></part-title>
 					<Form :model="mostForm" label-position="left" inline>
 				        <FormItem label="教职工人数" :label-width="100" style="margin-right: 40px">
-				        	<InputNumber clearable v-model="mostForm.jzgrs"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.jzgrs"></InputNumber>
 				        </FormItem>
 				        <FormItem label="学生人数" :label-width="80" style="margin-right: 40px">
-				        	<InputNumber clearable v-model="mostForm.xsrs"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.xsrs"></InputNumber>
 				        </FormItem>
 				        <FormItem label="寄宿制" :label-width="60" style="margin-right: 40px">
 				            <Select clearable v-model="mostForm.jsz" placeholder="请选择">
@@ -121,7 +115,7 @@
 				            </Select>
 				        </FormItem>
 				        <FormItem label="床位数" :label-width="60" v-if="mostForm.jsz == '寄宿'">
-				        	<InputNumber clearable v-model="mostForm.cws"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.cws"></InputNumber>
 				        </FormItem>
 					</Form>
 					<part-title text="危险化学品(实验室)" :btns="['add']" @add="openWhsysModel"></part-title>
@@ -209,7 +203,7 @@
 			        <FormItem label="数量">
 			        	<Row type="flex" align="middle">
 	            			<Col>
-			        			<InputNumber clearable :min="0" v-model="whsysForm.sl"></InputNumber>
+			        			<InputNumber :min="0" v-model="whsysForm.sl"></InputNumber>
 	            			</Col>
 	            			<Col>
 	            				<Select clearable v-model="whsysForm.jldw" placeholder="单位">
@@ -234,6 +228,7 @@
 <script>	
 	import api from '@/api/api'
 	import partTitle from '@/components/title'
+	import lng from '../../../baseInfo/components/lng'
 	import areajs from '@/common/js/area'
 	import lngjs from '@/common/js/lng'
 	import datePickerjs from '@/common/js/datePicker'
@@ -241,9 +236,10 @@
 	export default {
 		name: '',
 		mixins: [areajs, lngjs, datePickerjs],
-		components: { partTitle },
+		components: { partTitle, lng },
 		data() {
 			return {
+				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				step: 1,	
 				showAreaModel: false,
 				showLngModel: false,
@@ -261,20 +257,16 @@
 					jctysj: '',
 					xxlx: '',
 					hydm: '',
-				},
-				xxlxList: ['幼儿园', '小学', '初中', '普通高中', '九年一贯制', '十二年一贯制', '职业高中', '职业技术学校', '特殊学校', '大学', ],
-				addressInfo: {
 					xxdz: '',
 					xxfw: '',
 					lngAndLat: '',	
 					xxzdmj: 0,
-					jxjzzdmj: 0
-				},
-				contactInfo: {
+					jxjzzdmj: 0,
 					jbr: '',
 					jbrdh: '',
 					jbryx: '',
 				},
+				xxlxList: ['幼儿园', '小学', '初中', '普通高中', '九年一贯制', '十二年一贯制', '职业高中', '职业技术学校', '特殊学校', '大学', ],
 				mostForm: {
 					jzgrs: 0,
 					xsrs: 0,
@@ -310,8 +302,14 @@
 				areaList: [],
 				whsysColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpmc',
@@ -326,6 +324,7 @@
                         key: 'ccwz',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -355,32 +354,28 @@
 
 		},
 		methods: {
-			getBaseInfo() {
-				if(this.$route.query.type == '2') {
-					let baseInfo = this.$storage.get('baseInfo')
-					// baseInfo.hyml = []
-					// baseInfo.quyu = []
-					this.baseInfo = baseInfo
-					this.addressInfo = this.$storage.get('addressInfo')
-					this.contactInfo = this.$storage.get('contactInfo')
-					this.mostForm = this.$storage.get('mostForm')
-					this.form = this.$storage.get('form')
+			async getBaseInfo() {
+				let { status_code, data, message } = await api.getSchoolBase(this.gkdx_id);
+				if(status_code == 0) {
+					this.form = data;
+					let { jbr, jbrdh, jbryx, xxmc, jbdw, jbdwzcdjdz, tyshxydm, xxdz, quyu_id, jd, wd, xxfw, jctysj, xxlx, hydm, jxjzzdmj, jzgrs, xsrs, jsz, cws, xfzddw, xxzdmj} = this.form
+					this.baseInfo = { xxmc, jbdw, jbdwzcdjdz, tyshxydm, xxdz, xxlx, hydm, xxfw, xxdz, xxzdmj, jxjzzdmj, jbr, jbrdh, jbryx }
+					this.baseInfo.jctysj = this.form.jctysj ? new Date(this.form.jctysj) : '';
+					this.baseInfo.xxzdmj = xxzdmj ? Number(xxzdmj) : 0
+					this.baseInfo.jxjzzdmj = jxjzzdmj ? Number(jxjzzdmj) : 0
+					this.baseInfo.lngAndLat = jd && wd ? `${(jd - 0).toFixed(6)} ${(wd - 0).toFixed(6)}` : ''
+					this.mostForm = { jzgrs, xsrs, jsz, cws, xfzddw }
 					this.getQy()
 					// this.getHy()
-				}else {
-					this.loading = false
 				}
 			},
 			async nextStep() {
 				let params = {
-					quyu_id: this.baseInfo.quyu[this.baseInfo.quyu.length - 1],
 					...this.baseInfo,
-					...this.addressInfo,
-					...this.contactInfo,
 					jctysj: this.baseInfo.jctysj ? getDate(new Date(this.baseInfo.jctysj).getTime(), 'date') : '',
 					quyu_id: this.baseInfo.quyu[this.baseInfo.quyu.length - 1],
-					jd: this.addressInfo.lngAndLat.split(' ')[0],
-					wd: this.addressInfo.lngAndLat.split(' ')[1],
+					jd: this.baseInfo.lngAndLat.split(' ')[0],
+					wd: this.baseInfo.lngAndLat.split(' ')[1],
 				}	 
 				if(this.$route.query.type == 2) {
 					params.gkdx_id = this.form.gkdx_id
@@ -390,15 +385,9 @@
 				let { status_code, message } = await api.addSchoolBase(params);
 				if(status_code == 200) {
 					this.$Message.success('保存成功')
-					if(this.$route.query.type == 2) {
+					if(this.$route.name == 'base') {
 						this.$storage.set('gkdx_id', this.form.gkdx_id)
 						this.$router.back()
-					}else {
-						let { status_code, data } = await api.getSchoolBase()
-						if(status_code == 200) {
-							this.$storage.set('gkdx_id', data.data[0].gkdx_id)
-						}
-						this.$router.replace('/baseInfo')
 					}
 				}
 			},
@@ -435,8 +424,8 @@
 			            };
 			            //创建标注工具对象
 			            this.polygonTool = new T.PolygonTool(this.map, config);
-			            if(this.addressInfo.xxfw) {
-			            	let xxfw = JSON.parse(this.addressInfo.xxfw)
+			            if(this.baseInfo.xxfw) {
+			            	let xxfw = JSON.parse(this.baseInfo.xxfw)
 			            	let points = xxfw.map(item => {
 			            		return new T.LngLat(item.lng, item.lat)
 			            	})
@@ -451,23 +440,23 @@
 				this.polygonTool.addEventListener('draw', (e) => {
 					// 获取绘制的多边形信息
 					console.log(e);
-					this.addressInfo.xxfw = JSON.stringify(e.currentLnglats)
+					this.baseInfo.xxfw = JSON.stringify(e.currentLnglats)
 				})
 			},
 			clearArea() {
-				this.addressInfo.xxfw = ''
+				this.baseInfo.xxfw = ''
 				this.map.clearOverLays()
 			},
 			cancelArea() {
 				this.map.clearOverLays();
 				this.map = null;
 				this.polygonTool = null;
-				this.addressInfo.xxfw = this.xxfw || this.form.xxfw || '';
+				this.baseInfo.xxfw = this.xxfw || this.form.xxfw || '';
 				this.showAreaModel = false
 			},
 			saveArea() {
-				this.xxfw = this.addressInfo.xxfw;
-				this.form.xxfw = this.addressInfo.xxfw;
+				this.xxfw = this.baseInfo.xxfw;
+				this.form.xxfw = this.baseInfo.xxfw;
 				this.map.clearOverLays();
 				this.map = null;
 				this.polygonTool = null;

@@ -423,8 +423,14 @@
 				areaList: [],
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.whPage.pageIndex- 1) * this.whPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpm',
@@ -445,6 +451,7 @@
                         key: 'msds',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -476,8 +483,14 @@
 				sxflList: ['最终产品', '中间产品', '原料'],
 				whRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.whRiskPage.pageIndex- 1) * this.whRiskPage.pageSize + 1);
+				        }
                     }, {
                         title: '重大危险源单元名称',
                         key: 'zdwxydymc',
@@ -495,6 +508,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -515,8 +529,14 @@
 				},
 				ydzlxtColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.ydzlxtPage.pageIndex- 1) * this.ydzlxtPage.pageSize + 1);
+				        }
                     }, {
                         title: '名称',
                         key: 'mc',
@@ -537,6 +557,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -574,8 +595,14 @@
 				},
 				ccssColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.ccssPage.pageIndex- 1) * this.ccssPage.pageSize + 1);
+				        }
                     }, {
                         title: '储存设施单元名称',
                         key: 'ccssdymc',
@@ -596,6 +623,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -619,8 +647,14 @@
 				},
 				zaqColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.zaqPage.pageIndex- 1) * this.zaqPage.pageSize + 1);
+				        }
                     }, {
                         title: '规格型号',
                         key: 'ggxh',
@@ -642,6 +676,7 @@
                         width: 120
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -666,8 +701,14 @@
 				},
 				gqscColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.gqscPage.pageIndex- 1) * this.gqscPage.pageSize + 1);
+				        }
                     }, {
                         title: '罐名',
                         key: 'gm',
@@ -685,6 +726,7 @@
                         key: 'wd',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -708,8 +750,14 @@
 				},
 				ptgyColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.ptgyPage.pageIndex- 1) * this.ptgyPage.pageSize + 1);
+				        }
                     }, {
                         title: '工艺名称',
                         key: 'gymc',
@@ -733,6 +781,7 @@
                         key: 'dqzt',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -758,8 +807,14 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.rimPage.pageIndex- 1) * this.rimPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         key: 'mgmbmc',
@@ -774,6 +829,7 @@
                         key: 'rysl',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -788,7 +844,7 @@
 					lngAndLat: '',
 					qyfw: ''
 				},
-				fwList: ['东', '南', '西', '北'],
+				fwList: ['东', '南', '西', '北', '东北', '东南', '西北', '西南'],
 				mgmblxList: ['医院', '养老院', '学校', '政府机构', '商场', '居住区', '监狱', '宗教', '车站', '码头', '铁路', '公路', '林区', '工厂', '矿山', '河流', '其他'],
 				rimPage: {
 					pageSize: 10,

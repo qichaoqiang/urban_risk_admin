@@ -28,6 +28,12 @@ let actions = {
       context.commit('update_hasMenu', hasMenu)
       resolve()
     })
+  },
+  save_fxylb(context, fxylb) {
+    return new Promise((resolve) => {
+      context.commit('update_fxylb', fxylb)
+      resolve()
+    })
   }
 }
 

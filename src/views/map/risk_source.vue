@@ -12,6 +12,7 @@
 				<Cascader 
 	            	readonly 
 	            	change-on-select
+					:transfer="true"
 	            	v-model="searchFxyForm.fxylb" 
 	            	:data="fxylbList" 
 	            	:load-data="loadFxylb" 
@@ -46,19 +47,19 @@
 				},
 				xmData: [],
 				fxdjList: [{
-		            name: '红',
+		            name: '重大风险',
 		            value: '#F25E5E',
 		            color: 'red'
 		        }, {
-		            name: '橙',
+		            name: '较大风险',
 		            value: '#F49852',
 		            color: 'orange'
 		        }, {
-		            name: '黄',
+		            name: '一般风险',
 		            value: '#EFE850',
 		            color: 'yellow'
 		        }, {
-		            name: '蓝',
+		            name: '低风险',
 		            value: '#1C86F3',
 		            color: 'blue'
 		        }],
@@ -136,8 +137,15 @@
 			},
 			drawRiskPoints(item) {
 				let self = this
-				function handleClick() {
-					self.showDetail(item)
+				window.handleClick = () => {
+					console.log(111)
+					let userInfo = this.$storage.get('userInfo')
+					userInfo.gkdx_id = item.gkdx_id
+					userInfo.fxylb = item.fxylb
+					this.$storage.set('userInfo', userInfo)
+					// this.type = 2
+					// this.$router.push('editInfo')
+					location.href = process.env.NODE_ENV === "development" ? `${location.origin}/#/editInfo?type=2` : `${location.origin}/v2/#/editInfo?type=2`
 				}
 				let iconItem =  this.fxdjList.find(item_ => item_.name == item.fxdj)
 				if(!iconItem) {
@@ -160,7 +168,7 @@
 								<div style="color: #0078A8; font-weight: bold; font-size: 18px; line-height: 28px; text-align: center">${item.fxymc}</div>
 								<div style="margin-top: 10px; color: #333;">
 									<div>地址：${item.dz}</div>
-									<div onClick=\"handleClick()\">详情：查看</div>
+									<div>详情：<span class="link" onClick=\"handleClick()\">查看</span></div>
 								</div>
 		                	</div>
 		                </div>`;

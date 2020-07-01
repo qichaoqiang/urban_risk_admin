@@ -2,61 +2,15 @@ import router from './router/index'
 import storage from 'good-storage'
 import store from './store/index'
 
-let path = {
-	chuanboxiuzaoqiye: 'cbxz',
-	zhuanyeshichang: 'zysc',
-	tiyuchangguan: 'tycg',
-	yanglaoyuanshehuifuli: 'nurs',
-	jiayouzhan: 'jyz',
-	yiyuan: 'hospital',
-	weihuomatou: 'whmt',	
-	weixianhuaxuepinshiyongqiye: 'wxhxp_sy',
-	weixianhuaxuepinchucunqiye: 'wxhxp_cc',
-	weixianhuaxuepinshengchanqiye: 'wxhxp_sc',
-	weixianhuowuyunshu: 'wxhwys',
-	shangmaozongheti: 'smzht',
-	chengshiqiaoliang: 'csql',
-	chengshisuidao: 'cssd',
-	tianranqichangzhan: 'trqcz',
-	xuexiao: 'school',
-	zongjiao: 'religion',
-	keyunmatou: 'kymt',
-	binguanjiudian: 'bgjd',
-	jianzhushigong: 'jzsg',
-	wenhuayulechangsuo: 'whylcs',
-	lyuyoubaoche: 'lybc',
-	lyuyouchangsuo: 'travel',
-	xingjijiudian: 'xjjd',
-	puhuomatou: 'phmt',
-	minbaoqiye: 'mbqy',
-	shuikudaba: 'skdb',
-	shepentuqiye: 'sptqy',
-	sheanzhilengqiye: 'sazl',
-	shebaofenchenqiye: 'sbfc',
-	yehuashiyouqichangzhan: 'yhsyqcz',
-	zhatuxiaonachang: 'ztxnc',
-	yanhuabaozhushengchanqiye: 'yhbz_sc',
-	yanhuabaozhujingyingqiye: 'yhbz_jy',
-	kuangshanqiyedixiakuang: 'ksqy_dxk',
-	kuangshanqiyeweikuangku: 'ksqy_wkk',
-	kuangshanqiyelutiankuang: 'ksqy_ltk',
-	wangba: 'wb',
-	jinshuyelianqiye: 'jsyl',
-	changtukeyun: 'ctky',
-	canyinchangsuo: 'cycs',
-	gaocengzhuzhai: 'gczz',
-	gaocenggonggongjianzhu: 'gcggjz',
-}
-
 router.beforeEach((to, from, next) => {
-	if(storage.get('access_token_v2')) {
+	if(storage.get('access_token_v2_')) {
 		if(store.state.hasMenu) {
 			document.title = to.meta.title;
 			next()
 		}else {
 			let { yhlx, fxylb } = storage.get('userInfo')
 			let menu
-			let path_ = path[fxylb]
+			let path_ = store.state.path[fxylb]
 			if(yhlx == 2) {
 				menu = [{
 					path: '/info',
@@ -90,11 +44,20 @@ router.beforeEach((to, from, next) => {
 			}else {
 				let authList = storage.get('authList') || []
 				menu = []
+				menu.push({
+					name: 'overview',
+					path: '/overview',
+					icon: 'el-icon-s-data',
+					meta: {
+						title: '总览',
+					},
+					component: resolve => require(['@/views/overview/index'], resolve),
+				})
 				if(authList.includes('xiangmu')) {
 					menu.push({
 						name: 'city',
 						path: '/city',
-						icon: 'el-icon-s-data',
+						icon: 'el-icon-notebook-1',
 						meta: {
 							title: '项目管理',
 						},
@@ -186,24 +149,24 @@ router.beforeEach((to, from, next) => {
 						},
 						component: resolve => require(['@/views/system/index'], resolve),
 						children: [
-							{
-								name: 'system_dept',
-								path: '/system_dept',
-								meta: {
-									title: '部门管理',
-									parent: 'system'
-								},
-								component: resolve => require(['@/views/system/department'], resolve),
-							},
-							{
-								name: 'system_riskRules',
-								path: '/system_riskRules',
-								meta: {
-									title: '风险评估标准',
-									parent: 'system'
-								},
-								component: resolve => require(['@/views/system/riskRules'], resolve),
-							}
+							// {
+							// 	name: 'system_dept',
+							// 	path: '/system_dept',
+							// 	meta: {
+							// 		title: '部门管理',
+							// 		parent: 'system'
+							// 	},
+							// 	component: resolve => require(['@/views/system/department'], resolve),
+							// },
+							// {
+							// 	name: 'system_riskRules',
+							// 	path: '/system_riskRules',
+							// 	meta: {
+							// 		title: '风险评估标准',
+							// 		parent: 'system'
+							// 	},
+							// 	component: resolve => require(['@/views/system/riskRules'], resolve),
+							// }
 						]
 					}
 					if(authList.includes('quyu')) {
@@ -252,6 +215,15 @@ router.beforeEach((to, from, next) => {
 							icon: 'md-home'
 						},
 						component: resolve => require([`@/views/base/view/${path_}/index.vue`], resolve),
+					}, {
+						path: '/editInfo',
+						name: 'editInfo',
+						component: resolve => require(['@/views/city/components/index.vue'], resolve),
+						meta: {
+							hideInMenu: true,
+							notCache: true,
+							title: '登录'
+						},
 					},
 					...menu
 				]
@@ -264,7 +236,6 @@ router.beforeEach((to, from, next) => {
 	}else {
 		if(!storage.get('redirectToLogin')) {
 			storage.set('redirectToLogin', true)
-			console.log(111)
 			next({
 				path: '/login',
 				replace: true

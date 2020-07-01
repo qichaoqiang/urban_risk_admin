@@ -7,7 +7,7 @@
 					<div class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="营业位置" name="name1">
-				        	<part-title text="营业位置" :btns="['add']" @add="openRltzModel"></part-title>
+				        	<part-title text="营业位置"></part-title>
 				        	<Form :model="baseInfo" label-position="left" inline>
 					        	<FormItem label="所在建筑名称" :label-width="104" style="margin-right: 24px">
 						        	<Input clearable v-model="baseInfo.szjzmc"></Input>
@@ -282,10 +282,14 @@
 				areaList: [],
 				rltzColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        },
                     }, {
                         title: '近一个月的平均日流量',
                         key: 'jygydpjrll',
@@ -323,10 +327,14 @@
 				dqztList: ['运行', '停运', '检修'],
 				gdtrqColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        },
                     }, {
                         title: '近一月用气量（立方/月）',
                         key: 'jyyyql',
@@ -367,10 +375,14 @@
 				},
 				yhsyqColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        },
                     }, {
                         title: '钢瓶规格（L）',
                         key: 'gpgg',
@@ -403,10 +415,14 @@
 				},
 				cjrlColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        },
                     }, {
                         title: '近一月使用量（kg/月）',
                         key: 'jyysyl',
@@ -434,10 +450,14 @@
 				},
 				elseColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        },
                     }, {
                         title: '近一月使用量（kg/月）',
                         key: 'jyysyl',

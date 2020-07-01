@@ -11,7 +11,19 @@ Vue.component('Message', Message);
 let axios_ = {...axios}
 // 响应时间
 axios_.defaults.timeout = 100000
-axios_.defaults.baseURL = process.env.VUE_APP_API
+
+
+
+
+let origin = location.origin
+
+if(origin === "http://hz.ser119.com") {
+  axios_.defaults.baseURL = "http://hz.ser119.com"
+}else if(origin === "http://minhou.ser119.com") {
+  axios_.defaults.baseURL = "http://minhou.ser119.com"
+}else {
+  axios_.defaults.baseURL = "http://hz.ser119.com"
+}
 
 // 测试地址（内网)
 // axios_.defaults.baseURL = 'http://credit-api.int.anniu-tech.com'
@@ -36,7 +48,7 @@ axios_.interceptors.request.use((config) => {
   }
   config.withCredentials = false;
   if(config.url.indexOf('/oauth/token') == -1) {
-    config.headers.Authorization = `${storage.get('token_type_v2')} ${storage.get('access_token_v2')}`
+    config.headers.Authorization = `${storage.get('token_type_v2')} ${storage.get('access_token_v2_')}`
   }
   return config
 }, (error) => {
@@ -47,7 +59,7 @@ axios_.interceptors.request.use((config) => {
 // 返回状态判断(添加响应拦截器)
 axios_.interceptors.response.use((res) => {
   // 对响应数据做些事
-  if (res.data.status_code !== 200 && res.data.status_code !== 0) {
+  if (res.data.status_code !== 200 && res.data.status_code !== 0 && res.data.returncode !== '100') {
     let info = '系统异常'
     if(res.data.message) {
       info = res.data.message

@@ -131,7 +131,7 @@ export default {
                             if(res.status_code == 200) {
                                 storage.set('username_v2', this.form.username)
                                 storage.set('token_type_v2', res.token_type)
-                                storage.set('access_token_v2', res.access_token)
+                                storage.set('access_token_v2_', res.access_token)
                                 storage.set('refresh_token_v2', res.refresh_token)
                                 api.getUserInfo().then(res_ => {
                                     if(res_.status_code == 200) {
@@ -161,6 +161,7 @@ export default {
         },
     },
     mounted() {
+        storage.clear()
         let list = this.$route.path.split('/');
     }
 }

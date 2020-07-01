@@ -14,19 +14,8 @@
 						<FormItem label="企业名称">
 				            {{baseInfo.qymc}}
 				        </FormItem>
-				        <FormItem label="统一社会信用代码">
-				            <Input readonly v-model="baseInfo.tyshxydm"></Input>
-				        </FormItem>
 				        <FormItem label="注册地址">
 				        	<Input clearable v-model="baseInfo.zcdz"></Input>
-				        	<!-- <Row type="flex" :gutter="20">
-				        		<Col span="8">
-				        			<Cascader readonly v-model="baseInfo.zcdz1" :data="areaList" placeholder="注册地址"></Cascader>
-				        		</Col>
-				        		<Col span="16">
-				        			<Input readonly v-model="baseInfo.zcdz2" placeholder="详细地址"></Input>
-				        		</Col>
-				        	</Row> -->
 				        </FormItem>
 				        <FormItem label="所属区域">
 				            <Cascader 
@@ -36,6 +25,18 @@
 				            	:data="areaList" 
 				            	:load-data="loadArea" 
 				            	placeholder=""></Cascader>
+				        </FormItem>
+				        <FormItem label="经纬度">
+				        	<div>
+			        			<Input 
+			        				readonly 
+			        				v-model="baseInfo.lngAndLat" 
+			        				icon="md-pin" 
+			        				placeholder="经纬度" />
+			        		</div>
+				        </FormItem>
+				        <FormItem label="经营地址">
+				            <Input clearable v-model="baseInfo.jydz"></Input>
 				        </FormItem>
 				        <FormItem label="经营范围">
 				            <Input readonly v-model="baseInfo.jyfw"></Input>
@@ -60,6 +61,9 @@
 				        <FormItem label="行业代码">
 				            <Input readonly v-model="baseInfo.hydm"></Input>
 				        </FormItem>
+				        <FormItem label="统一社会信用代码">
+				            <Input readonly v-model="baseInfo.tyshxydm"></Input>
+				        </FormItem>
 				        <FormItem label="运行状态">
 				            <Select readonly v-model="baseInfo.yxzt">
 				                <Option v-for="item in yxztList" :key="item" :value="item">{{item}}</Option>
@@ -71,59 +75,38 @@
 			<div class="line"></div>
 			<Row type="flex" justify="center">
 				<Col>
-					<part-title text="位置信息"></part-title>
-					<Form :model="addressInfo" label-position="left" :disabled="true" :label-width="140" style="width: 600px">
-				        <FormItem label="位置信息">
-				        	<Row type="flex" :gutter="20">
-				        		<Col span="8">
-				        			<div>
-					        			<Input 
-					        				readonly 
-					        				v-model="addressInfo.lngAndLat" 
-					        				icon="md-pin" 
-					        				placeholder="请选择经纬度" />
-					        		</div>
-				        		</Col>
-				        	</Row>
-				        </FormItem>
-					</Form>
-				</Col>	
-			</Row>	
-			<div class="line"></div>
-			<Row type="flex" justify="center">
-				<Col>
 					<part-title text="联系人信息"></part-title>
-					<Form :model="contactInfo" label-position="left" :disabled="true" :label-width="140" style="width: 600px">
+					<Form :model="baseInfo" label-position="left" :disabled="true" :label-width="140" style="width: 600px">
 				        <FormItem label="企业负责人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input readonly v-model="contactInfo.qyfzr" :data="areaList"></Input>
+				        			<Input readonly v-model="baseInfo.qyfzr" :data="areaList"></Input>
 				        		</Col>
 				        		<Col span="16">
-				        			<Input readonly v-model="contactInfo.qyfzrdh"></Input>
+				        			<Input readonly v-model="baseInfo.qyfzrdh"></Input>
 				        		</Col>
 				        	</Row>
 				        </FormItem>
 				        <FormItem label="分管安全负责人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input readonly v-model="contactInfo.fgaqfzr"></Input>
+				        			<Input readonly v-model="baseInfo.fgaqfzr"></Input>
 				        		</Col>
 				        		<Col span="16">
-				        			<Input readonly v-model="contactInfo.fgaqfzrdh"></Input>
+				        			<Input readonly v-model="baseInfo.fgaqfzrdh"></Input>
 				        		</Col>
 				        	</Row>
 				        </FormItem>
 				        <FormItem label="经办人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input readonly v-model="contactInfo.jbr"></Input>
+				        			<Input readonly v-model="baseInfo.jbr"></Input>
 				        		</Col>
 				        		<Col span="16">
-				        			<Input readonly v-model="contactInfo.jbrdh"></Input>
+				        			<Input readonly v-model="baseInfo.jbrdh"></Input>
 				        		</Col>
 				        		<Col span="24">
-				        			<Input readonly v-model="contactInfo.jbryx"></Input>
+				        			<Input readonly v-model="baseInfo.jbryx"></Input>
 				        		</Col>
 				        	</Row>
 				        </FormItem>
@@ -203,19 +186,15 @@
 					jyfw: '',
 					zcdz1: [],
 					zcdz2: '',
-					quyu: []
-				},
-				addressInfo: {
-					lngAndLat: '',
-				},
-				contactInfo: {
+					quyu: [],
 					jbr: '',
 					jbrdh: '',
 					jbryx: '',
 					qyfzr: '',
 					qyfzrdh: '',
 					fgaqfzr: '',
-					fgaqfzrdh: ''
+					fgaqfzrdh: '',
+					lngAndLat: '',
 				},
 				area: '',
 				lng: '',
@@ -240,38 +219,19 @@
 
 		},
 		computed: {
-			zcdz() {
-				let zcdz1 = ''
-				let depth = 1
-				const getItem = (list, id) => {
-					let item_ = list.find(item => {
-						return item.value == id
-					})
-					zcdz1 += `${item_.label} `
-					if(depth < this.baseInfo.zcdz1.length) {
-						getItem(item_.children, this.baseInfo.zcdz1[depth])
-						depth++
-					}
-				}
-				if(this.baseInfo.zcdz1.length > 0) {
-					getItem(this.areaList, this.baseInfo.zcdz1[0])
-				}
-				return `${zcdz1}${this.baseInfo.zcdz2}`
-			}
+			
 		},
 		methods: {
 			async getBaseInfo() {
 				let { status_code, data, message } = await api.getCtkyBase(this.gkdx_id);
 				if(status_code == 0) {
 					this.form = data;
-					let { jbr, jbrdh, jbryx, qymc, tyshxydm, zcdz, jyfw, quyu_id, jd, wd, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, zgrs, glrysl, hyml, hydm, yxzt} = this.form
-					this.baseInfo = { qymc, glrysl, hydm, jyfw, tyshxydm, yxzt, zgrs, zcdz }
+					let { jbr, jbrdh, jbryx, qymc, tyshxydm, zcdz, jyfw, quyu_id, jd, wd, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, zgrs, glrysl, hyml, hydm, yxzt, jydz, clsj } = this.form
+					this.baseInfo = { qymc, hydm, jyfw, tyshxydm, yxzt, zcdz, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, jbr, jbrdh, jbryx, jydz }
+					this.baseInfo.zgrs = zgrs ? Number(zgrs) : 0
+					this.baseInfo.glrysl = glrysl ? Number(glrysl) : 0
 					this.baseInfo.clsj = this.form.clsj ? new Date(this.form.clsj) : '';
-					// this.baseInfo.quyu = this.form.fqybhc_bhzj.split(',');
-					// this.baseInfo.zcdz1 = this.form.zcdz.split(' ')[0];
-					// this.baseInfo.zcdz2 = this.form.zcdz.split(' ')[1];
-					this.addressInfo.lngAndLat = `${(this.form.jd - 0).toFixed(6)} ${(this.form.wd - 0).toFixed(6)}`
-					this.contactInfo = { qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, jbr, jbrdh, jbryx }
+					this.baseInfo.lngAndLat = `${(this.form.jd - 0).toFixed(6)} ${(this.form.wd - 0).toFixed(6)}`
 					this.getQy()
 					this.getHy()
 				}
@@ -342,8 +302,6 @@
 			},
 			edit() {
 				this.$storage.set('baseInfo', this.baseInfo);
-				this.$storage.set('addressInfo', this.addressInfo);
-				this.$storage.set('contactInfo', this.contactInfo);
 				this.$storage.set('form', this.form);
 				this.$router.push({
 					path: '/base',

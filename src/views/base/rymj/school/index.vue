@@ -68,10 +68,10 @@
 					<part-title text="建筑物信息"></part-title>
 					<Form :model="addressInfo" label-position="left" :label-width="170" style="width: 600px">
 				        <FormItem label="学校占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.xxzdmj" placeholder="占地面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.xxzdmj" placeholder="占地面积"></InputNumber>
 				        </FormItem>
 				        <FormItem label="学校建筑占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.jxjzzdmj" placeholder="建筑面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.jxjzzdmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -110,10 +110,10 @@
 					<part-title text="人员组成"></part-title>
 					<Form :model="mostForm" label-position="left" inline>
 				        <FormItem label="教职工人数" :label-width="100" style="margin-right: 40px">
-				        	<InputNumber clearable v-model="mostForm.jzgrs"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.jzgrs"></InputNumber>
 				        </FormItem>
 				        <FormItem label="学生人数" :label-width="80" style="margin-right: 40px">
-				        	<InputNumber clearable v-model="mostForm.xsrs"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.xsrs"></InputNumber>
 				        </FormItem>
 				        <FormItem label="寄宿制" :label-width="60" style="margin-right: 40px">
 				            <Select clearable v-model="mostForm.jsz" placeholder="请选择">
@@ -121,7 +121,7 @@
 				            </Select>
 				        </FormItem>
 				        <FormItem label="床位数" :label-width="60" v-if="mostForm.jsz == '寄宿'">
-				        	<InputNumber clearable v-model="mostForm.cws"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.cws"></InputNumber>
 				        </FormItem>
 					</Form>
 					<part-title text="危险化学品(实验室)" :btns="['add']" @add="openWhsysModel"></part-title>
@@ -209,7 +209,7 @@
 			        <FormItem label="数量">
 			        	<Row type="flex" align="middle">
 	            			<Col>
-			        			<InputNumber clearable :min="0" v-model="whsysForm.sl"></InputNumber>
+			        			InputNumber :min="0" v-model="whsysForm.sl"></InputNumber>
 	            			</Col>
 	            			<Col>
 	            				<Select clearable v-model="whsysForm.jldw" placeholder="单位">
@@ -310,8 +310,14 @@
 				areaList: [],
 				whsysColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpmc',
@@ -326,6 +332,7 @@
                         key: 'ccwz',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 

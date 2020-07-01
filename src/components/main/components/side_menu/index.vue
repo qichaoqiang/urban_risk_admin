@@ -31,7 +31,7 @@
 	                    <span style="margin-left: 8px">{{item.meta.title}}</span>
 	                </template>
 	                <el-menu-item v-for="(item_, index_) in item.children" :key="item_.name" :index="item_.name" @click="turnToPage(item_)">
-	                	<span style="margin-left: 4px">{{item_.meta.title}}</span>
+	                	<span style="margin-left: 18px">{{item_.meta.title}}</span>
 	                </el-menu-item>
 				</el-submenu>
 				<el-menu-item :index="item.name" v-else @click="turnToPage(item)">
@@ -129,6 +129,7 @@
 
 <style lang="scss" scoped>
 	.container {
+		min-height: 0!important;
 		background: #1E2657;
 		/deep/.ivu-menu {
 			width: 100%!important;

@@ -3,8 +3,10 @@
 		<div class="risk_bar_icon" @click="handleClickArrow(1)">
 			<Icon type="ios-arrow-back" color="#ffffff" size="24" />
 		</div>
-		<div class="risk_bar_box" :id="'risk_bar_box' + id">
-			<div class="risk_bar_chart" :id="'risk_bar_chart' + id"></div>
+		<div style="width: 340px; height: 200px; overflow: hidden;">
+			<div class="risk_bar_box" :id="'risk_bar_box' + id">
+				<div class="risk_bar_chart" :id="'risk_bar_chart' + id" style="height: 200px;"></div>
+			</div>
 		</div>
 		<div class="risk_bar_icon" @click="handleClickArrow(2)">
 			<Icon type="ios-arrow-forward" color="#ffffff" size="24" />
@@ -85,7 +87,7 @@
 				        	color: '#FFFFFF'
 				        },
 				        type: 'category',
-				        data: ['上城', '下城', '西湖', '江干', '拱墅', '滨江', '萧山', '余杭', '临安', '富阳', '建德', '桐庐', '淳安']
+				        data: ['上城区', '下城区', '西湖区', '江干区', '拱墅区', '滨江区', '萧山区', '余杭区', '临安区', '富阳区', '建德市', '桐庐县', '淳安县']
 				    },
 				    yAxis: {
 				    	...axisConfig,
@@ -96,7 +98,7 @@
 				    },
 				    series: [
 				        {
-				            name: '非常高',
+				            name: '重大风险',
 				            type: 'bar',
 				            stack: '总量',
 				            itemStyle: {
@@ -106,7 +108,7 @@
 				            data: [320, 302, 301, 334, 390, 330, 320, 320, 302, 301, 334, 390, 330]
 				        },
 				        {
-				            name: '较高',
+				            name: '较大风险',
 				            type: 'bar',
 				            stack: '总量',
 				            itemStyle: {
@@ -116,7 +118,7 @@
 				            data: [120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230]
 				        },
 				        {
-				            name: '一般',
+				            name: '一般风险',
 				            type: 'bar',
 				            stack: '总量',
 				            itemStyle: {
@@ -126,7 +128,7 @@
 				            data: [120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230]
 				        },
 				        {
-				            name: '低',
+				            name: '低风险',
 				            type: 'bar',
 				            stack: '总量',
 				            itemStyle: {
@@ -180,13 +182,21 @@
 		align-items: center;
 		.risk_bar_box {
 			width: 340px;
-			height: 200px;
+			height: 220px;
 			overflow-x: scroll;
 			overflow-y: hidden;
 			.risk_bar_chart {
 				width: 700px;
 				height: 200px;
 			}
+		}
+		.risk_bar_box_bottom {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			height: 20px;
+			z-index: 1000;
+			background: rgba(5, 27, 74, 0.87);
 		}
 		.risk_bar_icon {
 			cursor: pointer;

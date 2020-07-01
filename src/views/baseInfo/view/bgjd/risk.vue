@@ -8,38 +8,42 @@
 					<Tabs value="name1">
 				        <TabPane label="建筑物信息" name="name1">
 				        	<part-title text="建筑物信息"></part-title>
-				        	<Form :model="baseInfo" label-position="left" :label-width="120">
-					        	<FormItem label="所在建筑名称">
+				        	<Form :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="120">
+					        	<FormItem label="所在建筑名称" prop="szjzmc">
 						        	<Input clearable v-model="baseInfo.szjzmc"></Input>
 						        </FormItem>
-						        <FormItem label="业主单位">
+						        <FormItem label="业主单位" prop="yzdw">
 						        	<Input clearable v-model="baseInfo.yzdw"></Input>
 						        </FormItem>
-						        <FormItem label="联系人">
+						        <FormItem label="联系人" prop="yzdwlxr">
 						        	<Input clearable v-model="baseInfo.yzdwlxr"></Input>
 						        </FormItem>
-						        <FormItem label="建筑面积（㎡）">
+						        <FormItem label="建筑面积（㎡）" prop="jzmj">
 						        	<InputNumber :min="0" v-model="baseInfo.jzmj"></InputNumber>
 						        </FormItem>
-						        <FormItem label="建筑层数">
+						        <FormItem label="建筑层数" prop="jzcs">
 						        	<InputNumber :min="0" v-model="baseInfo.jzcs"></InputNumber>
 						        </FormItem>
 				        		<FormItem label="营业楼层">
 				        			<Row type="flex" :gutter="20">
 						        		<Col span="6">
-								        	<Select clearable :transfer="true" v-model="baseInfo.yylc1" placeholder="底层">
-								                <Option v-for="item in yylcList" :key="item" :value="item">{{item}}</Option>
-								            </Select>
+							        		<FormItem prop="yylc1">
+									        	<Select clearable :transfer="true" v-model="baseInfo.yylc1" placeholder="底层">
+									                <Option v-for="item in yylcList" :key="item" :value="item">{{item}}</Option>
+									            </Select>
+								            </FormItem>
 								        </Col>
 								        --
 								        <Col span="6">
-								            <Select clearable :transfer="true" v-model="baseInfo.yylc2" placeholder="顶层">
-								                <Option v-for="item in yylcList" :key="item" :value="item">{{item}}</Option>
-								            </Select>
+									        <FormItem prop="yylc2">
+									            <Select clearable :transfer="true" v-model="baseInfo.yylc2" placeholder="顶层">
+									                <Option v-for="item in yylcList" :key="item" :value="item">{{item}}</Option>
+									            </Select>
+									        </FormItem>
 								        </Col>
 								    </Row>
 						        </FormItem>
-						        <FormItem label="消防重点单位">
+						        <FormItem label="消防重点单位" prop="xfzddw">
 						            <Select clearable v-model="baseInfo.xfzddw" placeholder="请选择">
 						                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
 						            </Select>
@@ -47,23 +51,29 @@
 						        <FormItem label="文物保护单位">
 						        	<Row type="flex" :gutter="20">
 						        		<Col span="6">
-								        	<Select :transfer="true" clearable v-model="baseInfo.wwbhdw" placeholder="请选择">
-								                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
-								            </Select>
+							        		<FormItem prop="wwbhdw">
+									        	<Select :transfer="true" clearable v-model="baseInfo.wwbhdw" placeholder="请选择">
+									                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
+									            </Select>
+									        </FormItem>
 						        		</Col>
 						        		<Col span="9">
-							        		<Select :transfer="true" clearable v-show="baseInfo.wwbhdw == 1" v-model="baseInfo.jznd" placeholder="建筑年代">
-								                <Option v-for="item in jzndList" :key="item" :value="item">{{item}}</Option>
-								            </Select>
+							        		<FormItem prop="jznd" v-if="baseInfo.wwbhdw == 1">
+								        		<Select :transfer="true" clearable v-model="baseInfo.jznd" placeholder="建筑年代">
+									                <Option v-for="item in jzndList" :key="item" :value="item">{{item}}</Option>
+									            </Select>
+									        </FormItem>
 						        		</Col>
 						        		<Col span="9">
-						        			<Select :transfer="true" clearable v-show="baseInfo.wwbhdw == 1" v-model="baseInfo.jb" placeholder="级别">
-								                <Option v-for="item in jbList" :key="item" :value="item">{{item}}</Option>
-								            </Select>
+							        		<FormItem prop="jb" v-if="baseInfo.wwbhdw == 1">
+							        			<Select :transfer="true" clearable v-model="baseInfo.jb" placeholder="级别">
+									                <Option v-for="item in jbList" :key="item" :value="item">{{item}}</Option>
+									            </Select>
+									        </FormItem>
 						        		</Col>
 						        	</Row>
 						        </FormItem>
-				        		<FormItem label="建筑物结构">
+				        		<FormItem label="建筑物结构" prop="jzwjg">
 						        	<Select clearable :transfer="true" v-model="baseInfo.jzwjg" placeholder="请选择">
 						                <Option v-for="item in jzwjgList" :key="item" :value="item">{{item}}</Option>
 						            </Select>
@@ -77,8 +87,8 @@
 				        </TabPane>
 				        <TabPane label="营业状况" name="name2">
 				        	<part-title text="营业状况" :btns="['add']" @add="openYyzkModel"></part-title>
-							<Form :model="baseInfo" label-position="left" inline>
-						        <FormItem label="房间数" :label-width="118" style="margin-right: 24px">
+							<Form :model="baseInfo" ref="baseInfo2" :rules="baseInfoRules" hide-required-mark label-position="left" inline>
+						        <FormItem label="房间数" prop="fjs" :label-width="118" style="margin-right: 24px">
 						        	<InputNumber :min="0" v-model="baseInfo.fjs"></InputNumber>
 						        </FormItem>
 							</Form>
@@ -147,86 +157,18 @@
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}营业状况`" v-model="showYyzkModel" @on-visible-change="yyzkModelChange">
 			<div>
-				<Form :model="yyzkForm" label-position="left" :label-width="200">
-			        <FormItem label="近一周平均日开房数量">
+				<Form :model="yyzkForm" ref="yyzk" :rules="yyzkRules" hide-required-mark label-position="left" :label-width="200">
+			        <FormItem label="近一周平均日开房数量" prop="jyzpjrkfsl">
 			        	<InputNumber :min="0" v-model="yyzkForm.jyzpjrkfsl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="填报时间">
+			        <FormItem label="填报时间" prop="tbsj">
 			            <DatePicker type="date" v-model="yyzkForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showYyzkModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveYyzk">保存</Button>
-	        </div>
-		</Modal>
-		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}燃料信息`" v-model="showGdtrqModel" @on-visible-change="gdtrqModelChange">
-			<div>
-				<Form :model="gdtrqForm" label-position="left" :label-width="180">
-					<FormItem label="近一月用气量（立方/月）">
-			        	<InputNumber :min="0" v-model="gdtrqForm.jyyyql"></InputNumber>
-			        </FormItem>
-			        <FormItem label="填报时间">
-			            <DatePicker type="date" v-model="gdtrqForm.tbsj"  placeholder="请选择"></DatePicker>
-			        </FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showYyzkModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveGdtrq">保存</Button>
-	        </div>
-		</Modal>
-
-		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}燃料信息`" v-model="showYhsyqModel" @on-visible-change="yhsyqModelChange">
-			<div>
-				<Form :model="yhsyqForm" label-position="left" :label-width="140">
-					<FormItem label="钢瓶规格（L）">
-			        	<InputNumber :min="0" v-model="yhsyqForm.gpgg"></InputNumber>
-			        </FormItem>
-			        <FormItem label="数量">
-			            <InputNumber :min="0" v-model="yhsyqForm.sl"></InputNumber>
-			        </FormItem>
-			        <FormItem label="填报时间">
-			            <DatePicker type="date" v-model="yhsyqForm.tbsj"  placeholder="请选择"></DatePicker>
-			        </FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showYyzkModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveYhsyq">保存</Button>
-	        </div>
-		</Modal>
-		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}燃料信息`" v-model="showCjrlModel"  @on-visible-change="cjrlModelChange">
-			<div>
-				<Form :model="cjrlForm" label-position="left" :label-width="180">
-					<FormItem label="近一月使用量（kg/月）">
-			        	<InputNumber :min="0" v-model="cjrlForm.jyysyl"></InputNumber>
-			        </FormItem>
-			        <FormItem label="填报时间">
-			            <DatePicker type="date" v-model="cjrlForm.tbsj"  placeholder="请选择"></DatePicker>
-			        </FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showYyzkModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveCjrl">保存</Button>
-	        </div>
-		</Modal>
-		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}燃料信息`" v-model="showElseModel"  @on-visible-change="elseModelChange">
-			<div>
-				<Form :model="elseForm" label-position="left" :label-width="180">
-					<FormItem label="近一月使用量（kg/月）">
-			        	<InputNumber :min="0" v-model="elseForm.jyysyl"></InputNumber>
-			        </FormItem>
-			        <FormItem label="填报时间">
-			            <DatePicker type="date" v-model="elseForm.tbsj"  placeholder="请选择"></DatePicker>
-			        </FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-	            <!-- <Button type="text" size="large" @click="showYyzkModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveElse">保存</Button>
+		        <Button type="primary" size="large" :loading="yyzkLoading" @click="saveYyzk">保存</Button>
 	        </div>
 		</Modal>
 	</div>
@@ -263,6 +205,7 @@
 				showYhsyqModel: false,
 				showCjrlModel: false,
 				showElseModel: false,
+				yyzkLoading: false,
 				modeType: '',
 				modeType2: '',
 				map: null,
@@ -314,10 +257,14 @@
 				areaList: [],
 				yyzkColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.yyzkPage.pageIndex- 1) * this.yyzkPage.pageSize + 1);
+				        },
                     }, {
                         title: '近一周平均日开房数量',
                         key: 'jyzpjrkfsl',
@@ -350,10 +297,14 @@
 				dqztList: ['运行', '停运', '检修'],
 				gdtrqColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.gdtrqPage.pageIndex- 1) * this.gdtrqPage.pageSize + 1);
+				        },
                     }, {
                         title: '近一月用气量（立方/月）',
                         key: 'jyyyql',
@@ -394,10 +345,14 @@
 				},
 				yhsyqColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.yhsyqPage.pageIndex- 1) * this.yhsyqPage.pageSize + 1);
+				        },
                     }, {
                         title: '钢瓶规格（L）',
                         key: 'gpgg',
@@ -430,10 +385,14 @@
 				},
 				cjrlColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.cjrlPage.pageIndex- 1) * this.cjrlPage.pageSize + 1);
+				        },
                     }, {
                         title: '近一月使用量（kg/月）',
                         key: 'jyysyl',
@@ -461,10 +420,14 @@
 				},
 				elseColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.elsePage.pageIndex- 1) * this.elsePage.pageSize + 1);
+				        },
                     }, {
                         title: '近一月使用量（kg/月）',
                         key: 'jyysyl',
@@ -497,7 +460,29 @@
 
 		},
 		computed: {
-
+			baseInfoRules() {
+				return {
+					szjzmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					yzdw: [{ required: true, message: '请输入', trigger: 'change' }],
+					yzdwlxr: [{ required: true, message: '请输入', trigger: 'change' }],
+					jzmj: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					jzcs: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					yylc1: [{ required: true, message: '请选择', trigger: 'change' }],
+					yylc2: [{ required: true, message: '请选择', trigger: 'change' }],
+					xfzddw: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					wwbhdw: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					fjs: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					jzwjg: [{ required: true, message: '请选择', trigger: 'change' }],
+					jznd: [{ required: true, message: '请选择', trigger: 'change' }],
+					jb: [{ required: true, message: '请选择', trigger: 'change' }],
+				}
+			},
+			yyzkRules() {
+				return {
+					jyzpjrkfsl: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			async getBaseInfo() {
@@ -521,19 +506,21 @@
 				let { status_code, data, message } = await api.getBgjdBase(this.gkdx_id);
 				if(status_code == 0) {
 					console.log(data)
-					this.baseInfo.fjs = data.fjs ? Number(data.fjs) : 0
-					this.baseInfo.szjzmc = data.szjzmc 
-					this.baseInfo.yzdw = data.yzdw 
-					this.baseInfo.yzdwlxr = data.yzdwlxr 
-					this.baseInfo.jzmj = data.jzmj ? Number(data.jzmj) : 0
-					this.baseInfo.jzcs = data.jzcs ? Number(data.jzcs) : 0
-					this.baseInfo.xfzddw = data.xfzddw ? Number(data.xfzddw) : 0
-					this.baseInfo.yylc1 = data.yylc1 + ''
-					this.baseInfo.yylc2 = data.yylc2 + ''
-					this.baseInfo.wwbhdw = data.wwbhdw ? Number(data.wwbhdw) : 0
-					this.baseInfo.jznd = data.jznd
-					this.baseInfo.jb = data.jb
-					this.baseInfo.jzwjg = data.jzwjg
+					this.baseInfo = {
+						fjs: data.fjs ? Number(data.fjs) : 0,
+						szjzmc: data.szjzmc || '',
+						yzdw: data.yzdw || '',
+						yzdwlxr: data.yzdwlxr || '', 
+						jzmj: data.jzmj ? Number(data.jzmj) : 0,
+						jzcs: data.jzcs ? Number(data.jzcs) : 0,
+						xfzddw: data.xfzddw ? Number(data.xfzddw) : 0,
+						yylc1: data.yylc1 + '',
+						yylc2: data.yylc2 + '',
+						wwbhdw: data.wwbhdw ? Number(data.wwbhdw) : 0,
+						jznd: data.jznd || '',
+						jb: data.jb || '',
+						jzwjg: data.jzwjg || ''
+					}
 				}
 				this.loading = false
 			},
@@ -562,34 +549,42 @@
 				}
 			},
 			async saveInfo1() {
-				let params = {
-					gkdx_id: this.gkdx_id,
-					szjzmc: this.baseInfo.szjzmc,
-					yzdw: this.baseInfo.yzdw,
-					yzdwlxr: this.baseInfo.yzdwlxr,
-					jzmj: this.baseInfo.jzmj,
-					jzcs: this.baseInfo.jzcs,
-					xfzddw: this.baseInfo.xfzddw,
-					yylc1: this.baseInfo.yylc1,
-					yylc2: this.baseInfo.yylc2,
-					jznd: this.baseInfo.jznd,
-					jb: this.baseInfo.jb,
-					jzwjg: this.baseInfo.jzwjg,
-				}
-				let { status_code, message } = await api.addBgjdBase(params);
-				if(status_code == 200) {
-					this.$Message.success('保存成功')
-				}
+				this.$refs.baseInfo1.validate(async valid => {
+                    if (valid) {
+						let params = {
+							gkdx_id: this.gkdx_id,
+							szjzmc: this.baseInfo.szjzmc,
+							yzdw: this.baseInfo.yzdw,
+							yzdwlxr: this.baseInfo.yzdwlxr,
+							jzmj: this.baseInfo.jzmj,
+							jzcs: this.baseInfo.jzcs,
+							xfzddw: this.baseInfo.xfzddw,
+							yylc1: this.baseInfo.yylc1,
+							yylc2: this.baseInfo.yylc2,
+							jznd: this.baseInfo.jznd,
+							jb: this.baseInfo.jb,
+							jzwjg: this.baseInfo.jzwjg,
+						}
+						let { status_code, message } = await api.addBgjdBase(params);
+						if(status_code == 200) {
+							this.$Message.success('保存成功')
+						}
+                    }
+                })
 			},
 			async saveInfo2() {
-				let params = {
-					gkdx_id: this.gkdx_id,
-					fjs: this.baseInfo.fjs,
-				}
-				let { status_code, message } = await api.addBgjdBase(params);
-				if(status_code == 200) {
-					this.$Message.success('保存成功')
-				}
+				this.$refs.baseInfo2.validate(async valid => {
+                    if (valid) {
+						let params = {
+							gkdx_id: this.gkdx_id,
+							fjs: this.baseInfo.fjs,
+						}
+						let { status_code, message } = await api.addBgjdBase(params);
+						if(status_code == 200) {
+							this.$Message.success('保存成功')
+						}
+                    }
+                })
 			},
 			openAreaModal() {	
 				this.showAreaModel = true;
@@ -693,10 +688,13 @@
 			},
 			yyzkModelChange(status) {
 				if(!status) {
-					this.yyzkForm = {
-						jyzpjrkfsl: 0,
-						tbsj: '',
-					}
+					this.$nextTick(() => {
+						this.yyzkForm = {
+							jyzpjrkfsl: 0,
+							tbsj: '',
+						}
+						this.$refs.yyzk.resetFields();
+					})
 				}
 			},
 			async removeYyzk(row) {
@@ -705,20 +703,26 @@
 				this.getYyzkList()
 			},
 			async saveYyzk() {
-				let params = {
-					...this.yyzkForm,
-					tbsj: this.yyzkForm.tbsj ? getDate(new Date(this.yyzkForm.tbsj).getTime(), 'year') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addYyzkInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showYyzkModel = false
-					this.getYyzkList()
-				}
+				this.$refs.yyzk.validate(async valid => {
+                    if (valid) {
+                    	this.yyzkLoading = true
+						let params = {
+							...this.yyzkForm,
+							tbsj: this.yyzkForm.tbsj ? getDate(new Date(this.yyzkForm.tbsj).getTime(), 'year') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addYyzkInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showYyzkModel = false
+							this.getYyzkList()
+						}
+						this.yyzkLoading = false
+                    }
+                })
 			},
 			handleChangeGdtrqPage(val) {
 				this.gdtrqPage.pageIndex = val

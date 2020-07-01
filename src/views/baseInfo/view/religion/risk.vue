@@ -7,10 +7,10 @@
 					<part-title text="人员活动"></part-title>
 					<Form :model="mostForm" label-position="left" :label-width="140">
 				        <FormItem label="最多容纳人数">
-				        	<InputNumber clearable v-model="mostForm.zdkrnrs"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.zdkrnrs"></InputNumber>
 				        </FormItem>
 				        <FormItem label="活动频次(次/月)">
-				        	<InputNumber clearable v-model="mostForm.hdpc"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.hdpc"></InputNumber>
 				        </FormItem>
 					</Form>
 					<part-title text="消防重点单位"></part-title>

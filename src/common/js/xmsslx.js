@@ -15,7 +15,7 @@ export default {
 					let item_ = {
 						value: item.id,
 						parent_id: item.parent_id,
-                        label: item.qm,
+                        label: item.mc,
                         children: []
 					}
 					if(item.yzj == 1) {

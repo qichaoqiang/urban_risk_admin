@@ -36,13 +36,7 @@
 				        	<Input clearable v-model="baseInfo.scdz" placeholder="生产地址"></Input>
 				        </FormItem>
 				        <FormItem label="经纬度">
-				        	<div @click="openLngModal">
-			        			<Input 
-			        				readonly 
-			        				v-model="baseInfo.lngAndLat" 
-			        				icon="md-pin" 
-			        				placeholder="经纬度" />
-			        		</div>
+				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
 				        </FormItem>
 				        <FormItem label="企业范围">
 				        	<div @click.stop="openAreaModal">
@@ -104,10 +98,10 @@
 					<part-title text="建筑物信息"></part-title>
 					<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
 				        <FormItem label="占地面积（㎡）">
-				        	<InputNumber clearable v-model="baseInfo.zdmj" placeholder="占地面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="baseInfo.zdmj" placeholder="占地面积"></InputNumber>
 				        </FormItem>
 				        <FormItem label="建筑面积（㎡）">
-				        	<InputNumber clearable v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -605,6 +599,7 @@
 <script>
 	import api from '@/api/api'
 	import partTitle from '@/components/title'
+	import lng from '../../../baseInfo/components/lng'
 	import tablejs from '@/common/js/table'
 	import areajs from '@/common/js/area'
 	import industryjs from '@/common/js/industry'
@@ -614,11 +609,11 @@
 	export default {
 		name: '',
 		mixins: [tablejs, areajs, industryjs, lngjs, datePickerjs],
-		components: { partTitle },
+		components: { partTitle, lng },
 		data() {
 			return {
 				id: '',
-				gkdx_id: '',
+				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				loading: true,
 				step: 1,	
 				showAreaModel: false,
@@ -689,8 +684,14 @@
 				areaList: [],
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpm',
@@ -711,6 +712,7 @@
                         key: 'msds',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -741,8 +743,14 @@
 				nzzldwList: ['吨', '立方', 'KG', 'L'],
 				whRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '重大危险源单元名称',
                         key: 'zdwxydymc',
@@ -760,6 +768,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -780,8 +789,14 @@
 				},
 				sbfcgyColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '涉粉工艺名称',
                         key: 'sfgymc',
@@ -799,6 +814,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -824,8 +840,14 @@
 				},
 				deviceColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '除尘设施名称',
                         key: 'ccssmc',
@@ -840,6 +862,7 @@
                         key: 'yxzt',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -864,8 +887,14 @@
 				},
 				mainRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '工艺名称',
                         slot: 'gymc',
@@ -877,6 +906,7 @@
                         key: 'sjczrs',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -893,8 +923,14 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         slot: 'name',
@@ -909,6 +945,7 @@
                         key: 'cas',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -939,19 +976,20 @@
 
 		},
 		methods: {
-			getBaseInfo() {
-				if(this.$route.query.type == '2') {
-					let baseInfo = this.$storage.get('baseInfo')
-					baseInfo.hyml = []
-					baseInfo.quyu = []
-					this.baseInfo = baseInfo
-					this.baseInfo = this.$storage.get('baseInfo')
-					this.baseInfo = this.$storage.get('baseInfo')
-					this.form = this.$storage.get('form')
-					this.getQy()
-					this.getHy()
-				}else {
-					this.loading = false
+			async getBaseInfo() {
+				let { status_code, data, message } = await api.getSazlBase(this.gkdx_id);
+				if(status_code == 0) {
+					this.form = data;
+					let { qymc, tyshxydm, zcdz, sfzgyyq, yqmc, zgrs, glrysl, hyml, hydm, aqscbzh, qyjbjk, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, scdz, lngAndLat, qyfw, zdmj, jzmj, zddbrs, sazlqylx } = this.form
+					this.baseInfo = { qymc, tyshxydm, zcdz, sfzgyyq, yqmc, hydm, aqscbzh, qyjbjk, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, scdz, qyfw, sazlqylx }
+					this.baseInfo.zgrs = zgrs ? Number(zgrs) : 0
+					this.baseInfo.glrysl = glrysl ? Number(glrysl) : 0
+					this.baseInfo.zdmj = zdmj ? Number(zdmj) : 0
+					this.baseInfo.jzmj = jzmj ? Number(jzmj) : 0
+					this.baseInfo.zddbrs = zddbrs ? Number(zddbrs) : 0
+					this.baseInfo.lngAndLat = this.form.jd && this.form.wd ? `${(this.form.jd - 0).toFixed(6)} ${(this.form.wd - 0).toFixed(6)}` : ''
+					this.getHy();
+					this.getQy();
 				}
 			},
 			async nextStep() {
@@ -970,15 +1008,9 @@
 				let { status_code, message } = await api.addSazlBase(params);
 				if(status_code == 200) {
 					this.$Message.success('保存成功')
-					if(this.$route.query.type == 2) {
+					if(this.$route.name == 'base') {
 						this.$storage.set('gkdx_id', this.form.gkdx_id)
 						this.$router.back()
-					}else {
-						let { status_code, data } = await api.getSazlBase()
-						if(status_code == 200) {
-							this.$storage.set('gkdx_id', data.data[0].gkdx_id)
-						}
-						this.$router.replace('/baseInfo')
 					}
 				}
 			},

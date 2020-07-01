@@ -8,12 +8,12 @@
 					<Tabs value="name1">
 				        <TabPane label="旅客承载量" name="name1">
 							<part-title text="旅客承载量"></part-title>
-							<Form :model="mostForm" label-position="left" inline style="width: 600px">
+							<Form :model="baseInfo" label-position="left" inline style="width: 600px">
 						        <FormItem label="可接待最大旅客数量" :label-width="160" style="margin-right: 120px">
-						        	<InputNumber clearable v-model="mostForm.kjdzdlksl"></InputNumber>
+						        	<InputNumber :min="0" clearable v-model="baseInfo.kjdzdlksl"></InputNumber>
 						        </FormItem>
 						        <FormItem label="日均人流" :label-width="80">
-						        	<InputNumber clearable v-model="mostForm.rjrl"></InputNumber>
+						        	<InputNumber :min="0" clearable v-model="baseInfo.rjrl"></InputNumber>
 						        </FormItem>
 							</Form>
 							<Row type="flex" justify="center" style="margin-top: 24px">
@@ -198,7 +198,7 @@
 			            </Select>
 			        </FormItem>
 			        <FormItem label="开业时间">
-			        	<DatePicker type="date" v-model="travelForm.kysj" :options="datePickerOptions" placeholder="请选择"></DatePicker>
+			        	<DatePicker type="date" v-model="travelForm.kysj" placeholder="请选择"></DatePicker>
 			        </FormItem>
 			        <FormItem label="营业时间">
 			        	<TimePicker type="timerange" confirm v-model="travelForm.yysj" placeholder="营业时间"></TimePicker>
@@ -227,7 +227,7 @@
 			            </Select>
 			        </FormItem>
 			        <FormItem label="时代">
-			        	<DatePicker type="date" v-model="wwForm.sd" :options="datePickerOptions" placeholder="请选择"></DatePicker>
+			        	<DatePicker type="date" v-model="wwForm.sd" placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
@@ -255,7 +255,7 @@
 			        	</Row>
 			        </FormItem>
 			        <FormItem label="建设使用时间">
-			        	<DatePicker type="date" v-model="xfForm.jstysj" :options="datePickerOptions" placeholder="请选择"></DatePicker>
+			        	<DatePicker type="date" v-model="xfForm.jstysj" placeholder="请选择"></DatePicker>
 			        </FormItem>
 			        <FormItem label="使用单位">
 			            <Input clearable v-model="xfForm.sydw"></Input>
@@ -290,13 +290,13 @@
 			        	<Input clearable v-model="specialForm.xhgg"></Input>
 			        </FormItem>
 			        <FormItem label="出厂时间">
-			        	<DatePicker type="date" v-model="specialForm.czsj" :options="datePickerOptions" placeholder="请选择"></DatePicker>
+			        	<DatePicker type="date" v-model="specialForm.czsj" placeholder="请选择"></DatePicker>
 			        </FormItem>
 			        <FormItem label="使用单位">
 			            <Input clearable v-model="specialForm.sydw"></Input>
 			        </FormItem>
 			        <FormItem label="检验有效期">
-			        	<DatePicker type="date" v-model="specialForm.jyyxq" :options="datePickerOptions" placeholder="请选择"></DatePicker>
+			        	<DatePicker type="date" v-model="specialForm.jyyxq" placeholder="请选择"></DatePicker>
 			        </FormItem>
 			        <FormItem label="检验单位">
 			            <Input clearable v-model="specialForm.jydw"></Input>
@@ -373,7 +373,7 @@
 					jbrdh: '',
 					jbryx: '',
 				},
-				mostForm: {
+				baseInfo: {
 					kjdzdlksl: 0,
 					rjrl: 0
 				},
@@ -398,25 +398,37 @@
 				travelNum: {},
 				travelColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.travelPage.pageIndex- 1) * this.travelPage.pageSize + 1);
+				        }
                     }, {
                         title: '项目名称',
                         key: 'xmmc',
+                        minWidth: 100
                     }, {
                         title: '经营类型',
                         key: 'jylx',
+                        minWidth: 100
                     }, {
                         title: '开业时间',
                         key: 'kysj',
+                        minWidth: 120
                     }, {
                         title: '营业时间',
                         slot: 'yysj',
+                        minWidth: 120
                     }, {
                         title: '运行状态',
                         key: 'yxzt',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -438,19 +450,29 @@
 				travelYxztList: ['建设', '运行', '改造', '停运'],
 				wwColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.wwPage.pageIndex- 1) * this.wwPage.pageSize + 1);
+				        }
                     }, {
                         title: '名称',
                         key: 'mc',
+                        minWidth: 100
                     }, {
                         title: '级别',
                         key: 'jb',
+                        minWidth: 100
                     }, {
                         title: '时代',
                         key: 'sd',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -470,25 +492,37 @@
 				jbList: ['国家级', '省级', '市级', '县级'],
 				xfColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.xfPage.pageIndex- 1) * this.xfPage.pageSize + 1);
+				        }
                     }, {
                         title: '名称',
                         key: 'mc',
+                        minWidth: 100
                     }, {
                         title: '类型',
                         key: 'lx',
+                        minWidth: 100
                     }, {
                         title: '建设投用时间',
                         key: 'jstysj',
+                        minWidth: 120
                     }, {
                         title: '使用单位',
                         key: 'sydw',
+                        minWidth: 100
                     }, {
                         title: '运行状态',
                         key: 'yyzt',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -512,40 +546,57 @@
 				yyztList: ['运行', '改造', '停止'],
 				specialColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.specialPage.pageIndex- 1) * this.specialPage.pageSize + 1);
+				        }
                     }, {
                         title: '设备名称',
                         key: 'sbmc',
+                        minWidth: 100
                     }, {
                         title: '登记注册码',
                         key: 'djzcdm',
+                        minWidth: 110
                     }, {
                         title: '种类',
                         key: 'zl',
+                        minWidth: 100
                     }, {
                         title: '型号规格',
                         key: 'xhgg',
+                        minWidth: 100
                     }, {
                         title: '出厂时间',
                         key: 'czsj',
+                        minWidth: 100
                     }, {
                         title: '使用单位',
                         key: 'sydw',
+                        minWidth: 100
                     }, {
                         title: '检验有效期',
                         key: 'jyyxq',
+                        minWidth: 120
                     }, {
                         title: '检验单位',
                         key: 'jydw',
+                        minWidth: 100
                     }, {
                         title: '使用状态',
                         key: 'syzt',
+                        minWidth: 100
                     }, {
                         title: '风险等级',
                         key: 'fxdj',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -584,22 +635,6 @@
 		methods: {
 			async getBaseInfo() {
 				this.loading = true
-				let { status_code, data, message } = await api.getTravelBase();
-				if(status_code == 0) {
-					this.form = data;
-					let { jbr, jbrdh, jbryx, lyjdmc, tyshxydm, jydw, quyu_id, jd, wd, jqdj, hydm, yxzt, jqyysj1, jqyysj2, jqjs, kjdzdlksl, rjrl, dyfw, dz} = this.form
-					this.baseInfo = { lyjdmc, tyshxydm, jydw, jqdj, hydm, yxzt, jqjs }
-					this.baseInfo.kysj = this.form.kysj ? new Date(this.form.kysj) : '';
-					jqyysj1 = jqyysj1 ? jqyysj1 : ''
-					jqyysj2 = jqyysj2 ? jqyysj2 : ''
-					this.baseInfo.jqyysj = [jqyysj1, jqyysj2];
-					this.addressInfo = { dyfw, dz}
-					this.addressInfo.lngAndLat = this.form.jd && this.form.wd ? `${(this.form.jd - 0).toFixed(2)} ${(this.form.wd - 0).toFixed(2)}` : ''
-					this.contactInfo = { jbr, jbrdh, jbryx }
-					this.mostForm = { kjdzdlksl, rjrl }
-					this.getQy()
-					// this.getHy()
-				}
 				let travelParams = {
 					gkdx_id: this.gkdx_id,
 					per_page: this.travelPage.pageSize,
@@ -647,6 +682,14 @@
 				  	console.log(error)
 				  	this.loading = false
 				})
+				let { status_code, data, message } = await api.getTravelBase(this.gkdx_id);
+				if(status_code == 0) {
+					this.form = data;
+					this.baseInfo = { 
+						kjdzdlksl: data.kjdzdlksl ? Number(data.kjdzdlksl) : 0,
+						rjrl: data.rjrl ? Number(data.rjrl) : 0
+					}
+				}
 			},
 			async nextStep() {
 				let params = {
@@ -730,7 +773,7 @@
 			},
 			async saveInfo() {
 				let params = {
-					...this.mostForm,
+					...this.baseInfo,
 					gkdx_id: this.gkdx_id
 				}
 				let { status_code, message } = await api.addTravelBase(params);

@@ -62,9 +62,11 @@
 				        </TabPane>
 				        <TabPane label="经营状况" name="name2">
 				        	<part-title text="经营状况" :btns="['add']" @add="openJyzkModel"></part-title>
-				        	<div style="margin-bottom: 16px;">
-				        		<span>设计年周转量：{{baseInfo.sjnzzl}}m³</span>
-				        	</div>
+				        	<Form :model="baseInfo" label-position="left" style="width: 600px">
+						        <FormItem label="设计年周转量（m³）" :label-width="180">
+						        	<InputNumber :min="0" v-model="baseInfo.sjnzzl"></InputNumber>
+						        </FormItem>
+							</Form>
 							<Table :columns="jyzkColumns" :data="jyzkData">
 								<template slot-scope="{ row }" slot="action">
 						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editJyzkModel(row)">编辑</Button>
@@ -85,6 +87,11 @@
 				                    @on-change="handleChangeJyzkPage"
 				                    @on-page-size-change="handleChangeJyzkPageSize"
 				                />
+							</Row>
+							<Row type="flex" justify="center" style="margin-top: 24px">
+								<Col>
+									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo">完成</Button>
+								</Col>
 							</Row>
 				        </TabPane>
 				        <TabPane label="周边环境" name="name3">
@@ -336,28 +343,41 @@
 				areaList: [],
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpm',
+                        minWidth: 110
                     }, {
                         title: 'CAS号',
                         key: 'cas',
+                        minWidth: 110
                     }, {
                         title: '是否重点监管',
                         slot: 'sfzdjg',
+                        minWidth: 120
                     }, {
                         title: '是否爆炸品',
                         slot: 'sfbzp',
+                        minWidth: 110
                     }, {
                         title: '火灾风险等级',
                         key: 'hzwxxdj',
+                        minWidth: 120
                     }, {
                         title: 'MSDS',
                         key: 'msds',
+                        minWidth: 110
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -387,69 +407,43 @@
 				hxpztList: ['气体', '液化气体', '液体', '固体'],
 				nzzldwList: ['吨', '立方', 'KG', 'L'],
 				sxflList: ['最终产品', '中间产品', '原料'],
-				whRiskColumns: [
-					{
-                        title: '序号',
-                        type: 'index',
-                    }, {
-                        title: '重大危险源单元名称',
-                        key: 'zdwxydymc',
-                    }, {
-                        title: '重大危险源等级',
-                        key: 'zdwxydj',
-                    }, {
-                        title: '危险化学品',
-                        key: 'wxhxp',
-                    }, {
-                        title: '投用时间',
-                        key: 'tysj',
-                    }, {
-                        title: '当前状态',
-                        key: 'dqzt',
-                    }, {
-                        title: '操作',
-                        width: 150,
-                        slot: 'action',
-                    }, 
-				],
-				whRiskData: [],
-				whRiskForm: {
-					zdwxydymc: '',
-					zdwxydj: '',
-					wxhxp: '',
-					tysj: '',
-					dqzt: ''
-				},
-				dqztList: ['运行', '停运', '检修'],
-				whRiskPage: {
-					pageSize: 10,
-					pageIndex: 1,
-					totalRow: 0
-				},
 				cpzColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.cpzPage.pageIndex- 1) * this.cpzPage.pageSize + 1);
+				        }
                     }, {
                         title: '储罐名称',
                         key: 'cgmc',
+                        minWidth: 110
                     }, {
                         title: '容积(m³)',
                         key: 'rj',
+                        minWidth: 110
                     }, {
                         title: '压力(Mpa)',
                         key: 'yl',
+                        minWidth: 130
                     }, {
                         title: '温度(℃)',
                         key: 'wd',
+                        minWidth: 110
                     }, {
                         title: '数量',
                         key: 'sl',
+                        minWidth: 110
                     }, {
                         title: '备注',
                         key: 'bz',
+                        minWidth: 110
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -480,25 +474,37 @@
 		  		},
 				gyzColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.gyzPage.pageIndex- 1) * this.gyzPage.pageSize + 1);
+				        }
                     }, {
                         title: '气瓶规格(L)',
                         key: 'qpgg',
+                        minWidth: 120
                     }, {
                         title: '容积(m³)',
                         key: 'rj',
+                        minWidth: 110
                     }, {
                         title: '压力(Mpa)',
                         key: 'yl',
+                        minWidth: 120
                     }, {
                         title: '数量',
                         key: 'sl',
+                        minWidth: 110
                     }, {
                         title: '备注',
                         key: 'bz',
+                        minWidth: 110
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -518,16 +524,25 @@
 				},
 				jyzkColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.jyzkPage.pageIndex- 1) * this.jyzkPage.pageSize + 1);
+				        }
                     }, {
                         title: '近5日日平均周转量(m³)',
                         key: 'jrrpjzzl',
+                        minWidth: 200
                     }, {
                         title: '填报时间',
                         key: 'tbsj',
+                        minWidth: 110
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -544,22 +559,33 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.rimPage.pageIndex- 1) * this.rimPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         key: 'mgmbmc',
+                        minWidth: 120
                     }, {
                         title: '方位',
                         key: 'fw',
+                        minWidth: 110
                     }, {
                         title: '目标类型',
                         key: 'mgmblx',
+                        minWidth: 110
                     }, {
                         title: '人员数量',
                         key: 'rysl',
+                        minWidth: 110
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -574,7 +600,7 @@
 					lngAndLat: '',
 					qyfw: ''
 				},
-				fwList: ['东', '南', '西', '北'],
+				fwList: ['东', '南', '西', '北', '东北', '东南', '西北', '西南'],
 				mgmblxList: ['医院', '养老院', '学校', '政府机构', '商场', '居住区', '监狱', '宗教', '车站', '码头', '铁路', '公路', '林区', '工厂', '矿山', '河流', '其他'],
 				rimPage: {
 					pageSize: 10,
@@ -643,7 +669,10 @@
 				let { status_code, data, message } = await api.getYhsyqczBase(this.gkdx_id);
 				if(status_code == 0) {
 					this.form = data;
-					this.baseInfo = { czlx: data.czlx, sjnzzl: data.sjnzzl}
+					this.baseInfo = { 
+						czlx: data.czlx || '', 
+						sjnzzl: data.sjnzzl ? Number(data.sjnzzl) : 0
+					}
 				}
 			},
 			async nextStep() {
@@ -673,7 +702,7 @@
 			async saveInfo() {
 				let params = {
 					gkdx_id: this.gkdx_id,
-					...this.baseInfo
+					sjnzzl: this.baseInfo.sjnzzl,
 				}
 				let { status_code, message } = await api.addYhsyqczBase(params);
 				if(status_code == 200) {

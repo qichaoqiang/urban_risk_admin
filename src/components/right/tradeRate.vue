@@ -3,8 +3,8 @@
 		<div class="trade_rate_item" v-for="(item, index) in $store.state.tradeList" :key="item.name">
 			<div class="trade_rate_item_pie" :id="'trade_rate_item_pie' + index"></div>
 			<div class="trade_rate_item_name">
-				<img :src="require(`../../assets/trade/icon-${item.id}.png`)">
-				<span>{{item.info}}</span>
+				<!-- <img :src="require(`../../assets/trade/icon-${item.id}.png`)"> -->
+				<span>{{item.fxylbmc}}</span>
 			</div>
 		</div>
 	</div>

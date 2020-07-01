@@ -5,49 +5,11 @@
 				<Col>
 					<div class="title">请完善{{step == 1 ? '场所' : '风险'}}信息</div>
 					<part-title text="基本信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
+					<Form :model="baseInfo" ref="baseInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 						<FormItem label="名称">
 				            {{baseInfo.mc}}
 				        </FormItem>
-				        <FormItem label="机构类型">
-				            <Select clearable v-model="baseInfo.jglx" placeholder="机构类型">
-				                <Option v-for="item in jglxList" :key="item" :value="item">{{item}}</Option>
-				            </Select>
-				        </FormItem>
-				        <FormItem label="机构性质">
-				        	<Select clearable v-model="baseInfo.jgxz" placeholder="机构性质">
-				                <Option v-for="item in jgxzList" :key="item" :value="item">{{item}}</Option>
-				            </Select>
-				        </FormItem>
-				        <FormItem label="机构星级">
-				            <Select clearable v-model="baseInfo.jgxj" placeholder="机构星级">
-				                <Option v-for="item in jgxjList" :key="item" :value="item">{{item}}</Option>
-				            </Select>
-				        </FormItem>
-				        <FormItem label="收住对象">
-				        	<Select clearable multiple v-model="baseInfo.szdx" placeholder="收住对象">
-				                <Option v-for="item in szdxList" :key="item" :value="item">{{item}}</Option>
-				            </Select>
-				        </FormItem>
-				        <FormItem label="举办单位">
-				            <Input clearable v-model="baseInfo.jbdw" placeholder="举办单位"></Input>
-				        </FormItem>
-				        <FormItem label="成立时间">
-				            <DatePicker type="date" v-model="baseInfo.clsj"  placeholder="请选择"></DatePicker>
-				        </FormItem>
-				        <FormItem label="行业门类">
-				        	<Cascader 
-				        		clearable 
-				        		change-on-select
-			        			v-model="baseInfo.hyml" 
-			        			:data="industryList" 
-			        			:load-data="loadIndustry" 
-			        			placeholder="行业门类"></Cascader>
-				        </FormItem>
-				        <FormItem label="行业代码">
-				            <Input clearable v-model="baseInfo.hydm" placeholder="行业代码"></Input>
-				        </FormItem>
-				        <FormItem label="所属辖区">
+				        <FormItem label="所属辖区" prop="quyu">
 				            <Cascader 
 				            	clearable 
 				            	change-on-select
@@ -56,32 +18,64 @@
 				            	:load-data="loadArea" 
 				            	placeholder="所属辖区"></Cascader>
 				        </FormItem>
-				        <FormItem label="社会统一信用代码">
-				            <Input clearable v-model="baseInfo.tyshxydm" placeholder="社会统一信用代码"></Input>
+				        <FormItem label="地址" prop="dz">
+				        	<Input clearable v-model="baseInfo.dz" placeholder="地址"></Input>
 				        </FormItem>
-				        <FormItem label="机构简介">
-				            <Input clearable v-model="baseInfo.jgjj" type="textarea" placeholder="机构简介"></Input>
+				        <FormItem label="经纬度" prop="lngAndLat">
+				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
 				        </FormItem>
-				        <FormItem label="地址">
-				        	<Input clearable v-model="addressInfo.dz" placeholder="地址"></Input>
-				        </FormItem>
-				        <FormItem label="经纬度">
-				        	<div @click="openLngModal">
-			        			<Input 
-			        				readonly 
-			        				v-model="addressInfo.lngAndLat" 
-			        				icon="md-pin" 
-			        				placeholder="经纬度" />
-			        		</div>
-				        </FormItem>
-				        <FormItem label="场所范围">
+				        <FormItem label="场所范围" prop="csfw">
 				        	<div @click.stop="openAreaModal">
 			        			<Input 
 			        				readonly 
-			        				v-model="addressInfo.csfw" 
+			        				v-model="baseInfo.csfw" 
 			        				icon="md-pin" 
 			        				placeholder="场所范围" />
 			        		</div>
+				        </FormItem>
+				        <FormItem label="机构类型" prop="jglx">
+				            <Select clearable v-model="baseInfo.jglx" placeholder="机构类型">
+				                <Option v-for="item in jglxList" :key="item" :value="item">{{item}}</Option>
+				            </Select>
+				        </FormItem>
+				        <FormItem label="机构性质" prop="jgxz">
+				        	<Select clearable v-model="baseInfo.jgxz" placeholder="机构性质">
+				                <Option v-for="item in jgxzList" :key="item" :value="item">{{item}}</Option>
+				            </Select>
+				        </FormItem>
+				        <FormItem label="机构星级" prop="jgxj">
+				            <Select clearable v-model="baseInfo.jgxj" placeholder="机构星级">
+				                <Option v-for="item in jgxjList" :key="item" :value="item">{{item}}</Option>
+				            </Select>
+				        </FormItem>
+				        <FormItem label="收住对象" prop="szdx">
+				        	<Select clearable multiple v-model="baseInfo.szdx" placeholder="收住对象">
+				                <Option v-for="item in szdxList" :key="item" :value="item">{{item}}</Option>
+				            </Select>
+				        </FormItem>
+				        <FormItem label="举办单位" prop="jbdw">
+				            <Input clearable v-model="baseInfo.jbdw" placeholder="举办单位"></Input>
+				        </FormItem>
+				        <FormItem label="成立时间" prop="clsj">
+				            <DatePicker type="date" v-model="baseInfo.clsj"  placeholder="请选择"></DatePicker>
+				        </FormItem>
+				        <FormItem label="行业门类" prop="hyml">
+				        	<Cascader 
+				        		clearable 
+				        		change-on-select
+			        			v-model="baseInfo.hyml" 
+			        			:data="industryList" 
+			        			:load-data="loadIndustry" 
+			        			placeholder="行业门类"></Cascader>
+				        </FormItem>
+				        <FormItem label="行业代码" prop="hydm">
+				            <Input clearable v-model="baseInfo.hydm" placeholder="行业代码"></Input>
+				        </FormItem>
+				        <FormItem label="社会统一信用代码" prop="tyshxydm">
+				            <Input clearable v-model="baseInfo.tyshxydm" placeholder="社会统一信用代码"></Input>
+				        </FormItem>
+				        <FormItem label="机构简介" prop="jgjj">
+				            <Input clearable v-model="baseInfo.jgjj" type="textarea" placeholder="机构简介"></Input>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -90,15 +84,15 @@
 			<Row type="flex" justify="center">
 				<Col>
 					<part-title text="建筑物信息"></part-title>
-					<Form :model="addressInfo" label-position="left" :label-width="140" style="width: 600px">
-				        <FormItem label="占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.zdmj" placeholder="占地面积"></InputNumber>
+					<Form :model="baseInfo" ref="jzInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
+				        <FormItem label="占地面积（㎡）" prop="zdmj">
+				        	<InputNumber :min="0" v-model="baseInfo.zdmj" placeholder="占地面积"></InputNumber>
 				        </FormItem>
-				        <FormItem label="建筑面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.jzmj" placeholder="建筑面积"></InputNumber>
+				        <FormItem label="建筑面积（㎡）" prop="jzmj">
+				        	<InputNumber :min="0" v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
-				        <FormItem label="建筑层数">
-				        	<InputNumber clearable v-model="addressInfo.jzcs" placeholder="建筑层数"></InputNumber>
+				        <FormItem label="建筑层数" prop="jzcs">
+				        	<InputNumber :min="0" v-model="baseInfo.jzcs" placeholder="建筑层数"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -107,17 +101,23 @@
 			<Row type="flex" justify="center">
 				<Col>
 					<part-title text="联系人信息"></part-title>
-					<Form :model="contactInfo" label-position="left" :label-width="140" style="width: 600px">
+					<Form :model="baseInfo" ref="contactInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 				        <FormItem label="经办人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input clearable v-model="contactInfo.jbr" :data="areaList" placeholder="姓名"></Input>
+						        	<FormItem prop="jbr">
+					        			<Input clearable v-model="baseInfo.jbr" :data="areaList" placeholder="姓名"></Input>
+					        		</FormItem>
 				        		</Col>
 				        		<Col span="16">
-				        			<Input type="tel" clearable v-model="contactInfo.jbrdh" placeholder="电话"></Input>
+					        		<FormItem prop="jbrdh">
+					        			<Input clearable v-model="baseInfo.jbrdh" placeholder="电话"></Input>
+					        		</FormItem>
 				        		</Col>
-				        		<Col span="24">
-				        			<Input type="email" clearable v-model="contactInfo.jbryx" placeholder="邮箱"></Input>
+				        		<Col span="24" style="margin-top: 16px">
+					        		<FormItem prop="jbryx">
+					        			<Input clearable v-model="baseInfo.jbryx" placeholder="邮箱"></Input>
+					        		</FormItem>
 				        		</Col>
 				        	</Row>
 				        </FormItem>
@@ -220,13 +220,13 @@
 			<div>
 				<Form :model="infoForm" label-position="left" :label-width="140">
 					<FormItem label="从业人数">
-			        	<InputNumber clearable :min="0" v-model="infoForm.num"></InputNumber>
+			            <InputNumber :min="0" v-model="infoForm.num"></InputNumber>
 			        </FormItem>
 			        <FormItem label="核定床位数">
-			        	<InputNumber clearable :min="0" v-model="infoForm.num"></InputNumber>
+			            <InputNumber :min="0" v-model="infoForm.num"></InputNumber>
 			        </FormItem>
 			        <FormItem label="入住人数">
-			        	<InputNumber clearable :min="0" v-model="infoForm.num"></InputNumber>
+			            <InputNumber :min="0" v-model="infoForm.num"></InputNumber>
 			        </FormItem>
 				</Form>
 			</div>
@@ -239,10 +239,10 @@
 			<div>
 				<Form :model="personForm" label-position="left" :label-width="140">
 			        <FormItem label="自理型人数">
-			        	<InputNumber clearable :min="0" v-model="personForm.num"></InputNumber>
+			            <InputNumber :min="0" v-model="personForm.num"></InputNumber>
 			        </FormItem>
 					<FormItem label="护理型人数">
-			        	<InputNumber clearable :min="0" v-model="personForm.num"></InputNumber>
+			            <InputNumber :min="0" v-model="personForm.num"></InputNumber>
 			        </FormItem>
 				</Form>
 			</div>
@@ -257,6 +257,7 @@
 <script>	
 	import api from '@/api/api'
 	import partTitle from '@/components/title'
+	import lng from '../../../baseInfo/components/lng'
 	import areajs from '@/common/js/area'
 	import industryjs from '@/common/js/industry'
 	import lngjs from '@/common/js/lng'
@@ -279,9 +280,10 @@
 	export default {
 		name: '',
 		mixins: [areajs, industryjs, lngjs, datePickerjs],
-		components: { partTitle },
+		components: { partTitle, lng },
 		data() {
 			return {
+				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				step: 1,	
 				showAreaModel: false,
 				showLngModel: false,
@@ -308,7 +310,7 @@
 					szdx: [],
 					jgjj: '',
 				},
-				addressInfo: {
+				baseInfo: {
 					dz: '',
 					zdmj: 0,
 					jzmj: 0,
@@ -316,7 +318,7 @@
 					lngAndLat: '',	
 					csfw: ''	
 				},
-				contactInfo: {
+				baseInfo: {
 					jbr: '',
 					jbrdh: '',
 					jbryx: '',
@@ -356,8 +358,14 @@
 				szdxList: ['老人', '残疾人', '儿童'],
 				infoColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '从业人数',
                         key: 'cas',
@@ -372,6 +380,7 @@
                         key: 'cas',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -388,8 +397,14 @@
 				},
 				personColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '自理型人数',
                         key: 'cas',
@@ -401,6 +416,7 @@
                         key: 'cas',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -436,36 +452,79 @@
 
 		},
 		computed: {
-
-		},
-		methods: {
-			getBaseInfo() {
-				if(this.$route.query.type == '2') {
-					let baseInfo = this.$storage.get('baseInfo')
-					// baseInfo.hyml = []
-					// baseInfo.quyu = []
-					this.baseInfo = baseInfo
-					this.addressInfo = this.$storage.get('addressInfo')
-					this.contactInfo = this.$storage.get('contactInfo')
-					this.mostForm = this.$storage.get('mostForm')
-					this.form = this.$storage.get('form')
-					this.getQy()
-					this.getHy()
-				}else {
-					this.loading = false
+			rules() {
+				return {
+                	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                	dz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	hyml: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                	csfw: [{ required: true, message: '请选择', trigger: 'change' }],
+                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	jglx: [{ required: true, message: '请选择', trigger: 'change' }],
+                	jgxz: [{ required: true, message: '请选择', trigger: 'change' }],
+                	jgxj: [{ required: true, message: '请选择', trigger: 'change' }],
+                	szdx: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                	jbdw: [{ required: true, message: '请输入', trigger: 'change' }],
+                	clsj: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
+                	hydm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	tyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jgjj: [{ required: true, message: '请输入', trigger: 'change' }],
+                	zdmj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+                	jzmj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+                	jzcs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+                	jbr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jbrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jbryx: [{ required: true, message: '请输入', trigger: 'change' }],
 				}
 			},
-			async nextStep() {
+		},
+		methods: {
+			async getBaseInfo() {
+				let { status_code, data, message } = await api.getNursBase(this.gkdx_id);
+				if(status_code == 0) {
+					this.form = data;
+					let { jbr, jbrdh, jbryx, mc, dz, quyu_id, jd, wd, csfw, jbdw, tyshxydm, jglx, jgxz, clsj, hyml, hydm, jgxj, szdx, zdmj, jzmj, jzcs, jgjj, xfzddw, hzgwdw } = this.form
+					this.baseInfo = { mc, jbdw, tyshxydm, jglx, jgxz, hydm, jgxj, jgjj, dz, csfw, zdmj, jzmj, jzcs, lngAndLat: '', jbr, jbrdh, jbryx, quyu: [], hyml: [], szdx: [], clsj }
+					this.baseInfo.clsj = clsj ? new Date(clsj) : '';
+					this.baseInfo.szdx = szdx ? szdx.split(',') : [];
+					this.baseInfo.zdmj = zdmj ? Number(zdmj) : 0
+					this.baseInfo.jzmj = jzmj ? Number(jzmj) : 0
+					this.baseInfo.jzcs = jzcs ? Number(jzcs) : 0
+					this.baseInfo.csfw = csfw || ''
+					this.baseInfo.jgjj = jgjj || ''
+					this.baseInfo.lngAndLat = this.form.jd && this.form.wd ? `${(this.form.jd - 0).toFixed(6)} ${(this.form.wd - 0).toFixed(6)}` : ''
+					this.mostForm = { xfzddw, hzgwdw }
+					this.getQy()
+					this.getHy()
+				}
+			},
+			nextStep() {
+				this.$refs.baseInfo.validate((valid) => {
+                    if (valid) {
+                        this.$refs.jzInfo.validate((valid) => {
+		                    if (valid) {
+		                        this.$refs.contactInfo.validate((valid) => {
+				                    if (valid) {
+				                        this.submit()
+				                    }
+				                })
+		                    }
+		                })
+                    }
+                })
+                this.$refs.jzInfo.validate((valid) => {})
+                this.$refs.contactInfo.validate((valid) => {})
+			},
+			async submit() {
 				let params = {
 					...this.baseInfo,
-					...this.addressInfo,
-					...this.contactInfo,
+					...this.baseInfo,
+					...this.baseInfo,
 					clsj: this.baseInfo.clsj ? getDate(new Date(this.baseInfo.clsj).getTime(), 'date') : '',
 					quyu_id: this.baseInfo.quyu[this.baseInfo.quyu.length - 1],
 					hyml: this.baseInfo.hyml[this.baseInfo.hyml.length - 1],
 					szdx: this.baseInfo.szdx.join(','),
-					jd: this.addressInfo.lngAndLat.split(' ')[0],
-					wd: this.addressInfo.lngAndLat.split(' ')[1],
+					jd: this.baseInfo.lngAndLat.split(' ')[0],
+					wd: this.baseInfo.lngAndLat.split(' ')[1],
 				}	 
 				if(this.$route.query.type == 2) {
 					params.gkdx_id = this.form.gkdx_id
@@ -475,15 +534,9 @@
 				let { status_code, message } = await api.addNursBase(params);
 				if(status_code == 200) {
 					this.$Message.success('保存成功')
-					if(this.$route.query.type == 2) {
+					if(this.$route.name == 'base') {
 						this.$storage.set('gkdx_id', this.form.gkdx_id)
 						this.$router.back()
-					}else {
-						let { status_code, data } = await api.getNursBase()
-						if(status_code == 200) {
-							this.$storage.set('gkdx_id', data.data[0].gkdx_id)
-						}
-						this.$router.replace('/baseInfo')
 					}
 				}
 			},
@@ -508,8 +561,8 @@
 			            };
 			            //创建标注工具对象
 			            this.polygonTool = new T.PolygonTool(this.map, config);
-			            if(this.addressInfo.csfw) {
-			            	let csfw = JSON.parse(this.addressInfo.csfw)
+			            if(this.baseInfo.csfw) {
+			            	let csfw = JSON.parse(this.baseInfo.csfw)
 			            	let points = csfw.map(item => {
 			            		return new T.LngLat(item.lng, item.lat)
 			            	})
@@ -524,23 +577,23 @@
 				this.polygonTool.addEventListener('draw', (e) => {
 					// 获取绘制的多边形信息
 					console.log(e);
-					this.addressInfo.csfw = JSON.stringify(e.currentLnglats)
+					this.baseInfo.csfw = JSON.stringify(e.currentLnglats)
 				})
 			},
 			clearArea() {
-				this.addressInfo.csfw = ''
+				this.baseInfo.csfw = ''
 				this.map.clearOverLays()
 			},
 			cancelArea() {
 				this.map.clearOverLays();
 				this.map = null;
 				this.polygonTool = null;
-				this.addressInfo.csfw = this.csfw || this.form.csfw || '';
+				this.baseInfo.csfw = this.csfw || this.form.csfw || '';
 				this.showAreaModel = false
 			},
 			saveArea() {
-				this.csfw = this.addressInfo.csfw;
-				this.form.csfw = this.addressInfo.csfw;
+				this.csfw = this.baseInfo.csfw;
+				this.form.csfw = this.baseInfo.csfw;
 				this.map.clearOverLays();
 				this.map = null;
 				this.polygonTool = null;
@@ -568,7 +621,7 @@
 				})
 			},
 			saveLng() {
-				this.addressInfo.lngAndLat = `${this.lng} ${this.lat}`
+				this.baseInfo.lngAndLat = `${this.lng} ${this.lat}`
 				this.showLngModel = false
 				this.$nextTick(() => {
 					this.map = null;

@@ -333,7 +333,7 @@
 		data() {
 			return {
 				id: '',
-				gkdx_id: this.$storage.get('gkdx_id'),
+				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				sjcccpId: '',
 				ckyhbzsc_id: '',	
 				ccss_id: '',
@@ -412,8 +412,14 @@
 				areaList: [],
 				cpyhbzscColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.cpyhbzscPage.pageIndex- 1) * this.cpyhbzscPage.pageSize + 1);
+				        }
                     }, {
                         title: '产品类别',
                         key: 'cplb',
@@ -425,6 +431,7 @@
                         slot: 'scgm',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -452,8 +459,14 @@
 				nzzldwList: ['吨', '立方', 'KG', 'L'],
 				ckyhbzscColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.ckyhbzscPage.pageIndex- 1) * this.ckyhbzscPage.pageSize + 1);
+				        }
                     }, {
                         title: '仓库名称',
                         key: 'ckmc',
@@ -477,6 +490,7 @@
                         key: 'tbsj',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -510,8 +524,14 @@
 				},
 				ccssColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '储存设施单元名称',
                         key: 'ccssdymc',
@@ -532,6 +552,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -555,8 +576,14 @@
 				},
 				sjcccpColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '产品类别',
                         key: 'cplb',
@@ -571,6 +598,7 @@
                         key: 'hyl',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -595,8 +623,14 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.rimPage.pageIndex- 1) * this.rimPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         key: 'mgmbmc',
@@ -611,6 +645,7 @@
                         key: 'rysl',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -625,7 +660,7 @@
 					lngAndLat: '',
 					qyfw: ''
 				},
-				fwList: ['东', '南', '西', '北'],
+				fwList: ['东', '南', '西', '北', '东北', '东南', '西北', '西南'],
 				mgmblxList: ['医院', '养老院', '学校', '政府机构', '商场', '居住区', '监狱', '宗教', '车站', '码头', '铁路', '公路', '林区', '工厂', '矿山', '河流', '其他'],
 				rimPage: {
 					pageSize: 10,

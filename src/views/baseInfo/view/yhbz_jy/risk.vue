@@ -321,7 +321,7 @@
 		data() {
 			return {
 				id: '',
-				gkdx_id: this.$storage.get('gkdx_id'),
+				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				sjcccpId: '',
 				ckyhbzsc_id: '',	
 				ccss_id: '',
@@ -400,19 +400,29 @@
 				areaList: [],
 				cpyhbzscColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.cpyhbzscPage.pageIndex- 1) * this.cpyhbzscPage.pageSize + 1);
+				        }
                     }, {
                         title: '产品类别',
                         key: 'cplb',
+                        minWidth: 100
                     }, {
                         title: '产品分级',
                         key: 'cpfj',
+                        minWidth: 100
                     }, {
                         title: '周转量',
                         slot: 'zzl',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -438,31 +448,45 @@
 				nzzldwList: ['吨', '立方', 'KG', 'L'],
 				ckyhbzscColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.ckyhbzscPage.pageIndex- 1) * this.ckyhbzscPage.pageSize + 1);
+				        }
                     }, {
                         title: '仓库名称',
                         key: 'ckmc',
+                        minWidth: 100
                     }, {
                         title: '占地面积（㎡）',
                         key: 'zdmj',
+                        minWidth: 140
                     }, {
                         title: '危险等级',
                         key: 'wxdj',
+                        minWidth: 100
                     }, {
                         title: '核定药量（吨）',
                         key: 'hdyl',
+                        minWidth: 140
                     }, {
                         title: '最大储存药量（吨）',
                         key: 'zdccyl',
+                        minWidth: 180
                     }, {
                         title: '当前药量',
                         key: 'dqyl',
+                        minWidth: 100
                     }, {
                         title: '填报时间',
                         key: 'tbsj',
+                        minWidth: 120
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -496,28 +520,41 @@
 				},
 				ccssColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.ccssPage.pageIndex- 1) * this.ccssPage.pageSize + 1);
+				        }
                     }, {
                         title: '储存设施单元名称',
                         key: 'ccssdymc',
+                        minWidth: 160
                     }, {
                         title: '类型',
                         key: 'lx',
+                        minWidth: 100
                     }, {
                         title: '重大危险源',
                         key: 'zdwxy',
+                        minWidth: 110
                     }, {
                         title: '危险化学品',
                         slot: 'wxhxp',
+                        minWidth: 110
                     }, {
                         title: '投用时间',
                         key: 'tysj',
+                        minWidth: 120
                     }, {
                         title: '当前状态',
                         key: 'dqzt',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -541,22 +578,33 @@
 				},
 				sjcccpColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '产品类别',
                         key: 'cplb',
+                        minWidth: 100
                     }, {
                         title: '产品分级',
                         key: 'cpfj',
+                        minWidth: 100
                     }, {
                         title: '当前数量',
                         slot: 'dqsl',
+                        minWidth: 100
                     }, {
                         title: '含药量（吨）',
                         key: 'hyl',
+                        minWidth: 120
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -581,22 +629,33 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.rimPage.pageIndex- 1) * this.rimPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         key: 'mgmbmc',
+                        minWidth: 120
                     }, {
                         title: '方位',
                         key: 'fw',
+                        minWidth: 80
                     }, {
                         title: '目标类型',
                         key: 'mgmblx',
+                        minWidth: 100
                     }, {
                         title: '人员数量',
                         key: 'rysl',
+                        minWidth: 100
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -611,7 +670,7 @@
 					lngAndLat: '',
 					qyfw: ''
 				},
-				fwList: ['东', '南', '西', '北'],
+				fwList: ['东', '南', '西', '北', '东北', '东南', '西北', '西南'],
 				mgmblxList: ['医院', '养老院', '学校', '政府机构', '商场', '居住区', '监狱', '宗教', '车站', '码头', '铁路', '公路', '林区', '工厂', '矿山', '河流', '其他'],
 				rimPage: {
 					pageSize: 10,

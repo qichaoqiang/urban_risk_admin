@@ -9,8 +9,7 @@
 				        <TabPane label="危险性较大分部分项工程" name="name1">
 				        	<part-title text="危险性较大分部分项工程" :btns="['add']" @add="openWxxjdModel"></part-title>
 				        	<div style="margin-bottom: 16px;">
-				        		<span>储罐数量：{{wxxjdSum.cgsl}}</span>
-				        		<span style="margin-left:24px">储存总容积：{{wxxjdSum.cgzrj}}m³</span>
+				        		<span>合计数量：{{wxxjdSum.wxxjdgcsl}}</span>
 				        	</div>
 							<Table :columns="wxxjdColumns" :data="wxxjdData">
 								<template slot-scope="{ row }" slot="dqjd">
@@ -40,8 +39,7 @@
 				        <TabPane label="超过一定规模的危险性较大的分部分项工程" name="name2">
 				        	<part-title text="超过一定规模的危险性较大的分部分项工程" :btns="['add']" @add="openYdgmModel"></part-title>
 				        	<div style="margin-bottom: 16px;">
-				        		<span>储罐数量：{{ydgmSum.cgsl}}</span>
-				        		<span style="margin-left:24px">储存总容积：{{ydgmSum.cgzrj}}m³</span>
+				        		<span>合计数量：{{ydgmSum.ydgmgcsl}}</span>
 				        	</div>
 							<Table :columns="ydgmColumns" :data="ydgmData">
 								<template slot-scope="{ row }" slot="dqjd">
@@ -106,69 +104,69 @@
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}危险性较大分部分项工程`" v-model="showWxxjdModel" @on-visible-change="WxxjdModelChange">
 			<div>
-				<Form :model="wxxjdForm" label-position="left" :label-width="160">
-					<FormItem label="分部分项工程名称">
+				<Form :model="wxxjdForm" ref="wxxjd" :rules="wxxjdRules" hide-required-mark label-position="left" :label-width="160">
+					<FormItem label="分部分项工程名称" prop="fbfxgcmc">
 			        	<Input clearable v-model="wxxjdForm.fbfxgcmc"></Input>
 			        </FormItem>
-			        <FormItem label="工程类型">
+			        <FormItem label="工程类型" prop="gclx">
 			        	<Select clearable v-model="wxxjdForm.gclx" placeholder="请选择">
 			                <Option v-for="item in gclxList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
 			        </FormItem>
-			        <FormItem label="施工单位">
+			        <FormItem label="施工单位" prop="sgdw">
 			        	<Input clearable v-model="wxxjdForm.sgdw"></Input>
 			        </FormItem>
-			        <FormItem label="监理单位">
+			        <FormItem label="监理单位" prop="jldw">
 			        	<Input clearable v-model="wxxjdForm.jldw"></Input>
 			        </FormItem>
-			        <FormItem label="工程启动时间">
+			        <FormItem label="工程启动时间" prop="gcqdsj">
 			        	<DatePicker type="date" v-model="wxxjdForm.gcqdsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
-			        <FormItem label="预计结束时间">
+			        <FormItem label="预计结束时间" prop="yjjssj">
 			        	<DatePicker type="date" v-model="wxxjdForm.yjjssj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
-			        <FormItem label="当前形象进度（%）">
+			        <FormItem label="当前形象进度（%）" prop="dqjd">
 			        	<InputNumber :min="0" :max="100" v-model="wxxjdForm.dqjd"></InputNumber>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveWxxjd">保存</Button>
+		        <Button type="primary" size="large" :loading="wxxjdLoading" @click="saveWxxjd">保存</Button>
 	        </div>
 		</Modal>
 
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}超过一定规模的危险性较大的分部分项工程`" v-model="showYdgmModel" @on-visible-change="ydgmModelChange">
 			<div>
-				<Form :model="ydgmForm" label-position="left" :label-width="160">
-					<FormItem label="分部分项工程名称">
+				<Form :model="ydgmForm" ref="ydgm" :rules="ydgmRules" hide-required-mark label-position="left" :label-width="160">
+					<FormItem label="分部分项工程名称" prop="fbfxgcmc">
 			        	<Input clearable v-model="ydgmForm.fbfxgcmc"></Input>
 			        </FormItem>
-			        <FormItem label="工程类型">
+			        <FormItem label="工程类型" prop="gclx">
 			        	<Select clearable v-model="ydgmForm.gclx" placeholder="请选择">
 			                <Option v-for="item in gclxList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
 			        </FormItem>
-			        <FormItem label="施工单位">
+			        <FormItem label="施工单位" prop="sgdw">
 			        	<Input clearable v-model="ydgmForm.sgdw"></Input>
 			        </FormItem>
-			        <FormItem label="监理单位">
+			        <FormItem label="监理单位" prop="jldw">
 			        	<Input clearable v-model="ydgmForm.jldw"></Input>
 			        </FormItem>
-			        <FormItem label="工程启动时间">
+			        <FormItem label="工程启动时间" prop="gcqdsj">
 			        	<DatePicker type="date" v-model="ydgmForm.gcqdsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
-			        <FormItem label="预计结束时间">
+			        <FormItem label="预计结束时间" prop="yjjssj">
 			        	<DatePicker type="date" v-model="ydgmForm.yjjssj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
-			        <FormItem label="当前形象进度（%）">
+			        <FormItem label="当前形象进度（%）" prop="dqjd">
 			        	<InputNumber :min="0" :max="100" v-model="ydgmForm.dqjd"></InputNumber>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveYdgm">保存</Button>
+		        <Button type="primary" size="large" :loading="ydgmLoading" @click="saveYdgm">保存</Button>
 	        </div>
 		</Modal>
 	</div>
@@ -202,6 +200,8 @@
 				showLngModel: false,
 				showWxxjdModel: false,
 				showYdgmModel: false,
+				wxxjdLoading: false,
+				ydgmLoading: false,
 				modeType: '',
 				modeType2: '',
 				map: null,
@@ -238,8 +238,14 @@
 				areaList: [],
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpm',
@@ -260,6 +266,7 @@
                         key: 'msds',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -291,8 +298,14 @@
 				sxflList: ['最终产品', '中间产品', '原料'],
 				whRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '重大危险源单元名称',
                         key: 'zdwxydymc',
@@ -310,6 +323,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -330,31 +344,45 @@
 				},
 				wxxjdColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.wxxjdPage.pageIndex- 1) * this.wxxjdPage.pageSize + 1);
+				        }
                     }, {
                         title: '分部分项工程名称',
                         key: 'fbfxgcmc',
+                        minWidth: 160
                     }, {
                         title: '工程类型',
                         key: 'gclx',
+                        minWidth: 100
                     }, {
                         title: '施工单位',
                         key: 'sgdw',
+                        minWidth: 100
                     }, {
                         title: '监理单位',
                         key: 'jldw',
+                        minWidth: 100
                     }, {
                         title: '工程启动时间',
                         key: 'gcqdsj',
+                        minWidth: 120
                     }, {
                         title: '预计结束时间',
                         key: 'yjjssj',
+                        minWidth: 120
                     }, {
                         title: '当前形象进度',
                         slot: 'dqjd',
+                        minWidth: 120
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -376,38 +404,49 @@
 					totalRow: 0
 				},
 				wxxjdSum: {
-					cgsl: 0,
-		  			cgzrj: 0,
-		  			cygzrj: 0
+					wxxjdgcsl: 0
 		  		},
-
 				ydgmColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.ydgmPage.pageIndex- 1) * this.ydgmPage.pageSize + 1);
+				        }
                     }, {
                         title: '分部分项工程名称',
                         key: 'fbfxgcmc',
+                        minWidth: 160
                     }, {
                         title: '工程类型',
                         key: 'gclx',
+                        minWidth: 100
                     }, {
                         title: '施工单位',
                         key: 'sgdw',
+                        minWidth: 100
                     }, {
                         title: '监理单位',
                         key: 'jldw',
+                        minWidth: 100
                     }, {
                         title: '工程启动时间',
                         key: 'gcqdsj',
+                        minWidth: 120
                     }, {
                         title: '预计结束时间',
                         key: 'yjjssj',
+                        minWidth: 120
                     }, {
                         title: '当前形象进度',
                         slot: 'dqjd',
+                        minWidth: 120
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -429,14 +468,18 @@
 					totalRow: 0
 				},
 				ydgmSum: {
-					cgsl: 0,
-		  			cgzrj: 0,
-		  			cygzrj: 0
+					ydgmgcsl: 0,
 		  		},
 				gyzColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '储气容器名称',
                         key: 'cqrqmc',
@@ -454,6 +497,7 @@
                         key: 'bz',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -473,8 +517,14 @@
 				},
 				jyzkColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '近5日日平均周转量(m³)',
                         key: 'jrrpjzzl',
@@ -483,6 +533,7 @@
                         key: 'tbsj',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -499,8 +550,14 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         key: 'mgmbmc',
@@ -515,6 +572,7 @@
                         key: 'rysl',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -529,7 +587,7 @@
 					lngAndLat: '',
 					qyfw: ''
 				},
-				fwList: ['东', '南', '西', '北'],
+				fwList: ['东', '南', '西', '北', '东北', '东南', '西北', '西南'],
 				mgmblxList: ['医院', '养老院', '学校', '政府机构', '商场', '居住区', '监狱', '宗教', '车站', '码头', '铁路', '公路', '林区', '工厂', '矿山', '河流', '其他'],
 				rimPage: {
 					pageSize: 10,
@@ -543,7 +601,28 @@
 
 		},
 		computed: {
-
+			wxxjdRules() {
+				return {
+					fbfxgcmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					gclx: [{ required: true, message: '请选择', trigger: 'change' }],
+					sgdw: [{ required: true, message: '请输入', trigger: 'change' }],
+					jldw: [{ required: true, message: '请输入', trigger: 'change' }],
+					gcqdsj: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
+					yjjssj: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
+					dqjd: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
+			ydgmRules() {
+				return {
+					fbfxgcmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					gclx: [{ required: true, message: '请选择', trigger: 'change' }],
+					sgdw: [{ required: true, message: '请输入', trigger: 'change' }],
+					jldw: [{ required: true, message: '请输入', trigger: 'change' }],
+					gcqdsj: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
+					yjjssj: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
+					dqjd: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			async getBaseInfo() {
@@ -563,14 +642,12 @@
 				  	if(wxxjdRes.status_code == 200) {
 				  		this.wxxjdData = wxxjdRes.data.data.filter(item => item.gkdx_id == this.gkdx_id)
 				  		this.wxxjdPage.totalRow = wxxjdRes.data.total
-				  		this.wxxjdSum.cgsl = wxxjdRes.cgsl || 0
-				  		this.wxxjdSum.cgzrj = wxxjdRes.cgzrj || 0
+				  		this.wxxjdSum.wxxjdgcsl = wxxjdRes.wxxjdgcsl || 0
 				  	}
 				  	if(ydgmRes.status_code == 200) {
-				  		this.YdgmData = ydgmRes.data.data.filter(item => item.gkdx_id == this.gkdx_id)
+				  		this.ydgmData = ydgmRes.data.data.filter(item => item.gkdx_id == this.gkdx_id)
 				  		this.ydgmPage.totalRow = ydgmRes.data.total
-				  		this.YdgmSum.cgsl = ydgmRes.cgsl || 0
-				  		this.YdgmSum.cgzrj = ydgmRes.cgzrj || 0
+				  		this.YdgmSum.ydgmgcsl = ydgmRes.ydgmgcsl || 0
 				  	}
 				  	this.loading = false   
 				}).catch((error) => {
@@ -687,8 +764,7 @@
 				if(status_code == 200) {
 					this.wxxjdData = data.data
 					this.wxxjdPage.totalRow = data.total
-					this.wxxjdSum.cgsl = res.cgsl
-					this.wxxjdSum.cgzrj = res.cgzrj
+					this.wxxjdSum.wxxjdgcsl = res.wxxjdgcsl
 				}
 			},
 			async openWxxjdModel() {
@@ -711,15 +787,18 @@
 			},
 			WxxjdModelChange(status) {
 				if(!status) {
-					this.wxxjdForm = {
-						fbfxgcmc: '',
-						gclx: '',
-						sgdw: '',
-						jldw: '',
-						gcqdsj: '',
-						yjjssj: '',
-						dqjd: 0
-					}
+					this.$nextTick(() => {
+						this.wxxjdForm = {
+							fbfxgcmc: '',
+							gclx: '',
+							sgdw: '',
+							jldw: '',
+							gcqdsj: '',
+							yjjssj: '',
+							dqjd: 0
+						}
+						this.$refs.wxxjd.resetFields();
+					})
 				}
 			},
 			async removeWxxjd(row) {
@@ -728,21 +807,27 @@
 				this.getWxxjdList()
 			},
 			async saveWxxjd() {
-				let params = {
-					...this.wxxjdForm,
-					gcqdsj: this.wxxjdForm.gcqdsj ? getDate(new Date(this.wxxjdForm.gcqdsj).getTime(), 'date') : '',
-					yjjssj: this.wxxjdForm.yjjssj ? getDate(new Date(this.wxxjdForm.yjjssj).getTime(), 'date') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addWxxjdInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showWxxjdModel = false
-					this.getWxxjdList()
-				}
+				this.$refs.wxxjd.validate(async valid => {
+                    if (valid) {
+                    	this.wxxjdLoading = true
+						let params = {
+							...this.wxxjdForm,
+							gcqdsj: this.wxxjdForm.gcqdsj ? getDate(new Date(this.wxxjdForm.gcqdsj).getTime(), 'date') : '',
+							yjjssj: this.wxxjdForm.yjjssj ? getDate(new Date(this.wxxjdForm.yjjssj).getTime(), 'date') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addWxxjdInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showWxxjdModel = false
+							this.getWxxjdList()
+						}
+						this.wxxjdLoading = false
+                    }
+                })
 			},
 
 			handleChangeYdgmPage(val) {
@@ -764,8 +849,7 @@
 				if(status_code == 200) {
 					this.ydgmData = data.data
 					this.ydgmPage.totalRow = data.total
-					this.ydgmSum.cgsl = res.cgsl
-					this.ydgmSum.cgzrj = res.cgzrj
+					this.ydgmSum.ydgmgcsl = res.ydgmgcsl
 				}
 			},
 			async openYdgmModel() {
@@ -788,15 +872,18 @@
 			},
 			ydgmModelChange(status) {
 				if(!status) {
-					this.ydgmForm = {
-						fbfxgcmc: '',
-						gclx: '',
-						sgdw: '',
-						jldw: '',
-						gcqdsj: '',
-						yjjssj: '',
-						dqjd: 0
-					}
+					this.$nextTick(() => {
+						this.ydgmForm = {
+							fbfxgcmc: '',
+							gclx: '',
+							sgdw: '',
+							jldw: '',
+							gcqdsj: '',
+							yjjssj: '',
+							dqjd: 0
+						}
+						this.$refs.ydgm.resetFields();
+					})
 				}
 			},
 			async removeYdgm(row) {
@@ -805,21 +892,27 @@
 				this.getYdgmList()
 			},
 			async saveYdgm() {
-				let params = {
-					...this.ydgmForm,
-					gcqdsj: this.ydgmForm.gcqdsj ? getDate(new Date(this.ydgmForm.gcqdsj).getTime(), 'date') : '',
-					yjjssj: this.ydgmForm.yjjssj ? getDate(new Date(this.ydgmForm.yjjssj).getTime(), 'date') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addYdgmInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showYdgmModel = false
-					this.getYdgmList()
-				}
+				this.$refs.ydgm.validate(async valid => {
+                    if (valid) {
+                    	this.ydgmLoading = true
+						let params = {
+							...this.ydgmForm,
+							gcqdsj: this.ydgmForm.gcqdsj ? getDate(new Date(this.ydgmForm.gcqdsj).getTime(), 'date') : '',
+							yjjssj: this.ydgmForm.yjjssj ? getDate(new Date(this.ydgmForm.yjjssj).getTime(), 'date') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addYdgmInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showYdgmModel = false
+							this.getYdgmList()
+						}
+							this.ydgmLoading = false
+                    }
+                })
 			},
 		},
 		created() {

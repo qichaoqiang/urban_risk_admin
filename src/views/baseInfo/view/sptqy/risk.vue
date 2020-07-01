@@ -384,28 +384,41 @@
 				areaList: [],
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.whPage.pageIndex- 1) * this.whPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpm',
+                        minWidth: 110,
                     }, {
                         title: 'CAS号',
                         key: 'cas',
+                        minWidth: 110,
                     }, {
                         title: '是否重点监管',
                         slot: 'sfzdjg',
+                        minWidth: 120,
                     }, {
                         title: '是否爆炸品',
                         slot: 'sfbzp',
+                        minWidth: 110,
                     }, {
                         title: '火灾风险等级',
                         key: 'hzwxxdj',
+                        minWidth: 120,
                     }, {
                         title: 'MSDS',
                         key: 'msds',
+                        minWidth: 110,
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -435,69 +448,44 @@
 				hxpztList: ['气体', '液化气体', '液体', '固体'],
 				nzzldwList: ['吨', '立方', 'KG', 'L'],
 				sxflList: ['最终产品', '中间产品', '原料'],
-				whRiskColumns: [
-					{
-                        title: '序号',
-                        type: 'index',
-                    }, {
-                        title: '重大危险源单元名称',
-                        key: 'zdwxydymc',
-                    }, {
-                        title: '重大危险源等级',
-                        key: 'zdwxydj',
-                    }, {
-                        title: '危险化学品',
-                        key: 'wxhxp',
-                    }, {
-                        title: '投用时间',
-                        key: 'tysj',
-                    }, {
-                        title: '当前状态',
-                        key: 'dqzt',
-                    }, {
-                        title: '操作',
-                        width: 150,
-                        slot: 'action',
-                    }, 
-				],
-				whRiskData: [],
-				whRiskForm: {
-					zdwxydymc: '',
-					zdwxydj: '',
-					wxhxp: '',
-					tysj: '',
-					dqzt: ''
-				},
 				dqztList: ['运行', '停运', '检修'],
-				whRiskPage: {
-					pageSize: 10,
-					pageIndex: 1,
-					totalRow: 0
-				},
 				sczzColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '装置单元名称',
                         key: 'zzdymc',
+                        minWidth: 120,
                     }, {
                         title: '重大危险源',
                         key: 'zdwxy',
+                        minWidth: 110,
                     }, {
                         title: '危险化学品',
                         slot: 'wxhxp',
+                        minWidth: 110,
                     }, {
                         title: '危险工艺',
                         key: 'wxgy',
+                        minWidth: 100,
                     }, {
                         title: '投用时间',
                         key: 'tysj',
+                        minWidth: 100,
                     }, {
                         title: '当前状态',
                         key: 'dqzt',
+                        minWidth: 100,
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -532,28 +520,41 @@
 				},
 				ccssColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '储存设施单元名称',
                         key: 'ccssdymc',
+                        minWidth: 160,
                     }, {
                         title: '类型',
                         key: 'lx',
+                        minWidth: 80,
                     }, {
                         title: '重大危险源',
                         key: 'zdwxy',
+                        minWidth: 110,
                     }, {
                         title: '危险化学品',
                         slot: 'wxhxp',
+                        minWidth: 110,
                     }, {
                         title: '投用时间',
                         key: 'tysj',
+                        minWidth: 120,
                     }, {
                         title: '当前状态',
                         key: 'dqzt',
+                        minWidth: 100,
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -577,16 +578,25 @@
 				},
 				sjwxhxpColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名',
                         key: 'hxpm',
+                        minWidth: 100,
                     }, {
                         title: '数量',
                         slot: 'sl',
+                        minWidth: 80,
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -608,25 +618,37 @@
 				},
 				gqscColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '罐名',
                         key: 'gm',
+                        minWidth: 100,
                     }, {
                         title: '罐型',
                         key: 'gx',
+                        minWidth: 100,
                     }, {
                         title: '容积',
                         slot: 'rj',
+                        minWidth: 80,
                     }, {
                         title: '压力',
                         slot: 'yl',
+                        minWidth: 80,
                     }, {
                         title: '温度（℃）',
                         key: 'wd',
+                        minWidth: 110,
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -650,31 +672,45 @@
 				},
 				ptgyColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.ptgyPage.pageIndex- 1) * this.ptgyPage.pageSize + 1);
+				        }
                     }, {
                         title: '工艺名称',
                         key: 'gymc',
+                        minWidth: 100,
                     }, {
                         title: '场所封闭性',
                         key: 'csfbx',
+                        minWidth: 110,
                     }, {
                         title: '喷涂方式',
                         key: 'ptfs',
+                        minWidth: 100,
                     }, {
                         title: '自动化程度',
                         key: 'zdhcd',
+                        minWidth: 110,
                     }, {
                         title: '作业人数',
                         key: 'zyrs',
+                        minWidth: 100,
                     }, {
                         title: '涂料种类',
                         key: 'tlzl',
+                        minWidth: 100,
                     }, {
                         title: '当前状态',
                         key: 'dqzt',
+                        minWidth: 100,
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -700,22 +736,33 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.rimPage.pageIndex- 1) * this.rimPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         key: 'mgmbmc',
+                        minWidth: 120,
                     }, {
                         title: '方位',
                         key: 'fw',
+                        minWidth: 80,
                     }, {
                         title: '目标类型',
                         key: 'mgmblx',
+                        minWidth: 100,
                     }, {
                         title: '人员数量',
                         key: 'rysl',
+                        minWidth: 100,
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -730,7 +777,7 @@
 					lngAndLat: '',
 					qyfw: ''
 				},
-				fwList: ['东', '南', '西', '北'],
+				fwList: ['东', '南', '西', '北', '东北', '东南', '西北', '西南'],
 				mgmblxList: ['医院', '养老院', '学校', '政府机构', '商场', '居住区', '监狱', '宗教', '车站', '码头', '铁路', '公路', '林区', '工厂', '矿山', '河流', '其他'],
 				rimPage: {
 					pageSize: 10,

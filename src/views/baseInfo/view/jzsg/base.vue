@@ -39,7 +39,7 @@
 				        	<DatePicker type="date" v-model="baseInfo.lxsj"  placeholder="立项时间"></DatePicker>
 				        </FormItem>
 				        <FormItem label="工程造价(元)">
-				            <InputNumber clearable :min="0" v-model="baseInfo.gczj" placeholder="工程造价"></InputNumber>
+				            InputNumber :min="0" v-model="baseInfo.gczj" placeholder="工程造价"></InputNumber>
 				        </FormItem>
 				        <FormItem label="地址">
 				        	<Input clearable v-model="baseInfo.dz" placeholder="地址"></Input>
@@ -92,7 +92,7 @@
 					<part-title text="建筑物信息"></part-title>
 					<Form disabled :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
 				        <FormItem label="建筑面积（㎡）">
-				        	<InputNumber clearable :min="0" v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
+				        	InputNumber :min="0" v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -102,26 +102,6 @@
 				<Col>
 					<part-title text="联系人信息"></part-title>
 					<Form disabled :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
-				        <FormItem label="企业负责人">
-				        	<Row type="flex" :gutter="20">
-					        	<Col span="8">
-				        			<Input clearable v-model="baseInfo.qyfzr" :data="areaList" placeholder="姓名"></Input>
-				        		</Col>
-				        		<Col span="16">
-				        			<Input clearable v-model="baseInfo.qyfzrdh" placeholder="电话"></Input>
-				        		</Col>
-				        	</Row>
-				        </FormItem>
-				        <FormItem label="分管安全负责人">
-				        	<Row type="flex" :gutter="20">
-					        	<Col span="8">
-				        			<Input clearable v-model="baseInfo.fgaqfzr" :data="areaList" placeholder="姓名"></Input>
-				        		</Col>
-				        		<Col span="16">
-				        			<Input clearable v-model="baseInfo.fgaqfzrdh" placeholder="电话"></Input>
-				        		</Col>
-				        	</Row>
-				        </FormItem>
 				        <FormItem label="经办人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
@@ -659,8 +639,14 @@
 				areaList: [],
 				unitColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '单位名称',
                         key: 'dwmc',
@@ -683,8 +669,14 @@
 				},
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpm',
@@ -705,6 +697,7 @@
                         key: 'msds',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -735,8 +728,14 @@
 				nzzldwList: ['吨', '立方', 'KG', 'L'],
 				whRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '重大危险源单元名称',
                         key: 'zdwxydymc',
@@ -754,6 +753,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -774,8 +774,14 @@
 				},
 				sbfcgyColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '涉粉工艺名称',
                         key: 'sfgymc',
@@ -793,6 +799,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -818,8 +825,14 @@
 				},
 				deviceColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '除尘设施名称',
                         key: 'ccssmc',
@@ -834,6 +847,7 @@
                         key: 'yxzt',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -858,8 +872,14 @@
 				},
 				mainRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '工艺名称',
                         slot: 'gymc',
@@ -871,6 +891,7 @@
                         key: 'sjczrs',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -887,8 +908,14 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         slot: 'name',
@@ -903,6 +930,7 @@
                         key: 'cas',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -934,18 +962,19 @@
 		},
 		methods: {
 			async getBaseInfo() {
+					console.log(111)
 				let { status_code, data, message } = await api.getJzsgBase(this.gkdx_id);
-				if(status_code == 200) {
+				if(status_code == 0) {
 					this.form = data;
-					let { xmmc, dz, xmgdfw, lngAndLat, jzmj, xmsslx, lxspbm, lxsj, jsdw, sjdw, sgdw, jldw, jsnr, gczj, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh } = this.form
-					this.baseInfo = { xmmc, dz, xmgdfw, lxspbm, jsnr, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh }
+					let { xmmc, dz, xmgdfw, lngAndLat, jzmj, xmsslx, lxspbm, lxsj, jsdw, sjdw, sgdw, jldw, jsnr, gczj, jbr, jbrdh, jbryx } = this.form
+					this.baseInfo = { xmmc, dz, xmgdfw, lxspbm, jsnr, jbr, jbrdh, jbryx, xmsslx: [], quyu: [],  }
 					this.baseInfo.gczj = gczj ? Number(gczj) : 0
 					this.baseInfo.jzmj = jzmj ? Number(jzmj) : 0
 					this.baseInfo.lxsj = lxsj ? new Date(lxsj) : ''
-					this.jsdw = JSON.parse(jsdw)
-					this.sjdw = JSON.parse(sjdw)
-					this.sgdw = JSON.parse(sgdw)
-					this.jldw = JSON.parse(jldw)
+					this.jsdw = jsdw ? JSON.parse(jsdw) : []
+					this.sjdw = sjdw ? JSON.parse(sjdw) : []
+					this.sgdw = sgdw ? JSON.parse(sgdw) : []
+					this.jldw = jldw ? JSON.parse(jldw) : []
 					this.baseInfo.lngAndLat = this.form.jd && this.form.wd ? `${(this.form.jd - 0).toFixed(6)} ${(this.form.wd - 0).toFixed(6)}` : ''
 					this.getQy();
 					this.getXm();
@@ -1493,12 +1522,14 @@
 		},
 		created() {
 			this.getArea('', list => {
+				console.log(111)
 				this.areaList = list
 				if(this.xmsslxList.length > 0) {
 					this.getBaseInfo()
 				}
 			})
 			this.getXmsslx('', list=> {
+				console.log(222)
 				this.xmsslxList = list
 				if(this.areaList.length > 0) {
 					this.getBaseInfo()

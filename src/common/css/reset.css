@@ -95,3 +95,8 @@ textarea.van-field__control {
   -ms-user-select: auto;
   user-select: auto; 
 }
+
+
+div::scrollbar {
+  display:none;
+}

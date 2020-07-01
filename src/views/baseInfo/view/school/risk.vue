@@ -9,10 +9,10 @@
 							<part-title text="人员组成"></part-title>
 							<Form :model="mostForm" label-position="left" inline>
 						        <FormItem label="教职工人数" :label-width="100" style="margin-right: 40px">
-						        	<InputNumber clearable v-model="mostForm.jzgrs"></InputNumber>
+						        	<InputNumber :min="0" v-model="mostForm.jzgrs"></InputNumber>
 						        </FormItem>
 						        <FormItem label="学生人数" :label-width="80" style="margin-right: 40px">
-						        	<InputNumber clearable v-model="mostForm.xsrs"></InputNumber>
+						        	<InputNumber :min="0" v-model="mostForm.xsrs"></InputNumber>
 						        </FormItem>
 						        <FormItem label="寄宿制" :label-width="60" style="margin-right: 40px">
 						            <Select clearable v-model="mostForm.jsz" placeholder="请选择">
@@ -20,7 +20,7 @@
 						            </Select>
 						        </FormItem>
 						        <FormItem label="床位数" :label-width="60" v-if="mostForm.jsz == '寄宿'">
-						        	<InputNumber clearable v-model="mostForm.cws"></InputNumber>
+						        	<InputNumber :min="0" v-model="mostForm.cws"></InputNumber>
 						        </FormItem>
 							</Form>
 				        </TabPane>
@@ -114,7 +114,7 @@
 			        <FormItem label="数量">
 			        	<Row type="flex" align="middle">
 	            			<Col>
-			        			<InputNumber clearable :min="0" v-model="whsysForm.sl"></InputNumber>
+			        			<InputNumber :min="0" v-model="whsysForm.sl"></InputNumber>
 	            			</Col>
 	            			<Col>
 	            				<Select clearable v-model="whsysForm.jldw" placeholder="单位">
@@ -217,8 +217,14 @@
 				areaList: [],
 				whsysColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.whsysPage.pageIndex- 1) * this.whsysPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpmc',
@@ -233,6 +239,7 @@
                         key: 'ccwz',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 

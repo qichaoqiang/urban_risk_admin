@@ -2,7 +2,9 @@
 	<div class="user_container">
 		<Row type="flex" justify="space-between" align="middle">
 			<div class="title">区域管理</div>
-			<Button v-if="hasAuth('quyu_store')" type="primary" icon="ios-add" @click="openQuyuModel"></Button>
+			<Button v-if="hasAuth('quyu_store')" type="primary" @click="openQuyuModel" style="width: 60px">
+				<Icon type="ios-add" size="28" />
+			</Button>
 		</Row>
 		<div v-if="hasAuth('quyu')">
 			<Divider />
@@ -43,8 +45,8 @@
 	            />
 	        </Row>
 		</div>
-		<Modal :title="`${modelTypeList[modeType - 1]}风险源类别`" v-model="showQuyuModel"  @on-visible-change="quyuModelChange">
-			<Form :disabled="modeType == 3" :model="quyuForm" label-position="left" :label-width="120">
+		<Modal width="820" :title="`${modelTypeList[modeType - 1]}区域`" v-model="showQuyuModel"  @on-visible-change="quyuModelChange">
+			<Form :disabled="modeType == 3" :model="quyuForm" ref="quyu" :rules="quyuRules" hide-required-mark label-position="left" :label-width="120">
 				<FormItem label="所属区域">
 		        	<Cascader 
 		            	readonly 
@@ -55,16 +57,16 @@
 		            	:render-format="format" 
 		            	placeholder="请选择"></Cascader>
 		        </FormItem>
-				<FormItem label="区域名称">
+				<FormItem label="区域名称" prop="mc">
 		        	<Input clearable v-model="quyuForm.mc"></Input>
 		        </FormItem>
-				<FormItem label="排序">
+				<FormItem label="排序" prop="px">
 		        	<InputNumber :min="0" v-model="quyuForm.px"></InputNumber>
 		        </FormItem>
 			</Form>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button v-if="modeType != 3" type="primary" size="large" @click="saveQuyu">保存</Button>
+		        <Button v-if="modeType != 3" type="primary" size="large" :loading="quyuLoading" @click="saveQuyu">保存</Button>
 	        </div>
 		</Modal>
 	</div>
@@ -81,6 +83,7 @@
 				id: '',
 				loading: true,
 				showQuyuModel: false,
+				quyuLoading: false,
 				modeType: '',
 				quyuValue: 'id',
 				rowItem: null,
@@ -88,10 +91,14 @@
 				quyuData: [],
 				quyuColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '所属区域',
                         slot: 'mc',
@@ -123,7 +130,12 @@
 
 		},
 		computed: {
-
+			quyuRules() {
+				return {
+					mc: [{ required: true, message: '请选择', trigger: 'change' }],
+					px: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			format(labels, selectedData) {
@@ -179,11 +191,14 @@
 			},
 			quyuModelChange(status) {
 				if(!status) {
-					this.quyuForm = {
-						parent_id: [],
-						mc: '',
-						px: 0,
-					}
+					this.$nextTick(() => {
+						this.quyuForm = {
+							parent_id: [],
+							mc: '',
+							px: 0,
+						}
+						this.$refs.quyu.resetFields();
+					})
 				}
 			},
 			async removeQuyu(row) {
@@ -195,23 +210,29 @@
 				})
 			},
 			async saveQuyu() {
-				let params = {
-					...this.quyuForm,
-					parent_id: this.quyuForm.parent_id[0] ? this.quyuForm.parent_id[this.quyuForm.parent_id.length - 1] : 0,
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				delete params.lngAndLat
-				let { status_code, message } = await api.addQuyuItem(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showQuyuModel = false
-					this.getQuyuData()
-					this.getArea('', list => {
-						this.quyuList = list
-					}, 'id')
-				}
+				this.$refs.quyu.validate(async valid => {
+                    if (valid) {
+                    	this.quyuLoading = true
+						let params = {
+							...this.quyuForm,
+							parent_id: this.quyuForm.parent_id[0] ? this.quyuForm.parent_id[this.quyuForm.parent_id.length - 1] : 0,
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						delete params.lngAndLat
+						let { status_code, message } = await api.addQuyuItem(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showQuyuModel = false
+							this.getQuyuData()
+							this.getArea('', list => {
+								this.quyuList = list
+							}, 'id')
+						}
+						this.quyuLoading = false
+                    }
+                })
 			},
 			open(row) {
 				// this.showquyuDrawer1 = true

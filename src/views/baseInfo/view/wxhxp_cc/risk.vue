@@ -505,35 +505,22 @@
 		        		</div> -->
 			        </FormItem>
 				</Form>
-				<div v-show="modeType == 2 && (ccssForm.lx == '地上罐区' || ccssForm.lx == '埋地罐区')">
+				<div v-show="ccssForm.lx == '地上罐区' || ccssForm.lx == '埋地罐区'">
 					<part-title text="罐区" :btns="['add']" @add="openGqscModel"></part-title>
 					<Table :columns="gqscColumns" :data="gqscData">
 						<template slot-scope="{ row }" slot="rj">
-				            <span class="link">{{row.rj}}{{row.rjdw}}</span>
+				            <span>{{row.rj}}{{row.rjdw}}</span>
 				        </template>
 						<template slot-scope="{ row }" slot="yl">
-				            <span class="link">{{row.yl}}{{row.yldw}}</span>
+				            <span>{{row.yl}}{{row.yldw}}</span>
 				        </template>
-						<template slot-scope="{ row }" slot="action">
-				            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editGqscModel(row)">编辑</Button>
-				            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeGqsc(row)">
+						<template slot-scope="{ row, index }" slot="action">
+				            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editGqscModel(row, index)">编辑</Button>
+				            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeGqsc(index)">
 						        <Button type="error" size="small" ghost>删除</Button>
 						    </Poptip>
 				        </template>
 					</Table>
-					<Row type="flex" justify="end">
-						<Page
-		                    size="small"
-		                    style="margin-top: 10px"
-		                    :page-size="gqscPage.pageSize"
-		                    :total="gqscPage.totalRow"
-		                    show-elevator
-		                    show-total
-		                    show-sizer
-		                    @on-change="handleChangeGqscPage"
-		                    @on-page-size-change="handleChangeGqscPageSize"
-		                />
-					</Row>
 				</div>
 				<div>
 					<part-title text="涉及危险化学品" :btns="['add']" @add="openSjwxhxpModel"></part-title>
@@ -697,7 +684,7 @@
 		data() {
 			return {
 				id: '',
-				gkdx_id: this.$storage.get('gkdx_id'),
+				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				sjwxhxpId: '',
 				sczz_id: '',	
 				ccss_id: '',
@@ -776,28 +763,41 @@
 				areaList: [],
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.whPage.pageIndex- 1) * this.whPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpm',
+                        minWidth: 110
                     }, {
                         title: 'CAS号',
                         key: 'cas',
+                        minWidth: 100
                     }, {
                         title: '是否重点监管',
                         slot: 'sfzdjg',
+                        minWidth: 120
                     }, {
                         title: '是否爆炸品',
                         slot: 'sfbzp',
+                        minWidth: 110
                     }, {
                         title: '火灾风险等级',
                         key: 'hzwxxdj',
+                        minWidth: 120
                     }, {
                         title: 'MSDS',
                         key: 'msds',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -828,25 +828,37 @@
 				nzzldwList: ['吨', '立方', 'KG', 'L'],
 				whRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.whRiskPage.pageIndex- 1) * this.whRiskPage.pageSize + 1);
+				        }
                     }, {
                         title: '重大危险源单元名称',
                         key: 'zdwxydymc',
+                        minWidth: 160
                     }, {
                         title: '重大危险源等级',
                         key: 'zdwxydj',
+                        minWidth: 140
                     }, {
                         title: '危险化学品',
                         key: 'wxhxp',
+                        minWidth: 110
                     }, {
                         title: '投用时间',
                         key: 'tysj',
+                        minWidth: 120
                     }, {
                         title: '当前状态',
                         key: 'dqzt',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -867,28 +879,41 @@
 				},
 				sczzColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.sczzPage.pageIndex- 1) * this.sczzPage.pageSize + 1);
+				        }
                     }, {
                         title: '装置单元名称',
                         key: 'zzdymc',
+                        minWidth: 120
                     }, {
                         title: '重大危险源',
                         key: 'zdwxy',
+                        minWidth: 110
                     }, {
                         title: '危险化学品',
                         slot: 'wxhxp',
+                        minWidth: 110
                     }, {
                         title: '危险工艺',
                         key: 'wxgy',
+                        minWidth: 100
                     }, {
                         title: '投用时间',
                         key: 'tysj',
+                        minWidth: 120
                     }, {
                         title: '当前状态',
                         key: 'dqzt',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -923,28 +948,41 @@
 				},
 				ccssColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.ccssPage.pageIndex- 1) * this.ccssPage.pageSize + 1);
+				        }
                     }, {
                         title: '储存设施单元名称',
                         key: 'ccssdymc',
+                        minWidth: 160
                     }, {
                         title: '类型',
                         key: 'lx',
+                        minWidth: 100
                     }, {
                         title: '重大危险源',
                         key: 'zdwxy',
+                        minWidth: 110
                     }, {
                         title: '危险化学品',
                         slot: 'wxhxp',
+                        minWidth: 110
                     }, {
                         title: '投用时间',
                         key: 'tysj',
+                        minWidth: 120
                     }, {
                         title: '当前状态',
                         key: 'dqzt',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -968,16 +1006,25 @@
 				},
 				sjwxhxpColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.sjwxhxpPage.pageIndex- 1) * this.sjwxhxpPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名',
                         key: 'hxpm',
+                        minWidth: 100
                     }, {
                         title: '数量',
                         slot: 'sl',
+                        minWidth: 80
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -999,25 +1046,37 @@
 				},
 				gqscColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.gqscPage.pageIndex- 1) * this.gqscPage.pageSize + 1);
+				        }
                     }, {
                         title: '罐名',
                         key: 'gm',
+                        minWidth: 100
                     }, {
                         title: '罐型',
                         key: 'gx',
+                        minWidth: 100
                     }, {
                         title: '容积',
                         slot: 'rj',
+                        minWidth: 100
                     }, {
                         title: '压力',
                         slot: 'yl',
+                        minWidth: 100
                     }, {
                         title: '温度（℃）',
                         key: 'wd',
+                        minWidth: 110
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -1041,19 +1100,29 @@
 				},
 				mainRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.mainRiskPage.pageIndex- 1) * this.mainRiskPage.pageSize + 1);
+				        }
                     }, {
                         title: '工艺名称',
                         key: 'gymc',
+                        minWidth: 110
                     }, {
                         title: '危险工艺类型',
                         key: 'wxgylx',
+                        minWidth: 120
                     }, {
                         title: '工艺操作人数',
                         key: 'sjczrs',
+                        minWidth: 120
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -1076,22 +1145,33 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.rimPage.pageIndex- 1) * this.rimPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         key: 'mgmbmc',
+                        minWidth: 120
                     }, {
                         title: '方位',
                         key: 'fw',
+                        minWidth: 80
                     }, {
                         title: '目标类型',
                         key: 'mgmblx',
+                        minWidth: 100
                     }, {
                         title: '人员数量',
                         key: 'rysl',
+                        minWidth: 100
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -1106,7 +1186,7 @@
 					lngAndLat: '',
 					qyfw: ''
 				},
-				fwList: ['东', '南', '西', '北'],
+				fwList: ['东', '南', '西', '北', '东北', '东南', '西北', '西南'],
 				mgmblxList: ['医院', '养老院', '学校', '政府机构', '商场', '居住区', '监狱', '宗教', '车站', '码头', '铁路', '公路', '林区', '工厂', '矿山', '河流', '其他'],
 				rimPage: {
 					pageSize: 10,
@@ -1596,9 +1676,9 @@
 				this.id = row.id
 				this.ccss_id = row.id
 				this.sjwxhxpData = row.wxhxp ? JSON.parse(row.wxhxp) : []
+				this.gqscData = row.gqxx ? JSON.parse(row.gqxx) : []
 				this.modeType = 2;
 				this.showCcssModel = true
-				this.getGqscList();
 			},
 			ccssModelChange(status) {
 				if(!status) {
@@ -1613,6 +1693,7 @@
 						dqzt: ''
 					}
 					this.sjwxhxpData = []
+					this.gqscData = []
 				}
 			},
 			async removeCcss(row) {
@@ -1625,6 +1706,7 @@
 					...this.ccssForm,
 					tysj: this.ccssForm.tysj ? getDate(new Date(this.ccssForm.tysj).getTime(), 'date') : '',
 					wxhxp: this.sjwxhxpData.length > 0 ? JSON.stringify(this.sjwxhxpData) : '',
+					gqxx: this.gqscData.length > 0 ? JSON.stringify(this.gqscData) : '',
 					jd: this.ccssForm.lngAndLat.split(' ')[0],
 					wd: this.ccssForm.lngAndLat.split(' ')[1],
 					gkdx_id: this.gkdx_id
@@ -1699,14 +1781,10 @@
 				}
 			},
 			openGqscModel() {
-				if(this.modeType == 1) {
-					this.$Message.error('请在编辑时添加罐区')
-					return
-				}
 				this.modeType2 = 1;
 				this.showGqscModel = true
 			},
-			editGqscModel(row) {
+			editGqscModel(row, index) {
 				this.gqscForm = {
 					gm: row.gm,
 					gx: row.gx,
@@ -1716,7 +1794,7 @@
 					yldw: row.yldw,
 					wd: row.wd ? Number(row.wd) : 0,
 				}
-				this.gqscId = row.id
+				this.gqscId = index
 				this.modeType2 = 2;
 				this.showGqscModel = true
 			},
@@ -1734,24 +1812,15 @@
 				}
 			},
 			async saveGqsc() {
-				let params = {
-					...this.gqscForm,
-					wxhxpccss_id: this.ccss_id
-				}
 				if(this.modeType2 == 2) {
-					params.id = this.gqscId
+					this.gqscData.splice(this.gqscId, 1, this.gqscForm)
+				}else {
+					this.gqscData.push(this.gqscForm)
 				}
-				let { status_code, message } = await api.addGqscInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showGqscModel = false
-					this.getGqscList()
-				}
+				this.showGqscModel = false
 			},
-			async removeGqsc(row) {
-				let { status_code } = await api.deleteGqscInfo(row.id)
-				status_code == 200 && this.$Message.success('删除成功')
-				this.getGqscList()
+			async removeGqsc(index) {
+				this.sjwxhxpData.splice(index, 1)
 			},
 			handleChangeMainRiskPage(val) {
 				this.mainRiskPage.pageIndex = val

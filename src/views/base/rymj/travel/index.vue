@@ -105,10 +105,10 @@
 					<part-title text="旅客承载量"></part-title>
 					<Form :model="mostForm" label-position="left" inline style="width: 600px">
 				        <FormItem label="可接待最大旅客数量" :label-width="160" style="margin-right: 140px">
-				        	<InputNumber clearable v-model="mostForm.kjdzdlksl"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.kjdzdlksl"></InputNumber>
 				        </FormItem>
 				        <FormItem label="日均人流" :label-width="80">
-				        	<InputNumber clearable v-model="mostForm.rjrl"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.rjrl"></InputNumber>
 				        </FormItem>
 					</Form>
 					<part-title text="特殊旅游项目" :btns="['add']" @add="openTravelModel"></part-title>
@@ -483,8 +483,14 @@
 				travelNum: {},
 				travelColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '项目名称',
                         key: 'xmmc',
@@ -502,6 +508,7 @@
                         key: 'yxzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -523,8 +530,14 @@
 				travelYxztList: ['建设', '运行', '改造', '停运'],
 				wwColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '名称',
                         key: 'mc',
@@ -536,6 +549,7 @@
                         key: 'sd',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -555,8 +569,14 @@
 				jbList: ['国家级', '省级', '市级', '县级'],
 				xfColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '名称',
                         key: 'mc',
@@ -574,6 +594,7 @@
                         key: 'yyzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -597,8 +618,14 @@
 				yyztList: ['运行', '改造', '停止'],
 				specialColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '设备名称',
                         key: 'sbmc',
@@ -631,6 +658,7 @@
                         key: 'fxdj',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 

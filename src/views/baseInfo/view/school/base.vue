@@ -69,10 +69,10 @@
 					<part-title text="位置信息"></part-title>
 					<Form :model="addressInfo" label-position="left" :disabled="true" :label-width="170" style="width: 600px">
 				         <FormItem label="学校占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.xxzdmj" placeholder="占地面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.xxzdmj" placeholder="占地面积"></InputNumber>
 				        </FormItem>
 				        <FormItem label="学校建筑占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.jxjzzdmj" placeholder="建筑面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.jxjzzdmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	

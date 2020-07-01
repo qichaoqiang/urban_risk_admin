@@ -26,7 +26,7 @@
 					</Col>
 				</Row>
 		    </Header>
-		    <Layout>
+		    <Layout :style="{height: contentHeight}">
 		        <!-- :style="{position: 'fixed', top: '64px', left: 0, overflow: 'auto', background: '#1E2657'}" -->
 		    	<Sider
 		    		ref="side"
@@ -56,7 +56,7 @@
 		         <!-- :style="{position: 'fixed', top: '64px', bottom: 0, left: isCollapsed ? `${collapsedWidth}px` : '200px', right: 0, overflow: 'scroll'}" -->
 		        <Content>
 		        	<Row type="flex" justify="center" style="height: 100%">
-		        		<Col span="23">
+		        		<Col :span="$route.name == 'overview' ? '24' : '23'" style="height: 100%">
 		        			<router-view></router-view>
 		        		</Col>
 		        	</Row>
@@ -96,6 +96,7 @@
 <script>
 	import SideMenu from './components/side_menu'
 	import storage from 'good-storage'
+	import api from '@/api/api'
 	export default {
 		name: '',
 		components: {
@@ -109,10 +110,13 @@
 	            password: '',
 	            confirmPassword: '',
 	            addUserLoading: false,
+	            contentHeight: window.innerHeight - 64 + 'px'
 			}
 		},
 		watch: {
-
+			'$route.name'(val) {
+				this.isCollapsed = val == 'overview'
+			}
 		},
 		computed: {
 			rotateIcon () {
@@ -123,7 +127,7 @@
                     'menu-item',
                     this.isCollapsed ? 'collapsed-menu' : ''
                 ]
-            }
+            },
 		},
 		methods: {
 			turnToPage() {
@@ -138,6 +142,7 @@
 				// this.$router.push('/login')
 				// location.reload()
 				location.href = location.origin
+				location.href = process.env.NODE_ENV === "development" ? location.origin : `${location.origin}/v2`
 				// location.reload()
 	            // let { data, code } = await this.$axios('/operator/logout')
 	            // if (code == 200) {
@@ -163,8 +168,10 @@
 	                return 
 	            }
 	            this.addUserLoading = true
-	            let { data, code } = await this.$axios('/operator/changePassword', { operatorId: '', password: this.password })
-	            this.$Message.success('操作成功')
+	            let { data, status_code } = await api.changeUserInfo({ act: 'change_password', oldpassword: this.oldPassword, password: this.password })
+	            if(status_code == 200) {
+	            	this.$Message.success('修改成功')
+	            }
 	            this.addUserLoading = false
 	            this.isShowchangePassword = false
 	        },
@@ -186,7 +193,9 @@
 
 		},
 		mounted() {
-
+			window.addEventListener('resize', () => {
+				this.contentHeight = window.innerHeight - 64 + 'px'
+			})
 		}
 	}
 </script>
@@ -194,7 +203,7 @@
 <style lang="less" scoped>
 	.container {
 		width: 100%;
-		min-height: 100vh;
+		// min-height: 100vh;
 		.ivu-layout-header {
 			background: #1E2657;
 		}

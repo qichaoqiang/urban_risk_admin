@@ -13,6 +13,9 @@ let getters = {
   },
   getHasMenu: state => {
     return state.hasMenu
+  },
+  getFxylb: state => {
+    return state.fxylb
   }
 }
 

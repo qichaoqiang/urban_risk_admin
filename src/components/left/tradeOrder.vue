@@ -16,24 +16,24 @@
 		data() {
 			return {
 				tradeOrder: [{
-		            name: '危险化学品',
-		            value: 478,
+		            name: '上城区',
+		            value: 293,
 		            color: '#1C86F3'
 		        }, {
-		            name: '敏感人群场所',
-		            value: 291,
+		            name: '下城区',
+		            value: 199,
 		            color: '#F25E5E'
 		        }, {
-		            name: '矿山',
-		            value: 194,
+		            name: '西湖区',
+		            value: 192,
 		            color: '#3BBC91'
 		        }, {
-		            name: '能源场站',
-		            value: 88,
+		            name: '滨江区',
+		            value: 164,
 		            color: '#E4B44E'
 		        }, {
-		            name: '烟花爆竹',
-		            value: 77,
+		            name: '余杭区',
+		            value: 155,
 		            color: '#F49852'
 		        }]
 			}
@@ -68,7 +68,7 @@
 
 <style lang="scss" scoped>
 	.trade_order {
-		padding: 24px 32px 0 48px;
+		padding: 24px 32px 24px 48px;
 		box-sizing: border-box;
 		width: 100%;
 		.trade_item {

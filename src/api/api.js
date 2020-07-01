@@ -32,9 +32,26 @@ import jzsg from './jzsg' // 天然气场站
 import cycs from './cycs' // 餐饮场所
 import zysc from './zysc' // 专业市场
 import smzht from './smzht' // 商贸综合体
-import whylcs from './whylcs' // 餐饮场所
-import wb from './wb' // 专业市场
-import bgjd from './bgjd' // 商贸综合体
+import whylcs from './whylcs' // 文化娱乐场所
+import wb from './wb' // 网吧
+import bgjd from './bgjd' // 宾馆酒店
+import xjjd from './xjjd' // 星级酒店
+import gczz from './gczz' // 高层住宅
+import gcggjz from './gcggjz' // 高层公共建筑
+import tycg from './tycg' // 体育场馆
+import wxhwys from './wxhwys' // 危险货物运输
+import whmt from './whmt' // 危货码头
+import phmt from './phmt' // 普货码头
+import kymt from './kymt' // 客运码头
+import csql from './csql' // 城市桥梁
+import cssd from './cssd' // 城市隧道
+import ztxnc from './ztxnc' // 渣土消纳场
+import skdb from './skdb' // 水库大坝
+import lybc from './lybc' // 旅游包车
+import czrq from './czrq' // 城镇燃气
+import csgxsq from './csgxsq' // 长输管线（输气）
+import csgxsy from './csgxsy' // 长输管线（输油）
+
 
 export default {
   // 登录
@@ -44,6 +61,10 @@ export default {
   // 用户信息
   getUserInfo(params) {
     return fetchGet('/api/dangqianyonghu', params)
+  },
+  // 修改用户信息
+  changeUserInfo(params) {
+    return fetchPost('/api/dangqianyonghu', params)
   },
   // 行业分类
   getIndustryList(params) {
@@ -87,5 +108,21 @@ export default {
   ...smzht,
   ...whylcs,
   ...wb,
-  ...bgjd
+  ...bgjd,
+  ...xjjd,
+  ...gczz,
+  ...gcggjz,
+  ...tycg,
+  ...wxhwys,
+  ...whmt,
+  ...phmt,
+  ...kymt,
+  ...csql,
+  ...cssd,
+  ...ztxnc,
+  ...skdb,
+  ...lybc,
+  ...czrq,
+  ...csgxsq,
+  ...csgxsy
 }

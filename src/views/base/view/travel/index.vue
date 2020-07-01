@@ -19,7 +19,7 @@
 				            </Select>
 				        </FormItem>
 				        <FormItem label="开业时间">
-				            <DatePicker type="date" v-model="baseInfo.kysj" :options="datePickerOptions" placeholder="开业时间"></DatePicker>
+				            <DatePicker type="date" v-model="baseInfo.kysj" placeholder="开业时间"></DatePicker>
 				        </FormItem>
 				        <FormItem label="景区运行状态">
 				            <Select clearable v-model="baseInfo.yxzt" placeholder="景区运行状态">
@@ -30,22 +30,16 @@
 				        	<TimePicker type="timerange" confirm v-model="baseInfo.jqyysj" placeholder="景区营业时间"></TimePicker>
 				        </FormItem>
 				        <FormItem label="地址">
-				        	<Input clearable v-model="addressInfo.dz" placeholder="请输入地址"></Input>
+				        	<Input clearable v-model="baseInfo.dz" placeholder="请输入地址"></Input>
 				        </FormItem>
 				        <FormItem label="经纬度">
-				        	<div @click="openLngModal">
-				        		<Input 
-			        				readonly 
-			        				v-model="addressInfo.lngAndLat" 
-			        				icon="md-pin" 
-			        				placeholder="请选择经纬度" />
-		        			</div>
+				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
 				        </FormItem>
 				        <FormItem label="区域范围">
 				        	<div @click.stop="openAreaModal">
 					        	<Input 
 			        				readonly 
-			        				v-model="addressInfo.dyfw" 
+			        				v-model="baseInfo.dyfw" 
 			        				icon="md-pin" 
 			        				placeholder="请选择区域范围" />
 			        			</div>
@@ -75,17 +69,17 @@
 			<Row type="flex" justify="center">
 				<Col>
 					<part-title text="联系人信息"></part-title>
-					<Form :model="addressInfo" label-position="left" :label-width="140" style="width: 600px">
+					<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
 				        <FormItem label="经办人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input clearable v-model="contactInfo.jbr" :data="areaList" placeholder="姓名"></Input>
+				        			<Input clearable v-model="baseInfo.jbr" :data="areaList" placeholder="姓名"></Input>
 				        		</Col>
 				        		<Col span="16">
-				        			<Input clearable v-model="contactInfo.jbrdh" placeholder="电话"></Input>
+				        			<Input clearable v-model="baseInfo.jbrdh" placeholder="电话"></Input>
 				        		</Col>
 				        		<Col span="24">
-				        			<Input clearable v-model="contactInfo.jbryx" placeholder="邮箱"></Input>
+				        			<Input clearable v-model="baseInfo.jbryx" placeholder="邮箱"></Input>
 				        		</Col>
 				        	</Row>
 				        </FormItem>
@@ -105,10 +99,10 @@
 					<part-title text="旅客承载量"></part-title>
 					<Form :model="mostForm" label-position="left" inline style="width: 600px">
 				        <FormItem label="可接待最大旅客数量" :label-width="160" style="margin-right: 140px">
-				        	<InputNumber clearable v-model="mostForm.kjdzdlksl"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.kjdzdlksl"></InputNumber>
 				        </FormItem>
 				        <FormItem label="日均人流" :label-width="80">
-				        	<InputNumber clearable v-model="mostForm.rjrl"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.rjrl"></InputNumber>
 				        </FormItem>
 					</Form>
 					<part-title text="特殊旅游项目" :btns="['add']" @add="openTravelModel"></part-title>
@@ -283,7 +277,7 @@
 			            </Select>
 			        </FormItem>
 			        <FormItem label="开业时间">
-			        	<DatePicker type="date" v-model="travelForm.kysj" :options="datePickerOptions" placeholder="请选择"></DatePicker>
+			        	<DatePicker type="date" v-model="travelForm.kysj" placeholder="请选择"></DatePicker>
 			        </FormItem>
 			        <FormItem label="营业时间">
 			        	<TimePicker type="timerange" confirm v-model="travelForm.yysj" placeholder="营业时间"></TimePicker>
@@ -312,7 +306,7 @@
 			            </Select>
 			        </FormItem>
 			        <FormItem label="时代">
-			        	<DatePicker type="date" v-model="wwForm.sd" :options="datePickerOptions" placeholder="请选择"></DatePicker>
+			        	<DatePicker type="date" v-model="wwForm.sd" placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
@@ -340,7 +334,7 @@
 			        	</Row>
 			        </FormItem>
 			        <FormItem label="建设使用时间">
-			        	<DatePicker type="date" v-model="xfForm.jstysj" :options="datePickerOptions" placeholder="请选择"></DatePicker>
+			        	<DatePicker type="date" v-model="xfForm.jstysj" placeholder="请选择"></DatePicker>
 			        </FormItem>
 			        <FormItem label="使用单位">
 			            <Input clearable v-model="xfForm.sydw"></Input>
@@ -375,13 +369,13 @@
 			        	<Input clearable v-model="specialForm.xhgg"></Input>
 			        </FormItem>
 			        <FormItem label="出厂时间">
-			        	<DatePicker type="date" v-model="specialForm.czsj" :options="datePickerOptions" placeholder="请选择"></DatePicker>
+			        	<DatePicker type="date" v-model="specialForm.czsj" placeholder="请选择"></DatePicker>
 			        </FormItem>
 			        <FormItem label="使用单位">
 			            <Input clearable v-model="specialForm.sydw"></Input>
 			        </FormItem>
 			        <FormItem label="检验有效期">
-			        	<DatePicker type="date" v-model="specialForm.jyyxq" :options="datePickerOptions" placeholder="请选择"></DatePicker>
+			        	<DatePicker type="date" v-model="specialForm.jyyxq" placeholder="请选择"></DatePicker>
 			        </FormItem>
 			        <FormItem label="检验单位">
 			            <Input clearable v-model="specialForm.jydw"></Input>
@@ -409,6 +403,7 @@
 <script>	
 	import api from '@/api/api'
 	import partTitle from '@/components/title'
+	import lng from '../../../baseInfo/components/lng'
 	import areajs from '@/common/js/area'
 	import industryjs from '@/common/js/industry'
 	import lngjs from '@/common/js/lng'
@@ -417,11 +412,11 @@
 	export default {
 		name: '',
 		mixins: [areajs, industryjs, lngjs, datePickerjs],
-		components: { partTitle },
+		components: { partTitle, lng },
 		data() {
 			return {
 				id: '',
-				gkdx_id: '',
+				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				loading: false,
 				step: 1,	
 				showAreaModel: false,
@@ -447,14 +442,10 @@
 					jqjs: '',
 					rjrl: '',
 					yxzt: '',
-				},
-				addressInfo: {
+					jbr: '',
 					dz: '',
 					dyfw: '',
 					lngAndLat: '',
-				},
-				contactInfo: {
-					jbr: '',
 					jbrdh: '',
 					jbryx: '',
 				},
@@ -483,8 +474,14 @@
 				travelNum: {},
 				travelColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '项目名称',
                         key: 'xmmc',
@@ -502,6 +499,7 @@
                         key: 'yxzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -523,8 +521,14 @@
 				travelYxztList: ['建设', '运行', '改造', '停运'],
 				wwColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '名称',
                         key: 'mc',
@@ -536,6 +540,7 @@
                         key: 'sd',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -555,8 +560,14 @@
 				jbList: ['国家级', '省级', '市级', '县级'],
 				xfColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '名称',
                         key: 'mc',
@@ -574,6 +585,7 @@
                         key: 'yyzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -597,8 +609,14 @@
 				yyztList: ['运行', '改造', '停止'],
 				specialColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '设备名称',
                         key: 'sbmc',
@@ -631,6 +649,7 @@
                         key: 'fxdj',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -667,35 +686,32 @@
 
 		},
 		methods: {
-			getBaseInfo() {
-				this.loading = true
-				if(this.$route.query.type == '2') {
-					let baseInfo = this.$storage.get('baseInfo')
-					// baseInfo.hyml = []
-					// baseInfo.quyu = []
-					this.baseInfo = baseInfo
-					this.addressInfo = this.$storage.get('addressInfo')
-					this.contactInfo = this.$storage.get('contactInfo')
-					this.mostForm = this.$storage.get('mostForm')
-					this.form = this.$storage.get('form')
+			async getBaseInfo() {
+				let { status_code, data, message } = await api.getTravelBase(this.gkdx_id);
+				if(status_code == 0) {
+					this.form = data;
+					let { jbr, jbrdh, jbryx, lyjdmc, tyshxydm, jydw, quyu_id, jd, wd, jqdj, hydm, yxzt, jqyysj1, jqyysj2, jqjs, kjdzdlksl, rjrl, dyfw, dz} = this.form
+					this.baseInfo = { lyjdmc, tyshxydm, jydw, jqdj, hydm, yxzt, jqjs, dyfw, dz, jbr, jbrdh, jbryx }
+					this.baseInfo.kysj = this.form.kysj ? new Date(this.form.kysj) : '';
+					jqyysj1 = jqyysj1 ? jqyysj1 : ''
+					jqyysj2 = jqyysj2 ? jqyysj2 : ''
+					this.baseInfo.jqyysj = [jqyysj1, jqyysj2];
+					this.baseInfo.lngAndLat = jd && wd ? `${(jd - 0).toFixed(6)} ${(wd - 0).toFixed(6)}` : ''
+					this.mostForm = { kjdzdlksl, rjrl }
 					this.getQy()
 					// this.getHy()
-				}else {
-					this.loading = false
 				}
 			},
 			async nextStep() {
 				let params = {
 					quyu_id: this.baseInfo.quyu[this.baseInfo.quyu.length - 1],
 					...this.baseInfo,
-					...this.addressInfo,
-					...this.contactInfo,
 					kysj: this.baseInfo.kysj ? getDate(new Date(this.baseInfo.kysj).getTime(), 'date') : '',
 					jqyysj1: this.baseInfo.jqyysj[0],
 					jqyysj2: this.baseInfo.jqyysj[1],
 					// hyml: this.baseInfo.hyml[this.baseInfo.hyml.length - 1],
-					jd: this.addressInfo.lngAndLat.split(' ')[0],
-					wd: this.addressInfo.lngAndLat.split(' ')[1],
+					jd: this.baseInfo.lngAndLat.split(' ')[0],
+					wd: this.baseInfo.lngAndLat.split(' ')[1],
 				}	 
 				if(this.$route.query.type == 2) {
 					params.gkdx_id = this.form.gkdx_id
@@ -706,15 +722,9 @@
 				let { status_code, message } = await api.addTravelBase(params);
 				if(status_code == 200) {
 					this.$Message.success('保存成功')
-					if(this.$route.query.type == 2) {
+					if(this.$route.name == 'base') {
 						this.$storage.set('gkdx_id', this.form.gkdx_id)
 						this.$router.back()
-					}else {
-						let { status_code, data } = await api.getTravelBase()
-						if(status_code == 200) {
-							this.$storage.set('gkdx_id', data.data[0].gkdx_id)
-						}
-						this.$router.replace('/baseInfo')
 					}
 				}
 			},
@@ -751,8 +761,8 @@
 			            };
 			            //创建标注工具对象
 			            this.polygonTool = new T.PolygonTool(this.map, config);
-			            if(this.addressInfo.dyfw) {
-			            	let dyfw = JSON.parse(this.addressInfo.dyfw)
+			            if(this.baseInfo.dyfw) {
+			            	let dyfw = JSON.parse(this.baseInfo.dyfw)
 			            	let points = dyfw.map(item => {
 			            		return new T.LngLat(item.lng, item.lat)
 			            	})
@@ -767,23 +777,23 @@
 				this.polygonTool.addEventListener('draw', (e) => {
 					// 获取绘制的多边形信息
 					console.log(e);
-					this.addressInfo.dyfw = JSON.stringify(e.currentLnglats)
+					this.baseInfo.dyfw = JSON.stringify(e.currentLnglats)
 				})
 			},
 			clearArea() {
-				this.addressInfo.dyfw = ''
+				this.baseInfo.dyfw = ''
 				this.map.clearOverLays()
 			},
 			cancelArea() {
 				this.map.clearOverLays();
 				this.map = null;
 				this.polygonTool = null;
-				this.addressInfo.dyfw = this.dyfw || this.form.dyfw || '';
+				this.baseInfo.dyfw = this.dyfw || this.form.dyfw || '';
 				this.showAreaModel = false
 			},
 			saveArea() {
-				this.dyfw = this.addressInfo.dyfw;
-				this.form.dyfw = this.addressInfo.dyfw;
+				this.dyfw = this.baseInfo.dyfw;
+				this.form.dyfw = this.baseInfo.dyfw;
 				this.map.clearOverLays();
 				this.map = null;
 				this.polygonTool = null;

@@ -10,39 +10,39 @@ export default {
     return fetchGet(`/api/changtukeyun/${params}`)
   },
   // 车辆信息保存
-  addClInfo(params) {
+  addClxxctInfo(params) {
     return fetchPost(`/api/cheliangxinxi`, params)
   },
   // 车辆信息列表
-  getClList(params) {
+  getClxxctList(params) {
     return fetchGet('/api/cheliangxinxi', params)
   },
   // 车辆信息删除
-  deleteClInfo(id) {
+  deleteClxxctInfo(id) {
     return fetchDelete(`/api/cheliangxinxi/${id}`)
   },
   // 线路信息保存
-  addXlInfo(params) {
+  addXlxxInfo(params) {
     return fetchPost(`/api/xianluxinxi`, params)
   },
   // 线路信息列表
-  getXlList(params) {
+  getXlxxList(params) {
     return fetchGet('/api/xianluxinxi', params)
   },
   // 线路信息删除
-  deleteXlInfo(id) {
+  deleteXlxxInfo(id) {
     return fetchDelete(`/api/xianluxinxi/${id}`)
   },
   // 运营情况保存
-  addYyInfo(params) {
+  addYyqkInfo(params) {
     return fetchPost(`/api/yunyingzhuangkuang`, params)
   },
   // 运营情况列表
-  getYyList(params) {
+  getYyqkList(params) {
     return fetchGet('/api/yunyingzhuangkuang', params)
   },
   // 运营情况删除
-  deleteYyInfo(id) {
+  deleteYyqkInfo(id) {
     return fetchDelete(`/api/yunyingzhuangkuang/${id}`)
   },
 }

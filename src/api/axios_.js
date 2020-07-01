@@ -31,7 +31,7 @@ axios_.interceptors.request.use((config) => {
   }
   config.withCredentials = false;
   if(config.url.indexOf('/oauth/token') == -1) {
-    config.headers.Authorization = `${storage.get('token_type_v2')} ${storage.get('access_token_v2')}`
+    config.headers.Authorization = `${storage.get('token_type_v2')} ${storage.get('access_token_v2_')}`
   }
   return config
 }, (error) => {

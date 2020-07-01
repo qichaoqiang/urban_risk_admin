@@ -6,16 +6,16 @@
 				<Col>
 					<div class="title">请完善{{step == 1 ? '企业' : '风险'}}信息</div>
 					<part-title text="基本信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
+					<Form :model="baseInfo" ref="baseInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 						<FormItem label="企业名称">
 				            {{baseInfo.qymc}}
 				        </FormItem>
-				        <FormItem label="运行状态">
+				        <FormItem label="运行状态" prop="yxzt">
 				            <Select clearable v-model="baseInfo.yxzt" placeholder="运行状态">
 				                <Option v-for="item in yxztList" :key="item" :value="item">{{item}}</Option>
 				            </Select>
 				        </FormItem>
-				        <FormItem label="所属区域">
+				        <FormItem label="所属区域" prop="quyu">
 				            <Cascader 
 				            	readonly 
 				            	change-on-select
@@ -24,25 +24,19 @@
 				            	:load-data="loadArea" 
 				            	placeholder="所属区域"></Cascader>
 				        </FormItem>
-				        <FormItem label="经营范围">
+				        <FormItem label="经营范围" prop="jyfw">
 				        	<Input clearable v-model="baseInfo.jyfw" placeholder="经营范围"></Input>
 				        </FormItem>
-				        <FormItem label="销售许可证">
+				        <FormItem label="销售许可证" prop="xsxkz">
 				        	<Input clearable v-model="baseInfo.xsxkz" placeholder="销售许可证"></Input>
 				        </FormItem>
-				        <FormItem label="储存地址">
+				        <FormItem label="储存地址" prop="ccdz">
 				        	<Input clearable v-model="baseInfo.ccdz" placeholder="储存地址"></Input>
 				        </FormItem>
-				        <FormItem label="经纬度">
-				        	<div @click="openLngModal">
-			        			<Input 
-			        				readonly 
-			        				v-model="baseInfo.lngAndLat" 
-			        				icon="md-pin" 
-			        				placeholder="经纬度" />
-			        		</div>
+				        <FormItem label="经纬度" prop="lngAndLat">
+				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
 				        </FormItem>
-				        <FormItem label="企业范围">
+				        <FormItem label="企业范围" prop="qyfw">
 				        	<div @click.stop="openAreaModal">
 			        			<Input 
 			        				readonly 
@@ -51,13 +45,13 @@
 			        				placeholder="企业范围" />
 			        		</div>
 				        </FormItem>
-				        <FormItem label="职工人数">
+				        <FormItem label="职工人数" prop="zgrs">
 				            <InputNumber :min="0" v-model="baseInfo.zgrs"></InputNumber>
 				        </FormItem>
-				        <FormItem label="管理人员">
+				        <FormItem label="管理人员" prop="glrysl">
 				            <InputNumber :min="0" v-model="baseInfo.glrysl"></InputNumber>
 				        </FormItem>
-				        <FormItem label="行业门类">
+				        <FormItem label="行业门类" prop="hyml">
 				        	<Cascader 
 				        		clearable 
 				        		change-on-select
@@ -66,16 +60,16 @@
 			        			:load-data="loadIndustry" 
 			        			placeholder="行业门类"></Cascader>
 				        </FormItem>
-				        <FormItem label="行业代码">
+				        <FormItem label="行业代码" prop="hydm">
 				            <Input clearable v-model="baseInfo.hydm" placeholder="行业代码"></Input>
 				        </FormItem>
-				        <FormItem label="统一社会信用代码">
+				        <FormItem label="统一社会信用代码" prop="tyshxydm">
 				            <Input clearable v-model="baseInfo.tyshxydm" placeholder="统一社会信用代码"></Input>
 				        </FormItem>
-				        <FormItem label="注册地址">
+				        <FormItem label="注册地址" prop="zcdz">
 				        	<Input clearable v-model="baseInfo.zcdz" placeholder="注册地址"></Input>
 				        </FormItem>
-				        <FormItem label="企业基本简况">
+				        <FormItem label="企业基本简况" prop="qyjbjk">
 				            <Input clearable v-model="baseInfo.qyjbjk" type="textarea" placeholder="企业基本简况"></Input>
 				        </FormItem>
 					</Form>
@@ -85,12 +79,12 @@
 			<Row type="flex" justify="center">
 				<Col>
 					<part-title text="建筑物信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="120" style="width: 600px">
-				        <FormItem label="占地面积（㎡）">
-				        	<InputNumber clearable v-model="baseInfo.zdmj" placeholder="占地面积"></InputNumber>
+					<Form :model="baseInfo" ref="jzInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
+				        <FormItem label="占地面积（㎡）" prop="zdmj">
+				        	<InputNumber :min="0" v-model="baseInfo.zdmj" placeholder="占地面积"></InputNumber>
 				        </FormItem>
-				        <FormItem label="建筑面积（㎡）">
-				        	<InputNumber clearable v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
+				        <FormItem label="建筑面积（㎡）" prop="jzmj">
+				        	<InputNumber :min="0" v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -99,37 +93,51 @@
 			<Row type="flex" justify="center">
 				<Col>
 					<part-title text="联系人信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="120" style="width: 600px">
+					<Form :model="baseInfo" ref="contactInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 				        <FormItem label="企业负责人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input clearable v-model="baseInfo.qyfzr" :data="areaList" placeholder="姓名"></Input>
+						        	<FormItem prop="qyfzr">
+					        			<Input clearable v-model="baseInfo.qyfzr" :data="areaList" placeholder="姓名"></Input>
+					        		</FormItem>
 				        		</Col>
 				        		<Col span="16">
-				        			<Input clearable v-model="baseInfo.qyfzrdh" placeholder="电话"></Input>
+					        		<FormItem prop="qyfzrdh">
+					        			<Input clearable v-model="baseInfo.qyfzrdh" placeholder="电话"></Input>
+					        		</FormItem>
 				        		</Col>
 				        	</Row>
 				        </FormItem>
 				        <FormItem label="分管安全负责人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input clearable v-model="baseInfo.fgaqfzr" :data="areaList" placeholder="姓名"></Input>
+						        	<FormItem prop="fgaqfzr">
+					        			<Input clearable v-model="baseInfo.fgaqfzr" :data="areaList" placeholder="姓名"></Input>
+					        		</FormItem>
 				        		</Col>
 				        		<Col span="16">
-				        			<Input clearable v-model="baseInfo.fgaqfzrdh" placeholder="电话"></Input>
+					        		<FormItem prop="fgaqfzrdh">
+					        			<Input clearable v-model="baseInfo.fgaqfzrdh" placeholder="电话"></Input>
+					        		</FormItem>
 				        		</Col>
 				        	</Row>
 				        </FormItem>
 				        <FormItem label="经办人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input clearable v-model="baseInfo.jbr" :data="areaList" placeholder="姓名"></Input>
+						        	<FormItem prop="jbr">
+					        			<Input clearable v-model="baseInfo.jbr" :data="areaList" placeholder="姓名"></Input>
+					        		</FormItem>
 				        		</Col>
 				        		<Col span="16">
-				        			<Input clearable v-model="baseInfo.jbrdh" placeholder="电话"></Input>
+					        		<FormItem prop="jbrdh">
+					        			<Input clearable v-model="baseInfo.jbrdh" placeholder="电话"></Input>
+					        		</FormItem>
 				        		</Col>
-				        		<Col span="24">
-				        			<Input clearable v-model="baseInfo.jbryx" placeholder="邮箱"></Input>
+				        		<Col span="24" style="margin-top: 16px">
+					        		<FormItem prop="jbryx">
+					        			<Input clearable v-model="baseInfo.jbryx" placeholder="邮箱"></Input>
+					        		</FormItem>
 				        		</Col>
 				        	</Row>
 				        </FormItem>
@@ -588,6 +596,7 @@
 <script>
 	import api from '@/api/api'
 	import partTitle from '@/components/title'
+	import lng from '../../../baseInfo/components/lng'
 	import tablejs from '@/common/js/table'
 	import areajs from '@/common/js/area'
 	import industryjs from '@/common/js/industry'
@@ -597,11 +606,11 @@
 	export default {
 		name: '',
 		mixins: [tablejs, areajs, industryjs, lngjs, datePickerjs],
-		components: { partTitle },
+		components: { partTitle, lng },
 		data() {
 			return {
 				id: '',
-				gkdx_id: '',
+				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				loading: true,
 				step: 1,	
 				showAreaModel: false,
@@ -668,8 +677,14 @@
 				areaList: [],
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpm',
@@ -690,6 +705,7 @@
                         key: 'msds',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -720,8 +736,14 @@
 				nzzldwList: ['吨', '立方', 'KG', 'L'],
 				whRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '重大危险源单元名称',
                         key: 'zdwxydymc',
@@ -739,6 +761,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -759,8 +782,14 @@
 				},
 				sbfcgyColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '涉粉工艺名称',
                         key: 'sfgymc',
@@ -778,6 +807,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -803,8 +833,14 @@
 				},
 				deviceColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '除尘设施名称',
                         key: 'ccssmc',
@@ -819,6 +855,7 @@
                         key: 'yxzt',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -843,8 +880,14 @@
 				},
 				mainRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '工艺名称',
                         slot: 'gymc',
@@ -856,6 +899,7 @@
                         key: 'sjczrs',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -872,8 +916,14 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         slot: 'name',
@@ -888,6 +938,7 @@
                         key: 'cas',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -915,25 +966,73 @@
 
 		},
 		computed: {
-
-		},
-		methods: {
-			getBaseInfo() {
-				if(this.$route.query.type == '2') {
-					let baseInfo = this.$storage.get('baseInfo')
-					baseInfo.hyml = []
-					baseInfo.quyu = []
-					this.baseInfo = baseInfo
-					this.baseInfo = this.$storage.get('baseInfo')
-					this.baseInfo = this.$storage.get('baseInfo')
-					this.form = this.$storage.get('form')
-					this.getQy()
-					this.getHy()
-				}else {
-					this.loading = false
+			rules() {
+				return {
+					yxzt: [{ required: true, message: '请选择', trigger: 'change' }],
+                	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                	hyml: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                	jydz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jyfw: [{ required: true, message: '请输入', trigger: 'change' }],
+                	mtdz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	jyfw: [{ required: true, message: '请输入', trigger: 'change' }],
+                	xsxkz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	ccdz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	qyfw: [{ required: true, message: '请选择', trigger: 'change' }],
+                	zgrs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+                	glrysl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+                	hydm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	tyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	zcdz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	qyjbjk: [{ required: true, message: '请输入', trigger: 'change' }],
+                	zdmj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+                	jzmj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+                	jbr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jbrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jbryx: [{ required: true, message: '请输入', trigger: 'change' }],
+                	qyfzr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	qyfzrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+                	fgaqfzr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	fgaqfzrdh: [{ required: true, message: '请输入', trigger: 'change' }],
 				}
 			},
-			async nextStep() {
+		},
+		methods: {
+			async getBaseInfo() {
+				let { status_code, data, message } = await api.getMbqyBase(this.gkdx_id);
+				if(status_code == 0) {
+					this.form = data;
+					let { qymc, tyshxydm, zcdz, jyfw, xsxkz, ccdz, zgrs, glrysl, hyml, hydm, qyjbjk, yxzt, lngAndLat, qyfw, zdmj, jzmj, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh } = this.form
+					this.baseInfo = { qymc, tyshxydm, zcdz, jyfw, xsxkz, ccdz, zgrs, glrysl, hydm, qyjbjk, yxzt, qyfw, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, zdmj, jzmj, lngAndLat: '', quyu: [] }
+					this.baseInfo.zgrs = zgrs ? Number(zgrs) : 0
+					this.baseInfo.glrysl = glrysl ? Number(glrysl) : 0
+					this.baseInfo.zdmj = zdmj ? Number(zdmj) : 0
+					this.baseInfo.jzmj = jzmj ? Number(jzmj) : 0
+					this.baseInfo.qyfw = qyfw || ''
+					this.baseInfo.qyjbjk = qyjbjk || ''
+					this.baseInfo.lngAndLat = this.form.jd && this.form.wd ? `${(this.form.jd - 0).toFixed(6)} ${(this.form.wd - 0).toFixed(6)}` : ''
+					this.getQy()
+					this.getHy()
+				}
+			},
+			nextStep() {
+				this.$refs.baseInfo.validate((valid) => {
+                    if (valid) {
+                        this.$refs.jzInfo.validate((valid) => {
+		                    if (valid) {
+		                        this.$refs.contactInfo.validate((valid) => {
+				                    if (valid) {
+				                        this.submit()
+				                    }
+				                })
+		                    }
+		                })
+                    }
+                })
+                this.$refs.jzInfo.validate((valid) => {})
+                this.$refs.contactInfo.validate((valid) => {})
+			},
+			async submit() {
 				let params = {
 					...this.baseInfo,
 					hyml: this.baseInfo.hyml[this.baseInfo.hyml.length - 1],
@@ -948,15 +1047,9 @@
 				let { status_code, message } = await api.addMbqyBase(params);
 				if(status_code == 200) {
 					this.$Message.success('保存成功')
-					if(this.$route.query.type == 2) {
+					if(this.$route.name == 'base') {
 						this.$storage.set('gkdx_id', this.form.gkdx_id)
 						this.$router.back()
-					}else {
-						let { status_code, data } = await api.getMbqyBase()
-						if(status_code == 200) {
-							this.$storage.set('gkdx_id', data.data[0].gkdx_id)
-						}
-						this.$router.replace('/baseInfo')
 					}
 					// if(this.$route.query.type == 2) {
 					// 	this.$storage.set('gkdx_id', this.form.gkdx_id)

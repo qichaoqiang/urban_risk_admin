@@ -2,7 +2,9 @@
 	<div class="user_container">
 		<Row type="flex" justify="space-between" align="middle">
 			<div class="title">风险源类别</div>
-			<Button v-if="hasAuth(`${parents[0] ? parents[parents.length - 1].dm : 'fengxianyuanleibie'}_store`)" type="primary" icon="ios-add" @click="openFxylbModel"></Button>
+			<Button v-if="hasAuth(`${parents[0] ? parents[parents.length - 1].dm : 'fengxianyuanleibie'}_store`)" type="primary" @click="openFxylbModel" style="width: 60px">
+				<Icon type="ios-add" size="28" />
+			</Button>
 		</Row>
 		<div v-if="hasAuth('fengxianyuanleibie')">
 			<Divider />
@@ -43,8 +45,8 @@
 	            />
 	        </Row>
 		</div>
-		<Modal :title="`${modelTypeList[modeType - 1]}风险源类别`" v-model="showFxylbModel" @on-visible-change="fxylbModelChange">
-			<Form :disabled="modeType == 3" :model="fxylbForm" label-position="left" :label-width="120">
+		<Modal width="820" :title="`${modelTypeList[modeType - 1]}风险源类别`" v-model="showFxylbModel" @on-visible-change="fxylbModelChange">
+			<Form :disabled="modeType == 3" :model="fxylbForm" ref="fxylb" :rules="fxylbRules" hide-required-mark label-position="left" :label-width="120">
 				<FormItem label="父风险源类别">
 		        	<Cascader 
 		            	readonly 
@@ -55,22 +57,22 @@
 		            	:render-format="format" 
 		            	placeholder="请选择"></Cascader>
 		        </FormItem>
-				<FormItem label="风险源类别名称">
+				<FormItem label="风险源类别名称" prop="fxylbmc">
 		        	<Input clearable v-model="fxylbForm.fxylbmc"></Input>
 		        </FormItem>
-				<FormItem label="代码">
+				<FormItem label="代码" prop="dm">
 		        	<Input clearable v-model="fxylbForm.dm"></Input>
 		        </FormItem>
-				<FormItem label="图标">
+				<FormItem label="图标" prop="icon">
 		        	<Input clearable v-model="fxylbForm.icon"></Input>
 		        </FormItem>
-				<FormItem label="排序">
+				<FormItem label="排序" prop="px">
 		        	<InputNumber :min="0" v-model="fxylbForm.px"></InputNumber>
 		        </FormItem>
 			</Form>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button v-if="modeType != 3" type="primary" size="large" @click="saveFxylb">保存</Button>
+		        <Button v-if="modeType != 3" type="primary" size="large" :loading="fxylbLoading" @click="saveFxylb">保存</Button>
 	        </div>
 		</Modal>
 	</div>
@@ -89,6 +91,7 @@
 				showFxylbModel: false,
 				showfxylbDrawer1: false,
 				showfxylbDrawer2: false,
+				fxylbLoading: false,
 				modeType: '',
 				fxylbValue: 'id',
 				rowItem: null,
@@ -96,10 +99,14 @@
 				fxylbData: [],
 				fxylbColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.fxylbPage.pageIndex- 1) * this.fxylbPage.pageSize + 1);
+				        }
                     }, {
                         title: '风险源类别',
                         slot: 'fxylbmc',
@@ -133,7 +140,14 @@
 
 		},
 		computed: {
-
+			fxylbRules() {
+				return {
+					fxylbmc: [{ required: true, message: '请选择', trigger: 'change' }],
+					dm: [{ required: true, message: '请输入', trigger: 'change' }],
+					icon: [{ required: true, message: '请输入', trigger: 'change' }],
+					px: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			format(labels, selectedData) {
@@ -193,13 +207,16 @@
 			},
 			fxylbModelChange(status) {
 				if(!status) {
-					this.fxylbForm = {
-						parent_id: [],
-						fxylbmc: '',
-						dm: '',
-						icon: '',
-						px: 0,
-					}
+					this.$nextTick(() => {
+						this.fxylbForm = {
+							parent_id: [],
+							fxylbmc: '',
+							dm: '',
+							icon: '',
+							px: 0,
+						}
+						this.$refs.fxylb.resetFields();
+					})
 				}
 			},
 			async removeFxylb(row) {
@@ -211,23 +228,29 @@
 				})
 			},
 			async saveFxylb() {
-				let params = {
-					...this.fxylbForm,
-					parent_id: this.fxylbForm.parent_id[0] ? this.fxylbForm.parent_id[this.fxylbForm.parent_id.length - 1] : 0,
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				delete params.lngAndLat
-				let { status_code, message } = await api.addFxylbItem(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showFxylbModel = false
-					this.getFxylbData()
-					this.getFxylbList('', list => {
-						this.fxylbList = list
-					}, 'id')
-				}
+				this.$refs.fxylb.validate(async valid => {
+                    if (valid) {
+                    	this.fxylbLoading = true
+						let params = {
+							...this.fxylbForm,
+							parent_id: this.fxylbForm.parent_id[0] ? this.fxylbForm.parent_id[this.fxylbForm.parent_id.length - 1] : 0,
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						delete params.lngAndLat
+						let { status_code, message } = await api.addFxylbItem(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showFxylbModel = false
+							this.getFxylbData()
+							this.getFxylbList('', list => {
+								this.fxylbList = list
+							}, 'id')
+						}
+						this.fxylbLoading = false
+                    }
+                })
 			},
 			open(row) {
 				if(!this.hasAuth(row.dm)) {

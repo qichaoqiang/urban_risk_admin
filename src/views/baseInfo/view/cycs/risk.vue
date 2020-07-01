@@ -8,8 +8,8 @@
 					<Tabs value="name1">
 						<TabPane label="位置信息" name="name1">
 				        	<part-title text="位置信息"></part-title>
-							<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
-					        	<FormItem label="经营楼层">
+							<Form :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
+					        	<FormItem label="经营楼层" prop="jylc">
 						        	<Select clearable multiple :transfer="true" v-model="baseInfo.jylc" placeholder="请选择">
 						                <Option v-for="item in jylcList" :key="item" :value="item">{{item}}</Option>
 						            </Select>
@@ -46,8 +46,30 @@
 							</Row>
 				        </TabPane>
 				        <TabPane label="燃料信息" name="name3">
+			        		<part-title text="燃料信息" :btns="['add']" @add="openCjrlModel" v-if="baseInfo.zyrllx == '醇基燃料'"></part-title>
+			        		<part-title text="燃料信息" :btns="['add']" @add="openGdtrqModel" v-if="baseInfo.zyrllx == '管道天然气'"></part-title>
+			        		<part-title text="燃料信息" :btns="['add']" @add="openYhsyqModel" v-if="baseInfo.zyrllx == '液化石油气'"></part-title>
+				        	<part-title text="燃料信息" :btns="['add']" @add="openElseModel" v-if="baseInfo.zyrllx == '其他'"></part-title>
+			        		<Form :model="baseInfo" ref="baseInfo2" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="120" style="width: 600px">
+			        			<FormItem label="主要燃料类型" prop="zyrllx">
+						        	<Select :transfer="true" clearable v-model="baseInfo.zyrllx" placeholder="主要燃料类型">
+						                <Option v-for="item in zyrllxList" :key="item" :value="item">{{item}}</Option>
+						            </Select>
+						        </FormItem>
+					        	<FormItem label="燃料供应单位：" prop="rlgydw" v-if="baseInfo.zyrllx == '醇基燃料'">
+						        	<Input clearable v-model="baseInfo.rlgydw" style="width: 160px"></Input>
+						        </FormItem>
+						        <FormItem label="供应单位危险化学品生产或经营许可证：" :label-width="270" prop="gydwxkz" v-if="baseInfo.zyrllx == '醇基燃料'">
+						        	<Input clearable v-model="baseInfo.gydwxkz" style="width: 160px"></Input>
+						        </FormItem>
+					        	<FormItem label="燃气供应单位：" prop="rqgydw" v-if="baseInfo.zyrllx == '液化石油气'">
+						        	<Input clearable v-model="baseInfo.rqgydw"></Input>
+						        </FormItem>
+						        <FormItem label="燃料名称：" prop="rlmc" v-if="baseInfo.zyrllx == '其他'">
+						        	<Input clearable v-model="baseInfo.rlmc" style="width: 160px"></Input>
+						        </FormItem>
+						    </Form>
 				        	<div v-if="baseInfo.zyrllx == '管道天然气'">
-				        		<part-title text="燃料信息" :btns="['add']" @add="openGdtrqModel"></part-title>
 								<Table :columns="gdtrqColumns" :data="gdtrqData">
 									<template slot-scope="{ row }" slot="action">
 							            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editGdtrqModel(row)">编辑</Button>
@@ -69,14 +91,13 @@
 					                    @on-page-size-change="handleChangeGdtrqPageSize"
 					                />
 								</Row>
+							    <Row type="flex" justify="center" style="margin-top: 24px">
+									<Col>
+										<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo2">完成</Button>
+									</Col>
+								</Row>
 				        	</div>
 				        	<div v-if="baseInfo.zyrllx == '液化石油气'">
-				        		<part-title text="燃料信息" :btns="['add']" @add="openYhsyqModel"></part-title>
-				        		<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
-						        	<FormItem label="燃气供应单位：">
-							        	<Input clearble v-model="baseInfo.rqgydw"></Input>
-							        </FormItem>
-							    </Form>
 								<Table :columns="yhsyqColumns" :data="yhsyqData">
 									<template slot-scope="{ row }" slot="action">
 							            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editYhsyqModel(row)">编辑</Button>
@@ -100,20 +121,11 @@
 								</Row>
 							    <Row type="flex" justify="center" style="margin-top: 24px">
 									<Col>
-										<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo2">完成</Button>
+										<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo3">完成</Button>
 									</Col>
 								</Row>
 				        	</div>
 				        	<div v-if="baseInfo.zyrllx == '醇基燃料'">
-				        		<part-title text="燃料信息" :btns="['add']" @add="openCjrlModel"></part-title>
-				        		<Form :model="baseInfo" label-position="left" :label-width="120" style="width: 600px">
-						        	<FormItem label="燃料供应单位：">
-							        	<Input clearble v-model="baseInfo.rlgydw" style="width: 160px"></Input>
-							        </FormItem>
-							        <FormItem label="供应单位危险化学品生产或经营许可证：" :label-width="270">
-							        	<Input clearble v-model="baseInfo.gydwxkz" style="width: 160px"></Input>
-							        </FormItem>
-							    </Form>
 								<Table :columns="cjrlColumns" :data="cjrlData">
 									<template slot-scope="{ row }" slot="action">
 							            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editCjrlModel(row)">编辑</Button>
@@ -137,17 +149,11 @@
 								</Row>
 								<Row type="flex" justify="center" style="margin-top: 24px">
 									<Col>
-										<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo3">完成</Button>
+										<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo4">完成</Button>
 									</Col>
 								</Row>
 				        	</div>
 				        	<div v-if="baseInfo.zyrllx == '其他'">
-				        		<part-title text="燃料信息" :btns="['add']" @add="openElseModel"></part-title>
-				        		<Form :model="baseInfo" label-position="left" :label-width="100" style="width: 600px">
-							        <FormItem label="燃料名称：">
-							        	<Input clearble v-model="baseInfo.rlmc" style="width: 160px"></Input>
-							        </FormItem>
-							    </Form>
 								<Table :columns="elseColumns" :data="elseData">
 									<template slot-scope="{ row }" slot="action">
 							            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editElseModel(row)">编辑</Button>
@@ -171,7 +177,7 @@
 								</Row>
 								<Row type="flex" justify="center" style="margin-top: 24px">
 									<Col>
-										<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo4">完成</Button>
+										<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo5">完成</Button>
 									</Col>
 								</Row>
 				        	</div>
@@ -214,86 +220,86 @@
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}人流信息`" v-model="showRlxxModel" @on-visible-change="rlxxModelChange">
 			<div>
-				<Form :model="rlxxForm" label-position="left" :label-width="200">
-			        <FormItem label="近一个月的日平均就餐人数">
+				<Form :model="rlxxForm" ref="rlxx" :rules="rlxxRules" hide-required-mark label-position="left" :label-width="200">
+			        <FormItem label="近一个月的日平均就餐人数" prop="jygydrpjjcrs">
 			        	<InputNumber :min="0" v-model="rlxxForm.jygydrpjjcrs"></InputNumber>
 			        </FormItem>
-			        <FormItem label="填报时间">
+			        <FormItem label="填报时间" prop="tbsj">
 			            <DatePicker type="date" v-model="rlxxForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showRlxxModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveRlxx">保存</Button>
+		        <Button type="primary" size="large" :loading="rlxxLoading" @click="saveRlxx">保存</Button>
 	        </div>
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}燃料信息`" v-model="showGdtrqModel" @on-visible-change="gdtrqModelChange">
 			<div>
-				<Form :model="gdtrqForm" label-position="left" :label-width="180">
-					<FormItem label="近一月用气量（立方/月）">
+				<Form :model="gdtrqForm" ref="gdtrq" :rules="gdtrqRules" hide-required-mark label-position="left" :label-width="180">
+					<FormItem label="近一月用气量（立方/月）" prop="jyyyql">
 			        	<InputNumber :min="0" v-model="gdtrqForm.jyyyql"></InputNumber>
 			        </FormItem>
-			        <FormItem label="填报时间">
+			        <FormItem label="填报时间" prop="tbsj">
 			            <DatePicker type="date" v-model="gdtrqForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showRlxxModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveGdtrq">保存</Button>
+		        <Button type="primary" size="large" :loading="gdtrqLoading" @click="saveGdtrq">保存</Button>
 	        </div>
 		</Modal>
 
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}燃料信息`" v-model="showYhsyqModel" @on-visible-change="yhsyqModelChange">
 			<div>
-				<Form :model="yhsyqForm" label-position="left" :label-width="140">
-					<FormItem label="钢瓶规格（L）">
+				<Form :model="yhsyqForm" ref="yhsyq" :rules="yhsyqRules" hide-required-mark label-position="left" :label-width="140">
+					<FormItem label="钢瓶规格（L）" prop="gpgg">
 			        	<InputNumber :min="0" v-model="yhsyqForm.gpgg"></InputNumber>
 			        </FormItem>
-			        <FormItem label="数量">
+			        <FormItem label="数量" prop="sl">
 			            <InputNumber :min="0" v-model="yhsyqForm.sl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="填报时间">
+			        <FormItem label="填报时间" prop="tbsj">
 			            <DatePicker type="date" v-model="yhsyqForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showRlxxModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveYhsyq">保存</Button>
+		        <Button type="primary" size="large" :loading="yhsyqLoading" @click="saveYhsyq">保存</Button>
 	        </div>
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}燃料信息`" v-model="showCjrlModel"  @on-visible-change="cjrlModelChange">
 			<div>
-				<Form :model="cjrlForm" label-position="left" :label-width="180">
-					<FormItem label="近一月使用量（kg/月）">
+				<Form :model="cjrlForm" ref="cjrl" :rules="cjrlRules" hide-required-mark label-position="left" :label-width="180">
+					<FormItem label="近一月使用量（kg/月）" prop="jyysyl">
 			        	<InputNumber :min="0" v-model="cjrlForm.jyysyl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="填报时间">
+			        <FormItem label="填报时间" prop="tbsj">
 			            <DatePicker type="date" v-model="cjrlForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showRlxxModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveCjrl">保存</Button>
+		        <Button type="primary" size="large" :loading="cjrlLoading" @click="saveCjrl">保存</Button>
 	        </div>
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}燃料信息`" v-model="showElseModel"  @on-visible-change="elseModelChange">
 			<div>
-				<Form :model="elseForm" label-position="left" :label-width="180">
-					<FormItem label="近一月使用量（kg/月）">
+				<Form :model="elseForm" ref="else" :rules="elseRules" hide-required-mark label-position="left" :label-width="180">
+					<FormItem label="近一月使用量（kg/月）" prop="jyysyl">
 			        	<InputNumber :min="0" v-model="elseForm.jyysyl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="填报时间">
+			        <FormItem label="填报时间" prop="tbsj">
 			            <DatePicker type="date" v-model="elseForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showRlxxModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveElse">保存</Button>
+		        <Button type="primary" size="large" :loading="elseLoading" @click="saveElse">保存</Button>
 	        </div>
 		</Modal>
 	</div>
@@ -330,6 +336,11 @@
 				showYhsyqModel: false,
 				showCjrlModel: false,
 				showElseModel: false,
+				rlxxLoading: false,
+				gdtrqLoading: false,
+				yhsyqLoading: false,
+				cjrlLoading: false,
+				elseLoading: false,
 				modeType: '',
 				modeType2: '',
 				map: null,
@@ -355,6 +366,7 @@
 				},
 				yxztList: ['生产', '停工', '改造', '搬迁'],
 				jylcList: ['-3', '-2', '-1', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32'],
+				zyrllxList: ['管道天然气', '液化石油气', '醇基燃料', '其他'],
 				sfzgyyqList: [
 					{
 						value: 0,
@@ -382,10 +394,14 @@
 				areaList: [],
 				rlxxColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.rlxxPage.pageIndex- 1) * this.rlxxPage.pageSize + 1);
+				        },
                     }, {
                         title: '近一个月的日平均就餐人数',
                         key: 'jygydrpjjcrs',
@@ -418,10 +434,14 @@
 				dqztList: ['运行', '停运', '检修'],
 				gdtrqColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.gdtrqPage.pageIndex- 1) * this.gdtrqPage.pageSize + 1);
+				        },
                     }, {
                         title: '近一月用气量（立方/月）',
                         key: 'jyyyql',
@@ -462,10 +482,14 @@
 				},
 				yhsyqColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.yhsyqPage.pageIndex- 1) * this.yhsyqPage.pageSize + 1);
+				        },
                     }, {
                         title: '钢瓶规格（L）',
                         key: 'gpgg',
@@ -498,10 +522,14 @@
 				},
 				cjrlColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.cjrlPage.pageIndex- 1) * this.cjrlPage.pageSize + 1);
+				        },
                     }, {
                         title: '近一月使用量（kg/月）',
                         key: 'jyysyl',
@@ -529,10 +557,14 @@
 				},
 				elseColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
-                        fixed: 'left',
-                        width: 80,
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.elsePage.pageIndex- 1) * this.elsePage.pageSize + 1);
+				        },
                     }, {
                         title: '近一月使用量（kg/月）',
                         key: 'jyysyl',
@@ -565,7 +597,47 @@
 
 		},
 		computed: {
-
+			baseInfoRules() {
+				return {
+					jylc: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+					zyrllx: [{ required: true, message: '请输入', trigger: 'change' }],
+					rqgydw: [{ required: true, message: '请输入', trigger: 'change' }],
+					rlgydw: [{ required: true, message: '请选择', trigger: 'change' }],
+					gydwxkz: [{ required: true, message: '请选择', trigger: 'change' }],
+					rlmc: [{ required: true, message: '请输入', trigger: 'change' }],
+				}
+			},
+			rlxxRules() {
+				return {
+					jygydrpjjcrs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
+			gdtrqRules() {
+				return {
+					jyyyql: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
+			yhsyqRules() {
+				return {
+					gpgg: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					sl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
+			cjrlRules() {
+				return {
+					jyysyl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
+			elseRules() {
+				return {
+					jyysyl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			async getBaseInfo() {
@@ -619,13 +691,19 @@
 				  	}
 				  	this.loading = false   
 				}).catch((error) => {
-				  	console.log(error)
 				  	this.loading = false
 				})
 				let { status_code, data, message } = await api.getCycsBase(this.gkdx_id);
 				if(status_code == 0) {
 					this.form = data;
-					this.baseInfo = { jylc: data.jylc.split(','), zyrllx: data.zyrllx, rqgydw: data.rqgydw, rlgydw: data.rlgydw, gydwxkz: data.gydwxkz, rlmc: data.rlmc }
+					this.baseInfo = { 
+						jylc: data.jylc ? data.jylc.split(',') : [], 
+						zyrllx: data.zyrllx, 
+						rqgydw: data.rqgydw, 
+						rlgydw: data.rlgydw, 
+						gydwxkz: data.gydwxkz, 
+						rlmc: data.rlmc 
+					}
 				}
 			},
 			async nextStep() {
@@ -653,45 +731,78 @@
 				}
 			},
 			async saveInfo1() {
-				let params = {
-					gkdx_id: this.gkdx_id,
-					jylc: this.baseInfo.jylc.join(',')
-				}
-				let { status_code, message } = await api.addCycsBase(params);
-				if(status_code == 200) {
-					this.$Message.success('保存成功')
-				}
+				this.$refs.baseInfo1.validate(async valid => {
+                    if (valid) {
+                        let params = {
+							gkdx_id: this.gkdx_id,
+							jylc: this.baseInfo.jylc.join(',')
+						}
+						let { status_code, message } = await api.addCycsBase(params);
+						if(status_code == 200) {
+							this.$Message.success('保存成功')
+						}
+                    }
+                })
 			},
 			async saveInfo2() {
-				let params = {
-					gkdx_id: this.gkdx_id,
-					rqgydw: this.baseInfo.rqgydw
-				}
-				let { status_code, message } = await api.addCycsBase(params);
-				if(status_code == 200) {
-					this.$Message.success('保存成功')
-				}
+				this.$refs.baseInfo2.validate(async valid => {
+                    if (valid) {
+                        let params = {
+							gkdx_id: this.gkdx_id,
+							zyrllx: this.baseInfo.zyrllx
+						}
+						let { status_code, message } = await api.addCycsBase(params);
+						if(status_code == 200) {
+							this.$Message.success('保存成功')
+						}
+                    }
+                })
 			},
 			async saveInfo3() {
-				let params = {
-					gkdx_id: this.gkdx_id,
-					rlgydw: this.baseInfo.rlgydw,
-					gydwxkz: this.baseInfo.gydwxkz
-				}
-				let { status_code, message } = await api.addCycsBase(params);
-				if(status_code == 200) {
-					this.$Message.success('保存成功')
-				}
+				this.$refs.baseInfo2.validate(async valid => {
+                    if (valid) {
+						let params = {
+							gkdx_id: this.gkdx_id,
+							rqgydw: this.baseInfo.rqgydw,
+							zyrllx: this.baseInfo.zyrllx
+						}
+						let { status_code, message } = await api.addCycsBase(params);
+						if(status_code == 200) {
+							this.$Message.success('保存成功')
+						}
+                    }
+                })
 			},
 			async saveInfo4() {
-				let params = {
-					gkdx_id: this.gkdx_id,
-					rlmc: this.baseInfo.rlmc
-				}
-				let { status_code, message } = await api.addCycsBase(params);
-				if(status_code == 200) {
-					this.$Message.success('保存成功')
-				}
+				this.$refs.baseInfo2.validate(async valid => {
+                    if (valid) {
+						let params = {
+							gkdx_id: this.gkdx_id,
+							rlgydw: this.baseInfo.rlgydw,
+							gydwxkz: this.baseInfo.gydwxkz,
+							zyrllx: this.baseInfo.zyrllx
+						}
+						let { status_code, message } = await api.addCycsBase(params);
+						if(status_code == 200) {
+							this.$Message.success('保存成功')
+						}
+                    }
+                })
+			},
+			async saveInfo5() {
+				this.$refs.baseInfo2.validate(async valid => {
+                    if (valid) {
+                        let params = {
+							gkdx_id: this.gkdx_id,
+							rlmc: this.baseInfo.rlmc,
+							zyrllx: this.baseInfo.zyrllx
+						}
+						let { status_code, message } = await api.addCycsBase(params);
+						if(status_code == 200) {
+							this.$Message.success('保存成功')
+						}
+                    }
+                })
 			},
 			openAreaModal() {	
 				this.showAreaModel = true;
@@ -726,7 +837,6 @@
 				this.polygonTool.open();
 				this.polygonTool.addEventListener('draw', (e) => {
 					// 获取绘制的多边形信息
-					console.log(e);
 					this.addressInfo.qyfw = JSON.stringify(e.currentLnglats)
 				})
 			},
@@ -795,10 +905,13 @@
 			},
 			rlxxModelChange(status) {
 				if(!status) {
-					this.rlxxForm = {
-						jygydrpjjcrs: 0,
-						tbsj: '',
-					}
+					this.$nextTick(() => {
+						this.rlxxForm = {
+							jygydrpjjcrs: 0,
+							tbsj: '',
+						}
+						this.$refs.rlxx.resetFields();
+					})
 				}
 			},
 			async removeRlxx(row) {
@@ -807,20 +920,26 @@
 				this.getRlxxList()
 			},
 			async saveRlxx() {
-				let params = {
-					...this.rlxxForm,
-					tbsj: this.rlxxForm.tbsj ? getDate(new Date(this.rlxxForm.tbsj).getTime(), 'year') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addRlxxInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showRlxxModel = false
-					this.getRlxxList()
-				}
+				this.$refs.rlxx.validate(async valid => {
+                    if (valid) {
+                    	this.rlxxLoading = true
+						let params = {
+							...this.rlxxForm,
+							tbsj: this.rlxxForm.tbsj ? getDate(new Date(this.rlxxForm.tbsj).getTime(), 'year') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addRlxxInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showRlxxModel = false
+							this.getRlxxList()
+						}
+						this.rlxxLoading = false
+                    }
+                })
 			},
 			handleChangeGdtrqPage(val) {
 				this.gdtrqPage.pageIndex = val
@@ -857,10 +976,13 @@
 			},
 			gdtrqModelChange(status) {
 				if(!status) {
-					this.gdtrqForm = {
-						jyyyql: 0,
-						tbsj: '',
-					}
+					this.$nextTick(() => {
+						this.gdtrqForm = {
+							jyyyql: 0,
+							tbsj: '',
+						}
+						this.$refs.gdtrq.resetFields();
+					})
 				}
 			},
 			async removeGdtrq(row) {
@@ -869,22 +991,28 @@
 				this.getGdtrqList()
 			},
 			async saveGdtrq() {
-				let params = {
-					...this.gdtrqForm,
-					tbsj: this.gdtrqForm.tbsj ? getDate(new Date(this.gdtrqForm.tbsj).getTime(), 'year') : '',
-					gkdx_id: this.gkdx_id
-				}
-				delete params.isWxgy
-				delete params.lngAndLat
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addGdtrqInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showGdtrqModel = false
-					this.getGdtrqList()
-				}
+				this.$refs.gdtrq.validate(async valid => {
+                    if (valid) {
+                    	this.gdtrqLoading = true
+						let params = {
+							...this.gdtrqForm,
+							tbsj: this.gdtrqForm.tbsj ? getDate(new Date(this.gdtrqForm.tbsj).getTime(), 'year') : '',
+							gkdx_id: this.gkdx_id
+						}
+						delete params.isWxgy
+						delete params.lngAndLat
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addGdtrqInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showGdtrqModel = false
+							this.getGdtrqList()
+						}
+							this.gdtrqLoading = false
+                    }
+                })
 			},
 			handleChangeYhsyqPage(val) {
 				this.yhsyqPage.pageIndex = val
@@ -922,11 +1050,14 @@
 			},
 			yhsyqModelChange(status) {
 				if(!status) {
-					this.yhsyqForm = {
-						gpgg: 0,
-						sl: 0,
-						tbsj: '',
-					}
+					this.$nextTick(() => {
+						this.yhsyqForm = {
+							gpgg: 0,
+							sl: 0,
+							tbsj: '',
+						}
+						this.$refs.yhsyq.resetFields();
+					})
 				}
 			},
 			async removeYhsyq(row) {
@@ -935,20 +1066,26 @@
 				this.getYhsyqList()
 			},
 			async saveYhsyq() {
-				let params = {
-					...this.yhsyqForm,
-					tbsj: this.yhsyqForm.tbsj ? getDate(new Date(this.yhsyqForm.tbsj).getTime(), 'year') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addYhsyqInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showYhsyqModel = false
-					this.getYhsyqList()
-				}
+				this.$refs.yhsyq.validate(async valid => {
+                    if (valid) {
+                    	this.yhsyqLoading = true
+						let params = {
+							...this.yhsyqForm,
+							tbsj: this.yhsyqForm.tbsj ? getDate(new Date(this.yhsyqForm.tbsj).getTime(), 'year') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addYhsyqInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showYhsyqModel = false
+							this.getYhsyqList()
+						}
+							this.yhsyqLoading = false
+                    }
+                })
 			},
 			handleChangeCjrlPage(val) {
 				this.cjrlPage.pageIndex = val
@@ -985,10 +1122,13 @@
 			},
 			cjrlModelChange(status) {
 				if(!status) {
-					this.cjrlForm = {
-						jyysyl: 0,
-						tbsj: '',
-					}
+					this.$nextTick(() => {
+						this.cjrlForm = {
+							jyysyl: 0,
+							tbsj: '',
+						}
+						this.$refs.cjrl.resetFields();
+					})
 				}
 			},
 			async removeCjrl(row) {
@@ -997,20 +1137,26 @@
 				this.getCjrlList()
 			},
 			async saveCjrl() {
-				let params = {
-					...this.cjrlForm,
-					tbsj: this.cjrlForm.tbsj ? getDate(new Date(this.cjrlForm.tbsj).getTime(), 'year') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addCjrlInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showCjrlModel = false
-					this.getCjrlList()
-				}
+				this.$refs.cjrl.validate(async valid => {
+                    if (valid) {
+                    	this.cjrlLoading = true
+						let params = {
+							...this.cjrlForm,
+							tbsj: this.cjrlForm.tbsj ? getDate(new Date(this.cjrlForm.tbsj).getTime(), 'year') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addCjrlInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showCjrlModel = false
+							this.getCjrlList()
+						}
+							this.cjrlLoading = false
+                    }
+                })
 			},
 			handleChangeElsePage(val) {
 				this.elsePage.pageIndex = val
@@ -1047,10 +1193,13 @@
 			},
 			elseModelChange(status) {
 				if(!status) {
-					this.elseForm = {
-						jyysyl: 0,
-						tbsj: '',
-					}
+					this.$nextTick(() => {
+						this.elseForm = {
+							jyysyl: 0,
+							tbsj: '',
+						}
+						this.$refs.else.resetFields();
+					})
 				}
 			},
 			async removeElse(row) {
@@ -1059,20 +1208,26 @@
 				this.getElseList()
 			},
 			async saveElse() {
-				let params = {
-					...this.elseForm,
-					tbsj: this.elseForm.tbsj ? getDate(new Date(this.elseForm.tbsj).getTime(), 'year') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addElseInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showElseModel = false
-					this.getElseList()
-				}
+				this.$refs.else.validate(async valid => {
+                    if (valid) {
+                    	this.elseLoading = true
+						let params = {
+							...this.elseForm,
+							tbsj: this.elseForm.tbsj ? getDate(new Date(this.elseForm.tbsj).getTime(), 'year') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addElseInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showElseModel = false
+							this.getElseList()
+						}
+							this.elseLoading = false
+                    }
+                })
 			},
 		},
 		created() {

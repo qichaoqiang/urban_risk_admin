@@ -5,11 +5,11 @@
 				<Col>
 					<div class="title">请完善{{step == 1 ? '企业' : '风险'}}信息</div>
 					<part-title text="基本信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="120" style="width: 600px">
+					<Form :model="baseInfo" ref="baseInfo" :rules="rules" hide-required-mark label-position="left" :label-width="120" style="width: 600px">
 						<FormItem label="建设项目名称" placeholder="请输入建设项目名称">
 				            {{baseInfo.xmmc}}
 				        </FormItem>
-				        <FormItem label="项目所属类型">
+				        <FormItem label="项目所属类型" prop="xmsslx">
 				        	<Cascader 
 				            	clearable 
 				            	change-on-select
@@ -18,7 +18,7 @@
 				            	:load-data="loadXmsslx" 
 				            	placeholder="项目所属类型"></Cascader>
 				        </FormItem>
-				        <FormItem label="所属辖区">
+				        <FormItem label="所属辖区" prop="quyu">
 				            <Cascader 
 				            	clearable 
 				            	change-on-select
@@ -27,28 +27,22 @@
 				            	:load-data="loadArea" 
 				            	placeholder="所属辖区"></Cascader>
 				        </FormItem>
-				        <FormItem label="立项审批部门">
+				        <FormItem label="立项审批部门" prop="lxspbm">
 				            <Input clearable v-model="baseInfo.lxspbm" placeholder="立项审批部门"></Input>
 				        </FormItem>
-				        <FormItem label="立项时间">
+				        <FormItem label="立项时间" prop="lxsj">
 				        	<DatePicker type="date" v-model="baseInfo.lxsj"  placeholder="立项时间"></DatePicker>
 				        </FormItem>
-				        <FormItem label="工程造价(元)">
-				            <InputNumber clearable :min="0" v-model="baseInfo.gczj" placeholder="工程造价"></InputNumber>
+				        <FormItem label="工程造价(元)" prop="gczj">
+				            InputNumber :min="0" v-model="baseInfo.gczj" placeholder="工程造价"></InputNumber>
 				        </FormItem>
-				        <FormItem label="地址">
+				        <FormItem label="地址" prop="dz">
 				        	<Input clearable v-model="baseInfo.dz" placeholder="地址"></Input>
 				        </FormItem>
-				        <FormItem label="经纬度">
-				        	<div @click="openLngModal">
-			        			<Input 
-			        				readonly 
-			        				v-model="baseInfo.lngAndLat" 
-			        				icon="md-pin" 
-			        				placeholder="经纬度" />
-			        		</div>
+				        <FormItem label="经纬度" prop="lngAndLat">
+				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
 				        </FormItem>
-				        <FormItem label="项目工地范围">
+				        <FormItem label="项目工地范围" prop="xmgdfw">
 				        	<div @click.stop="openAreaModal">
 			        			<Input 
 			        				readonly 
@@ -57,7 +51,7 @@
 			        				placeholder="项目工地范围" />
 			        		</div>
 				        </FormItem>
-				        <FormItem label="建设内容">
+				        <FormItem label="建设内容" prop="jsnr">
 				            <Input clearable type="textarea" v-model="baseInfo.jsnr" placeholder="建设内容"></Input>
 				        </FormItem>
 					</Form>
@@ -113,9 +107,9 @@
 			<Row type="flex" justify="center">
 				<Col>
 					<part-title text="建筑物信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="120" style="width: 600px">
-						<FormItem label="建筑面积（㎡）">
-				        	<InputNumber clearable :min="0" v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
+					<Form :model="baseInfo" ref="jzInfo" :rules="rules" hide-required-mark label-position="left" :label-width="120" style="width: 600px">
+						<FormItem label="建筑面积（㎡）" prop="jzmj">
+				        	InputNumber :min="0" v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -124,37 +118,23 @@
 			<Row type="flex" justify="center">
 				<Col>
 					<part-title text="联系人信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="120" style="width: 600px">
-				        <FormItem label="企业负责人">
-				        	<Row type="flex" :gutter="20">
-					        	<Col span="8">
-				        			<Input clearable v-model="baseInfo.qyfzr" :data="areaList" placeholder="姓名"></Input>
-				        		</Col>
-				        		<Col span="16">
-				        			<Input clearable v-model="baseInfo.qyfzrdh" placeholder="电话"></Input>
-				        		</Col>
-				        	</Row>
-				        </FormItem>
-				        <FormItem label="分管安全负责人">
-				        	<Row type="flex" :gutter="20">
-					        	<Col span="8">
-				        			<Input clearable v-model="baseInfo.fgaqfzr" :data="areaList" placeholder="姓名"></Input>
-				        		</Col>
-				        		<Col span="16">
-				        			<Input clearable v-model="baseInfo.fgaqfzrdh" placeholder="电话"></Input>
-				        		</Col>
-				        	</Row>
-				        </FormItem>
+					<Form :model="baseInfo" ref="contactInfo" :rules="rules" hide-required-mark label-position="left" :label-width="120" style="width: 600px">
 				        <FormItem label="经办人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input clearable v-model="baseInfo.jbr" :data="areaList" placeholder="姓名"></Input>
+						        	<FormItem prop="jbr">
+					        			<Input clearable v-model="baseInfo.jbr" :data="areaList" placeholder="姓名"></Input>
+					        		</FormItem>
 				        		</Col>
 				        		<Col span="16">
-				        			<Input clearable v-model="baseInfo.jbrdh" placeholder="电话"></Input>
+					        		<FormItem prop="jbrdh">
+					        			<Input clearable v-model="baseInfo.jbrdh" placeholder="电话"></Input>
+					        		</FormItem>
 				        		</Col>
-				        		<Col span="24">
-				        			<Input clearable v-model="baseInfo.jbryx" placeholder="邮箱"></Input>
+				        		<Col span="24" style="margin-top: 16px">
+					        		<FormItem prop="jbryx">
+					        			<Input clearable v-model="baseInfo.jbryx" placeholder="邮箱"></Input>
+					        		</FormItem>
 				        		</Col>
 				        	</Row>
 				        </FormItem>
@@ -167,66 +147,26 @@
 				</Col>
 			</Row>
 		</div>
-		<div v-if="step == 2">
-			<Row type="flex" justify="center">
-				<Col span="22">
-					<div class="title">请完善风险信息</div>
-					<part-title text="危险性较大分部分项工程" :btns="['add']" @add="openDangerModel"></part-title>
-					<Table :columns="dangerColumns" :data="dangerData">
-						<template slot-scope="{ row }" slot="name">
-				            <span class="link">{{row.name}}</span>
-				        </template>
-						<template slot-scope="{ row }" slot="action">
-				            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editDangerModel(row)">编辑</Button>
-				            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeDanger(row)">
-						        <Button type="error" size="small" ghost>删除</Button>
-						    </Poptip>
-				        </template>
-					</Table>
-					<part-title text="超过一定规模的危险性较大的分部分项工程" :btns="['add']" @add="openDangerRiskModel"></part-title>
-					<Table :columns="dangerRiskColumns" :data="dangerRiskData">
-						<template slot-scope="{ row }" slot="name">
-				            <span class="link">{{row.name}}</span>
-				        </template>
-				        <template slot-scope="{ row }" slot="level">
-				            <div :style="{ margin: '0 auto', width: '40px', height: '20px', background: row.color}"></div>
-				        </template>
-						<template slot-scope="{ row }" slot="action">
-				            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editDangerRiskModel(row)">编辑</Button>
-				            
-				            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeDangerRisk(row)">
-						        <Button type="error" size="small" ghost>删除</Button>
-						    </Poptip>
-				        </template>
-					</Table>
-				</Col>	
-			</Row>	
-			<Row type="flex" justify="center" style="margin-top: 24px">
-				<Col>
-					<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo">完成</Button>
-				</Col>
-			</Row>
-		</div>
 
 		<Modal :title="`${modeType == 1 ? '新增' : '编辑'}${unitTitle}`" v-model="showUnitModel" @on-visible-change="unitModelChange">
 			<div>
-				<Form :model="unitForm" label-position="left" :label-width="160">
-					<FormItem label="单位名称">
+				<Form :model="unitForm" ref="unit" :rules="unitRules" hide-required-mark label-position="left" :label-width="160">
+					<FormItem label="单位名称" prop="dwmc">
 			        	<Input clearable v-model="unitForm.dwmc"></Input>
 			        </FormItem>
-			        <FormItem label="社会统一信用代码">
+			        <FormItem label="社会统一信用代码" prop="shtyxydm">
 			        	<Input clearable v-model="unitForm.shtyxydm"></Input>
 			        </FormItem>
-			        <FormItem label="负责项目的联系人">
+			        <FormItem label="负责项目的联系人" prop="lxr">
 			        	<Input clearable v-model="unitForm.lxr"></Input>
 			        </FormItem>
-			        <FormItem label="联系电话">
+			        <FormItem label="联系电话" prop="tel">
 			        	<Input clearable type="tel" v-model="unitForm.tel"></Input>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
-		        <Button type="primary" size="large" @click="saveUnit">保存</Button>
+		        <Button type="primary" size="large" :loading="unitLoading" @click="saveUnit">保存</Button>
 	        </div>
 		</Modal>
 		
@@ -288,7 +228,7 @@
 			        	<DatePicker type="date" v-model="dangerForm.name"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 			        <FormItem label="当前形象进度（%）">
-			        	<InputNumber clearable v-model="dangerForm.num"></InputNumber>
+			        	<InputNumber :min="0" v-model="dangerForm.num"></InputNumber>
 			        </FormItem>
 				</Form>
 			</div>
@@ -320,7 +260,7 @@
 			        	<DatePicker type="date" v-model="dangerRiskForm.name"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 			        <FormItem label="当前形象进度（%）">
-			        	<InputNumber clearable :min='0' :max="100" v-model="dangerRiskForm.num"></InputNumber>
+			            <InputNumber :min="0" :max="100" v-model="dangerRiskForm.num"></InputNumber>
 			        </FormItem>
 				</Form>
 			</div>
@@ -334,6 +274,7 @@
 <script>
 	import api from '@/api/api'
 	import partTitle from '@/components/title'
+	import lng from '../../../baseInfo/components/lng'
 	import tablejs from '@/common/js/table'
 	import areajs from '@/common/js/area'
 	import lngjs from '@/common/js/lng_'
@@ -342,9 +283,10 @@
 	export default {
 		name: '',
 		mixins: [tablejs, areajs, lngjs, xmsslxjs],
-		components: { partTitle },
+		components: { partTitle, lng },
 		data() {
 			return {
+				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				step: 1,	
 				showAreaModel: false,
 				showLngModel: false,
@@ -355,6 +297,7 @@
 				showMainRiskModel: false,
 				showRimModel: false,
 				showUnitModel: false,
+				unitLoading: false,
 				unitType: '',
 				modeType: '',
 				map: null,
@@ -374,10 +317,6 @@
 					jbr: '',
 					jbrdh: '',
 					jbryx: '',
-					qyfzr: '',
-					qyfzrdh: '',
-					fgaqfzr: '',
-					fgaqfzrdh: '',
 				},
 				jsdw: [],
 				sjdw: [],
@@ -401,22 +340,33 @@
 				areaList: [],
 				unitColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '单位名称',
                         key: 'dwmc',
+                        minWidth: 100
                     }, {
                         title: '社会统一信用代码',
                         key: 'shtyxydm',
+                        minWidth: 160
                     }, {
                         title: '负责项目的联系人',
                         key: 'lxr',
+                        minWidth: 160
                     }, {
                         title: '联系电话',
                         key: 'tel',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -430,8 +380,14 @@
 				unitList: ['jsdw', 'sjdw', 'sgdw', 'jldw'],
 				dangerColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '分部分项工程名称',
                         slot: 'name',
@@ -455,6 +411,7 @@
                         key: 'cas',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -471,8 +428,14 @@
 				},
 				dangerRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '分部分项工程名称',
                         slot: 'name',
@@ -496,6 +459,7 @@
                         key: 'cas',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -512,8 +476,14 @@
 				},
 				sbfcgyColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '涉粉工艺名称',
                         slot: 'sfgymc',
@@ -537,6 +507,7 @@
                         key: 'cas',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -549,8 +520,14 @@
 				},
 				deviceColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '除尘设备名称',
                         slot: 'name',
@@ -568,6 +545,7 @@
                         key: 'cas',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -585,8 +563,14 @@
 				},
 				mainRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '工艺名称',
                         slot: 'name',
@@ -598,6 +582,7 @@
                         key: 'cas',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -615,8 +600,14 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         slot: 'name',
@@ -631,6 +622,7 @@
                         key: 'cas',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -648,34 +640,83 @@
 				}
 			}
 		},
+		watch: {
+			'unitForm.lxr'(val) {
+				console.log(val)
+			}
+		},
 		computed: {
 			unitTitle() {
 				let list = ['建设单位', '设计单位', '施工单位', '监理单位']
 				return this.unitType ? list[this.unitType - 1] : ''
+			},
+			rules() {
+				return {
+					xmsslx: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                	lxspbm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	lxsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+                	dz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	xmgdfw: [{ required: true, message: '请选择', trigger: 'change' }],
+                	gczj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+                	jsnr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jzmj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+                	jbr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jbrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jbryx: [{ required: true, message: '请输入', trigger: 'change' }],
+				}
+			},
+			unitRules() {
+				return {
+                	dwmc: [{ required: true, message: '请输入', trigger: 'change' }],
+                	shtyxydm: [{ required: true, message: '请选择', trigger: 'change' }],
+                	lxr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	tel: [{ required: true, message: '请选择', trigger: 'change' }],
+				}
 			}
 		},
 		methods: {
-			getBaseInfo() {
-				if(this.$route.query.type == '2') {
-					let baseInfo = this.$storage.get('baseInfo')
-					baseInfo.xmsslx = []
-					baseInfo.quyu = []
-					this.baseInfo = baseInfo
-					this.baseInfo = this.$storage.get('baseInfo')
-					this.baseInfo = this.$storage.get('baseInfo')
-					this.form = this.$storage.get('form')
-					this.jsdw = JSON.parse(this.form.jsdw)
-					this.sjdw = JSON.parse(this.form.sjdw)
-					this.sgdw = JSON.parse(this.form.sgdw)
-					this.jldw = JSON.parse(this.form.jldw)
-					this.getQy()
-					this.getXm()
-				}else {
-					this.loading = false
+			async getBaseInfo() {
+				let { status_code, data, message } = await api.getJzsgBase(this.gkdx_id);
+				if(status_code == 0) {
+					this.form = data;
+					let { xmmc, dz, xmgdfw, lngAndLat, jzmj, xmsslx, lxspbm, lxsj, jsdw, sjdw, sgdw, jldw, jsnr, gczj, jbr, jbrdh, jbryx } = this.form
+					this.baseInfo = { xmmc, dz, xmgdfw, lxspbm, jsnr, jbr, jbrdh, jbryx, gczj, jzmj, lxsj, lngAndLat: '', xmsslx: [], quyu: [] }
+					this.baseInfo.gczj = gczj ? Number(gczj) : 0
+					this.baseInfo.jzmj = jzmj ? Number(jzmj) : 0
+					this.baseInfo.lxsj = lxsj ? new Date(lxsj) : ''
+					this.jsdw = jsdw ? JSON.parse(jsdw) : []
+					this.sjdw = sjdw ? JSON.parse(sjdw) : []
+					this.sgdw = sgdw ? JSON.parse(sgdw) : []
+					this.jldw = jldw ? JSON.parse(jldw) : []
+					this.baseInfo.xmgdfw = xmgdfw || ''
+					this.baseInfo.jsnr = jsnr || ''
+					this.baseInfo.lngAndLat = this.form.jd && this.form.wd ? `${(this.form.jd - 0).toFixed(6)} ${(this.form.wd - 0).toFixed(6)}` : ''
+					this.getQy();
+					this.getXm();
 				}
 			},
-			async nextStep() {
+			nextStep() {
+				this.$refs.baseInfo.validate((valid) => {
+                    if (valid) {
+                        this.$refs.jzInfo.validate((valid) => {
+		                    if (valid) {
+		                        this.$refs.contactInfo.validate((valid) => {
+				                    if (valid) {
+				                        this.submit()
+				                    }
+				                })
+		                    }
+		                })
+                    }
+                })
+				this.$refs.jzInfo.validate((valid) => {})
+                this.$refs.contactInfo.validate((valid) => {})
+			},
+			async submit() {
 				let params = {
+					gkdx_id: this.gkdx_id,
 					...this.baseInfo,
 					quyu_id: this.baseInfo.quyu[this.baseInfo.quyu.length - 1],
 					xmsslx: this.baseInfo.xmsslx[this.baseInfo.xmsslx.length - 1],
@@ -690,20 +731,14 @@
 				if(this.$route.query.type == 2) {
 					params.gkdx_id = this.form.gkdx_id
 				}
-				// delete params.quyu
+				delete params.quyu
 				delete params.lngAndLat
 				let { status_code, message } = await api.addJzsgBase(params);
 				if(status_code == 200) {
 					this.$Message.success('保存成功')
-					if(this.$route.query.type == 2) {
+					if(this.$route.name == 'base') {
 						this.$storage.set('gkdx_id', this.form.gkdx_id)
 						this.$router.back()
-					}else {
-						let { status_code, data } = await api.getJzsgBase()
-						if(status_code == 200) {
-							this.$storage.set('gkdx_id', data.data[0].gkdx_id)
-						}
-						this.$router.replace('/baseInfo')
 					}
 				}
 			},
@@ -774,12 +809,15 @@
 			},
 			unitModelChange(status) {
 				if(!status) {
-					this.unitForm = {
-						dwmc: '',
-						shtyxydm: '',
-						lxr: '',
-						tel: '',
-					}
+					this.$nextTick(() => {
+						this.unitForm = {
+							dwmc: '',
+							shtyxydm: '',
+							lxr: '',
+							tel: '',
+						}
+						this.$refs.unit.resetFields();
+					})
 				}
 			},
 			openUnitModel(type) {
@@ -803,13 +841,19 @@
 				this[this.unitList[type - 1]].splice(index, 1)
 			},
 			saveUnit() {
-				if(this.modeType == 2) {
-					this[this.unitList[this.unitType - 1]].splice(this.id, 1, this.unitForm)
-				}else {
-					console.log(this.unitList[this.unitType - 1])
-					this[this.unitList[this.unitType - 1]].push(this.unitForm)
-				}
-				this.showUnitModel = false
+				this.$refs.unit.validate(async valid => {
+                    if (valid) {
+                    	this.unitLoading = true
+						if(this.modeType == 2) {
+							this[this.unitList[this.unitType - 1]].splice(this.id, 1, {...this.unitForm})
+						}else {
+							console.log(this.unitList[this.unitType - 1])
+							this[this.unitList[this.unitType - 1]].push({...this.unitForm})
+						}
+						this.showUnitModel = false
+						this.unitLoading = false
+                    }
+                })
 			},
 			addDevice() {
 				this.modeType = 1;

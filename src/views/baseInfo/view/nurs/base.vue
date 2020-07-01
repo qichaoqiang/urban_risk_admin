@@ -92,13 +92,13 @@
 					<part-title text="建筑物信息"></part-title>
 					<Form disabled :model="addressInfo" label-position="left" :label-width="140" style="width: 600px">
 				        <FormItem label="占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.zdmj" placeholder="占地面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.zdmj" placeholder="占地面积"></InputNumber>
 				        </FormItem>
 				        <FormItem label="建筑面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.jzmj" placeholder="建筑面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.jzmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 				        <FormItem label="建筑层数">
-				        	<InputNumber clearable v-model="addressInfo.jzcs" placeholder="建筑层数"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.jzcs" placeholder="建筑层数"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -220,13 +220,13 @@
 			<div>
 				<Form :model="infoForm" label-position="left" :label-width="140">
 					<FormItem label="从业人数">
-			        	<InputNumber clearable :min="0" v-model="infoForm.num"></InputNumber>
+			            <InputNumber :min="0" v-model="infoForm.num"></InputNumber>
 			        </FormItem>
 			        <FormItem label="核定床位数">
-			        	<InputNumber clearable :min="0" v-model="infoForm.num"></InputNumber>
+			            <InputNumber :min="0" v-model="infoForm.num"></InputNumber>
 			        </FormItem>
 			        <FormItem label="入住人数">
-			        	<InputNumber clearable :min="0" v-model="infoForm.num"></InputNumber>
+			            <InputNumber :min="0" v-model="infoForm.num"></InputNumber>
 			        </FormItem>
 				</Form>
 			</div>
@@ -238,10 +238,10 @@
 			<div>
 				<Form :model="personForm" label-position="left" :label-width="140">
 			        <FormItem label="自理型人数">
-			        	<InputNumber clearable :min="0" v-model="personForm.num"></InputNumber>
+			            <InputNumber :min="0" v-model="personForm.num"></InputNumber>
 			        </FormItem>
 					<FormItem label="护理型人数">
-			        	<InputNumber clearable :min="0" v-model="personForm.num"></InputNumber>
+			            <InputNumber :min="0" v-model="personForm.num"></InputNumber>
 			        </FormItem>
 				</Form>
 			</div>
@@ -355,8 +355,14 @@
 				szdxList: ['老人', '残疾人', '儿童'],
 				infoColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '从业人数',
                         key: 'cas',
@@ -371,6 +377,7 @@
                         key: 'cas',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -387,8 +394,14 @@
 				},
 				personColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '自理型人数',
                         key: 'cas',
@@ -400,6 +413,7 @@
                         key: 'cas',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 

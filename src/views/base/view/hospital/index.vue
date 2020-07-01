@@ -5,49 +5,43 @@
 				<Col>
 					<div class="title">请完善{{step == 1 ? '场所' : '风险'}}信息</div>
 					<part-title text="基本信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
+					<Form :model="baseInfo" ref="baseInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 						<FormItem label="医院名称">
 				            {{baseInfo.yymc}}
 				        </FormItem>
-				        <FormItem label="医院类型">
+				        <FormItem label="医院类型" prop="yylx">
 				            <Select clearable v-model="baseInfo.yylx" placeholder="医院类型">
 				                <Option v-for="item in yylxList" :key="item" :value="item">{{item}}</Option>
 				            </Select>
 				        </FormItem>
-				        <FormItem label="医院等级">
+				        <FormItem label="医院等级" prop="yydj">
 				        	<Cascader clearable :data="levelList" v-model="baseInfo.yydj" placeholder="医院等级"></Cascader>
 				        </FormItem>
-				        <FormItem label="举办单位">
+				        <FormItem label="举办单位" prop="jbdw">
 				            <Input clearable v-model="baseInfo.jbdw" placeholder="举办单位"></Input>
 				        </FormItem>
-				        <FormItem label="建成投用时间">
+				        <FormItem label="建成投用时间" prop="jctysj">
 				            <DatePicker type="date" v-model="baseInfo.jctysj"  placeholder="建成投用时间"></DatePicker>
 				        </FormItem>
-				        <FormItem label="医院地址">
-				        	<Input clearable v-model="addressInfo.yydz" placeholder="医院地址"></Input>
+				        <FormItem label="医院地址" prop="yydz">
+				        	<Input clearable v-model="baseInfo.yydz" placeholder="医院地址"></Input>
 				        </FormItem>
-				        <FormItem label="经纬度">
-				        	<div @click="openLngModal">
-			        			<Input 
-			        				readonly 
-			        				v-model="addressInfo.lngAndLat" 
-			        				icon="md-pin" 
-			        				placeholder="经纬度" />
-			        		</div>
+				        <FormItem label="经纬度" prop="lngAndLat">
+				        	<lng :lngAndLat.sync="baseInfo.lngAndLat"></lng>
 				        </FormItem>
-				        <FormItem label="场所范围">
+				        <FormItem label="医院范围" prop="yyfw">
 				        	<div @click.stop="openAreaModal">
 			        			<Input 
 			        				readonly 
-			        				v-model="addressInfo.yyfw" 
+			        				v-model="baseInfo.yyfw" 
 			        				icon="md-pin" 
-			        				placeholder="场所范围" />
+			        				placeholder="医院范围" />
 			        		</div>
 				        </FormItem>
-				        <FormItem label="行业代码">
+				        <FormItem label="行业代码" prop="hydm">
 				            <Input clearable v-model="baseInfo.hydm" placeholder="行业代码"></Input>
 				        </FormItem>
-				        <FormItem label="所辖管区">
+				        <FormItem label="所辖管区" prop="quyu">
 				            <Cascader 
 				            	clearable 
 				            	change-on-select
@@ -56,10 +50,10 @@
 				            	:load-data="loadArea" 
 				            	placeholder="所属辖区"></Cascader>
 				        </FormItem>
-				        <FormItem label="社会统一信用代码">
+				        <FormItem label="社会统一信用代码" prop="tyshxydm">
 				            <Input clearable v-model="baseInfo.tyshxydm" placeholder="社会统一信用代码"></Input>
 				        </FormItem>
-				        <FormItem label="注册登记地址">
+				        <FormItem label="注册登记地址" prop="zcdjdz">
 				            <Input clearable v-model="baseInfo.zcdjdz" placeholder="注册登记地址"></Input>
 				        </FormItem>
 					</Form>
@@ -69,12 +63,12 @@
 			<Row type="flex" justify="center">
 				<Col>
 					<part-title text="建筑物信息"></part-title>
-					<Form :model="addressInfo" label-position="left" :label-width="140" style="width: 600px">
-				        <FormItem label="占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.zdmj" placeholder="占地面积"></InputNumber>
+					<Form :model="baseInfo" ref="jzInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
+				        <FormItem label="占地面积（㎡）" prop="zdmj">
+				        	<InputNumber :min="0" v-model="baseInfo.zdmj" placeholder="占地面积"></InputNumber>
 				        </FormItem>
-				        <FormItem label="建筑面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.jzmj" placeholder="建筑面积"></InputNumber>
+				        <FormItem label="建筑面积（㎡）" prop="jzmj">
+				        	<InputNumber :min="0" v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -83,17 +77,23 @@
 			<Row type="flex" justify="center">
 				<Col>
 					<part-title text="联系人信息"></part-title>
-					<Form :model="addressInfo" label-position="left" :label-width="140" style="width: 600px">
+					<Form :model="baseInfo" ref="contactInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 				        <FormItem label="经办人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input clearable v-model="contactInfo.jbr" placeholder="姓名"></Input>
+						        	<FormItem prop="jbr">
+					        			<Input clearable v-model="baseInfo.jbr" :data="areaList" placeholder="姓名"></Input>
+					        		</FormItem>
 				        		</Col>
 				        		<Col span="16">
-				        			<Input type="tel" clearable v-model="contactInfo.jbrdh" placeholder="电话"></Input>
+					        		<FormItem prop="jbrdh">
+					        			<Input clearable v-model="baseInfo.jbrdh" placeholder="电话"></Input>
+					        		</FormItem>
 				        		</Col>
-				        		<Col span="24">
-				        			<Input type="email" clearable v-model="contactInfo.jbryx" placeholder="邮箱"></Input>
+				        		<Col span="24" style="margin-top: 16px">
+					        		<FormItem prop="jbryx">
+					        			<Input clearable v-model="baseInfo.jbryx" placeholder="邮箱"></Input>
+					        		</FormItem>
 				        		</Col>
 				        	</Row>
 				        </FormItem>
@@ -113,16 +113,16 @@
 					<part-title text="医院规模"></part-title>
 					<Form :model="mostForm" label-position="left" inline :label-width="140">
 				        <FormItem label="从业人员" style="margin-right: 100px">
-				        	<InputNumber clearable v-model="mostForm.cyrs"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.cyrs"></InputNumber>
 				        </FormItem>
 				        <FormItem label="日均门诊人数" style="margin-right: 100px">
-				        	<InputNumber clearable v-model="mostForm.rjmzrs"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.rjmzrs"></InputNumber>
 				        </FormItem>
 				        <FormItem label="床位数" style="margin-right: 100px">
-				        	<InputNumber clearable v-model="mostForm.cws"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.cws"></InputNumber>
 				        </FormItem>
 				        <FormItem label="日均床位使用量" style="margin-right: 100px">
-				        	<InputNumber clearable v-model="mostForm.rjcwsyl"></InputNumber>
+				        	<InputNumber :min="0" v-model="mostForm.rjcwsyl"></InputNumber>
 				        </FormItem>
 					</Form>
 					<part-title text="危险化学品"></part-title>
@@ -266,7 +266,7 @@
 			        	<Input clearable v-model="whForm.Ch"></Input>
 			        </FormItem>
 			        <FormItem label="数量">
-			        	<InputNumber clearable :min="0" v-model="whForm.sl"></InputNumber>
+			            <InputNumber :min="0" v-model="whForm.sl"></InputNumber>
 			        </FormItem>
 			        <FormItem label="储存位置">
 			        	<Input clearable v-model="whForm.ccwz"></Input>
@@ -291,16 +291,16 @@
 			        	<Input clearable v-model="ydForm.wz"></Input>
 			        </FormItem>
 			        <FormItem label="容量">
-			            <InputNumber clearable v-model="ydForm.rl"></InputNumber>
+			            <InputNumber :min="0" v-model="ydForm.rl"></InputNumber>
 			        </FormItem>
 			        <FormItem label="数量">
-			            <InputNumber clearable :min="0" v-model="ydForm.sl"></InputNumber>
+			            <InputNumber :min="0" v-model="ydForm.sl"></InputNumber>
 			        </FormItem>
 			        <FormItem label="压力">
-			            <InputNumber clearable v-model="ydForm.yl"></InputNumber>
+			            <InputNumber :min="0" v-model="ydForm.yl"></InputNumber>
 			        </FormItem>
 			        <FormItem label="年使用量(kg)">
-			        	<InputNumber clearable v-model="ydForm.nsyl"></InputNumber>
+			        	<InputNumber :min="0" v-model="ydForm.nsyl"></InputNumber>
 			        </FormItem>
 			        <FormItem label="储罐/钢瓶检验有效期">
 			        	<DatePicker type="date" v-model="ydForm.jyyxq"></DatePicker>
@@ -346,6 +346,7 @@
 <script>	
 	import api from '@/api/api'
 	import partTitle from '@/components/title'
+	import lng from '../../../baseInfo/components/lng'
 	import areajs from '@/common/js/area'
 	import lngjs from '@/common/js/lng'
 	import datePickerjs from '@/common/js/datePicker'
@@ -367,7 +368,7 @@
 	export default {
 		name: '',
 		mixins: [areajs, lngjs, datePickerjs],
-		components: { partTitle },
+		components: { partTitle, lng },
 		data() {
 			return {
 				step: 1,	
@@ -382,7 +383,7 @@
 				modeType: '',
 				map: null,
 				polygonTool: null,
-				gkdx_id: '',
+				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				baseInfo: {
 					yymc: '医院',
 					yylx: '',
@@ -393,18 +394,14 @@
 					jctysj: '',
 					hydm: '',
 					yydj: [],
-				},
-				addressInfo: {
 					yydz: '',
 					zdmj: 0,
 					jzmj: 0,
 					lngAndLat: '',	
-					yyfw: ''	
-				},
-				contactInfo: {
+					yyfw: '',
 					jbr: '',
 					jbrdh: '',
-					jbryx: '',
+					jbryx: '',	
 				},
 				mostForm: {
 					cyrs: 0,
@@ -452,8 +449,14 @@
 				areaList: [],
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpmc',
@@ -471,6 +474,7 @@
                         key: 'nsyl',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -490,8 +494,14 @@
 				},
 				ydColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '名称',
                         key: 'mc',
@@ -518,6 +528,7 @@
                         key: 'jydw',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -540,8 +551,14 @@
 				},
 				riskLiauidColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '名称',
                         key: 'mc',
@@ -559,6 +576,7 @@
                         key: 'hsdw',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -590,35 +608,76 @@
 
 		},
 		computed: {
-
+			rules() {
+				const validatorQuyu = (rule, value, callback) => {
+					if (!value || value.length == 0) {
+	                    callback(new Error('请选择'));
+	                } else {
+	                    callback();
+	                }
+				}
+				return {
+                	quyu: [{ required: true, validator: validatorQuyu, trigger: 'change' }],
+                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	yylx: [{ required: true, message: '请选择', trigger: 'change' }],
+                	yydj: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                	jbdw: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jctysj: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
+                	zdmj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+                	jzmj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+                	tyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	yydz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	yyfw: [{ required: true, message: '请选择', trigger: 'change' }],
+                	zcdjdz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	hydm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jbr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jbrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+                	jbryx: [{ required: true, message: '请输入', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
-			getBaseInfo() {
-				if(this.$route.query.type == '2') {
-					let baseInfo = this.$storage.get('baseInfo')
-					// baseInfo.hyml = []
-					// baseInfo.quyu = []
-					this.baseInfo = baseInfo
-					this.addressInfo = this.$storage.get('addressInfo')
-					this.contactInfo = this.$storage.get('contactInfo')
-					this.mostForm = this.$storage.get('mostForm')
-					this.form = this.$storage.get('form')
+			async getBaseInfo() {
+				let { status_code, data, message } = await api.getHospitalBase(this.gkdx_id);
+				if(status_code == 0) {
+					this.form = data;
+					let { jbr, jbrdh, jbryx, yymc, jbdw, zcdjdz, tyshxydm, yydz, quyu_id, jd, wd, yyfw, jctysj, yylx, hydm, yydj, zdmj, jzmj, cyrs, rjmzrs, cws, rjcwsyl, xfzddw, hzgwdw } = this.form
+					this.baseInfo = { yymc, jbdw, zcdjdz, tyshxydm, yylx, hydm, jctysj: '', yydj: [], zdmj, jzmj, yydz, yyfw, jbr, jbrdh, jbryx }
+					this.baseInfo.jctysj = this.form.jctysj ? new Date(this.form.jctysj) : '';
+					this.baseInfo.yydj = this.form.yydj ? this.form.yydj.split(',') : [];
+					this.baseInfo.zdmj = zdmj ? Number(zdmj) : 0
+					this.baseInfo.jzmj = jzmj ? Number(jzmj) : 0
+					this.baseInfo.yyfw = yyfw || ''
+					this.baseInfo.lngAndLat = this.form.jd && this.form.wd ? `${(this.form.jd - 0).toFixed(6)} ${(this.form.wd - 0).toFixed(6)}` : ''
 					this.getQy()
 					// this.getHy()
-				}else {
-					this.loading = false
 				}
 			},
 			async nextStep() {
+				this.$refs.baseInfo.validate((valid) => {
+                    if (valid) {
+                        this.$refs.jzInfo.validate((valid) => {
+		                    if (valid) {
+		                        this.$refs.baseInfo.validate((valid) => {
+				                    if (valid) {
+				                        this.submit()
+				                    }
+				                })
+		                    }
+		                })
+                    }
+                })
+                this.$refs.contactInfo.validate((valid) => {})
+                this.$refs.jzInfo.validate((valid) => {})
+			},
+			async submit() {
 				let params = {
 					...this.baseInfo,
-					...this.addressInfo,
-					...this.contactInfo,
 					jctysj: this.baseInfo.jctysj ? getDate(new Date(this.baseInfo.jctysj).getTime(), 'date') : '',
 					quyu_id: this.baseInfo.quyu[this.baseInfo.quyu.length - 1],
 					yydj: this.baseInfo.yydj.join(','),
-					jd: this.addressInfo.lngAndLat.split(' ')[0],
-					wd: this.addressInfo.lngAndLat.split(' ')[1],
+					jd: this.baseInfo.lngAndLat.split(' ')[0],
+					wd: this.baseInfo.lngAndLat.split(' ')[1],
 				}	 
 				if(this.$route.query.type == 2) {
 					params.gkdx_id = this.form.gkdx_id
@@ -628,61 +687,10 @@
 				let { status_code, message } = await api.addHospitalBase(params);
 				if(status_code == 200) {
 					this.$Message.success('保存成功')
-					if(this.$route.query.type == 2) {
+					if(this.$route.name == 'base') {
 						this.$storage.set('gkdx_id', this.form.gkdx_id)
 						this.$router.back()
-					}else {
-						let { status_code, data } = await api.getHospitalBase()
-						if(status_code == 200) {
-							this.$storage.set('gkdx_id', data.data[0].gkdx_id)
-						}
-						this.$router.replace('/baseInfo')
 					}
-					// if(this.$route.query.type == 2) {
-					// 	this.gkdx_id = this.form.gkdx_id
-					// }else {
-					// 	let { status_code, data } = await api.getHospitalBase()
-					// 	if(status_code == 200) {
-					// 		this.gkdx_id = data.data[0].gkdx_id
-					// 	}
-					// } 
-					// let whParams = {
-					// 	gkdx_id: this.gkdx_id,
-					// 	per_page: this.whPage.pageSize,
-					// 	page: this.whPage.pageIndex,
-					// }
-					// let ydParams = {
-					// 	gkdx_id: this.gkdx_id,
-					// 	per_page: this.ydPage.pageSize,
-					// 	page: this.ydPage.pageIndex,
-					// }
-					// let riskLiauidParams = {
-					// 	gkdx_id: this.gkdx_id,
-					// 	per_page: this.riskLiauidPage.pageSize,
-					// 	page: this.riskLiauidPage.pageIndex,
-					// }
-					// Promise.all([api.getWhyyItemList(whParams), api.getYdItemList(ydParams), api.getRiskLiauidItemList(riskLiauidParams)]).then((result) => {
-					//   	let whRes = result[0], ydRes = result[1], riskLiauidRes = result[2]
-					//   	if(whRes.status_code == 200) {
-					//   		this.whData = whRes.data.data
-					//   		this.whNum = whRes.data.yxzt
-					//   		this.whPage.totalRow = whRes.data.total
-					//   	}
-					//   	if(ydRes.status_code == 200) {
-					//   		this.ydData = ydRes.data.data
-					//   		this.ydNum = ydRes.data.jb
-					//   		this.ydPage.totalRow = ydRes.data.total
-					//   	}
-					//   	if(riskLiauidRes.status_code == 200) {
-					//   		this.riskLiauidData = riskLiauidRes.data.data
-					//   		this.riskLiauidNum = riskLiauidRes.data.yyzt
-					//   		this.riskLiauidPage.totalRow = riskLiauidRes.data.total
-					//   	}
-					//   	this.loading = false   
-					// }).catch((error) => {
-					//   	console.log(error)
-					//   	this.loading = false
-					// })
 				}
 			},
 			async saveInfo() {
@@ -718,8 +726,8 @@
 			            };
 			            //创建标注工具对象
 			            this.polygonTool = new T.PolygonTool(this.map, config);
-			            if(this.addressInfo.yyfw) {
-			            	let yyfw = JSON.parse(this.addressInfo.yyfw)
+			            if(this.baseInfo.yyfw) {
+			            	let yyfw = JSON.parse(this.baseInfo.yyfw)
 			            	let points = yyfw.map(item => {
 			            		return new T.LngLat(item.lng, item.lat)
 			            	})
@@ -734,23 +742,23 @@
 				this.polygonTool.addEventListener('draw', (e) => {
 					// 获取绘制的多边形信息
 					console.log(e);
-					this.addressInfo.yyfw = JSON.stringify(e.currentLnglats)
+					this.baseInfo.yyfw = JSON.stringify(e.currentLnglats)
 				})
 			},
 			clearArea() {
-				this.addressInfo.yyfw = ''
+				this.baseInfo.yyfw = ''
 				this.map.clearOverLays()
 			},
 			cancelArea() {
 				this.map.clearOverLays();
 				this.map = null;
 				this.polygonTool = null;
-				this.addressInfo.yyfw = this.yyfw || this.form.yyfw || '';
+				this.baseInfo.yyfw = this.yyfw || this.form.yyfw || '';
 				this.showAreaModel = false
 			},
 			saveArea() {
-				this.yyfw = this.addressInfo.yyfw;
-				this.form.yyfw = this.addressInfo.yyfw;
+				this.yyfw = this.baseInfo.yyfw;
+				this.form.yyfw = this.baseInfo.yyfw;
 				this.map.clearOverLays();
 				this.map = null;
 				this.polygonTool = null;

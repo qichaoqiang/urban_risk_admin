@@ -61,9 +61,11 @@
 				        </TabPane>
 				        <TabPane label="经营状况" name="name2">
 				        	<part-title text="经营状况" :btns="['add']" @add="openJyzkModel"></part-title>
-				        	<div style="margin-bottom: 16px;">
-				        		<span>设计年周转量：{{baseInfo.sjnzzl}}m³</span>
-				        	</div>
+				        	<Form :model="baseInfo" label-position="left" style="width: 600px">
+						        <FormItem label="设计年周转量（m³）" :label-width="180">
+						        	<InputNumber :min="0" v-model="baseInfo.sjnzzl"></InputNumber>
+						        </FormItem>
+							</Form>
 							<Table :columns="jyzkColumns" :data="jyzkData">
 								<template slot-scope="{ row }" slot="action">
 						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editJyzkModel(row)">编辑</Button>
@@ -84,6 +86,11 @@
 				                    @on-change="handleChangeJyzkPage"
 				                    @on-page-size-change="handleChangeJyzkPageSize"
 				                />
+							</Row>
+							<Row type="flex" justify="center" style="margin-top: 24px">
+								<Col>
+									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo">完成</Button>
+								</Col>
 							</Row>
 				        </TabPane>
 				        <TabPane label="周边环境" name="name3">
@@ -335,8 +342,14 @@
 				areaList: [],
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpm',
@@ -357,6 +370,7 @@
                         key: 'msds',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -388,8 +402,14 @@
 				sxflList: ['最终产品', '中间产品', '原料'],
 				whRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.quyuPage.pageIndex- 1) * this.quyuPage.pageSize + 1);
+				        }
                     }, {
                         title: '重大危险源单元名称',
                         key: 'zdwxydymc',
@@ -407,6 +427,7 @@
                         key: 'dqzt',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -427,8 +448,14 @@
 				},
 				cpzColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.cpzPage.pageIndex- 1) * this.cpzPage.pageSize + 1);
+				        }
                     }, {
                         title: '储罐名称',
                         key: 'cgmc',
@@ -449,6 +476,7 @@
                         key: 'bz',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -478,8 +506,14 @@
 		  		},
 				gyzColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.gyzPage.pageIndex- 1) * this.gyzPage.pageSize + 1);
+				        }
                     }, {
                         title: '储气容器名称',
                         key: 'cqrqmc',
@@ -497,6 +531,7 @@
                         key: 'bz',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -516,8 +551,14 @@
 				},
 				jyzkColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.jyzkPage.pageIndex- 1) * this.jyzkPage.pageSize + 1);
+				        }
                     }, {
                         title: '近5日日平均周转量(m³)',
                         key: 'jrrpjzzl',
@@ -526,6 +567,7 @@
                         key: 'tbsj',
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -542,8 +584,14 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.rimPage.pageIndex- 1) * this.rimPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         key: 'mgmbmc',
@@ -558,6 +606,7 @@
                         key: 'rysl',
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -572,7 +621,7 @@
 					lngAndLat: '',
 					qyfw: ''
 				},
-				fwList: ['东', '南', '西', '北'],
+				fwList: ['东', '南', '西', '北', '东北', '东南', '西北', '西南'],
 				mgmblxList: ['医院', '养老院', '学校', '政府机构', '商场', '居住区', '监狱', '宗教', '车站', '码头', '铁路', '公路', '林区', '工厂', '矿山', '河流', '其他'],
 				rimPage: {
 					pageSize: 10,
@@ -640,7 +689,10 @@
 				let { status_code, data, message } = await api.getTrqczBase(this.gkdx_id);
 				if(status_code == 0) {
 					this.form = data;
-					this.baseInfo = { czlx: data.czlx, sjnzzl: data.sjnzzl}
+					this.baseInfo = { 
+						czlx: data.czlx || '', 
+						sjnzzl: data.sjnzzl ? Number(data.sjnzzl) : 0
+					}
 				}
 			},
 			async nextStep() {
@@ -670,7 +722,7 @@
 			async saveInfo() {
 				let params = {
 					gkdx_id: this.gkdx_id,
-					...this.baseInfo
+					sjnzzl: this.baseInfo.sjnzzl,
 				}
 				let { status_code, message } = await api.addTrqczBase(params);
 				if(status_code == 200) {

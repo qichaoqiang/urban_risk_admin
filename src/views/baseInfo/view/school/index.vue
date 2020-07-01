@@ -55,10 +55,10 @@
 				        	<Input clearable v-model="addressInfo.xxdz" placeholder="学校地址"></Input>
 				        </FormItem>
 				         <FormItem label="学校占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.xxzdmj" placeholder="占地面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.xxzdmj" placeholder="占地面积"></InputNumber>
 				        </FormItem>
 				        <FormItem label="学校建筑占地面积（㎡）">
-				        	<InputNumber clearable v-model="addressInfo.jxjzzdmj" placeholder="建筑面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="addressInfo.jxjzzdmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 				        <FormItem label="经纬度">
 				        	<div @click="openLngModal">

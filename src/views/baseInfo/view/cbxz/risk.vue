@@ -85,8 +85,8 @@
 								</Row>
 				        </TabPane>
 				        <TabPane label="重大危险源" name="name4">
-				        	<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
-					        	<FormItem label="重大危险源">
+				        	<Form :model="baseInfo" ref="baseInfo" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
+					        	<FormItem label="重大危险源" prop="zdwxy">
 						        	<Select clearable v-model="baseInfo.zdwxy" placeholder="请选择">
 						                <Option v-for="item in zdwxyList" :key="item" :value="item">{{item}}</Option>
 						            </Select>
@@ -161,37 +161,37 @@
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}危险化学品`" v-model="showWhModel" @on-visible-change="whModelChange">
 			<div>
-				<Form :model="whForm" label-position="left" :label-width="140">
-					<FormItem label="化学品名称">
+				<Form :model="whForm" ref="wh" :rules="whRules" hide-required-mark label-position="left" :label-width="140">
+					<FormItem label="化学品名称" prop="hxpm">
 			        	<Input clearable v-model="whForm.hxpm"></Input>
 			        </FormItem>
-			        <FormItem label="别名">
+			        <FormItem label="别名" prop="bm">
 			        	<Input clearable v-model="whForm.bm"></Input>
 			        </FormItem>
-			        <FormItem label="CAS号">
+			        <FormItem label="CAS号" prop="cas">
 			        	<Input clearable v-model="whForm.cas"></Input>
 			        </FormItem>
-			        <FormItem label="是否重点监管">
+			        <FormItem label="是否重点监管" prop="sfzdjg">
 			            <Select clearable v-model="whForm.sfzdjg" placeholder="请选择">
 			                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
 			            </Select>
 			        </FormItem>
-			        <FormItem label="是否爆炸品">
+			        <FormItem label="是否爆炸品" prop="sfbzp">
 			            <Select clearable v-model="whForm.sfbzp" placeholder="请选择">
 			                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
 			            </Select>
 			        </FormItem>
-			        <FormItem label="是否剧毒化学品">
+			        <FormItem label="是否剧毒化学品" prop="sfjdhxp">
 			            <Select clearable v-model="whForm.sfjdhxp" placeholder="请选择">
 			                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
 			            </Select>
 			        </FormItem>
-			        <FormItem label="火灾危险性等级">
+			        <FormItem label="火灾危险性等级" prop="hzwxxdj">
 			            <Select clearable v-model="whForm.hzwxxdj" placeholder="请选择">
 			                <Option v-for="item in hzwxxdjList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
 			        </FormItem>
-			        <FormItem label="化学品状态">
+			        <FormItem label="化学品状态" prop="hxpzt">
 			            <Select clearable v-model="whForm.hxpzt" placeholder="请选择">
 			                <Option v-for="item in hxpztList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
@@ -199,64 +199,76 @@
 			        <FormItem label="年中转量">
 			        	<Row type="flex" align="middle">
 	            			<Col>
-	            				<InputNumber :min="0" v-model="whForm.nzzl"></InputNumber>
+		            			<FormItem prop="nzzl">
+		            				<InputNumber :min="0" v-model="whForm.nzzl"></InputNumber>
+		            			</FormItem>
 	            			</Col>
 	            			<Col>
-	            				<Select clearable v-model="whForm.nzzldw" placeholder="单位">
-					                <Option v-for="item in nzzldwList" :key="item" :value="item">{{item}}</Option>
-					            </Select>
+		            			<FormItem prop="nzzldw">
+		            				<Select clearable v-model="whForm.nzzldw" placeholder="单位">
+						                <Option v-for="item in nzzldwList" :key="item" :value="item">{{item}}</Option>
+						            </Select>
+						        </FormItem>
 	            			</Col>
 	            		</Row>
 			        </FormItem>
 			        <FormItem label="最大存储量">
 			            <Row type="flex" align="middle">
 	            			<Col>
-	            			<InputNumber :min="0" v-model="whForm.zdccl"></InputNumber>
+	            				<FormItem prop="zdccl">
+	            					<InputNumber :min="0" v-model="whForm.zdccl"></InputNumber>
+		            			</FormItem>
 	            			</Col>
 	            			<Col>
-	            				<Select clearable v-model="whForm.zdccldw" placeholder="单位">
-					                <Option v-for="item in nzzldwList" :key="item" :value="item">{{item}}</Option>
-					            </Select>
+		            			<FormItem prop="zdccldw">
+		            				<Select clearable v-model="whForm.zdccldw" placeholder="单位">
+						                <Option v-for="item in nzzldwList" :key="item" :value="item">{{item}}</Option>
+						            </Select>
+						        </FormItem>
 	            			</Col>
 	            		</Row>
 			        </FormItem>
-			        <FormItem label="MSDS">
+			        <FormItem label="MSDS" prop="msds">
 			        	<Input clearable v-model="whForm.msds"></Input>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveWh">保存</Button>
+		        <Button type="primary" size="large" :loading="whLoading" @click="saveWh">保存</Button>
 	        </div>
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}主要生产作业`" v-model="showZysczyModel" @on-visible-change="zysczyModelChange">
 			<div>
-				<Form :model="zysczyForm" label-position="left" :label-width="160">
-					<FormItem label="工序类型">
+				<Form :model="zysczyForm" ref="zysczy" :rules="zysczyRules" hide-required-mark label-position="left" :label-width="160">
+					<FormItem label="工序类型" prop="gxlx">
 			        	<Select clearable v-model="zysczyForm.gxlx" placeholder="请选择">
 			                <Option v-for="item in gxlxList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
 			        </FormItem>
-					<FormItem label="工序名称">
+					<FormItem label="工序名称" prop="gxmc">
 			        	<Input clearable v-model="zysczyForm.gxmc"></Input>
 			        </FormItem>
-			        <FormItem label="岗位人数">
+			        <FormItem label="岗位人数" prop="gwrs">
 			        	<InputNumber :min="0" v-model="zysczyForm.gwrs"></InputNumber>
 			        </FormItem>
 			        <FormItem label="是否产生有毒有害气体">
 			        	<Row type="flex" :gutter="20">
 			        		<Col span="6">
-					        	<Select clearable v-model="zysczyForm.sfcsydyhqt" placeholder="请选择">
-					                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
-					            </Select>
+			        			<FormItem prop="sfcsydyhqt">
+						        	<Select clearable v-model="zysczyForm.sfcsydyhqt" placeholder="请选择">
+						                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
+						            </Select>
+						        </FormItem>
 			        		</Col>
 			        		<Col span="18">
-			        			<Input clearable v-show="zysczyForm.sfcsydyhqt == 1" v-model="baseInfo.qtmc" placeholder="气体名称"></Input>
+			        			<FormItem prop="qtmc" v-if="zysczyForm.sfcsydyhqt == 1">
+			        				<Input clearable v-model="zysczyForm.qtmc" placeholder="气体名称"></Input>
+			        			</FormItem>
 			        		</Col>
 			        	</Row>
 			        </FormItem>
-			        <FormItem label="是否产生粉尘">
+			        <FormItem label="是否产生粉尘" prop="sfcsfc">
 			        	<Select clearable v-model="zysczyForm.sfcsfc" placeholder="请选择">
 			                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
 			            </Select>
@@ -264,18 +276,22 @@
 			        <FormItem label="是否有限空间作业">
 			        	<Row type="flex" :gutter="20">
 			        		<Col span="6">
-					        	<Select clearable v-model="zysczyForm.sfyxkjzy" placeholder="请选择">
-					                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
-					            </Select>
+				        		<FormItem prop="sfyxkjzy">
+						        	<Select clearable v-model="zysczyForm.sfyxkjzy" placeholder="请选择">
+						                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
+						            </Select>
+						        </FormItem>
 			        		</Col>
 			        		<Col span="18">
-			        			<Select v-show="zysczyForm.sfyxkjzy == 1" v-model="zysczyForm.zycs" placeholder="作业场所">
-					                <Option v-for="item in zycsList" :key="item" :value="item">{{item}}</Option>
-					            </Select>
+			        			<FormItem prop="zycs" v-if="zysczyForm.sfyxkjzy == 1">
+			        				<Select clearable v-model="zysczyForm.zycs" placeholder="作业场所">
+						                <Option v-for="item in zycsList" :key="item" :value="item">{{item}}</Option>
+						            </Select>
+			        			</FormItem>
 			        		</Col>
 			        	</Row>
 			        </FormItem>
-			        <FormItem label="典型作业形式">
+			        <FormItem label="典型作业形式" prop="dxzyxs">
 			        	<Select clearable multiple v-model="zysczyForm.dxzyxs" placeholder="请选择">
 			                <Option v-for="item in dxzyxsList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
@@ -284,26 +300,26 @@
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveZysczy">保存</Button>
+		        <Button type="primary" size="large" :loading="zysczyLoading" @click="saveZysczy">保存</Button>
 	        </div>
 		</Modal>
 
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}主要设备`" v-model="showZysbModel" @on-visible-change="zysbModelChange">
 			<div>
-				<Form :model="zysbForm" label-position="left" :label-width="140">
-					<FormItem label="设备名称">
+				<Form :model="zysbForm" ref="zysb" :rules="zysbRules" hide-required-mark label-position="left" :label-width="140">
+					<FormItem label="设备名称" prop="sbmc">
 			        	<Input clearable v-model="zysbForm.sbmc"></Input>
 			        </FormItem>
-			        <FormItem label="数量">
+			        <FormItem label="数量" prop="sl">
 			            <InputNumber :min="0" v-model="zysbForm.sl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="起重量（t）">
+			        <FormItem label="起重量（t）" prop="qzl">
 			            <InputNumber :min="0" v-model="zysbForm.qzl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="投用时间">
+			        <FormItem label="投用时间" prop="tysj">
 			            <DatePicker type="datetime" v-model="zysbForm.tysj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
-			        <FormItem label="当前运行状态">
+			        <FormItem label="当前运行状态" prop="dqyxzt">
 			            <Select clearable v-model="zysbForm.dqyxzt" placeholder="请选择">
 			                <Option v-for="item in dqztList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
@@ -312,32 +328,32 @@
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveZysb">保存</Button>
+		        <Button type="primary" size="large" :loading="zysbLoading" @click="saveZysb">保存</Button>
 	        </div>
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}周边环境`" v-model="showRimModel"  @on-visible-change="rimModelChange">
 			<div>
-				<Form :model="rimForm" label-position="left" :label-width="140">
-					<FormItem label="敏感目标名称">
+				<Form :model="rimForm" ref="rim" :rules="rimRules" hide-required-mark label-position="left" :label-width="140">
+					<FormItem label="敏感目标名称" prop="mgmbmc">
 			        	<Input clearable v-model="rimForm.mgmbmc"></Input>
 			        </FormItem>
-			        <FormItem label="方位">
+			        <FormItem label="方位" prop="fw">
 			        	<Select clearable v-model="rimForm.fw" placeholder="请选择">
 			                <Option v-for="item in fwList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
 			        </FormItem>
-			        <FormItem label="敏感目标类型">
+			        <FormItem label="敏感目标类型" prop="mgmblx">
 			            <Select clearable v-model="rimForm.mgmblx" placeholder="请选择">
 			                <Option v-for="item in mgmblxList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
 			        </FormItem>
-			        <FormItem label="敏感目标距离(m)">
+			        <FormItem label="敏感目标距离(m)" prop="mgmbjl">
 			        	<InputNumber :min="0" v-model="rimForm.mgmbjl"></InputNumber>
 			        </FormItem>	
-			        <FormItem label="人员数量">
+			        <FormItem label="人员数量" prop="rysl">
 			        	<InputNumber :min="0" v-model="rimForm.rysl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="经纬度">
+			        <FormItem label="经纬度" prop="lngAndLat">
 			        	<lng :lngAndLat.sync="rimForm.lngAndLat"></lng>
 			        	<!-- <div @click="openLngModal">
 		        			<Input 
@@ -347,7 +363,7 @@
 		        				placeholder="经纬度" />
 		        		</div> -->
 			        </FormItem>
-			        <FormItem label="区域范围">
+			        <FormItem label="区域范围" prop="qyfw">
 			        	<qyfw :qyfw.sync="rimForm.qyfw"></qyfw>
 			        	<!-- <div @click.stop="openAreaModal">
 		        			<Input 
@@ -361,7 +377,7 @@
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveRim">保存</Button>
+		        <Button type="primary" size="large" :loading="rimLoading" @click="saveRim">保存</Button>
 	        </div>
 		</Modal>
 	</div>
@@ -401,6 +417,10 @@
 				showGqscModel: false,
 				showZysbModel: false,
 				showRimModel: false,
+				whLoading: false,
+				zysczyLoading: false,
+				zysbLoading: false,
+				rimLoading: false,
 				modeType: '',
 				modeType2: '',
 				map: null,
@@ -452,28 +472,41 @@
 				areaList: [],
 				whColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.whPage.pageIndex- 1) * this.whPage.pageSize + 1);
+				        }
                     }, {
                         title: '化学品名称',
                         key: 'hxpm',
+                        minWidth: 110
                     }, {
                         title: 'CAS号',
                         key: 'cas',
+                        minWidth: 100
                     }, {
                         title: '是否重点监管',
                         slot: 'sfzdjg',
+                        minWidth: 120
                     }, {
                         title: '是否爆炸品',
                         slot: 'sfbzp',
+                        minWidth: 110
                     }, {
                         title: '火灾风险等级',
                         key: 'hzwxxdj',
+                        minWidth: 120
                     }, {
                         title: 'MSDS',
                         key: 'msds',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -483,9 +516,9 @@
 					hxpm: '',
 					bm: '',
 					cas: '',
-					sfzdjg: '',
-					sfbzp: '',
-					sfjdhxp: '',
+					sfzdjg: 0,
+					sfbzp: 0,
+					sfjdhxp: 0,
 					hzwxxdj: '',
 					hxpzt: '',
 					msds: '',
@@ -505,25 +538,37 @@
 				sxflList: ['最终产品', '中间产品', '原料'],
 				whRiskColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.whRiskPage.pageIndex- 1) * this.whRiskPage.pageSize + 1);
+				        }
                     }, {
                         title: '重大危险源单元名称',
                         key: 'zdwxydymc',
+                        minWidth: 160
                     }, {
                         title: '重大危险源等级',
                         key: 'zdwxydj',
+                        minWidth: 140
                     }, {
                         title: '危险化学品',
                         key: 'wxhxp',
+                        minWidth: 110
                     }, {
                         title: '投用时间',
                         key: 'tysj',
+                        minWidth: 100
                     }, {
                         title: '当前状态',
                         key: 'dqzt',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -544,22 +589,33 @@
 				},
 				zysczyColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.zysczyPage.pageIndex- 1) * this.zysczyPage.pageSize + 1);
+				        }
                     }, {
                         title: '工序类型',
                         key: 'gxlx',
+                        minWidth: 100
                     }, {
                         title: '工序名称',
                         key: 'gxmc',
+                        minWidth: 100
                     }, {
                         title: '岗位人数',
                         key: 'gwrs',
+                        minWidth: 100
                     }, {
                         title: '作业形式',
                         key: 'dxzyxs',
+                        minWidth: 100
                     }, {
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -569,10 +625,10 @@
 					gxlx: '',
 					gxmc: '',
 					gwrs: 0,
-					sfcsydyhqt: '',
+					sfcsydyhqt: 0,
 					qtmc: '',
-					sfcsfc: '',
-					sfyxkjzy: '',
+					sfcsfc: 0,
+					sfyxkjzy: 0,
 					zycs: '',
 					dxzyxs: [],
 				},
@@ -601,25 +657,37 @@
 				},
 				zysbColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// // fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.zysbPage.pageIndex- 1) * this.zysbPage.pageSize + 1);
+				        }
                     }, {
                         title: '设备名称',
                         key: 'sbmc',
+                        minWidth: 100
                     }, {
                         title: '数量',
                         key: 'sl',
+                        minWidth: 80
                     }, {
                         title: '起重量（t）',
                         key: 'qzl',
+                        minWidth: 120
                     }, {
                         title: '投用时间',
                         key: 'tysj',
+                        minWidth: 180
                     }, {
                         title: '当前运行状态',
                         key: 'dqyxzt',
+                        minWidth: 120
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -643,22 +711,33 @@
 				},
 				rimColumns: [
 					{
-                        title: '序号',
-                        type: 'index',
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.rimPage.pageIndex- 1) * this.rimPage.pageSize + 1);
+				        }
                     }, {
                         title: '敏感目标名称',
                         key: 'mgmbmc',
+                        minWidth: 120
                     }, {
                         title: '方位',
                         key: 'fw',
+                        minWidth: 80
                     }, {
                         title: '目标类型',
                         key: 'mgmblx',
+                        minWidth: 100
                     }, {
                         title: '人员数量',
                         key: 'rysl',
+                        minWidth: 100
                     },{
                         title: '操作',
+                        fixed: 'right',
                         width: 150,
                         slot: 'action',
                     }, 
@@ -673,7 +752,7 @@
 					lngAndLat: '',
 					qyfw: ''
 				},
-				fwList: ['东', '南', '西', '北'],
+				fwList: ['东', '南', '西', '北', '东北', '东南', '西北', '西南'],
 				mgmblxList: ['医院', '养老院', '学校', '政府机构', '商场', '居住区', '监狱', '宗教', '车站', '码头', '铁路', '公路', '林区', '工厂', '矿山', '河流', '其他'],
 				rimPage: {
 					pageSize: 10,
@@ -687,7 +766,68 @@
 
 		},
 		computed: {
-
+			baseInfoRules() {
+				return {
+					zdwxy: [{ required: true, message: '请选择', trigger: 'change' }],
+				}
+			},
+			whRules() {
+				return {
+					hxpm: [{ required: true, message: '请输入', trigger: 'change' }],
+					bm: [{ required: true, message: '请选择', trigger: 'change' }],
+					cas: [{ required: true, message: '请选择', trigger: 'change' }],
+					hzwxxdj: [{ required: true, message: '请选择', trigger: 'change' }],
+					hxpzt: [{ required: true, message: '请选择', trigger: 'change' }],
+					nzzldw: [{ required: true, message: '请选择', trigger: 'change' }],
+					zdccldw: [{ required: true, message: '请选择', trigger: 'change' }],
+					msds: [{ required: true, message: '请输入', trigger: 'change' }],
+					sfzdjg: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					sfbzp: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					sfjdhxp: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					nzzl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					zdccl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
+			zysczyRules() {
+				return {
+					gxlx: [{ required: true, message: '请选择', trigger: 'change' }],
+					gxmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					qtmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					zycs: [{ required: true, message: '请输入', trigger: 'change' }],
+					dxzyxs: [{ required: true, type: 'array', min: 1, message: '请选择', trigger: 'change' }],
+					sfcsydyhqt: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					sfcsfc: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					sfyxkjzy: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+					gwrs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
+			zysbRules() {
+				return {
+					sbmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					tysj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+					dqyxzt: [{ required: true, message: '请选择', trigger: 'change' }],
+					sl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					qzl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
+			rimRules() {
+				const validatorQyfw = (rule, value, callback) => {
+					if (!this.rimForm.qyfw) {
+	                    callback(new Error('请选择'));
+	                } else {
+	                    callback();
+	                }
+				}
+				return {
+					mgmbmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					// fw: [{ required: true, message: '请选择', trigger: 'change' }],
+					// mgmblx: [{ required: true, message: '请选择', trigger: 'change' }],
+                	// lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	// qyfw: [{ required: true, validator: validatorQyfw, trigger: 'change' }],
+					// mgmbjl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					// rysl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			async getBaseInfo() {
@@ -766,14 +906,18 @@
 				}
 			},
 			async saveInfo() {
-				let params = {
-					gkdx_id: this.gkdx_id,
-					...this.baseInfo
-				}
-				let { status_code, message } = await api.addCbxzBase(params);
-				if(status_code == 200) {
-					this.$Message.success('保存成功')
-				}
+				this.$refs.baseInfo.validate(async valid => {
+                    if (valid) {
+                    	let params = {
+							gkdx_id: this.gkdx_id,
+							...this.baseInfo
+						}
+						let { status_code, message } = await api.addCbxzBase(params);
+						if(status_code == 200) {
+							this.$Message.success('保存成功')
+						}
+                    }
+                })
 			},
 			openAreaModal() {	
 				this.showAreaModel = true;
@@ -888,21 +1032,24 @@
 			},
 			whModelChange(status) {
 				if(!status) {
-					this.whForm = {
-						hxpm: '',
-						bm: '',
-						cas: '',
-						sfzdjg: '',
-						sfbzp: '',
-						sfjdhxp: '',
-						hzwxxdj: '',
-						hxpzt: '',
-						msds: '',
-						nzzl: 0,
-						nzzldw: '',
-						zdccl: 0,
-						zdccldw: '',
-					}
+					this.$nextTick(() => {
+						this.whForm = {
+							hxpm: '',
+							bm: '',
+							cas: '',
+							sfzdjg: '',
+							sfbzp: '',
+							sfjdhxp: '',
+							hzwxxdj: '',
+							hxpzt: '',
+							msds: '',
+							nzzl: 0,
+							nzzldw: '',
+							zdccl: 0,
+							zdccldw: '',
+						}
+						this.$refs.wh.resetFields();
+					})
 				}
 			},
 			async removeWh(row) {
@@ -911,19 +1058,25 @@
 				this.getWhsbfcList()
 			},
 			async saveWh() {
-				let params = {
-					...this.whForm,
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addWhsbfcInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showWhModel = false
-					this.getWhsbfcList()
-				}
+				this.$refs.wh.validate(async valid => {
+                    if (valid) {
+                    	this.whLoading = true
+						let params = {
+							...this.whForm,
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addWhsbfcInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showWhModel = false
+							this.whLoading = false
+							this.getWhsbfcList()
+						}
+                    }
+                })
 			},
 			handleChangeZysczyPage(val) {
 				this.zysczyPage.pageIndex = val
@@ -954,10 +1107,10 @@
 					gxlx: row.gxlx,
 					gxmc: row.gxmc,
 					gwrs: row.gwrs ? Number(row.gwrs) : 0,
-					sfcsydyhqt: row.sfcsydyhqt,
+					sfcsydyhqt: row.gwrs ? Number(row.gwrs) : 0,
 					qtmc: row.qtmc,
-					sfcsfc: row.sfcsfc,
-					sfyxkjzy: row.sfyxkjzy,
+					sfcsfc: row.sfcsfc ? Number(row.sfcsfc) : 0,
+					sfyxkjzy: row.sfyxkjzy ? Number(row.sfyxkjzy) : 0,
 					zycs: row.zycs,
 					dxzyxs: row.dxzyxs.split(','),
 				}
@@ -967,17 +1120,20 @@
 			},
 			zysczyModelChange(status) {
 				if(!status) {
-					this.zysczyForm = {
-						gxlx: '',
-						gxmc: '',
-						gwrs: 0,
-						sfcsydyhqt: '',
-						qtmc: '',
-						sfcsfc: '',
-						sfyxkjzy: '',
-						zycs: '',
-						dxzyxs: [],
-					}
+					this.$nextTick(() => {
+						this.zysczyForm = {
+							gxlx: '',
+							gxmc: '',
+							gwrs: 0,
+							sfcsydyhqt: 0,
+							qtmc: '',
+							sfcsfc: 0,
+							sfyxkjzy: 0,
+							zycs: '',
+							dxzyxs: [],
+						}
+						this.$refs.zysczy.resetFields();
+					})
 				}
 			},
 			async removeZysczy(row) {
@@ -986,22 +1142,28 @@
 				this.getZysczyList()
 			},
 			async saveZysczy() {
-				let params = {
-					...this.zysczyForm,
-					dxzyxs: this.zysczyForm.dxzyxs.join(','),
-					gkdx_id: this.gkdx_id
-				}
-				delete params.isWxgy
-				delete params.lngAndLat
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addZysczyInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showZysczyModel = false
-					this.getZysczyList()
-				}
+				this.$refs.zysczy.validate(async valid => {
+                    if (valid) {
+                    	this.zysczyLoading = true
+						let params = {
+							...this.zysczyForm,
+							dxzyxs: this.zysczyForm.dxzyxs.join(','),
+							gkdx_id: this.gkdx_id
+						}
+						delete params.isWxgy
+						delete params.lngAndLat
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addZysczyInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showZysczyModel = false
+							this.getZysczyList()
+						}
+						this.zysczyLoading = false
+                    }
+                })
 			},
 			handleChangeZysbPage(val) {
 				this.zysbPage.pageIndex = val
@@ -1041,13 +1203,16 @@
 			},
 			zysbModelChange(status) {
 				if(!status) {
-					this.zysbForm = {
-						sbmc: '',
-						sl: 0,
-						qzl: 0,
-						tysj: '',
-						dqyxzt: '',
-					}
+					this.$nextTick(() => {
+						this.zysbForm = {
+							sbmc: '',
+							sl: 0,
+							qzl: 0,
+							tysj: '',
+							dqyxzt: '',
+						}
+						this.$refs.zysb.resetFields();
+					})
 				}
 			},
 			async removeZysb(row) {
@@ -1056,20 +1221,26 @@
 				this.getZysbList()
 			},
 			async saveZysb() {
-				let params = {
-					...this.zysbForm,
-					tysj: this.zysbForm.tysj ? getDate(new Date(this.zysbForm.tysj).getTime(), 'year') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addZysbInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showZysbModel = false
-					this.getZysbList()
-				}
+				this.$refs.zysb.validate(async valid => {
+                    if (valid) {
+                    	this.zysbLoading = true
+						let params = {
+							...this.zysbForm,
+							tysj: this.zysbForm.tysj ? getDate(new Date(this.zysbForm.tysj).getTime(), 'year') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addZysbInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showZysbModel = false
+							this.getZysbList()
+						}
+						this.zysbLoading = false
+                    }
+                })
 			},
 			handleChangeRimPage(val) {
 				this.rimPage.pageIndex = val
@@ -1111,15 +1282,18 @@
 			},
 			rimModelChange(status) {
 				if(!status) {
-					this.rimForm = {
-						mgmbmc: '',
-						mgmblx: '',
-						fw: '',
-						mgmbjl: 0,
-						rysl: 0,
-						lngAndLat: '',
-						qyfw: ''
-					}
+					this.$nextTick(() => {
+						this.rimForm = {
+							mgmbmc: '',
+							mgmblx: '',
+							fw: '',
+							mgmbjl: 0,
+							rysl: 0,
+							lngAndLat: '',
+							qyfw: ''
+						}
+						this.$refs.rim.resetFields();
+					})
 				}
 			},
 			async removeRim(row) {
@@ -1128,22 +1302,28 @@
 				this.getRimList()
 			},
 			async saveRim() {
-				let params = {
-					...this.rimForm,
-					jd: this.rimForm.lngAndLat.split(' ')[0],
-					wd: this.rimForm.lngAndLat.split(' ')[1],
-					gkdx_id: this.gkdx_id
-				}
-				delete params.lngAndLat
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addRimInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showRimModel = false
-					this.getRimList()
-				}
+				this.$refs.rim.validate(async valid => {
+                    if (valid) {
+                    	this.rimLoading = true
+						let params = {
+							...this.rimForm,
+							jd: this.rimForm.lngAndLat.split(' ')[0],
+							wd: this.rimForm.lngAndLat.split(' ')[1],
+							gkdx_id: this.gkdx_id
+						}
+						delete params.lngAndLat
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addRimInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showRimModel = false
+							this.getRimList()
+						}
+						this.rimLoading = false
+                    }
+                })
 			},
 		},
 		created() {
