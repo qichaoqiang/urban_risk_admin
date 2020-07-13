@@ -20,7 +20,7 @@
 				            	placeholder="所属区域"></Cascader>
 				        </FormItem>
 				        <FormItem label="经纬度" prop="lngAndLat">
-				        	<lng id="lng_box_qd" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
+				        	<lng id="lng_box_qd" :lngAndLat.sync="baseInfo.lngAndLat" :dz="baseInfo.dz"></lng>
 				        </FormItem>
 				        <FormItem label="地址" prop="dz">
 				        	<Input clearable v-model="baseInfo.dz" placeholder="地址"></Input>
@@ -978,22 +978,22 @@
 				return {
                 	quyu: [{ required: true, validator: validatorQuyu, trigger: 'change' }],
                 	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
-                	aqscbzh: [{ required: true, message: '请输入', trigger: 'change' }],
                 	dz: [{ required: true, message: '请输入', trigger: 'change' }],
-                	gldw: [{ required: true, message: '请输入', trigger: 'change' }],
-                	gldwtyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
-                	sjdw: [{ required: true, message: '请输入', trigger: 'change' }],
-                	sjdwtyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
-                	sgdw: [{ required: true, message: '请输入', trigger: 'change' }],
-                	sgdwtyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
-                	jgsj: [{ required: true, validator: validatorJgsj, trigger: 'change' }],
-                	zysj: [{ required: true, validator: validatorZysj, trigger: 'change' }],
-                	qljj: [{ required: true, message: '请输入', trigger: 'change' }],
-                	jbr: [{ required: true, message: '请输入', trigger: 'change' }],
-                	jbrdh: [{ required: true, message: '请输入', trigger: 'change' }],
-                	jbryx: [{ required: true, message: '请输入', trigger: 'change' }],
-                	fzr: [{ required: true, message: '请输入', trigger: 'change' }],
-                	fzrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// aqscbzh: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// gldw: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// gldwtyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// sjdw: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// sjdwtyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// sgdw: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// sgdwtyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// jgsj: [{ required: true, validator: validatorJgsj, trigger: 'change' }],
+                	// zysj: [{ required: true, validator: validatorZysj, trigger: 'change' }],
+                	// qljj: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// jbr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// jbrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// jbryx: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// fzr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// fzrdh: [{ required: true, message: '请输入', trigger: 'change' }],
 				}
 			},
 		},

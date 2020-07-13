@@ -5,7 +5,7 @@
 				<Col>
 					<div class="title">请完善{{step == 1 ? '学校' : '风险'}}信息</div>
 					<part-title text="基本信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="170" style="width: 600px">
+					<Form :model="baseInfo" ref="baseInfo" :rules="rules" hide-required-mark label-position="left" :label-width="170" style="width: 600px">
 						<FormItem label="学校名称">
 				            {{baseInfo.xxmc}}
 				        </FormItem>
@@ -20,11 +20,11 @@
 				        <FormItem label="建成投用时间">
 				            <DatePicker type="date" v-model="baseInfo.jctysj"  placeholder="建成投用时间"></DatePicker>
 				        </FormItem>
-				        <FormItem label="学校地址">
+				        <FormItem label="学校地址" prop="xxdz">
 				        	<Input clearable v-model="baseInfo.xxdz" placeholder="学校地址"></Input>
 				        </FormItem>
-				        <FormItem label="经纬度">
-				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
+				        <FormItem label="经纬度" prop="lngAndLat">
+				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat" :dz="baseInfo.xxdz"></lng>
 				        </FormItem>
 				        <FormItem label="学校范围">
 				        	<div @click.stop="openAreaModal">
@@ -38,7 +38,7 @@
 				        <FormItem label="行业代码">
 				            <Input clearable v-model="baseInfo.hydm" placeholder="行业代码"></Input>
 				        </FormItem>
-				        <FormItem label="所属辖区">
+				        <FormItem label="所属辖区" prop="quyu">
 				        	<Cascader 
 				            	clearable 
 				            	change-on-select
@@ -351,7 +351,13 @@
 
 		},
 		computed: {
-
+			rules() {
+				return {
+                	xxdz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                }
+            }
 		},
 		methods: {
 			async getBaseInfo() {
@@ -369,7 +375,14 @@
 					// this.getHy()
 				}
 			},
-			async nextStep() {
+			nextStep() {
+				this.$refs.baseInfo.validate((valid) => {
+                    if (valid) {
+                        this.submit()
+                    }
+                })
+			},
+			async submit() {
 				let params = {
 					...this.baseInfo,
 					jctysj: this.baseInfo.jctysj ? getDate(new Date(this.baseInfo.jctysj).getTime(), 'date') : '',

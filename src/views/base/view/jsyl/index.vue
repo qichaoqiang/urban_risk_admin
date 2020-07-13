@@ -31,7 +31,7 @@
 				        	<Input clearable v-model="baseInfo.scdz" placeholder="生产地址"></Input>
 				        </FormItem>
 				        <FormItem label="经纬度" prop="lngAndLat">
-				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
+				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat" :dz="baseInfo.scdz"></lng>
 				        </FormItem>
 				        <FormItem label="企业范围" prop="qyfw">
 				        	<div @click.stop="openAreaModal">
@@ -1002,31 +1002,31 @@
 	                }
 				}
 				return {
-					yxzt: [{ required: true, message: '请选择', trigger: 'change' }],
                 	quyu: [{ required: true, validator: validatorQuyu, trigger: 'change' }],
-                	aqscbzh: [{ required: true, message: '请输入', trigger: 'change' }],
                 	scdz: [{ required: true, message: '请输入', trigger: 'change' }],
                 	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
-                	qyfw: [{ required: true, message: '请选择', trigger: 'change' }],
-                	sfzgyyq: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
-                	yqmc: [{ required: true, message: '请输入', trigger: 'change' }],
-                	hyml: [{ required: true, validator: validatorQuyu, trigger: 'change' }],
-                	hydm: [{ required: true, message: '请输入', trigger: 'change' }],
-                	tyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
-                	zcdz: [{ required: true, message: '请输入', trigger: 'change' }],
-                	qyjbjk: [{ required: true, message: '请输入', trigger: 'change' }],
-                	zgrs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
-                	glrysl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
-                	zdmj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
-                	jzmj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
-                	zddbrs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
-                	jbr: [{ required: true, message: '请输入', trigger: 'change' }],
-                	jbrdh: [{ required: true, message: '请输入', trigger: 'change' }],
-                	jbryx: [{ required: true, message: '请输入', trigger: 'change' }],
-                	qyfzr: [{ required: true, message: '请输入', trigger: 'change' }],
-                	fzrdh: [{ required: true, message: '请输入', trigger: 'change' }],
-                	fgaqfzr: [{ required: true, message: '请输入', trigger: 'change' }],
-                	fgaqfzrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	qyfw: [{ required: true, message: '请选择', trigger: 'change' }],
+     //            	sfzgyyq: [{ required: true, type: 'number', message: '请选择', trigger: 'change' }],
+     //            	yqmc: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	hyml: [{ required: true, validator: validatorQuyu, trigger: 'change' }],
+     //            	hydm: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	tyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	zcdz: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	qyjbjk: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	zgrs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+     //            	glrysl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+     //            	zdmj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+     //            	jzmj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+     //            	zddbrs: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+     //            	jbr: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	jbrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	jbryx: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	qyfzr: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	fzrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	fgaqfzr: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	fgaqfzrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	aqscbzh: [{ required: true, message: '请输入', trigger: 'change' }],
+					// yxzt: [{ required: true, message: '请选择', trigger: 'change' }],
 				}
 			},
 		},

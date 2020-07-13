@@ -74,6 +74,10 @@ export default {
   getXmsslxList(params) {
     return fetchGet('/api/shigongxiangmuleixing', params)
   },
+  // 区域风险
+  getQyfxList(params) {
+    return fetchGet('/api/quyufengxian', params)
+  },
   ...role,
   ...cj_account,
   ...admin,

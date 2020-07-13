@@ -123,12 +123,27 @@
 				    },
 				    yAxis: {
 				        ...axisConfig,
-				    	name: '风险个数',
+				    	name: '风险指数',
 				        type: 'value',
 				    },
 				    itemStyle: {
 				    	borderWidth: 1,
 		                color: 'rgb(54, 136, 236)'
+		            },
+		            areaStyle: {
+		            	color: {
+						    type: 'linear',
+						    x: 0,
+						    y: 0,
+						    x2: 0,
+						    y2: 1,
+						    colorStops: [{
+						        offset: 0, color: 'red' // 0% 处的颜色
+						    }, {
+						        offset: 1, color: 'blue' // 100% 处的颜色
+						    }],
+						    global: false // 缺省为 false
+						}
 		            },
 		            tooltip: {
 		            	trigger: 'axis',

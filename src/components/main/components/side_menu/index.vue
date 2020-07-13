@@ -110,12 +110,12 @@
 		},
 		methods: {
 			turnToPage(item) {
-				console.log(item.name)
 				// this.$nextTick(() => {
 				// 	this.$refs.menu.updateOpened()
 				// })
 				// this.openNames = this.$route.meta.parent ? [this.$route.meta.parent] : []
-				this.$router.push({path: item.path})
+
+				if(item.path !== this.$route.path) this.$router.push({path: item.path})
 			}
 		},
 		created() {

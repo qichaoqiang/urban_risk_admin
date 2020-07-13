@@ -6,19 +6,19 @@
 				<Col>
 					<div class="title">请完善{{step == 1 ? '企业' : '风险'}}信息</div>
 					<part-title text="基本信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
+					<Form :model="baseInfo" ref="baseInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 						<FormItem label="企业名称">
 				            {{baseInfo.qymc}}
 				        </FormItem>
 				        <FormItem label="经营范围">
-				        	<Input clearable v-model="baseInfo.jyfw" placeholder="经营范围"></Input>
+				        	<Input clearable type="textarea" :rows="4" v-model="baseInfo.jyfw" placeholder="经营范围"></Input>
 				        </FormItem>
 				        <FormItem label="运行状态">
 				            <Select clearable v-model="baseInfo.yxzt" placeholder="运行状态">
 				                <Option v-for="item in yxztList" :key="item" :value="item">{{item}}</Option>
 				            </Select>
 				        </FormItem>
-				        <FormItem label="所属区域">
+				        <FormItem label="所属区域" prop="quyu">
 				            <Cascader 
 				            	readonly 
 				            	change-on-select
@@ -30,11 +30,11 @@
 				        <FormItem label="安全生产许可证">
 				        	<Input clearable v-model="baseInfo.aqscxkz" placeholder="安全生产许可证"></Input>
 				        </FormItem>
-				        <FormItem label="生产地址">
+				        <FormItem label="生产地址" prop="scdz">
 				        	<Input clearable v-model="baseInfo.scdz" placeholder="生产地址"></Input>
 				        </FormItem>
-				        <FormItem label="经纬度">
-				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
+				        <FormItem label="经纬度" prop="lngAndLat">
+				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat" :dz="baseInfo.scdz"></lng>
 				        </FormItem>
 				        <FormItem label="企业范围">
 				        	<div @click.stop="openAreaModal">
@@ -974,7 +974,13 @@
 
 		},
 		computed: {
-
+			rules() {
+				return {
+                	scdz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                }
+            }
 		},
 		methods: {
 			async getBaseInfo() {
@@ -993,7 +999,14 @@
 					this.getQy();
 				}
 			},
-			async nextStep() {
+			nextStep() {
+				this.$refs.baseInfo.validate((valid) => {
+                    if (valid) {
+                        this.submit()
+                    }
+                })
+			},
+			async submit() {
 				let params = {
 					...this.baseInfo,
 					tcsj: this.baseInfo.tcsj ? getDate(new Date(this.baseInfo.tcsj).getTime(), 'date') : '',

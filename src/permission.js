@@ -52,6 +52,35 @@ router.beforeEach((to, from, next) => {
 						title: '总览',
 					},
 					component: resolve => require(['@/views/overview/index'], resolve),
+					children: [
+						{
+							name: 'area',
+							path: '/area',
+							meta: {
+								title: '区域风险分析',
+								parent: 'overview'
+							},
+							component: resolve => require([`@/views/overview/area.vue`], resolve),
+						},
+						{
+							name: 'industry',
+							path: '/industry',
+							meta: {
+								title: '行业风险分析',
+								parent: 'overview'
+							},
+							component: resolve => require([`@/views/overview/industry.vue`], resolve),
+						},
+						{
+							name: 'poi',
+							path: '/poi',
+							meta: {
+								title: '安全风险分布',
+								parent: 'overview'
+							},
+							component: resolve => require([`@/views/overview/poi.vue`], resolve),
+						}
+					]
 				})
 				if(authList.includes('xiangmu')) {
 					menu.push({

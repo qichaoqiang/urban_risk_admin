@@ -162,30 +162,30 @@
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}码头规模`" v-model="showMtgmModel" @on-visible-change="mtgmModelChange">
 			<div>
-				<Form :model="mtgmForm" label-position="left" :label-width="180">
-					<FormItem label="近1月日均周转量（吨）">
+				<Form :model="mtgmForm" ref="mtgm" :rules="mtgmRules" hide-required-mark label-position="left" :label-width="180">
+					<FormItem label="近1月日均周转量（吨）" prop="jyyrjzzl">
 			        	<InputNumber :min="0" v-model="mtgmForm.jyyrjzzl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="填报时间">
+			        <FormItem label="填报时间" prop="tbsj">
 			            <DatePicker type="date" v-model="mtgmForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showMtgmModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveMtgm">保存</Button>
+		        <Button type="primary" size="large" :loading="mtgmLoading" @click="saveMtgm">保存</Button>
 	        </div>
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}泊位信息`" v-model="showBwxxModel" @on-visible-change="bwxxModelChange">
 			<div>
-				<Form :model="bwxxForm" label-position="left" :label-width="140">
-					<FormItem label="泊位名称">
+				<Form :model="bwxxForm" ref="bwxx" :rules="bwxxRules" hide-required-mark label-position="left" :label-width="140">
+					<FormItem label="泊位名称" prop="bwmc">
 			        	<Input clearable v-model="bwxxForm.bwmc"></Input>
 			        </FormItem>
-			        <FormItem label="靠泊吨级（DWT）">
+			        <FormItem label="靠泊吨级（DWT）" prop="kbdw">
 			        	<Input clearable v-model="bwxxForm.kbdw"></Input>
 			        </FormItem>
-			        <FormItem label="是否开展夜间作业">
+			        <FormItem label="是否开展夜间作业" prop="sfkzyjzy">
 			        	<Select clearable v-model="bwxxForm.sfkzyjzy" placeholder="请选择">
 			                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
 			            </Select>
@@ -205,73 +205,73 @@
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showMtgmModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveBwxx">保存</Button>
+		        <Button type="primary" size="large" :loading="bwxxLoading" @click="saveBwxx">保存</Button>
 	        </div>
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}货物种类`" v-model="showSjwxhwzlModel" @on-visible-change="sjwxhwzlModelChange">
 			<div>
-				<Form :model="sjwxhwzlForm" label-position="left" :label-width="160">
-					<FormItem label="货物名称">
+				<Form :model="sjwxhwzlForm" ref="sjwxhwzl" :rules="sjwxhwzlRules" hide-required-mark label-position="left" :label-width="160">
+					<FormItem label="货物名称" prop="wxhwmc">
 			        	<Input clearable v-model="sjwxhwzlForm.wxhwmc"></Input>
 			        </FormItem>
-			        <FormItem label="最大年周转量（吨/年）">
+			        <FormItem label="最大年周转量（吨/年）" prop="zdnzzl">
 			        	<InputNumber :min="0" v-model="sjwxhwzlForm.zdnzzl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="近1月日平均周转（吨）">
+			        <FormItem label="近1月日平均周转（吨）" prop="jyyrpjzz">
 			        	<InputNumber :min="0" v-model="sjwxhwzlForm.jyyrpjzz"></InputNumber>
 			        </FormItem>
-			        <FormItem label="填报时间">
+			        <FormItem label="填报时间" prop="tbsj">
 			            <DatePicker type="date" v-model="sjwxhwzlForm.tbsj"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showMtgmModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveSjwxhwzl">保存</Button>
+		        <Button type="primary" size="large" :loading="sjwxhwzlLoading" @click="saveSjwxhwzl">保存</Button>
 	        </div>
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}仓储信息`" v-model="showCcxxphModel"  @on-visible-change="ccxxphModelChange">
 			<div>
-				<Form :model="ccxxphForm" label-position="left" :label-width="140">
-					<FormItem label="堆场或者仓库名称">
+				<Form :model="ccxxphForm" ref="ccxxph" :rules="ccxxphRules" hide-required-mark label-position="left" :label-width="140">
+					<FormItem label="堆场或者仓库名称" prop="dchzckmc">
 			        	<Input clearable v-model="ccxxphForm.dchzckmc"></Input>
 			        </FormItem>
-			        <FormItem label="面积（㎡）">
+			        <FormItem label="面积（㎡）" prop="mj">
 			        	<InputNumber :min="0" v-model="ccxxphForm.mj"></InputNumber>
 			        </FormItem>
-			        <FormItem label="数量">
+			        <FormItem label="数量" prop="sl">
 			        	<InputNumber :min="0" v-model="ccxxphForm.sl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="货物名称">
+			        <FormItem label="货物名称" prop="hwmc">
 			        	<Input clearable v-model="ccxxphForm.hwmc"></Input>
 			        </FormItem>
-			       <FormItem label="存储量">
+			       <FormItem label="存储量" prop="ccl">
 			        	<InputNumber :min="0" v-model="ccxxphForm.ccl"></InputNumber>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showMtgmModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveCcxxph">保存</Button>
+		        <Button type="primary" size="large" :loading="ccxxphLoading" @click="saveCcxxph">保存</Button>
 	        </div>
 		</Modal>
 		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}装卸设备`" v-model="showZxsbModel"  @on-visible-change="zxsbModelChange">
 			<div>
-				<Form :model="zxsbForm" label-position="left" :label-width="140">
-					<FormItem label="起重机械名称">
+				<Form :model="zxsbForm" ref="zxsb" :rules="zxsbRules" hide-required-mark label-position="left" :label-width="140">
+					<FormItem label="起重机械名称" prop="qzjxmc">
 			        	<Input clearable v-model="zxsbForm.qzjxmc"></Input>
 			        </FormItem>
-			        <FormItem label="吨位">
+			        <FormItem label="吨位" prop="dw">
 			        	<InputNumber :min="0" v-model="zxsbForm.dw"></InputNumber>
 			        </FormItem>
-			        <FormItem label="检验有效期">
+			        <FormItem label="检验有效期" prop="jyyxq">
 			        	<DatePicker type="date" v-model="zxsbForm.jyyxq"  placeholder="请选择"></DatePicker>
 			        </FormItem>
 				</Form>
 			</div>
 			<div slot="footer">
 	            <!-- <Button type="text" size="large" @click="showMtgmModel = false">取消</Button> -->
-		        <Button type="primary" size="large" @click="saveZxsb">保存</Button>
+		        <Button type="primary" size="large" :loading="zxsbLoading" @click="saveZxsb">保存</Button>
 	        </div>
 		</Modal>
 	</div>
@@ -312,6 +312,11 @@
 				showMainRiskModel: false,
 				showCcxxphModel: false,
 				showZxsbModel: false,
+				mtgmLoading: false,
+				bwxxLoading: false,
+				sjwxhwzlLoading: false,
+				ccxxphLoading: false,
+				zxsbLoading: false,
 				modeType: '',
 				modeType2: '',
 				map: null,
@@ -663,6 +668,43 @@
 					sjnzzl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
 				}
 			},
+			mtgmRules() {
+				return {
+					jyyrjzzl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
+			bwxxRules() {
+				return {
+					bwmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					kbdw: [{ required: true, message: '请输入', trigger: 'change' }],
+					sfkzyjzy: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
+			sjwxhwzlRules() {
+				return {
+					wxhwmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					zdnzzl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					jyyrpjzz: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
+			ccxxphRules() {
+				return {
+					dchzckmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					mj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					sl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					hwmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					ccl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
+			zxsbRules() {
+				return {
+					qzjxmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					dw: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					jyyxq: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			async getBaseInfo() {
@@ -856,10 +898,13 @@
 			},
 			mtgmModelChange(status) {
 				if(!status) {
-					this.mtgmForm = {
-						jyyrjzzl: 0,
-						tbsj: '',
-					}
+					this.$nextTick(() => {
+						this.mtgmForm = {
+							jyyrjzzl: 0,
+							tbsj: '',
+						}
+						this.$refs.mtgm.resetFields();
+					})
 				}
 			},
 			async removeMtgm(row) {
@@ -868,20 +913,26 @@
 				this.getMtgmList()
 			},
 			async saveMtgm() {
-				let params = {
-					...this.mtgmForm,
-					tbsj: this.mtgmForm.tbsj ? getDate(new Date(this.mtgmForm.tbsj).getTime(), 'date') : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addMtgmInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showMtgmModel = false
-					this.getMtgmList()
-				}
+				this.$refs.mtgm.validate(async valid => {
+                    if (valid) {
+                    	this.mtgmLoading = true
+                    	let params = {
+							...this.mtgmForm,
+							tbsj: this.mtgmForm.tbsj ? getDate(new Date(this.mtgmForm.tbsj).getTime(), 'date') : '',
+							gkdx_id: this.gkdx_id
+						}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addMtgmInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showMtgmModel = false
+							this.getMtgmList()
+						}
+						this.mtgmLoading = false
+                    }
+                })
 			},
 			handleChangeBwxxPage(val) {
 				this.bwxxPage.pageIndex = val
@@ -921,11 +972,14 @@
 			},
 			bwxxModelChange(status) {
 				if(!status) {
-					this.bwxxForm = {
-						bwmc: '',
-						kbdw: '',
-						sfkzyjzy: 0,
-					}
+					this.$nextTick(() => {
+						this.bwxxForm = {
+							bwmc: '',
+							kbdw: '',
+							sfkzyjzy: 0,
+						}
+						this.$refs.bwxx.resetFields();
+					})
 					this.sjwxhwzlData = []
 				}
 			},
@@ -935,123 +989,26 @@
 				this.getBwxxList()
 			},
 			async saveBwxx() {
-				let params = {
-					...this.bwxxForm,
-					wxhwzl: this.sjwxhwzlData.length > 0 ? JSON.stringify(this.sjwxhwzlData) : '',
-					gkdx_id: this.gkdx_id
-				}
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addBwxxInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showBwxxModel = false
-					this.getBwxxList()
-				}
-			},
-			handleChangeCcssPage(val) {
-				this.ccssPage.pageIndex = val
-				this.getCcssList()
-			},
-			handleChangeCcssPageSize(val) {
-				this.ccssPage.pageSize = val
-				this.getCcssList()
-			},
-			async getCcssList() {
-				let params = {
-					gkdx_id: this.gkdx_id,
-					per_page: this.ccssPage.pageSize,
-					page: this.ccssPage.pageIndex,
-				}
-				let { status_code, data } = await api.getCcssList(params)
-				if(status_code == 200) {
-					this.ccssData = data.data
-					this.ccssPage.totalRow = data.total
-				}
-			},
-			async openCcssModel() {
-				if(this.fclxList.length == 0) {
-					let { status_code, data } = await api.getFclxList()
-					if(status_code == 200) {
-						this.fclxList = []
-						for(let key in data) {
-							let item = {
-								value: key,
-			                    label: key,
-							}
-							item.children = data[key].map(item_ => {
-								return {
-									value: item_,
-			                    	label: item_,
-								}
-							})
-							this.fclxList.push(item)
+				this.$refs.bwxx.validate(async valid => {
+                    if (valid) {
+                    	this.bwxxLoading = true
+						let params = {
+							...this.bwxxForm,
+							wxhwzl: this.sjwxhwzlData.length > 0 ? JSON.stringify(this.sjwxhwzlData) : '',
+							gkdx_id: this.gkdx_id
 						}
-						// this.fclxList
-					}
-				}
-				this.modeType = 1;
-				this.showCcssModel = true
-			},
-			async editCcssModel(row) {
-				this.ccssForm = {
-					ccssdymc: row.ccssdymc,
-					lx: row.lx,
-					ccwd: row.ccwd ? Number(row.ccwd) : 0,
-					zdwxy: row.zdwxy,
-					tysj: row.tysj ? new Date(row.tysj) : '',
-					lngAndLat: row.jd && row.wd ? `${(row.jd - 0).toFixed(2)} ${(row.wd - 0).toFixed(2)}` : '',
-					dtfw: row.dtfw,
-					dqzt: row.dqzt
-				}
-				this.id = row.id
-				this.ccss_id = row.id
-				this.sjwxhwzlData = row.wxhxp ? JSON.parse(row.wxhxp) : []
-				this.modeType = 2;
-				this.showCcssModel = true
-				this.getGqscList();
-			},
-			ccssModelChange(status) {
-				if(!status) {
-					this.ccssForm = {
-						ccssdymc: '',
-						lx: '',
-						ccwd: 0,
-						zdwxy: '',
-						tysj: '',
-						lngAndLat: '',
-						dtfw: '',
-						dqzt: ''
-					}
-					this.sjwxhwzlData = []
-				}
-			},
-			async removeCcss(row) {
-				let { status_code } = await api.deleteCcssInfo(row.id)
-				status_code == 200 && this.$Message.success('删除成功')
-				this.getCcssList()
-			},
-			async saveCcss() {
-				let params = {
-					...this.ccssForm,
-					tysj: this.ccssForm.tysj ? getDate(new Date(this.ccssForm.tysj).getTime(), 'date') : '',
-					wxhxp: this.sjwxhwzlData.length > 0 ? JSON.stringify(this.sjwxhwzlData) : '',
-					jd: this.ccssForm.lngAndLat.split(' ')[0],
-					wd: this.ccssForm.lngAndLat.split(' ')[1],
-					gkdx_id: this.gkdx_id
-				}
-				delete params.isWxgy
-				delete params.lngAndLat
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addCcssInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showCcssModel = false
-					this.getCcssList()
-				}
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addBwxxInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showBwxxModel = false
+							this.getBwxxList()
+						}
+						this.bwxxLoading = false
+                    }
+                })
 			},
 			handleWxhwzl(row) {
 				if(row.wxhwzl) {
@@ -1069,7 +1026,7 @@
 			},
 			editSjwxhwzlModel(row, index) {
 				this.sjwxhwzlForm = {
-					wxhwmc: row.cplb,
+					wxhwmc: row.wxhwmc,
 					zdnzzl: row.zdnzzl ? Number(row.zdnzzl) : 0,
 					jyyrpjzz: row.jyyrpjzz ? Number(row.jyyrpjzz) : 0,
 					tbsj: row.tbsj ? new Date(row.tbsj) : '',
@@ -1080,22 +1037,31 @@
 			},
 			sjwxhwzlModelChange(status) {
 				if(!status) {
-					this.sjwxhwzlForm = {
-						wxhwmc: '',
-						zdnzzl: 0,
-						jyyrpjzz: 0,
-						tbsj: '',
-					}
+					this.$nextTick(() => {
+						this.sjwxhwzlForm = {
+							wxhwmc: '',
+							zdnzzl: 0,
+							jyyrpjzz: 0,
+							tbsj: '',
+						}
+						this.$refs.sjwxhwzl.resetFields();
+					})
 				}
 			},
 			async saveSjwxhwzl() {
-				let sjwxhwzlForm = {...this.sjwxhwzlForm, tbsj: this.sjwxhwzlForm.tbsj ? getDate(new Date(this.sjwxhwzlForm.tbsj).getTime(), 'date') : '',}
-				if(this.modeType2 == 2) {
-					this.sjwxhwzlData.splice(this.sjwxhwzlId, 1, sjwxhwzlForm)
-				}else {
-					this.sjwxhwzlData.push(sjwxhwzlForm)
-				}
-				this.showSjwxhwzlModel = false
+				this.$refs.sjwxhwzl.validate(async valid => {
+                    if (valid) {
+                    	this.sjwxhwzlLoading = true
+						let sjwxhwzlForm = {...this.sjwxhwzlForm, tbsj: this.sjwxhwzlForm.tbsj ? getDate(new Date(this.sjwxhwzlForm.tbsj).getTime(), 'date') : '',}
+						if(this.modeType2 == 2) {
+							this.sjwxhwzlData.splice(this.sjwxhwzlId, 1, sjwxhwzlForm)
+						}else {
+							this.sjwxhwzlData.push(sjwxhwzlForm)
+						}
+						this.showSjwxhwzlModel = false
+						this.sjwxhwzlLoading = false
+                    }
+                })
 			},
 			removeSjwxhwzl(index) {
 				this.sjwxhwzlData.splice(index, 1)
@@ -1138,13 +1104,16 @@
 			},
 			ccxxphModelChange(status) {
 				if(!status) {
-					this.ccxxphForm = {
-						dchzckmc: '',
-						mj: 0,
-						sl: 0,
-						hwmc: '',
-						ccl: 0
-					}
+					this.$nextTick(() => {
+						this.ccxxphForm = {
+							dchzckmc: '',
+							mj: 0,
+							sl: 0,
+							hwmc: '',
+							ccl: 0
+						}
+						this.$refs.ccxxph.resetFields();
+					})
 				}
 			},
 			async removeCcxxph(row) {
@@ -1153,20 +1122,26 @@
 				this.getCcxxphList()
 			},
 			async saveCcxxph() {
-				let params = {
-					...this.ccxxphForm,
-					gkdx_id: this.gkdx_id
-				}
-				delete params.lngAndLat
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addCcxxphInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showCcxxphModel = false
-					this.getCcxxphList()
-				}
+				this.$refs.ccxxph.validate(async valid => {
+                    if (valid) {
+                    	this.ccxxphLoading = true
+						let params = {
+							...this.ccxxphForm,
+							gkdx_id: this.gkdx_id
+						}
+						delete params.lngAndLat
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addCcxxphInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showCcxxphModel = false
+							this.getCcxxphList()
+						}
+						this.ccxxphLoading = false
+                    }
+                })
 			},
 			handleChangeZxsbPage(val) {
 				this.zxsbPage.pageIndex = val
@@ -1207,11 +1182,14 @@
 			},
 			zxsbModelChange(status) {
 				if(!status) {
-					this.zxsbForm = {
-						qzjxmc: '',
-						dw: 0,
-						jyyxq: '',
-					}
+					this.$nextTick(() => {
+						this.zxsbForm = {
+							qzjxmc: '',
+							dw: 0,
+							jyyxq: '',
+						}
+						this.$refs.zxsb.resetFields();
+					})
 				}
 			},
 			async removeZxsb(row) {
@@ -1220,21 +1198,27 @@
 				this.getZxsbList()
 			},
 			async saveZxsb() {
-				let params = {
-					...this.zxsbForm,
-					jyyxq: this.zxsbForm.jyyxq ? getDate(new Date(this.zxsbForm.jyyxq).getTime(), 'date') : '',
-					gkdx_id: this.gkdx_id
-				}
-				delete params.lngAndLat
-				if(this.modeType == 2) {
-					params.id = this.id
-				}
-				let { status_code, message } = await api.addZxsbInfo(params);
-				if(status_code == 200) {
-					this.$Message.success(message)
-					this.showZxsbModel = false
-					this.getZxsbList()
-				}
+				this.$refs.zxsb.validate(async valid => {
+                    if (valid) {
+                    	this.zxsbLoading = true
+						let params = {
+							...this.zxsbForm,
+							jyyxq: this.zxsbForm.jyyxq ? getDate(new Date(this.zxsbForm.jyyxq).getTime(), 'date') : '',
+							gkdx_id: this.gkdx_id
+						}
+						delete params.lngAndLat
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addZxsbInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showZxsbModel = false
+							this.getZxsbList()
+						}
+						this.zxsbLoading = false
+                    }
+                })
 			},
 		},
 		created() {

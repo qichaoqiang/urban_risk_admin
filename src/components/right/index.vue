@@ -7,7 +7,7 @@
 					<Tabs value="name1">
 						<TabPane label="风险图层" name="name1">
 							<div style="margin-top: 8px; height: 270px; width: 100%; overflow: hidden">
-								<div  style="padding-bottom: 20px; height: 290px; box-sizing: border-box; width: calc(100% + 18px); overflow: scroll">
+								<div  style="padding-bottom: 20px; height: 300px; box-sizing: border-box; width: calc(100% + 30px); overflow: scroll">
 									<trade :data="tradeList" left="0px" :level="1" @selectChange="handleSelectChange"></trade>
 								</div>
 							</div>
@@ -19,12 +19,12 @@
 			<!-- <title-top name="行业分类" left="0px"></title-top> -->
 			<!-- <level></level> -->
 		</div>
-		<div class="trade_item" v-if="$store.state.tradeList.length > 0">
-			<title-top name="各行业占比" left="0px"></title-top>
+		<div class="trade_item" v-if="tradeList.length > 0">
+			<title-top name="单元风险分布 行业占比" left="0px"></title-top>
 			<trade-rate></trade-rate>
 		</div>
 		<div class="trade_item">
-			<title-top name="风险点风险变化" left="0px"></title-top>
+			<title-top name="行业风险数量" left="0px"></title-top>
 			<risk-change></risk-change>
 		</div>
 	</div>

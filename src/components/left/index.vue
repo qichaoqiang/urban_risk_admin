@@ -3,23 +3,24 @@
 		<title-top name="风险统计"></title-top>
 		<div class="overview_data">
 			<div class="overview_item">
-				<div class="overview_key">风险数量</div>
-				<div class="overview_value">381</div>
+				<div class="overview_key">风险源数量</div>
+				<div class="overview_value">{{$store.state.fxySum}}</div>
 			</div>
-			<div class="overview_item">
+			<!-- <div class="overview_item">
 				<div class="overview_key">风险等级</div>
 				<div class="overview_value">高</div>
-			</div>
+			</div> -->
 		</div>
-		<div class="overview_line"></div>
-		<div v-if="area == '全部'">
+		<!-- <div class="overview_line"></div>
+		<div>
 			<title-top name="分区域"></title-top>
 			<risk-bar id="1"></risk-bar>
 			<div class="overview_line"></div>
 			<title-top name="分行业"></title-top>
 			<risk-hy id="2"></risk-hy>
-		</div>
-		<div v-else>
+		</div> -->
+		<title-top name="风险等级分布图" :area="area"></title-top>
+		<div>
 			<overview></overview>
 		</div>
 		<div class="overview_line"></div>
@@ -75,7 +76,7 @@
 <style lang="scss" scoped>
 	.left_box {
 		.overview_data {
-			margin-top: 27px;
+			margin-top: 16px;
 			padding: 0 49px;
 			box-sizing: border-box;
 			width: 100%;

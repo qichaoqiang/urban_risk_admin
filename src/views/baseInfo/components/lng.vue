@@ -55,14 +55,6 @@
 				},
 			}
 		},
-		watch: {
-			'baseInfo.lngAndLat'(val) {
-				this.$emit('update:lngAndLat', val)
-			},
-			lngAndLat(val) {
-				this.baseInfo.lngAndLat = val
-			}
-		},
 		computed: {
 
 		},

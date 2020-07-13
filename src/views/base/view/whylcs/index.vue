@@ -6,11 +6,11 @@
 				<Col>
 					<div class="title">请完善{{step == 1 ? '企业' : '风险'}}信息</div>
 					<part-title text="基本信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
+					<Form :model="baseInfo" ref="baseInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 						<FormItem label="场所名称">
 				            {{baseInfo.csmc}}
 				        </FormItem>
-				        <FormItem label="所属区域">
+				        <FormItem label="所属区域" prop="quyu">
 				            <Cascader 
 				            	clearable 
 				            	change-on-select
@@ -40,11 +40,11 @@
 				                <Option v-for="item in yyztList" :key="item" :value="item">{{item}}</Option>
 				            </Select>
 				        </FormItem>
-				        <FormItem label="场所地址">
+				        <FormItem label="场所地址" prop="csdz">
 				        	<Input clearable v-model="baseInfo.csdz" placeholder="场所地址"></Input>
 				        </FormItem>
-				        <FormItem label="经纬度">
-				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
+				        <FormItem label="经纬度" prop="lngAndLat">
+				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat" :dz="baseInfo.csdz"></lng>
 				        </FormItem>
 				        <FormItem label="场所范围">
 				        	<div @click.stop="openAreaModal">
@@ -243,7 +243,13 @@
 
 		},
 		computed: {
-
+			rules() {
+				return {
+                	csdz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                }
+            }
 		},
 		methods: {
 			async getBaseInfo() {
@@ -264,7 +270,14 @@
 					this.getQy();
 				}
 			},
-			async nextStep() {
+			nextStep() {
+				this.$refs.baseInfo.validate((valid) => {
+                    if (valid) {
+                        this.submit()
+                    }
+                })
+			},
+			async submit() {
 				let params = {
 					...this.baseInfo,
 					yysj1: this.baseInfo.yysj[0],

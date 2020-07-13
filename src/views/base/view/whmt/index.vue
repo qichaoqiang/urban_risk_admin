@@ -6,11 +6,11 @@
 				<Col>
 					<div class="title">请完善{{step == 1 ? '企业' : '风险'}}信息</div>
 					<part-title text="基本信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
+					<Form :model="baseInfo" ref="baseInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 						<FormItem label="企业名称">
 				            {{baseInfo.qymc}}
 				        </FormItem>
-				        <FormItem label="所属区域">
+				        <FormItem label="所属区域" prop="quyu">
 				            <Cascader 
 				            	readonly 
 				            	change-on-select
@@ -24,14 +24,14 @@
 				                <Option v-for="item in yxztList" :key="item" :value="item">{{item}}</Option>
 				            </Select>
 				        </FormItem>
-				        <FormItem label="经纬度">
-				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
+				        <FormItem label="经纬度" prop="lngAndLat">
+				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat" :dz="baseInfo.mtdz"></lng>
 				        </FormItem>
-				        <FormItem label="码头地址">
+				        <FormItem label="码头地址" prop="mtdz">
 				        	<Input clearable v-model="baseInfo.mtdz" placeholder="码头地址"></Input>
 				        </FormItem>
 				        <FormItem label="经营范围">
-				        	<Input clearable v-model="baseInfo.jyfw" placeholder="经营范围"></Input>
+				        	<Input clearable type="textarea" :rows="4" v-model="baseInfo.jyfw" placeholder="经营范围"></Input>
 				        </FormItem>
 				        <FormItem label="所在港区名称">
 				        	<Input clearable v-model="baseInfo.szgqmc" placeholder="所在港区名称"></Input>
@@ -936,7 +936,13 @@
 
 		},
 		computed: {
-
+			rules() {
+				return {
+                	mtdz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                }
+            }
 		},
 		methods: {
 			async getBaseInfo() {
@@ -953,7 +959,14 @@
 					this.getQy();
 				}
 			},
-			async nextStep() {
+			nextStep() {
+				this.$refs.baseInfo.validate((valid) => {
+                    if (valid) {
+                        this.submit()
+                    }
+                })
+			},
+			async submit() {
 				let params = {
 					...this.baseInfo,
 					tysj: this.baseInfo.tysj ? getDate(new Date(this.baseInfo.tysj).getTime(), 'date') : '',

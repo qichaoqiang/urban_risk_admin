@@ -17,6 +17,12 @@ let actions = {
       resolve()
     })
   }, 
+  save_levelList(context, levelList) {
+    return new Promise((resolve) => {
+      context.commit('update_levelList', levelList)
+      resolve()
+    })
+  }, 
   save_resizeCount(context, resizeCount) {
     return new Promise((resolve) => {
       context.commit('update_resizeCount', resizeCount)
@@ -32,6 +38,18 @@ let actions = {
   save_fxylb(context, fxylb) {
     return new Promise((resolve) => {
       context.commit('update_fxylb', fxylb)
+      resolve()
+    })
+  },
+  save_fxySum(context, fxySum) {
+    return new Promise((resolve) => {
+      context.commit('update_fxySum', fxySum)
+      resolve()
+    })
+  },
+  save_riskPoints(context, riskPoints) {
+    return new Promise((resolve) => {
+      context.commit('update_riskPoints', riskPoints)
       resolve()
     })
   }

@@ -16,6 +16,9 @@ let getters = {
   },
   getFxylb: state => {
     return state.fxylb
+  },
+  getFxySum: state => {
+    return state.fxySum
   }
 }
 

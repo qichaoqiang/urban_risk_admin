@@ -6,7 +6,7 @@
 				<Col>
 					<div class="title">请完善{{step == 1 ? '场所' : '风险'}}信息</div>
 					<part-title text="基本信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
+					<Form :model="baseInfo" ref="baseInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 						<FormItem label="旅游景点名称">
 				            {{baseInfo.lyjdmc}}
 				        </FormItem>
@@ -29,11 +29,11 @@
 				        <FormItem label="景区营业时间">
 				        	<TimePicker type="timerange" confirm v-model="baseInfo.jqyysj" placeholder="景区营业时间"></TimePicker>
 				        </FormItem>
-				        <FormItem label="地址">
+				        <FormItem label="地址" prop="dz">
 				        	<Input clearable v-model="baseInfo.dz" placeholder="请输入地址"></Input>
 				        </FormItem>
-				        <FormItem label="经纬度">
-				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
+				        <FormItem label="经纬度" prop="lngAndLat">
+				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat" :dz="baseInfo.dz"></lng>
 				        </FormItem>
 				        <FormItem label="区域范围">
 				        	<div @click.stop="openAreaModal">
@@ -47,7 +47,7 @@
 				        <FormItem label="经营单位">
 				            <Input clearable v-model="baseInfo.jydw" placeholder="经营单位"></Input>
 				        </FormItem>
-				        <FormItem label="所属区域">
+				        <FormItem label="所属区域" prop="quyu">
 				        	<Cascader 
 				            	clearable 
 				            	change-on-select
@@ -683,7 +683,13 @@
 
 		},
 		computed: {
-
+			rules() {
+				return {
+                	dz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                }
+            }
 		},
 		methods: {
 			async getBaseInfo() {
@@ -702,7 +708,14 @@
 					// this.getHy()
 				}
 			},
-			async nextStep() {
+			nextStep() {
+				this.$refs.baseInfo.validate((valid) => {
+                    if (valid) {
+                        this.submit()
+                    }
+                })
+			},
+			async submit() {
 				let params = {
 					quyu_id: this.baseInfo.quyu[this.baseInfo.quyu.length - 1],
 					...this.baseInfo,

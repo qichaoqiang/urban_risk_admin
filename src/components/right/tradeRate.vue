@@ -25,38 +25,46 @@
 		name: '',
 		data() {
 			return {
-				order: [{
+				levelList: [{
 		            name: '重大风险',
-		            value: 194,
+		            value: 0,
 		            color: '#F25E5E',
 		            selected: false,
 		        }, {
 		            name: '较大风险',
-		            value: 291,
+		            value: 0,
 		            color: '#F49852',
 		            selected: false,
 		        }, {
 		            name: '一般风险',
-		            value: 194,
+		            value: 0,
 		            color: '#EFE850',
 		            selected: false,
 		        }, {
 		            name: '低风险',
-		            value: 478,
+		            value: 0,
 		            color: '#1C86F3',
 		            selected: false,
 		        }],
 			}
 		},
 		watch: {
-			'$store.state.tradeList.length'(val) {
-				console.log(val);
-				this.draw();
-			},
 			'$store.state.resizeCount'(val) {
 				this.$store.state.tradeList.forEach(item => {
 					item.myChart && item.myChart.resize();
 				})
+			},
+			'$store.state.tradeList.length'(val) {
+				console.log(val)
+				if(val > 0 && this.$store.state.riskPoints.length > 0) {
+					// this.draw()
+				}
+			},
+			'$store.state.riskPoints.length'(val) {
+				console.log(val)
+				if(val > 0 && this.$store.state.tradeList.length > 0) {
+					// this.draw()
+				}
 			}
 		},
 		computed: {
@@ -65,16 +73,34 @@
 		methods: {
 			draw() {
 				let self = this;
-		        for(let i = 0; i < this.$store.state.tradeList.length; i++) {
-		        	this.$store.state.tradeList[i].myChart = echarts.init(document.getElementById('trade_rate_item_pie' + i));
-					let color = this.order.map(item => item.color);
-					this.$store.state.tradeList[i].myChart.setOption({
+				let { tradeList, riskPoints } = this.$store.state;
+				console.log(tradeList, riskPoints)
+		        for(let i = 0; i < tradeList.length; i++) {
+		        	tradeList[i].myChart = echarts.init(document.getElementById('trade_rate_item_pie' + i));
+					let color = this.levelList.map(item => item.color);
+					let levelList = JSON.parse(JSON.stringify(this.levelList))
+					levelList.forEach(item => {
+						let value = 0
+						riskPoints.forEach(riskItem => {
+							if(tradeList[i].children) {
+								value += tradeList[i].children.filter(child => {
+									if(child.dm == riskItem.fxylb && item.name == riskItem.fxdj) {
+										console.log(child.dm, riskItem.fxylb, item.name, riskItem.fxdj)
+									}
+									return child.dm == riskItem.fxylb && item.name == riskItem.fxdj
+								}).length
+							}
+						})
+						item.value = value
+					});
+					console.log(levelList)
+					tradeList[i].myChart.setOption({
 						color,
 						tooltip: {
 							backgroundColor: 'rgba(5,27,74,0.87)',
 							// borderColor: 'rgba(5,27,74,0.87)',
 							// borderWidth: '1px',
-							formatter: '{b} <br/>占比：{d}%'
+							formatter: '{b}：{d}% <br/>数量：{c}'
 						},
 			            series: [
 					        {
@@ -82,7 +108,7 @@
 					            type: 'pie',
 					            radius: '80%',
 					            center: ['50%', '50%'],
-					            data: this.order,
+					            data: levelList,
 					            hoverOffset: 4,
 					            label: {
 					            	show: false,
@@ -98,7 +124,7 @@
 
 		},
 		mounted() {
-			this.draw()
+			// this.draw()
 		}
 	}
 </script>

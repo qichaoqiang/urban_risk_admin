@@ -40,7 +40,7 @@
 				        	<Input clearable v-model="baseInfo.dz" placeholder="地址"></Input>
 				        </FormItem>
 				        <FormItem label="经纬度" prop="lngAndLat">
-				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
+				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat" :dz="baseInfo.dz"></lng>
 				        </FormItem>
 				        <FormItem label="项目工地范围" prop="xmgdfw">
 				        	<div @click.stop="openAreaModal">
@@ -652,19 +652,19 @@
 			},
 			rules() {
 				return {
-					xmsslx: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
-                	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
-                	lxspbm: [{ required: true, message: '请输入', trigger: 'change' }],
-                	lxsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
                 	dz: [{ required: true, message: '请输入', trigger: 'change' }],
                 	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
-                	xmgdfw: [{ required: true, message: '请选择', trigger: 'change' }],
-                	gczj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
-                	jsnr: [{ required: true, message: '请输入', trigger: 'change' }],
-                	jzmj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
-                	jbr: [{ required: true, message: '请输入', trigger: 'change' }],
-                	jbrdh: [{ required: true, message: '请输入', trigger: 'change' }],
-                	jbryx: [{ required: true, message: '请输入', trigger: 'change' }],
+                	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+					// xmsslx: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+     //            	lxspbm: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	lxsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+     //            	xmgdfw: [{ required: true, message: '请选择', trigger: 'change' }],
+     //            	gczj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+     //            	jsnr: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	jzmj: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+     //            	jbr: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	jbrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+     //            	jbryx: [{ required: true, message: '请输入', trigger: 'change' }],
 				}
 			},
 			unitRules() {

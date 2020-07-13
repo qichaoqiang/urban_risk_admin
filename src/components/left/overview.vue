@@ -3,13 +3,13 @@
 		<div class="overview_pie">
 			<div id="overview_pie"></div>
 		</div>
-		<div class="overview_list">
+		<!-- <div class="overview_list">
 			<div class="overview_item1" v-for="(item, index) in overviewData" :key="item.name">
 				<img class="overview_item1_icon" :src="require(`@/assets/queer-${index + 1}.png`)">
 				<div class="overview_item1_name">{{item.name}}</div>
 				<div class="overview_item1_value" :style="{color: item.color}">{{item.value}}</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 </template>
 
@@ -51,7 +51,12 @@
 		watch: {
 			'$store.state.resizeCount'(val) {
 				this.myChart.resize();
-			}
+			},
+			'$store.state.levelList'(val) {
+				this.$nextTick(() => {
+					this.drawOverview()
+				})
+			},
 		},
 		computed: {
 
@@ -60,16 +65,22 @@
 			drawOverview() {
 				this.myChart = echarts.init(document.getElementById('overview_pie'));
 				let color = this.overviewData.map(item => item.color);
+				let data = this.$store.state.levelList.map(item => {
+					let { name, value, color } = item
+					return { name, value, color }
+				})
 				this.myChart.setOption({
 					color,
-					tooltip: {},
+					tooltip: {
+
+					},
 		            series: [
 				        {
 				            name: '',
 				            type: 'pie',
-				            radius: '50%',
+				            radius: '80%',
 				            center: ['50%', '50%'],
-				            data: this.overviewData,
+				            data,
 				            label: {
 				            	formatter: '{d}%'
 				            }
@@ -82,7 +93,7 @@
 
 		},
 		mounted() {
-			this.drawOverview()
+			
 		}
 	}
 </script>

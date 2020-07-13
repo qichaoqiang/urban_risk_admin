@@ -10,6 +10,10 @@ export default {
 			default: 'lng_box1',
 			type: String
 		},
+		dz: {
+			default: '',
+			type: String
+		},
 	},
 	data() {
 		return {
@@ -18,6 +22,20 @@ export default {
 			map: null,
 			showLngModel: false,
 			keyword: ''
+		}
+	},
+	watch: {
+		'baseInfo.lngAndLat'(val) {
+			this.$emit('update:lngAndLat', val)
+		},
+		lngAndLat(val) {
+			this.baseInfo.lngAndLat = val
+		},
+		dz(val) {
+			if(val) {
+				this.keyword = val
+				this.search();
+			}
 		}
 	},
 	methods: {
@@ -115,7 +133,7 @@ export default {
 			this.map.addOverLay(marker);
 			this.lng = lng.toFixed(6)
 			this.lat = lat.toFixed(6)
-			this.baseInfo.lngAndLat = `${location.lon} ${location.lat}`
+			this.baseInfo.lngAndLat = `${this.lng} ${this.lat}`
 			this.map.centerAndZoom(new T.LngLat(lng, lat), 15);
 		},
 	}

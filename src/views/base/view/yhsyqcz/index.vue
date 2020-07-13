@@ -6,7 +6,7 @@
 				<Col>
 					<div class="title">请完善{{step == 1 ? '企业' : '风险'}}信息</div>
 					<part-title text="基本信息"></part-title>
-					<Form :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
+					<Form :model="baseInfo" ref="baseInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 						<FormItem label="站场名称">
 				            {{baseInfo.zcmc}}
 				        </FormItem>
@@ -28,7 +28,7 @@
 				        	<Input clearable v-model="baseInfo.jydw" placeholder="经营单位"></Input>
 				        </FormItem>
 				        <FormItem label="经营范围">
-				        	<Input clearable v-model="baseInfo.jyfw" placeholder="经营范围"></Input>
+				        	<Input clearable type="textarea" :rows="4" v-model="baseInfo.jyfw" placeholder="经营范围"></Input>
 				        </FormItem>
 				        <FormItem label="经营许可证编号">
 				        	<Input clearable v-model="baseInfo.jyxkzbh" placeholder="安全经营许可证编号"></Input>
@@ -36,11 +36,11 @@
 				        <FormItem label="有效期">
 				        	<DatePicker type="date" v-model="baseInfo.yxq"  placeholder="请选择"></DatePicker>
 				        </FormItem>
-				        <FormItem label="站点地址">
+				        <FormItem label="站点地址" prop="zddz">
 				        	<Input clearable v-model="baseInfo.zddz" placeholder="站点地址"></Input>
 				        </FormItem>
-				        <FormItem label="经纬度">
-				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
+				        <FormItem label="经纬度" prop="lngAndLat">
+				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat" :dz="baseInfo.zddz"></lng>
 				        </FormItem>
 				        <FormItem label="站点范围">
 				        	<div @click.stop="openAreaModal">
@@ -969,7 +969,13 @@
 
 		},
 		computed: {
-
+			rules() {
+				return {
+                	zddz: [{ required: true, message: '请输入', trigger: 'change' }],
+                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                }
+            }
 		},
 		methods: {
 			async getBaseInfo() {
@@ -988,7 +994,14 @@
 					this.getQy();
 				}
 			},
-			async nextStep() {
+			nextStep() {
+				this.$refs.baseInfo.validate((valid) => {
+                    if (valid) {
+                        this.submit()
+                    }
+                })
+			},
+			async submit() {
 				let params = {
 					...this.baseInfo,
 					quyu_id: this.baseInfo.quyu[this.baseInfo.quyu.length - 1],

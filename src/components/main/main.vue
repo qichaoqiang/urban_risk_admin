@@ -7,23 +7,21 @@
 					<Col>
 						<div class="header_left">
 							<img class="logo" src="@/assets/login-logo.png" />
-							<p v-show="!isCollapsed" class="name">区域风险后台</p>
+							<p v-show="!isCollapsed" class="name">城市安全风险管理平台</p>
 							<Icon v-show="!$route.meta.hideMenu" @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '0 20px'}" type="md-menu" size="24"></Icon>
 						</div>
 					</Col>
-					<Col>
-						<div class="user">
-							<Dropdown :transfer="true" @on-click="handleClick">
-					            <Avatar size="small" :src="require('@/assets/register.png')" />
-					            <span class="userName" style="margin: 0 5px">{{$storage.get('userInfo').nickname}}</span>
-					            <Icon :size="18" type="md-arrow-dropdown"></Icon>
-					            <DropdownMenu slot="list">
-					                <DropdownItem name="logout">安全退出</DropdownItem>
-					                <DropdownItem name="changePassword">修改密码</DropdownItem>
-					            </DropdownMenu>
-					        </Dropdown>
-						</div>
-					</Col>
+					<div class="user">
+						<Dropdown :transfer="true" @on-click="handleClick">
+				            <Avatar size="small" :src="require('@/assets/register.png')" />
+				            <span class="userName" style="margin: 0 5px">{{$storage.get('userInfo').nickname}}</span>
+				            <Icon :size="18" type="md-arrow-dropdown"></Icon>
+				            <DropdownMenu slot="list">
+				                <DropdownItem name="logout">安全退出</DropdownItem>
+				                <DropdownItem name="changePassword">修改密码</DropdownItem>
+				            </DropdownMenu>
+				        </Dropdown>
+					</div>
 				</Row>
 		    </Header>
 		    <Layout :style="{height: contentHeight}">
@@ -56,7 +54,7 @@
 		         <!-- :style="{position: 'fixed', top: '64px', bottom: 0, left: isCollapsed ? `${collapsedWidth}px` : '200px', right: 0, overflow: 'scroll'}" -->
 		        <Content>
 		        	<Row type="flex" justify="center" style="height: 100%">
-		        		<Col :span="$route.name == 'overview' ? '24' : '23'" style="height: 100%">
+		        		<Col :span="overviewList.includes($route.name) ? '24' : '23'" style="height: 100%">
 		        			<router-view></router-view>
 		        		</Col>
 		        	</Row>
@@ -110,13 +108,14 @@
 	            password: '',
 	            confirmPassword: '',
 	            addUserLoading: false,
-	            contentHeight: window.innerHeight - 64 + 'px'
+	            contentHeight: window.innerHeight - 64 + 'px',
+	            overviewList: ['area', 'industry', 'poi']
 			}
 		},
 		watch: {
-			'$route.name'(val) {
-				this.isCollapsed = val == 'overview'
-			}
+			// '$route.name'(val) {
+			// 	this.isCollapsed = val == 'overview'
+			// }
 		},
 		computed: {
 			rotateIcon () {
@@ -206,6 +205,9 @@
 		// min-height: 100vh;
 		.ivu-layout-header {
 			background: #1E2657;
+		}
+		.user {
+			height: 40px;
 		}
 		.trans{
 			transition: transform .2s ease;

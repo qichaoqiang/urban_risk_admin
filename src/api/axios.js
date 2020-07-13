@@ -76,7 +76,8 @@ axios_.interceptors.response.use((res) => {
       Message.error('登录信息失效，请重新登录')
       setTimeout(() => {
         storage.clear();
-        router.replace('/login');
+        location.replace('/');
+        // router.replace('/')
       }, 1000);
     }else {
       Message.error('系统异常')

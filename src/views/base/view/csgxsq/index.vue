@@ -28,7 +28,7 @@
 				        		</Col>
 				        		<Col span="16">
 				        			<FormItem prop="lngAndLat">
-				        				<lng id="lng_box_qd" :lngAndLat.sync="baseInfo.lngAndLat"></lng>
+				        				<lng id="lng_box_qd" :lngAndLat.sync="baseInfo.lngAndLat" :dz="baseInfo.qd"></lng>
 				        			</FormItem>
 				        		</Col>
 				        	</Row>
@@ -42,7 +42,7 @@
 				        		</Col>
 				        		<Col span="16">
 					        		<FormItem prop="zdlngAndLat">
-					        			<lng id="lng_box_zd" :lngAndLat.sync="baseInfo.zdlngAndLat"></lng>
+					        			<lng id="lng_box_zd" :lngAndLat.sync="baseInfo.zdlngAndLat" :dz="baseInfo.zd"></lng>
 					        		</FormItem>
 				        		</Col>
 				        	</Row>
@@ -853,22 +853,22 @@
                 	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
                 	zd: [{ required: true, message: '请输入', trigger: 'change' }],
                 	zdlngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
-                	aqscbzh: [{ required: true, message: '请输入', trigger: 'change' }],
-                	tjxq: [{ required: true, message: '请输入', trigger: 'change' }],
-                	gldw: [{ required: true, message: '请输入', trigger: 'change' }],
-                	tyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
-                	sjdw: [{ required: true, message: '请输入', trigger: 'change' }],
-                	sjdwtyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
-                	sgdw: [{ required: true, message: '请输入', trigger: 'change' }],
-                	sgdwtyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
-                	jgtysj: [{ required: true, validator: validatorDate, trigger: 'change' }],
-                	jbr: [{ required: true, message: '请输入', trigger: 'change' }],
-                	jbrdh: [{ required: true, message: '请输入', trigger: 'change' }],
-                	jbryx: [{ required: true, message: '请输入', trigger: 'change' }],
-                	fzr: [{ required: true, message: '请输入', trigger: 'change' }],
-                	fzrdh: [{ required: true, message: '请输入', trigger: 'change' }],
-                	fgaqfzr: [{ required: true, message: '请输入', trigger: 'change' }],
-                	fgaqfzrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// aqscbzh: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// tjxq: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// gldw: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// tyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// sjdw: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// sjdwtyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// sgdw: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// sgdwtyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// jgtysj: [{ required: true, validator: validatorDate, trigger: 'change' }],
+                	// jbr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// jbrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// jbryx: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// fzr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// fzrdh: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// fgaqfzr: [{ required: true, message: '请输入', trigger: 'change' }],
+                	// fgaqfzrdh: [{ required: true, message: '请输入', trigger: 'change' }],
 				}
 			},
 		},

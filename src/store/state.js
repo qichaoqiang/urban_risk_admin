@@ -2,9 +2,12 @@ let state = {
   tradeList: [],
   selectIds: '',
   levelIds: '',
+  levelList: [],
   resizeCount: 0,
   hasMenu: false,
   fxylb: '',
+  fxySum: '',
+  riskPoints: [],
   path: {
 	chuanboxiuzaoqiye: 'cbxz',
 	zhuanyeshichang: 'zysc',

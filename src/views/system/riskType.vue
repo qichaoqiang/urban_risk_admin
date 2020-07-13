@@ -263,6 +263,11 @@
 			navigate(index) {
 				console.log(index)
 				this.parents.splice(index)
+				this.fxylbPage = {
+					pageSize: 10,
+					pageIndex: 1,
+					totalRow: 0
+				}
 				this.getFxylbData()
 				
 			},

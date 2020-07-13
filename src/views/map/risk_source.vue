@@ -102,7 +102,7 @@
 		        lo.getCurrentPosition((e) => {
 					this.map = new T.Map('risk_map');
 					this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 9);
-					this.map.setStyle('indigo')
+					// this.map.setStyle('indigo')
 					let ctrl = new T.Control.MapType([{
 						title: '地图', //地图控件上所要显示的图层名称
 						icon:'http://api.tianditu.gov.cn/v4.0/image/map/maptype/vector.png', //地图控件上所要显示的图层图标（默认图标大小80x80）
@@ -129,6 +129,7 @@
 						layer: TMAP_TERRAIN_HYBRID_MAP
 					}]); 
 	            	this.map.addControl(ctrl);
+	            	this.map.setMapType(TMAP_HYBRID_MAP)
 	            	let zoom = new T.Control.Zoom({
 	            		position: T_ANCHOR_TOP_RIGHT
 	            	})
