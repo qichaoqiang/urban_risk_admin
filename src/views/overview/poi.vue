@@ -1,141 +1,142 @@
 <template>
 	<div class="container" id="overview" style="min-width: 1200px; height: 100%">
-		<div class="header">
-				<div class="header_left">
-					<!-- <Dropdown :transfer="true" trigger="click" placement="bottom-start" @on-click="selectArea" @on-visible-change="visibleChange" transfer-class-name="overview_dropdown">
-						
-						<DropdownMenu slot="list">
-							<DropdownItem name="all">全部</DropdownItem>
-	            			<DropdownItem v-for="item in cityList" :key="item.dropName" :name="item.dropName">{{item.name}}</DropdownItem>
-	            		</DropdownMenu>
-					</Dropdown> -->
-					<div class="header_select">
-						<div @click="showCityList = !showCityList" style="display: flex; align-items: center;">
-							<span :style="{color: showCityList ? '#10F6FF' : '#fff'}">{{cityName}}</span>
-							<div class="header_select_arrow" id="header_select_arrow" :class="{header_select_arrow_rotate1: !showCityList, header_select_arrow_rotate2: showCityList}">
-								<Icon type="md-arrow-dropup" :color="showCityList ? '#10F6FF' : '#fff'" />
-							</div>
-						</div>
-						<div v-show="false" class="header_select_dropdown" id="header_select_dropdown">
-							<div class="header_select_dropdown_list">
-								<div class="header_select_dropdown_item" @click="selectArea('all')">杭州市</div>
-	            				<div class="header_select_dropdown_item" v-for="item in cityList" :key="item.dropName" @click="selectArea(item.dropName)">{{item.name}}</div>
-							</div>
-						</div>
-					</div>
-					<div class="header_select" style="flex: 1; margin-left: 35px">
-						<div style="display: flex; " @click="handleSelectLeft">
-							<span :style="{color: showLeft ? '#10F6FF' : '#fff'}">风险统计</span>
-							<div class="header_select_arrow" id="header_select_arrow" :class="{header_select_arrow_rotate1: !showLeft, header_select_arrow_rotate2: showLeft}">
-								<Icon type="md-arrow-dropup" :color="showLeft ? '#10F6FF' : '#fff'" />
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="header_title">杭州市风险地图</div>
-				<div class="header_select trade1" @click="handleSelectRight(true)">
-					<span :style="{color: showRight ? '#10F6FF' : '#fff'}">图层</span>
-					<div class="header_select_arrow" id="header_select_arrow" :class="{header_select_arrow_rotate1: !showRight, header_select_arrow_rotate2: showRight}">
-						<Icon type="md-arrow-dropup" :color="showRight ? '#10F6FF' : '#fff'" />
-					</div>
-				</div>
+		<!-- <header-title></header-title> -->
+		<div class="mapDiv">
+			<div id="mapDiv" style="width: 100%; height: 100%"></div>
 		</div>
-		<div class="mapDiv" id="mapDiv"></div>
 		<div class="level_box" ref="level_box">
-			<div class="level_item" v-for="item in levelList" :key="item.color" style="width: 200px; height: 36px;">
+			<div class="level_item" v-for="item in $store.state.levelList" :key="item.color" style="width: 200px; height: 36px;">
 				<div class="check" :class="{selected: item.selected}"  @click="selectLevel(item)"></div>
-				<div class="level_item_name">{{item.name}}（{{item.value}}）</div>
+				<div class="level_item_name">{{item.name}}（{{item.value || 0}}）</div>
 				<div class="level_item_color" :style="{background: item.color, width: '16px', height: '16px'}"></div>
 			</div>
 		</div>
-		<div class="tool_box">
-			<div class="screenfull" v-show="!isScreenFull" @click="screenfull">全屏</div>
-			<div class="screenfull" @click="print">打印</div>
-			<div class="screenfull" @click="save">保存</div>
-		</div>
-		<!-- <div class="level_box" ref="level_box">
-			<div class="level_item" v-for="item in levelList" :key="item.color" style="width: 112px; height: 28px;">
-				<div class="level_item_name">{{item.name}}</div>
-				<div class="level_item_color" :style="{background: item.color, width: '16px', height: '16px'}"></div>
-			</div>
-		</div> -->
-		<!-- <div class="level_box" ref="level_box">
-			<div class="level_item" v-for="item in iconList" :key="item.color" style="width: 112px; height: 28px;">
-				<div class="level_item_name">{{item.name}}</div>
-				<div class="level_item_color" :style="{background: item.color, width: '16px', height: '16px'}"></div>
-			</div>
-		</div> -->
-		<div class="left" id="left" v-show="false">
+		<tool :levelList="levelList"></tool>
+		<div class="left" id="left">
 			<!-- <risk-detail :data="riskInfo" :currentRisk="currentRisk"  @drawRiskSource="handleDrawRiskSource"></risk-detail> -->
 			<div class="left_box">
-				<left-box :area="cityName"></left-box>
+				<div class="left_item" ref="areaBox">
+					<title-top name="选择区域"></title-top>
+					<div class="header_select_dropdown_list">
+						<div class="header_select_dropdown_item">
+							<div class="check" :class="{selected: cityName == '全市'}" @click="selectArea('all')"></div>
+							<span :class="{active: cityName == '全市'}">全市</span>
+						</div>
+	    				<div class="header_select_dropdown_item" v-for="item in cityList" :key="item.dropName">
+	    					<div class="check" :class="{selected: cityName == item.name}" @click="selectArea(item.dropName, item.zoom)"></div>
+	    					<span :class="{active: cityName == item.name}">{{item.name}}</span>
+	    				</div>
+	    				<div class="header_select_dropdown_item">
+	    					<div class="check"></div>
+	    					<span>名胜区</span>
+	    				</div>
+					</div>
+				</div>
+				<div class="left_item">
+					<div class="line" @mousedown="drag"></div>
+					<title-top name="选择行业"></title-top>
+					<div class="trade_list">
+						<trade ref="trade_list" :data="tradeList" left="32px" :level="1"></trade>
+					</div>
+				</div>
 			</div>
-			<!-- <div class="close" @click="handleSelectLeft(false)"></div> -->
 		</div>
-		<!-- <div class="select_trade" v-show="!showRight" @click="handleSelectRight(true)" style="padding: 12px 0 4px; width: 88px;">
-			<img src="@/assets/ic_consult_call.png" style="width
-			40px; height: 40px">
-			<div class="select_trade_text" style="margin: 12px 0 4px; font-size: 14px; line-height: 20px;">行业分类</div>
-			<Icon type="ios-arrow-down" size="12px" color="#ffffff"/>
-		</div> -->
-		<div class="trade_box" id="right" v-show="false">
+		<div class="trade_box" id="right">
 			<div class="right_box">
-				<trade-box :data="tradeList"></trade-box>
-			</div>
-			<!-- <div class="close" @click="handleSelectRight(false)"></div> -->
-		</div>
-		<div class="bottom" :class="{bottom_left: showLeft, bottom_right: showRight}" v-if="!reset && showInfoModel">
-			<risk-time></risk-time>
-		</div>
-		<div class="city_model" id="city_model" v-if="overCity" :style="{left: `${cityModelLeft}px`, top: `${cityModelTop}px`}">
-			<div class="city_name">{{overCity.name}}</div>
-			<!-- fxyList -->
-			<div class="city_level" v-for="(item, index) in levelList" :key="item.color">
-				<div class="city_level_color" :style="{background: item.color, width: '16px', height: '16px'}"></div>
-				<div class="city_level_name">{{item.name}}：{{overCity.fxyList[index]}}</div>
+				<title-top :name="`${cityName}${$store.state.industry ? $store.state.industry.fxylbmc : ''}风险等级分布图`" :area="area"></title-top>
+				<div>
+					<overview></overview>
+				</div>
+				<title-top :name="`${$store.state.industry ? $store.state.industry.fxylbmc : ''}风险源数量`"></title-top>
+				<div class="trade_order_popup">
+					<div class="trade_order_content">
+						<poi-tj :qyfxList="qyfxList" :cityName="cityName"></poi-tj>
+					</div>
+				</div>
 			</div>
 		</div>
-
 		<div class="info" v-show="showMarkers && !showInfoModel">
 			<div class="info_model_box">
-				<div class="close" @click="showMarkers = false"></div>
 				<div class="info_model marker_model">
 					<div class="marker_content">
 						<Tree :data="markersList" @on-select-change="selectMarker"></Tree>
 					</div>
 				</div>
+				<div class="close" @click="showMarkers = false"></div>
 			</div>
 		</div>
 		<div class="info" v-if="showInfoModel">
 			<div class="info_model_box">
-				<div class="close" @click="showInfoModel = false"></div>
 				<div class="info_model">
-					<div class="info_name">{{fxyInfo.fxymc}}</div>
+					<div class="info_name">{{fxyInfo.fengxianyuan.fxymc}}</div>
 					<div class="info_content">
 						<Tabs value="name1">
 					        <TabPane label="基本信息" name="name1">
 								<div class="baseInfo_box">
 									<div class="baseInfo">
-										<p>所属区域：{{fxyInfo.quyu}}</p>
-										<p>地址：{{fxyInfo.dz}}</p>
+										<p>所属区域：{{fxyInfo.fengxianyuan.quyu}}</p>
+										<p>地址：{{fxyInfo.fengxianyuan.dz}}</p>
 									</div>
 								</div>
 					        </TabPane>
 					        <TabPane label="风险信息" name="name2">
-								<div class="baseInfo_box">
-									<div class="baseInfo">
+					        	<div class="baseInfo_box" v-if="fxyInfo.fengxianyuan.fxylb == 'zadao'">
+					        		<div class="baseInfo">
+										<div v-for="(item, index) in fxyInfo.fengxianxinxi" :key="index">
+											<p>道路名称：{{item['道路名称']}}</p>
+											<p>主线设计速度(km/h)：{{item['主线设计速度(km/h)']}}</p>
+											<p>主线车道数：{{item['主线车道数']}}</p>
+											<p>跨主线桥梁最小净空（m）：{{item['跨主线桥梁最小净空（m）']}}</p>
+											<p style="color: #10F6FF">匝道信息：</p>
+											<!-- <div v-for="(item_, index_) in item['匝道信息']" :key="index_">
+												<p style="color: #10F6FF">&nbsp;&nbsp;匝道段{{index_ + 1}}：</p>
+												<p>&nbsp;&nbsp;&nbsp;&nbsp;匝道段名称：{{item_['匝道段名称']}}</p>
+												<p>&nbsp;&nbsp;&nbsp;&nbsp;匝道车道数：{{item_['匝道车道数']}}</p>
+												<p>&nbsp;&nbsp;&nbsp;&nbsp;坡长（m）：{{item_['坡长（m）']}}</p>
+												<p>&nbsp;&nbsp;&nbsp;&nbsp;最大纵坡（%）：{{item_['最大纵坡（%）']}}</p>
+												<p>&nbsp;&nbsp;&nbsp;&nbsp;设计速度（Km/h）：{{item_['设计速度（Km/h）']}}</p>
+												<p>&nbsp;&nbsp;&nbsp;&nbsp;路基宽度（m）：{{item_['路基宽度（m）']}}</p>
+												<p>&nbsp;&nbsp;&nbsp;&nbsp;转弯半径（m）：{{item_['转弯半径（m）']}}</p>
+											</div> -->
+											<div :style="{height: `${item['匝道信息'].length * 48 + 39}px`, overflow: 'hidden'}">
+												<Table :row-class-name="rowClassName" :columns="zdColumns" :data="item['匝道信息']"></Table>
+											</div>
+											<p style="color: #10F6FF">图像信息：</p>
+											<div class="img_box">
+												<Carousel v-model="zdImg" loop arrow="always">
+											        <CarouselItem v-for="(item_, index_) in item['图片']" :key="item_.url">
+											            <span style="color: #fff">&nbsp;&nbsp;{{item_.title}}</span>
+														<img style="margin-top: 8px; width: 100%" :src="item_.url">
+											        </CarouselItem>
+											    </Carousel>
+												<!-- <div >
+													<p>
+														<span>&nbsp;&nbsp;{{item_.title}}</span>
+														<img style="margin-top: 8px; width: 100%" :src="item_.url">
+													</p>
+												</div> -->
+											</div>
+											
+										</div>
+									</div>
+					        	</div>
+								<div class="baseInfo_box" v-else>
+									<!-- <div class="baseInfo">
 										<div style="display: flex; flex-wrap: wrap;">
-											<p style="margin-right: 32px;">风险等级：<span class="red">{{fxyInfo.fxdj}}</span></p>
-											<p style="margin-right: 32px;">风险值：<span class="red">{{Number(fxyInfo.fxz)}}</span></p>
+											<p style="margin-right: 32px;">风险等级：<span class="red">{{fxyInfo.fengxianyuan.fxdj}}</span></p>
+											<p style="margin-right: 32px;">风险值：<span class="red">{{Number(fxyInfo.fengxianyuan.fxz)}}</span></p>
 											<p>风险源类型：<span class="red">{{fxyInfo.fxylbmc}}</span></p>
 										</div>
 										<div class="radar" id="radar">
 											
 										</div>
+									</div> -->
+									<div class="baseInfo">
+										<p v-for="item in fxyInfo.fengxianxinxi" :key="item.fxmc">{{item.fxmc}}：{{item.value}}</p>
 									</div>
 								</div>
 					        </TabPane>
-					        <TabPane label="隐患治理" name="name3">
+					        <!-- <TabPane label="隐患治理" name="name3">
 								<div class="baseInfo_box">
 									<div class="baseInfo">
 										<div style="display: flex; flex-wrap: wrap;">
@@ -146,11 +147,26 @@
 										</div>
 									</div>
 								</div>
-					        </TabPane>
+					        </TabPane> -->
 					    </Tabs>
 					</div>
 				</div>
+				<div class="close" @click="showInfoModel = false"></div>
 			</div>
+		</div>
+		<div class="city_model" id="city_model" v-if="overCity" :style="{left: `${cityModelLeft}px`, top: `${cityModelTop}px`}">
+			<div class="city_name">{{overCity.name}}</div>
+			<div class="city_level" v-for="(item, index) in levelList" :key="item.color">
+				<div class="city_level_color" :style="{background: item.color, width: '16px', height: '16px'}"></div>
+				<div class="city_level_name">{{item.name}}：{{overCity.fxyList[index]}}</div>
+			</div>
+		</div>
+		<div class="step_box"v-show="riskPoints.length < zsl && zsl > 1000">
+			<div class="value" :style="{left: `${riskPoints.length / zsl * 100}%`}">已加载{{riskPoints.length}}个poi</div>
+			<div class="step">
+				<div class="step_content" :style="{width: `${riskPoints.length / zsl * 100}%`}"></div>
+			</div>
+			<div class="sum">poi总数{{zsl}}</div>
 		</div>
 	</div>
 </template>
@@ -167,21 +183,26 @@
 	import axios from '@/api/axios'
 	import $ from 'jquery'
 	import tradeList from '@/utils/trade'
-	import LeftBox from '@/components/left/index'
-	import TradeBox from '@/components/right/index'
-	import RiskTime from '@/components/bottom/index'
-	import RiskDetail from '@/components/left/riskDetail'
 	import api from '@/api/api'
 	import quyu from '@/common/js/quyu_overview'
 	import storage from 'good-storage'
-	import html2canvas from 'html2canvas'
+	import TitleTop from '@/components/common/title'
+	import Tool from './components/tool'
+	import HeaderTitle from './components/header'
+	import Overview from '@/components/left/overview'
+	import PoiTj from '@/components/left/poi_tj'
+	import Trade from '@/components/right/trade'
+	import all_county from '@/common/area/all.json'
+	console.log(all_county)
 	export default {
 		name: 'poi',
 		components: {
-			TradeBox,
-			LeftBox,
-			RiskTime,
-			RiskDetail
+			TitleTop,
+			Tool,
+			Overview,
+			PoiTj,
+			Trade,
+			HeaderTitle
 		},
 		mixins: [quyu],
 		data() {
@@ -189,7 +210,7 @@
 				showCityList: false,
 				showInfoModel: false,
 				fxyInfo: {},
-				cityName: '杭州市',
+				cityName: '全市',
 				username: storage.get('username'),
 				area: '全部',
 				showLeft: false,
@@ -199,126 +220,20 @@
 				map: null, // 地图
 				polygon: null, // 面对象
 				cityList: [
-					{"name": "上城区", dropName: "sc", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}},
-					{"name": "下城区", dropName: "xc", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}},
-					{"name": "西湖区", dropName: "xh", "polygon": null, color: '#1C86F3', index: 1, point: {x: -20, y: -10}},
-					{"name": "江干区", dropName: "jg", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}},
-					{"name": "拱墅区", dropName: "gs", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}},
-					{"name": "滨江区", dropName: "bj", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}},
+					{"name": "上城区", dropName: "sc", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
+					{"name": "下城区", dropName: "xc", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
+					{"name": "西湖区", dropName: "xh", "polygon": null, color: '#1C86F3', index: 1, point: {x: -20, y: -10}, zoom: 11},
+					{"name": "江干区", dropName: "jg", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
+					{"name": "拱墅区", dropName: "gs", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
+					{"name": "滨江区", dropName: "bj", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
 					{"name": "萧山区", dropName: "xs", "polygon": null, color: '#F25E5E', index: 0, point: {x: -20, y: -10}},
 					{"name": "余杭区", dropName: "yh", "polygon": null, color: '#F49852', index: 0, point: {x: -20, y: -10}},
 					{"name": "临安区", dropName: "la", "polygon": null, color: '#EFE850', index: 0, point: {x: -20, y: -10}},
 					{"name": "富阳区", dropName: "fy", "polygon": null, color: '#F49852', index: 0, point: {x: -20, y: -10}},
 					{"name": "建德市", dropName: "jd", "polygon": null, color: '#F25E5E', index: 0, point: {x: -20, y: -10}},
 					{"name": "桐庐县", dropName: "tl", "polygon": null, color: '#EFE850', index: 0, point: {x: -20, y: -10}},
-					{"name": "淳安县", dropName: "ca", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}}
-				],
-				riskPoints: [
-					{
-						id: 1,
-						x:  30.26005300,
-						y: 119.94697500,
-						type: '化学生产企业',
-						type_: '危险化学品',
-						level: 0,
-						riskMatter: 122,
-						iconUrl: require('../../assets/1.png'),
-						device: 192,
-						people: 101,
-						environment:29,
-						hasRadar: false
-					}, {
-						id: 2,
-						x:  30.11,
-						y: 119.67,
-						type: '公共设施',
-						type_: '公共设施',
-						level: 1,
-						riskMatter: 88,
-						iconUrl: require('../../assets/2.png'),
-						device: 138,
-						people: 81,
-						environment: 47,
-						hasRadar: false
-					}, {
-						id: 3,
-						x:  30.29,
-						y: 120.33,
-						type: '化学生产企业',
-						type_: '危险化学品',
-						level: 2,
-						riskMatter: 122,
-						iconUrl: require('../../assets/3.png'),
-						device: 192,
-						people: 101,
-						environment:29,
-						hasRadar: false
-					}, {
-						id: 4,
-						x:  30.01,
-						y: 119.55,
-						type: '公共设施',
-						type_: '公共设施',
-						level: 3,
-						riskMatter: 88,
-						iconUrl: require('../../assets/4.png'),
-						device: 138,
-						people: 81,
-						environment: 47,
-						hasRadar: false
-					}, {
-						id: 5,
-						x:  30.32,
-						y: 120.30,
-						type: '化学生产企业',
-						type_: '危险化学品',
-						level: 0,
-						riskMatter: 122,
-						iconUrl: require('../../assets/1.png'),
-						device: 192,
-						people: 101,
-						environment:29,
-						hasRadar: false
-					}, {
-						id: 6,
-						x:  30.31,
-						y: 119.87,
-						type: '公共设施',
-						type_: '公共设施',
-						level: 1,
-						riskMatter: 88,
-						iconUrl: require('../../assets/2.png'),
-						device: 138,
-						people: 81,
-						environment: 47,
-						hasRadar: false
-					}, {
-						id: 7,
-						x:  30.33,
-						y: 120.44,
-						type: '化学生产企业',
-						type_: '危险化学品',
-						level: 2,
-						riskMatter: 122,
-						iconUrl: require('../../assets/3.png'),
-						device: 192,
-						people: 101,
-						environment:29,
-						hasRadar: false
-					}, {
-						id: 8,
-						x:  30.04,
-						y: 119.37,
-						type: '公共设施',
-						type_: '公共设施',
-						level: 3,
-						riskMatter: 88,
-						iconUrl: require('../../assets/4.png'),
-						device: 138,
-						people: 81,
-						environment: 47,
-						hasRadar: false
-					}
+					{"name": "淳安县", dropName: "ca", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}},
+					{"name": "钱塘新区", dropName: "qt", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 11}
 				],
 				iconList: [{
 		            name: '风险点',
@@ -365,59 +280,101 @@
 		        overCity: null,
 		        cityModelLeft: 0,
 		        cityModelTop: 0,
-		        xm_id: process.env.NODE_ENV === 'development' ? 11 : 1,
+		        xm_id: process.env.NODE_ENV === 'development' ? 1 : 1,
 		        markersList: [],
 		        showMarkers: false,
 		        riskPoints: [],
 		        isScreenFull: false,
-		        markerList: []
+		        markerList: [],
+		        qyfxList: [],
+		        zsl: 0,
+		        labelList: [],
+		        markers: null,
+		        markerArr: [],
+		        zdImg: 0,
+		        zdColumns: [
+		        	{
+                        title: '匝道段名称',
+                        key: '匝道段名称',
+                        width: 220,
+                        fixed: 'left'
+                    }, {
+                        title: '匝道车道数',
+                        key: '匝道车道数',
+                        width: 120
+                    }, {
+                        title: '坡长（m）',
+                        key: '坡长（m）',
+                        width: 120
+                    }, {
+                        title: '最大纵坡（%）',
+                        key: '最大纵坡（%）',
+                        width: 140
+                    }, {
+                        title: '设计速度（Km/h）',
+                        key: '设计速度（Km/h）',
+                        width: 160
+                    }, {
+                        title: '路基宽度（m）',
+                        key: '路基宽度（m）',
+                        width: 140
+                    }, {
+                        title: '转弯半径（m）',
+                        key: '转弯半径（m）',
+                        width: 140
+                    }
+		        ]
 			}
 		},
 		watch: {
 			cityName(val) {
-				let params = {
-					xm_id: this.xm_id,
-					per_page: 1000,
-					page: 1,
-				}
-				let quyu = this.areaList.find(areaItem => areaItem.mc == val)
-				// quyu && (params.quyu_id = quyu.id)
-				// let { status_code, data } = await api.getFxyList(params)
-				// if(status_code == 200) {
-				// 	let riskPoints = data.data
-				// 	this.$store.dispatch('save_riskPoints', riskPoints)
+				// let params = {
+				// 	xm_id: this.xm_id,
+				// 	per_page: 1000,
+				// 	page: 1,
 				// }
-				if(quyu) {
-					riskPoints = this.riskPoints.filter(item => item.id == quyu.id)
-				}else {
-					riskPoints = this.riskPoints
-				}
+				// let quyu = this.areaList.find(areaItem => areaItem.mc == val)
+				this.cityList.forEach(item => {
+					if(item.polygon) {
+						if(item.name == val) {
+							item.polygon.setFillOpacity(1)
+							item.polygon.setWeight(5)
+						}else {
+							item.polygon.setFillOpacity(0.8)
+							item.polygon.setWeight(2)
+						}
+					}
+				})
+            	this.labelList.forEach(item => {
+            		let opacity = item.NP == this.cityName ? 1 : 0.01
+            		item.setOpacity(opacity)
+            	})
+				this.getFxysl(() => {
+					this.clearOverlays()
+					this.getFxy()
+				});
 			},
 			showCityList(val) {
 				$('#header_select_dropdown').slideToggle('normal', 'swing');
 			},
-			showLeft(val) {
-				if(val) this.$refs.level_box.style.left = '420px';
-				$('#left').slideToggle('normal', 'swing', () => {
-					if(!val) this.$refs.level_box.style.left = '32px';
-				});
-			},
-			showRight(val) {
+			'$store.state.industry'(val) {
+				this.clearOverlays()
 				if(val) {
-					$('#right').slideDown();
-					document.getElementsByClassName('tdt-right')[1].style.right = '400px'
-				}else {
-					$('#right').slideUp();
-					document.getElementsByClassName('tdt-right')[1].style.right = '0px'
+					this.getAreaIndustryList(() => {
+						this.getFxysl(() => {
+							this.getFxy()
+								
+								// this.cityList.forEach(item => {
+								// 	let qyfx = this.qyfxList.find(qyfxItem => qyfxItem.qxmc == item.name)
+								// 	let fxdj = qyfx ? qyfx.fxdj : ''
+								// 	let level = this.levelList.find(levelItem => fxdj == levelItem.name)
+								// 	item.color = level ? level.color : item.color
+								// 	item.polygon.setFillColor(item.color)
+								// })
+						})
+					})
 				}
-			},
-			'$store.state.selectIds'(val) {
-				setTimeout(() => {
-					if(val == this.$store.state.selectIds) {
-						this.clearOverlays()
-						this.drawRiskMap()
-					}
-				}, 300)
+				
 			},
 			'$store.state.levelIds'(val) {
 				setTimeout(() => {
@@ -431,7 +388,9 @@
 			}
 		},
 		computed: {
-
+			fxdjList() {
+				return this.$store.state.levelList.filter(item => item.selected).map(item => item.name)
+			}
 		},
 		methods: {
 			init() {
@@ -439,7 +398,7 @@
 				let zoom = 9;
 
 	            this.map = new T.Map('mapDiv');
-	            this.map.centerAndZoom(new T.LngLat(120.15, 30.28), zoom); // 
+	            this.map.centerAndZoom(new T.LngLat(119.886055, 29.996153), zoom); // 
 	            // this.map.setStyle('indigo') // 修改地图风格
 	            this.map.enableScrollWheelZoom();
 	            // this.map.disableDoubleClickZoom() // 禁止双击放大
@@ -449,31 +408,57 @@
             		position: T_ANCHOR_BOTTOM_RIGHT
             	}); 
             	this.map.addControl(ctrl); // 增加地图类型控件
+            	//移除图层
+            	this.map.removeControl(TMAP_NORMAL_MAP);
+	            //添加图层
+	            this.map.addControl(TMAP_SATELLITE_MAP);
             	let zoomCtrl = new T.Control.Zoom({
             		position: T_ANCHOR_BOTTOM_RIGHT
             	})
             	this.map.addControl(zoomCtrl);
-				this.getQyfxList(() => {
+            	this.map.on('zoomend', (type, target) => {
+            		this.labelList.forEach(item => {
+	            		item.setFontSize(Math.pow(2, (this.map.getZoom() - 5) > 5 ? 5 : (this.map.getZoom() - 5)))
+	            	})
+            	})
+				this.getAreaIndustryList(() => {
 					this.getFxysl(() => {
 						this.drawMunicipios();
+						this.clearOverlays()
+						this.getFxy()
 					})
 				})
+				setTimeout(() => {
+					this.map.checkResize()
+				}, 100)
+			},
+			allMap() {
+				this.map.centerAndZoom(new T.LngLat(119.886055, 29.996153), 9);
 			},
 			// 区域选择
-			selectArea(name) {
-				this.showCityList = false
+			selectArea(name, zoom) {
 				if(name == 'all') {
-					this.cityName = '杭州市'
-					this.clearOverlays()
-					this.drawRiskMap();
-	            	this.map.centerAndZoom(new T.LngLat(120.15, 30.28), 8);
+					this.cityName = '全市'
+	            	this.map.centerAndZoom(new T.LngLat(119.886055, 29.996153), 9);
 				}else {
 					let item = this.cityList.find(item => item.dropName == name)
 					this.cityName = item.name;
-					this.clearOverlays()
-					this.drawRiskMap();
-	            	this.map.centerAndZoom(item.latlng, 10);
+	            	this.map.centerAndZoom(item.latlng, zoom || 10);
 				}
+			},
+			selectLevel(item) {
+				item.selected = !item.selected
+				this.$nextTick(() => {
+					this.handleMarkerShow()
+				})
+			},
+			handleMarkerShow() {
+				console.log(this.fxdjList)
+				this.markerArr.forEach(item => {
+					// console.log(this.fxdjList.includes(item.fxdj))
+					this.fxdjList.includes(item.item.fxdj) ? item.setOpacity(1) : item.setOpacity(0)
+				})
+				
 			},
 			visibleChange(status) {
 				this.areaVisible = status;
@@ -482,226 +467,209 @@
 			async drawMunicipios() {
 				let self = this;
 				let times = Math.ceil(this.zsl / 1000)
-				let riskPoints = []
 				var bdary = new BMap.Boundary();
-				this.cityList.forEach(item => {
+				this.labelList = []
+				this.cityList.forEach(async item => {
 					item.fxyList = []
-					// this.levelList.forEach(levelItem => {
-					// 	setTimeout(() => {
-					// 		item.fxyList.push(riskPoints.filter(riskItem => riskItem.fxdj == levelItem.name).length)
-					// 	})
-					// })
 					let qyfx = this.qyfxList.find(qyfxItem => qyfxItem.qxmc == item.name)
 					let fxdj = qyfx ? qyfx.fxdj : ''
 					let level = this.levelList.find(levelItem => fxdj == levelItem.name)
 					item.color = level ? level.color : item.color
-				    bdary.get("杭州市" + item.name, async res => { //获取行政区域
-				    	// item.fxyList = []
-				  //   	let quyu = this.areaList.find(areaItem => areaItem.mc == item.name)
-				  //   	this.levelList.forEach(levelItem => {
-				  //   		quyu && (riskPoints = riskPoints.filter(riskItem => riskItem.quyu_id == quyu.id))
-						// 	item.fxyList.push(riskPoints.filter(riskItem => riskItem.fxdj == levelItem.name).length)
-						// })
-		            	let searchWord = item.name;
-						axios.get(`http://api.tianditu.gov.cn/administrative?postStr={"searchWord":"${searchWord}","searchType":"1","needSubInfo":"false","needAll":"false","needPolygon":"true","needPre":"true"}&tk=701640b81eacb6c191dd460f74393688`).then(result => {
-					        // map.clearOverlays();        //清除地图覆盖物       
-					        var count = res.boundaries.length; //行政区域的点有多少个
-					        if (count === 0) {
-					            // alert('未能获取当前输入行政区域');
-					            return;
-					        }	
-					        let arr = res.boundaries[0].split(';')
-							let points = [];
-							let point = ''
-							arr.forEach(item => {
-								point = item.split(', ');
-								points.push(new T.LngLat(point[0], point[1]));
-							})
-							item.polygon = new T.Polygon(points, {
-				                color: '#008192', weight: 2, opacity: 1, fillColor: item.color, fillOpacity: 0.5
-				            });
-							this.map.addOverLay(item.polygon);
-							let bound = result.data[item.name == '西湖区' ? 1 : 0].bound.split(',').map(item => {
-								return item - 0;
-							})
-							// var latlng = new T.LngLat(result.data[0].lnt, result.data[0].lat);
-							// 显示区域名称
-							item.latlng = new T.LngLat((bound[0] + bound[2]) / 2, (bound[1] + bound[3]) / 2);
-				            var label = new T.Label({
-				                text: item.name,
-				                position: item.latlng,
-				                offset: new T.Point(-20, 0)
-				            });
-							this.map.addOverLay(label);
-				            item.polygon.addEventListener("click", () => {
-				            	this.cityName = item.name;
-				            	this.clearOverlays()
-				            	this.drawRiskMap();
-				            	this.map.centerAndZoom(item.latlng, 10);
-				            });
-				            item.polygon.addEventListener("mouseover", e => {
-				            	item.polygon.setFillOpacity(1)
-				            	this.overCity = item
-				            });
-				            item.polygon.addEventListener("mouseout", e => {
-				            	item.polygon.setFillOpacity(0.5)
-				            	this.overCity = null
-				            });
-				            window.addEventListener("mousemove", e => {
-			            		if(this.overCity) {
-			            			this.cityModelTop = e.y - 60
-			            			this.cityModelLeft = e.x - 180
-			            		}
-			            	})
-						})
-				    });
+			        item.data = all_county.features.find(item_ => item_.properties.NAME == item.name)
+			        let points = [];
+					item.data.geometry.coordinates[0][0].forEach(item_ => {
+						points.push(new T.LngLat(item_[0], item_[1]));
+					})
+					item.polygon = new T.Polygon(points, {
+		                color: '#ffffff', weight: 2, opacity: 1, fillColor: 'transparent', fillOpacity: 0.5
+		            });
+					this.map.addOverLay(item.polygon);
+					item.latlng = new T.LngLat(item.data.properties.centerLon, item.data.properties.centerLat);
+		            let label = new T.Label({
+		                text: item.name,
+		                position: item.latlng,
+		                offset: new T.Point(-20, 0)
+		            });
+		            label.setFontColor('#000')
+					this.map.addOverLay(label);
+				    label.setOpacity(0.01)
+					this.labelList.push(label)
+					item.polygon.addEventListener("click", () => {
+		            	this.cityName = item.name;
+		            	this.map.centerAndZoom(item.latlng, 10);
+		            });
+		            item.polygon.addEventListener("mouseover", e => {
+		            	item.polygon.setFillOpacity(1)
+		            });
+		            item.polygon.addEventListener("mouseout", e => {
+		            	item.polygon.setFillOpacity(0.8)
+		            });
 	            })
+			},
+			async getAreaIndustryList(cb) {
+				let quyu = this.areaList.find(areaItem => areaItem.mc == this.cityName)
+				let params = {
+					act: 'quyu',
+					xm_id: this.xm_id
+				}
+				quyu && (params.quyu_id = quyu.id)
+				this.$store.state.industry && (params.fxylb = this.$store.state.industry.dm)
+				let { status_code, data } = await api.getQyfxySlList(params)
+				if(status_code == 200) {
+					this.qyfxList = data
+					cb && cb()
+				}
+			},
+			async getFxysl(cb) {
+				let quyu = this.areaList.find(areaItem => areaItem.mc == this.cityName)
+				let params = {
+					xm_id: this.xm_id,
+					per_page: 10,
+					page: 1,
+				}
+				quyu && (params.quyu_id = quyu.id)
+				this.$store.state.industry && (params.fxylb = this.$store.state.industry.dm)
+				let { status_code: status_code_, fxdjsl, zsl } = await api.getFxyList(params)
+				this.zsl = zsl
+				if(params.fxylb == 'jiayouzhan') {
+					let obj = {
+						'一级': '重大风险',
+						'二级': '较大风险',
+						'三级': '一般风险',
+					}
+					this.levelList.forEach(item => {
+						for(let key in obj) {
+							obj[key] == item.name && (item.value = fxdjsl[key])
+						}
+					})
+					this.levelList[3].value = 0
+				}else {
+					this.levelList.forEach(item => {
+						item.value = fxdjsl[item.name]
+					})
+				}
+				this.$store.dispatch('save_levelList', JSON.parse(JSON.stringify(this.levelList)))
+				cb && cb()
+			},
+			getFxy() {
+				let times = Math.ceil(this.zsl / 100)
+				this.riskPoints = []
+				let quyu = this.areaList.find(areaItem => areaItem.mc == this.cityName)
 				for(let i = 0; i < times; i++) {
 					setTimeout(async () => {
 						let params = {
 							xm_id: this.xm_id,
-							per_page: 1000,
+							per_page: 100,
 							page: i + 1,
 						}
+						quyu && (params.quyu_id = quyu.id)
+						this.$store.state.industry && (params.fxylb = this.$store.state.industry.dm)
 						let { status_code, data } = await api.getFxyList(params)
 						if(status_code == 200) {
-							riskPoints = [...riskPoints, ...data.data]
-							if(riskPoints.length == this.zsl) {
-								this.$store.dispatch('save_riskPoints', riskPoints)
-								this.riskPoints = riskPoints
-								this.drawRiskMap()
-								// this.cityList.forEach(item => {
-								// 	item.fxyList = []
-								// 	// this.levelList.forEach(levelItem => {
-								// 	// 	setTimeout(() => {
-								// 	// 		item.fxyList.push(riskPoints.filter(riskItem => riskItem.fxdj == levelItem.name).length)
-								// 	// 	})
-								// 	// })
-								// 	let qyfx = this.qyfxList.find(qyfxItem => qyfxItem.qxmc == item.name)
-								// 	let fxdj = qyfx ? qyfx.fxdj : ''
-								// 	let level = this.levelList.find(levelItem => fxdj == levelItem.name)
-								// 	item.color = level ? level.color : item.color
-					   //          })
+							this.riskPoints = [...this.riskPoints, ...data.data]
+							if(this.riskPoints.length == this.zsl) {
+								this.$store.dispatch('save_riskPoints', this.riskPoints)
+								this.drawRiskPoints(this.riskPoints)
 							}
 						}
 					}, 1)
 				}
 			},
-			selectLevel(item) {
-				console.log(item.selected)
-				item.selected = item.selected ? false : true
-				this.clearOverlays()
-				this.drawRiskMap()
-			},
 			clearOverlays() {
-				// let allMarkers = this.markersList;
-				console.log(this.markersList)
-				console.log(this.map.removeLayer)
-		        // for (let i = allMarkers.length - 1; i > -1; i--){
-		        // 	this.map.removeLayer(allMarkers[i]);
-		        // }
 		        let allOverlay = this.map.getOverlays();
 		        for (let i = allOverlay.length -1; i >= 0 ; i--){
 		            if(!allOverlay[i].Yt && !allOverlay[i].NP) {
 		                this.map.removeLayer(allOverlay[i]);
 		            }
 		        }
+		        if(this.markers) {
+		        	this.markers.clearMarkers()
+		        }
+		        // console.log(document.getElementsByClassName('tdt-cluster0'))
+		        // document.getElementsByClassName('tdt-interactive').remove()
+		        // this.map.clearOverLays()
+		        // this.drawMunicipios()
 			},
-			async drawRiskMap() {
-				let levelList = this.levelList.filter(item => item.selected).map(item => item.name);
-				let selectIdList = this.$store.state.selectIds.split(',')
-				let fxylb = this.allTrade.filter(item => selectIdList.includes(item.id + '')).map(item => item.dm).join(',')
-				let quyu = this.areaList.find(item => item.mc == this.cityName)
-				let riskPoints = []
-				if(quyu) {
-					riskPoints = this.riskPoints.filter(item => item.id == quyu.id)
-				}else {
-					riskPoints = this.riskPoints
-				}
-				this.$store.dispatch('save_fxySum', riskPoints.length)
-				// if(levelList.length > 0) {
-				// 	this.drawRiskPoints(riskPoints.filter(item => levelList.includes(item.fxdj)))
-				// }else {
-				// 	this.drawRiskPoints(riskPoints)
-				// }
-				this.drawRiskPoints(riskPoints.filter(item => levelList.includes(item.fxdj)))
-				this.levelList.forEach(item => {
-					item.value = riskPoints.filter(riskItem => riskItem.fxdj == item.name).length
-				})
-				this.$store.dispatch('save_levelList', JSON.parse(JSON.stringify(this.levelList)))
-			},
-
 			drawRiskPoints(list) {
 				let self = this
 				let markerArr = []
 		        this.markersList = []
 				list.forEach(item => {
-					// window.handleClick = () => {
-					// 	let userInfo = this.$storage.get('userInfo')
-					// 	userInfo.gkdx_id = item.gkdx_id
-					// 	userInfo.fxylb = item.fxylb
-					// 	this.$storage.set('userInfo', userInfo)
-					// 	location.href = process.env.NODE_ENV === "development" ? `${location.origin}/#/editInfo?type=2` : `${location.origin}/v2/#/editInfo?type=2`
-					// }
-					let iconItem =  this.levelList.find(item_ => item_.name == item.fxdj)
-					if(!iconItem) {
-						return
-					}
-		            // 创建图片对象
-		            let icon = new T.Icon({
-		                iconUrl: require(`../../assets/point_${iconItem.color_}.png`),
-		                iconSize: new T.Point(26, 27),
-		                iconAnchor: new T.Point(12, 27)
-		            });
-		            //向地图上添加自定义标注
-		            let param1 = new T.LngLat(item.jd, item.wd)
-		            let marker = new T.Marker(param1, {icon: icon});
-		            marker.item = item
-		            marker.addEventListener("click", () => {
-		            	this.showInfo(item)
-		            });
-		            markerArr.push(marker)
+		            if(item.jd && item.wd) {
+		            	let iconItem =  this.levelList.find(item_ => item_.name == item.fxdj)
+						if(!iconItem) {
+							return
+						}
+						let index = this.levelList.findIndex(levelItem => item.fxdj == levelItem.name)
+						if(index < 0) {
+							return
+						}
+						let iconUrl
+						try {
+							iconUrl = require(`../../assets/risk-point/${item.fxylb}-${index + 1}.png`)
+						} 
+						catch {
+							iconUrl = require(`../../assets/risk-point/fengxianyuan-${index + 1}.png`)
+						}
+			            // 创建图片对象
+			            let icon = new T.Icon({
+			                iconUrl,
+			                iconSize: new T.Point(26, 27),
+			                iconAnchor: new T.Point(12, 27)
+			            });
+			            //向地图上添加自定义标注
+			            let param1 = new T.LngLat(item.jd, item.wd)
+			            let marker = new T.Marker(param1, {icon: icon});
+			            marker.item = item
+			            marker.addEventListener("click", () => {
+			            	this.showInfo(item)
+			            });
+			            markerArr.push(marker)
+			            this.map.addOverLay(marker);
+		            }
 				})
-				let markers = new T.MarkerClusterer(this.map, {markers: markerArr});
-				for(let i = 0; i < Object.keys(markers).length; i++) {
-					if(markers[Object.keys(markers)[i]].clusterclick) {
-						markers[Object.keys(markers)[i]].clusterclick.shift()
-					}
-				}
-				markers.addEventListener('clusterclick', e => {
-					let markersList = []
-					if(!e.target.selfData) {
-						console.log(e.target.options)
-						e.target.options.markers.forEach(item => {
-							let cupx = e.layerPoint
-							let px = this.map.lngLatToLayerPoint(item.or)
-							if(this.getDistance(cupx, px) < 61) {
-								let fxylb = markersList.find(marker => item.item.fxylb == marker.fxylb)
-								if(!fxylb) {
-									markersList.push({
-										title: item.item.fxylbmc,
-										expand: false,
-										children: [
-											{
-												title: item.item.fxymc,
-												...item.item
-											}
-										]
-									})
-								}else {
-									fxylb.children.push({
-										title: item.item.fxymc,
-										...item.item
-									})
-								}
-								this.markersList = markersList
-								this.$nextTick(() => {
-									this.showMarkers = true;
-								})
-							}
-						})
-					}
-				})
+				// this.markers = new T.MarkerClusterer(this.map, {markers: markerArr});
+				// this.markerArr = markerArr
+				// for(let i = 0; i < Object.keys(this.markers).length; i++) {
+				// 	if(this.markers[Object.keys(this.markers)[i]].clusterclick) {
+				// 		this.markers[Object.keys(this.markers)[i]].clusterclick.shift()
+				// 	}
+				// }
+				// this.markers.addEventListener('clusterclick', e => {
+				// 	let markersList = []
+				// 	if(!e.target.selfData) {
+				// 		e.target.options.markers.forEach(item => {
+				// 			let cupx = e.layerPoint
+				// 			let px = this.map.lngLatToLayerPoint(item.or)
+				// 			let distance = this.getDistance(cupx, px)
+				// 			if((distance + '') != 'NaN' && this.getDistance(cupx, px) < 61) {
+				// 				let fxylb = markersList.find(marker => item.item.fxylb == marker.fxylb)
+				// 				if(!fxylb) {
+				// 					markersList.push({
+				// 						title: item.item.fxylbmc,
+				// 						fxylb: item.item.fxylb,
+				// 						expand: false,
+				// 						children: [
+				// 							{
+				// 								title: item.item.fxymc,
+				// 								...item.item
+				// 							}
+				// 						]
+				// 					})
+				// 				}else {
+				// 					fxylb.children.push({
+				// 						title: item.item.fxymc,
+				// 						...item.item
+				// 					})
+				// 				}
+				// 				this.markersList = markersList
+				// 				this.$nextTick(() => {
+				// 					this.showMarkers = true;
+				// 				})
+				// 			}
+				// 		})
+				// 	}
+				// })
 			},
 			selectMarker(data) {
 				if(!data[0].children) {
@@ -714,143 +682,83 @@
 				let x = point1.x - point2.x
 				let y = point1.y - point2.y
 				let distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))
-
-				console.log(distance)
 				return distance
 			},
-			// 绘制风险点
-			drawAnnotations(item, text) {
-				let self = this;
-	            // 创建图片对象
-	            let icon = new T.Icon({
-	                // iconUrl: require(`../../assets/risk-point/${item.type_}-${item.level + 1}.png`),
-	                iconUrl: require(`../../assets/risk-point/${text}-1.png`),
-	                iconSize: new T.Point(18, 25),
-	                iconAnchor: new T.Point(10, 25)
-	            });
-	            //向地图上添加自定义标注
-	            let param1 = this.area == '全部' ? new T.LngLat(item.enterprise.lng, item.enterprise.lat) : new T.LngLat(item.lng, item.lat)
-	            let marker = new T.Marker(param1, {icon: icon});
-	            marker.addEventListener("click", () => {
-	            	self.drawRadarBox(item);
-	            });
-	            this.map.addOverLay(marker);
-			},
-			showInfo(item) {
-				this.fxyInfo = item
-				this.getQy(() => {
-					let myChart = echarts.init(document.getElementById('radar'));
-					myChart.setOption({
-					    radar: {
-					        indicator: [
-					            {name: '危险物质', max: 200},
-					            {name: '人员', max: 200},
-					            {name: '周边环境', max: 200},
-					            {name: '设备', max: 200},
-					        ],
-					        shape: 'circle',
-					    	radius: 60,
-					        splitNumber: 3,
-					        name: {
-					            textStyle: {
-					                color: '#fff',
-					                fontSize: 12
-					            }
-					        },
-					        splitLine: {
-					            lineStyle: {
-					                color: '#fff'
-					            }
-					        },
-					        splitArea: {
-					            show: false
-					        },
-					        axisLine: {
-					            lineStyle: {
-					                color: '#fff'
-					            }
-					        }
-					    },
-			            tooltip: {
-			                trigger: 'axis'
-			            },
-					    series: [
-					        {
-					            name: '风险点信息',
-					            type: 'radar',
-					            lineStyle: {
-								    normal: {
-								        width: 1,
-								        opacity: 0.5
-								    }
-								},
-					            data: [{
-					            	value: [100, 120, 110, 160]
-					            }],
-					            symbol: 'none',
-					            itemStyle: {
-					                color: 'rgb(16,246,255)'
-					            },
-					            lineStyle: {
-					            	color: '#10F6FF'
-					            },
-					            areaStyle: {
-					                opacity: 0.8
-					            }
-					        }
-					    ]
-					});
-				})
-			},
-			// 风险资源展示
-			handleDrawRiskSource(item) {
-				if(this.infoWin) {
-					this.infoWin.closeInfoWindow();
-					this.infoWin = null;
-				}
-				let lnglat = new T.LngLat(item.lng, item.lat);
-				this.infoWin = new T.InfoWindow();
-				this.infoWin.setLngLat(lnglat);
-				this.infoWin.setContent(`名称：${item.dsname}<br/>地址：${item.dsaddress}<br/>风险物品：${item.dsscale}<br/>所属园区：${item.dsparkname}`);
-				this.infoWin.setOffset([0, -20]);
-				this.map.addOverLay(this.infoWin);
-			},
-			// 绘制雷达图
-			drawRadarBox(item) {
-	            this.currentRisk = item;
+			async showInfo(item) {
 				let params = {
-					user_enterprise_id: this.area == '全部' ? item.enterprise.user_enterprise_id : item.user_enterprise_id
+					gkdx_id: item.gkdx_id
 				}
-				api.getWhqy(params).then(res => {
-					this.riskInfo = JSON.stringify(res.data) == '[]' ? {} : res.data;
-					if(!this.showLeft) {
-						this.showLeft = true;
-					}
-				})
+				let { status_code, data } = await api.getFxxxList(params)
+				if(status_code == 200) {
+					this.fxyInfo = data
+					this.getQy(() => {
+						this.showInfoModel = true;
+					})
+				}
+				// this.getQy(() => {
+				// 	let myChart = echarts.init(document.getElementById('radar'));
+				// 	myChart.setOption({
+				// 	    radar: {
+				// 	        indicator: [
+				// 	            {name: '危险物质', max: 200},
+				// 	            {name: '人员', max: 200},
+				// 	            {name: '周边环境', max: 200},
+				// 	            {name: '设备', max: 200},
+				// 	        ],
+				// 	        shape: 'circle',
+				// 	    	radius: 60,
+				// 	        splitNumber: 3,
+				// 	        name: {
+				// 	            textStyle: {
+				// 	                color: '#fff',
+				// 	                fontSize: 12
+				// 	            }
+				// 	        },
+				// 	        splitLine: {
+				// 	            lineStyle: {
+				// 	                color: '#fff'
+				// 	            }
+				// 	        },
+				// 	        splitArea: {
+				// 	            show: false
+				// 	        },
+				// 	        axisLine: {
+				// 	            lineStyle: {
+				// 	                color: '#fff'
+				// 	            }
+				// 	        }
+				// 	    },
+			 //            tooltip: {
+			 //                trigger: 'axis'
+			 //            },
+				// 	    series: [
+				// 	        {
+				// 	            name: '风险点信息',
+				// 	            type: 'radar',
+				// 	            lineStyle: {
+				// 				    normal: {
+				// 				        width: 1,
+				// 				        opacity: 0.5
+				// 				    }
+				// 				},
+				// 	            data: [{
+				// 	            	value: [100, 120, 110, 160]
+				// 	            }],
+				// 	            symbol: 'none',
+				// 	            itemStyle: {
+				// 	                color: 'rgb(16,246,255)'
+				// 	            },
+				// 	            lineStyle: {
+				// 	            	color: '#10F6FF'
+				// 	            },
+				// 	            areaStyle: {
+				// 	                opacity: 0.8
+				// 	            }
+				// 	        }
+				// 	    ]
+				// 	});
+				// })
 			},
-			// 清除地图覆盖物
-			clearAll() {
-				this.map.clearOverLays();
-				this.riskPoints.forEach(item => {
-	            	this.drawAnnotations(item)
-	            })
-			},
-			// 
-			handleSelectLeft() {
-				this.reset = true
-				this.showLeft = !this.showLeft
-				this.$nextTick(() => {
-					this.reset = false
-				})
-			},
-			handleSelectRight(bool) {
-				this.reset = true
-				this.showRight = !this.showRight
-				this.$nextTick(() => {
-					this.reset = false
-				})
-			}, 
-			// 获取行业类目
 			async getTradeList() {
 				let params = {
 					act: 'getall'
@@ -858,9 +766,11 @@
 				let { status_code, data } = await api.getFxylbList(params)
 				if(status_code == 200) {
 					this.allTrade = data;
-					console.log(data.map(item => item.fxylbmc).splice(3, 100))
-					let list = this.toTree(data, 1);
-					this.$store.dispatch('save_tradeList', list);
+					this.tradeList = this.toTree(data, 1);
+					this.$store.dispatch('save_tradeList', this.tradeList);
+					this.$nextTick(() => {
+        				this.$refs.trade_list.setHeight()
+					})
 				}
 			},
 			toTree(data, index) {
@@ -889,96 +799,26 @@
 			    })
 			    return val
 			},
-			screenfull() {
-				let de = document.querySelector('#overview') || document.documentElement;
-				const requestFullScreen = element => {
-				    if (de.requestFullscreen) {
-				        de.requestFullscreen();
-				    } else if (de.mozRequestFullScreen) {
-				        de.mozRequestFullScreen();
-				    } else if (de.webkitRequestFullScreen) {
-				        de.webkitRequestFullScreen();
-					}else if(div.msRequestFullScreen){
-		                div.msRequestFullScreen();
-		            }else {
-				    	this.$Message.error('不支持全屏')
-				    	return false
-				    }
+			drag(e) {
+				let elem = e.target
+				let distance = e.clientY - e.target.offsetTop
+				document.onmousemove = e => {
+					this.$refs.areaBox.style.height = (e.clientY - distance) + 'px'
 				}
-				if(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement){
-                	this.$Message.info('当前窗口已全屏显示')
-            	}else {
-            		requestFullScreen();
-            	}
-			},
-			print() {
-				var v = document.getElementById("mapDiv");
-				//向v中追加打印数据，可以将界面的元素追加进来
-				var h = window.open("打印窗口", "_blank");
-			    h.document.write( $(v).prop("outerHTML"));
-			    h.document.close();
-			    h.print();
-			    h.close();
-			},
-			save() {
-				html2canvas(document.getElementById('mapDiv'), {
-					allowTaint: false,
-                    useCORS: true,
-				}).then(canvas => {
-					//将图片保存到变量
-					var image = canvas.toDataURL("image/jpeg");
-					downloadFile('图片名称', image);
-				});
-				function downloadFile(fileName, content) { //下载base64图片
-				    var base64ToBlob = function(code) {
-				        let parts = code.split(';base64,');
-				        let contentType = parts[0].split(':')[1];
-				        console.log(parts[1])
-				        let raw = window.atob(parts[1]);
-				        let rawLength = raw.length;
-				        let uInt8Array = new Uint8Array(rawLength);
-				        for(let i = 0; i < rawLength; ++i) {
-				            uInt8Array[i] = raw.charCodeAt(i);
-				        }
-				        return new Blob([uInt8Array], {
-				            type: contentType
-				        });
-				    };
-				    let aLink = document.createElement('a');
-				    let blob = base64ToBlob(content); //new Blob([content]);
-				    let evt = document.createEvent("HTMLEvents");
-				    evt.initEvent("click", true, true); //initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
-				    aLink.download = fileName;
-				    aLink.href = URL.createObjectURL(blob);
-				    aLink.click();
-				};
-			},
-			async getQyfxList(cb) {
-				let { status_code, data } = await api.getQyfxList({})
-				if(status_code == 200) {
-					this.qyfxList = data
-					cb && cb()
+				document.onmouseup = e => {
+					document.onmousemove = null
+					document.onmouseup = null
+					this.$nextTick(() => {
+						this.$refs.trade_list.setHeight()
+					})
 				}
 			},
-			async getFxysl(cb) {
-				let quyu = this.areaList.find(areaItem => areaItem.mc == this.cityName)
-				let params = {
-					xm_id: this.xm_id,
-					per_page: 10,
-					page: 1,
-				}
-				quyu && (params.quyu_id = quyu.id)
-				let times
-				let { status_code: status_code_, fxdjsl, zsl } = await api.getFxyList(params)
-				this.zsl = zsl
-				this.levelList.forEach(item => {
-					item.value = fxdjsl[item.name]
-				})
-				cb && cb()
-			}
+			rowClassName (row, index) {
+                return 'demo-table-info-row';
+            }
 		},
 		async created() {
-			this.getTradeList();
+			this.getTradeList()
 			let { status_code, data } = await api.getAreaList({parent_id: 28, per_page: 1000})
 			if(status_code == 200) {
 				this.areaList = data.data
@@ -987,6 +827,10 @@
 					item_ && (item.id = item_.id)
 				})
 			}
+			this.$nextTick(() => {
+				$('.tdt-bottom').css('bottom', document.getElementById('mapDiv').offsetHeight / 2 + 'px')
+				// document.getElementsByClassName('tdt-bottom').style.bottom = document.getElementById('mapDiv').offsetHeight / 2 + 'px'
+			})
 		},
 		mounted() {
 			this.init();
@@ -1001,132 +845,8 @@
 	.container {
 		position: relative;
 		width: 100%;
-		.header {
-			position: relative;
-			box-sizing: border-box;
-			width: 100%;
-			height: 40px;
-			border: 1px solid #10388C;
-			box-shadow: inset 0 0 32px 0 rgba(0,163,255,0.30);
-			background: url('../../assets/title-background.png');
-			background-size: 100% 100%;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			.header_left {
-				display: flex;
-				align-items: center;
-			}
-			.header_title {
-				position: absolute;
-				left: 50%;
-				top: 50%;
-				transform: translate(-50%, -50%);
-				width: 365px;
-				height: 30px;
-				font-family: PingFangSC-Semibold;
-				font-size: 14px;
-				color: #10F6FF;
-				text-align: center;
-				line-height: 30px;
-				background: url('../../assets/headline.png');
-				background-size: 100%;
-			}
-
-			.header_area {
-				font-family: PingFangSC-Regular;
-				font-size: 20px;
-				text-align: left;
-				color: #fff;
-			}
-			.header_select {
-				margin-left: 40px;
-				// height: 40px;
-				display: flex;
-				align-items: center;
-				font-family: PingFangSC-Regular;
-				font-size: 20px;
-				text-align: left;
-				color: #fff;
-				.header_select_dropdown {
-					position: absolute;
-					top: 40px;
-					left: 40px;
-					z-index: 1001;
-					padding: 4px 0;
-					width: 200px;
-					overflow: hidden;
-					background: rgb(5, 27, 74);
-					border-radius: 4px;
-					border: 1px solid #10388c;
-					box-shadow: inset 0 0 4px 0 rgba(0, 163, 255, .3);
-					.header_select_dropdown_list {
-						width: 100%;
-						max-height: 200px;
-						overflow-y: scroll;
-						overflow-x: hidden;
-						display: flex;
-						flex-wrap: wrap;
-						.header_select_dropdown_item {
-							width: 60px;
-							padding-left: 8px;
-							box-sizing: border-box;
-							font-family: PingFangSC-Regular;
-							font-size: 14px;
-							text-align: left;
-							color: #fff;
-							line-height: 32px;
-							cursor: pointer;
-							&:first-child {
-								width: 100%;
-								border-bottom: 1px solid #fff;
-							}
-							&:hover {
-								color: #2d8cf0;
-							};
-						}
-					}
-				}
-				span {
-					cursor: pointer;
-					margin-right: 4px;
-					font-size: 14px;
-				}
-				.header_select_arrow {
-					width: 20px;
-					height: 20px;
-					transform: rotate(0deg);
-					transform-origin: center;
-					display: flex;
-					justify-content: center;
-					align-items: center;
-				}
-				.header_select_arrow_rotate1 {
-					animation: rotate 0.5s;
-					animation-fill-mode: forwards;
-				}
-				@keyframes rotate{
-					from {
-						transform: rotate(0deg);
-					}
-					to {
-						transform: rotate(180deg);
-					}
-				}
-				.header_select_arrow_rotate2 {
-					animation: rotateBack 0.5s;
-					animation-fill-mode: forwards;
-				}
-				@keyframes rotateBack{
-					from {
-						transform: rotate(180deg);
-					}
-					to {
-						transform: rotate(0deg);
-					}
-				}
-			}
-		}
+		height: 100%;
+		overflow-y: hidden;
 		.trade1 {
 			margin-left: 0;
 			margin-right: 40px;
@@ -1139,12 +859,12 @@
 			// bottom: 0;
 			// z-index: 100;
 			width: 100%;
-			height: calc(100% - 40px);
+			height: 100%;
 		}
 		.level_box {
 			position: absolute;
-			top: 60px;
-			left: 32px;
+			left: 340px;
+			top: 70px;
 			z-index: 1000;
 			.level_item {
 				margin-bottom: 12px;
@@ -1179,29 +899,91 @@
 				}
 			}
 		}
-		.tool_box {
-			position: absolute;
-			top: 40px;
-			right: 0;
-			z-index: 1001;
-		}
 		.left {
 			position: absolute;
 			left: 0;
-			top: 40px;
+			top: 0;
 			bottom: 0;
 			z-index: 1000;
 			// padding-top: 48px;
 			box-sizing: border-box;
-			width: 400px;
+			width: 320px;
 			background: rgba(5,27,74,0.87);
-			border: 1px solid #10388C;
-			box-shadow: inset 0 0 32px 0 rgba(0,163,255,0.30);
 			overflow: hidden;
 			.left_box {
-				width: 420px;
-				height: calc(100% + 20px);
-				overflow-y: scroll;
+				box-sizing: border-box;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				.left_item {
+					width: 100%;
+					height: 50%;
+					overflow: hidden;
+					border: 1px solid #10388C;
+					box-shadow: inset 0 0 32px 0 rgba(0,163,255,0.30);
+					&:first-child {
+						height: 30%;
+					}
+					&:last-child {
+						.line {
+							width: 100%;
+							height: 1px;
+							background: #25b5d8;
+							cursor: s-resize;
+						}
+						flex: 1;
+					}
+					.trade_list {
+						height: 100%;
+						box-sizing: border-box;
+						padding-bottom: 24px;
+					}
+					.header_select_dropdown_list {
+						padding-right: 20px;
+						box-sizing: border-box;
+						width: calc(100% + 20px);
+						height: calc(100% - 58px);
+						overflow-y: scroll;
+						// min-height: 100%;
+						display: flex;
+						flex-wrap: wrap;
+						justify-content: center;
+						.header_select_dropdown_item {
+							margin-top: 28px;
+							width: 40%;
+							box-sizing: border-box;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							.check {
+								margin-right: 16px;
+								width: 20px;
+								height: 20px;
+								background: url('../../assets/agreement_off.png');
+								background-size: 100%;
+								cursor: pointer;
+							}
+							.selected {
+								background: url('../../assets/agreement_on.png');
+								background-size: 100%;
+							}
+							span {
+								width: 60px;
+								font-family: PingFangSC-Regular;
+								font-size: 14px;
+								text-align: left;
+								color: #fff;
+								line-height: 20px;
+								cursor: pointer;
+								display: inline-block;
+							}
+							.active {
+								color: rgb(16, 246, 255);
+							}
+						}
+					}
+				}
 			}
 			.close {
 				position: absolute;
@@ -1239,7 +1021,7 @@
 		.trade_box {
 			position: absolute;
 			right: 0;
-			top: 40px;
+			top: 0;
 			bottom: 0;
 			z-index: 1000;
 			box-sizing: border-box;
@@ -1250,8 +1032,17 @@
 			overflow: hidden;
 			.right_box {
 				width: 420px;
-				height: calc(100% + 20px);
-				overflow-y: scroll;
+				height: 100%;
+				.trade_order_popup {
+					width: 100%;
+					height: calc(100% - 342px);
+					overflow-x: hidden;
+					.trade_order_content {
+						width: calc(100% + 20px);
+						height: 100%;
+						overflow-y: scroll;
+					}
+				}
 			}
 			.close {
 				position: absolute;
@@ -1331,8 +1122,8 @@
 			align-items: center;
 			.info_model_box {
 				position: relative;
-				width: 560px;
-				height: 410px;
+				width: 840px;
+				height: 615px;
 				background: url('../../assets/point-up.png') center no-repeat;
 				background-size: contain;
 				.close {
@@ -1349,6 +1140,7 @@
 					box-sizing: border-box;
 					width: 100%;
 					height: 100%;
+					overflow: hidden;
 					.info_name {
 						font-family: PingFangSC-Medium;
 						font-size: 18px;
@@ -1379,11 +1171,12 @@
 						}
 						.baseInfo_box {
 							width: 100%;
-							height: 280px;
+							height: 560px;
 							overflow: hidden;
 							.baseInfo {
-								width: 100%;
-								height: 280px;
+								width: calc(100% + 20px);
+								height: 560px;
+								overflow-y: scroll;
 								p {
 									margin-bottom: 8px;
 									font-family: PingFangSC-Regular;
@@ -1401,12 +1194,48 @@
 									width: 100%;
 									height: 200px;
 								}
+								/deep/ .ivu-table {
+									background-color: transparent;
+									&:before {
+										height: 0;
+									}
+									.ivu-table-overflowX {
+										overflow-y: hidden;
+										height: calc(100% - 20px);
+										table {
+											padding-bottom: 20px;
+										}
+									}
+									.ivu-table-fixed {
+										&:before {
+											height: 0;
+										}
+									}
+									th {
+										background-color: #022a63;
+										color: #fff;
+										border: none;
+									}
+									td {
+										background-color: #022a63;
+							        	color: #fff;
+							        	border: none;
+									}
+									.demo-table-info-row {
+										td {
+											
+										}
+									}
+							    }
+							    .img_box {
+							    	width: calc(100% - 20px);
+							    }
 							}
 						}
 					}
 				}
 				/deep/ .marker_model {
-					overflow-y: hidden;
+					overflow: hidden;
 					.marker_content {
 						width: calc(100% + 50px);
 						height: 100%;
@@ -1429,6 +1258,43 @@
 				}
 			}
 		}
+		.step_box {
+			position: absolute;
+			bottom: 42px;
+			left: 50%;
+			z-index: 1001;
+			transform: translateX(-50%);
+			display: flex;
+			align-items: center;
+			.step {
+				width: 600px;
+				height: 16px;
+				background: rgba(255,255,255,0.50);
+				border-radius: 8px;
+				.step_content {
+					height: 16px;
+					background: #1C86F3;
+					border-radius: 8px;
+				}
+			}
+			.value {
+				position: absolute;
+				bottom: 20px;
+				transform: translateX(-100%);
+				font-family: PingFangSC-Medium;
+				font-size: 15px;
+				color: #1C86F3;
+				text-align: left;
+				white-space: nowrap;
+			}
+			.sum {
+				margin-left: 16px;
+				font-family: PingFangSC-Medium;
+				font-size: 15px;
+				color: #1C86F3;
+				text-align: left;
+			}
+		}
 	}
 
 	.ivu-dropdown-menu {
@@ -1442,5 +1308,8 @@
 			color: #2b85e4;
 			background: transparent;
 		}
+	}
+	/deep/.tdt-right {
+		right: 400px;
 	}
 </style>

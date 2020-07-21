@@ -78,6 +78,18 @@ export default {
   getQyfxList(params) {
     return fetchGet('/api/quyufengxian', params)
   },
+  // 区域行业风险
+  getAreaIndustryList(params) {
+    return fetchGet('/api/quyuhangyefengxian', params)
+  },
+  // 区域风险源数量
+  getQyfxySlList(params) {
+    return fetchGet('/api/fengxianyuangaikuang', params)
+  },
+  // 风险信息
+  getFxxxList(params) {
+    return fetchGet('/api/fengxianxinxi', params)
+  },
   ...role,
   ...cj_account,
   ...admin,

@@ -52,6 +52,12 @@ let actions = {
       context.commit('update_riskPoints', riskPoints)
       resolve()
     })
+  },
+  save_industry(context, industry) {
+    return new Promise((resolve) => {
+      context.commit('update_industry', industry)
+      resolve()
+    })
   }
 }
 

@@ -1,20 +1,26 @@
 <template>
-	<div class="trade">
-		<div class="trade_item" :class="{trade_item1: level == 1}" v-for="item in data" :style="{'padding-left': left}">
-			<div class="trade_father" @click="handleClickItem(item)" :class="{selected: selectIds.includes(item.id + '')}">
-				<div class="check" @click.stop.prevent="handleSelect(item)"></div>
-				<!-- <img class="icon" v-if="level <= 2" :src="require(`../../assets/trade/icon-${item.id}${item.selected ? 'on' : ''}.png`)">	 -->
+	<div class="trade" ref="trade">
+		<div class="trade_item" :class="{trade_item1: level == 1}" v-for="item in data" v-show="item.children || level != 1" :style="{'padding-left': left}">
+			<div class="trade_father" @click="handleClickItem(item)" :class="{selected: $store.state.industry && $store.state.industry.id == item.id}">
+				<div class="check" v-if="level != 1" @click.stop.prevent="handleSelect(item)"></div>
+				<img class="icon" v-if="level == 2" :src="iconUrl(item)">	
 				<span :class="`text${level}`">{{item.fxylbmc}}</span>
-				<div class="arrow" v-if="item.children && item.children.length >= 1" :class="{arrow_rotate1: item.showChildren, arrow_rotate2: !item.showChildren}">
+				<div class="arrow" v-if="item.children && item.children.length >= 1 && level < 2" :class="{arrow_rotate1: item.showChildren, arrow_rotate2: !item.showChildren}">
 					<Icon type="md-arrow-dropdown" size="12px" :color="item.selected ? '#10F6FF' : '#fff'" />
 				</div>
 			</div>
-			<div class="trade_brother" :id="'trade_brother' + item.id" v-if="item.children && item.children.length >= 1">
-				<trade 
-					:data="item.children" 
-					:selectData="currentData"
-					:level="level + 1" 
-					@selectFather="handleSelectFather"></trade>
+			<div 
+				class="trade_brother" 
+				:id="'trade_brother' + item.id" 
+				v-if="item.children && item.children.length >= 1 && level < 2" 
+				:style="{height: contentHeight + 'px'}">
+				<div class="trade_brother_content">
+					<trade 
+						:data="item.children" 
+						:selectData="currentData"
+						:level="level + 1" 
+						@selectFather="handleSelectFather"></trade>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -32,6 +38,7 @@
 					selectAll: false,
 					selectId: 0
 				},
+				contentHeight: 0
 			}
 		},
 		components: {
@@ -73,9 +80,19 @@
 		computed: {
 			selectIds() {
 				return this.$store.state.selectIds.split(',');
-			}
+			},
 		},
 		methods: {
+			iconUrl(item) {
+				let iconUrl
+				try {
+					iconUrl = require(`../../assets/risk-point/${item.dm}-${this.$store.state.industry && this.$store.state.industry.id == item.id ? '5' : '6'}.png`)
+				} 
+				catch {
+					iconUrl = require(`../../assets/risk-point/fengxianyuan-${this.$store.state.industry && this.$store.state.industry.id == item.id ? '5' : '6'}.png`)
+				}
+				return iconUrl
+			},
 			handleSelectDataChange() {
 				if(this.level == 3) {
 					
@@ -88,12 +105,19 @@
 				})
 			},
 			handleClickItem(item) {
-				item.showChildren = !item.showChildren;
+				this.data.forEach(item_ => {
+					if(item.id !== item_.id) {
+						$(`#trade_brother${item_.id}`).stop().slideUp();
+					}
+				})
 				$(`#trade_brother${item.id}`).stop().slideToggle();
 			},
 			handleSelect(item) {
-				item.selected = !item.selected;
-				this.setCurrentData(item);
+				if(this.$store.state.industry && this.$store.state.industry.id == item.id) {
+					this.$store.dispatch('save_industry', null)
+				}else {
+					this.$store.dispatch('save_industry', item)
+				}
 			},
 			setCurrentData(item) {
 				this.currentData.selectAll = item.selected;
@@ -131,6 +155,10 @@
 						this.pushSelectId(item);
 					}
 				})
+			},
+			setHeight() {
+				console.log(this.$refs.trade)
+				this.contentHeight = this.$refs.trade.offsetHeight - 38 * 3 - 20
 			}
 		},
 		created() {
@@ -144,6 +172,7 @@
 
 <style lang="scss" scoped>
 	.trade {
+		height: 100%;
 		.trade_item {
 			padding-left: 32px;
 			box-sizing: border-box;
@@ -228,6 +257,14 @@
 			}
 			.trade_brother {
 				display: none;
+				width: 100%;
+				overflow: hidden;
+				.trade_brother_content {
+					width: calc(100% + 20px);
+					height: 100%;
+					padding-bottom: 24px;
+					overflow-y: scroll;
+				}
 			}
 		}
 		.trade_item1 {

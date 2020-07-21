@@ -29,8 +29,8 @@ export default {
 			cb && cb(list)
 		},
 		getQy(cb) {
-			if(this.fxyInfo.fqybhc_bhzj) {
-				let quyu = this.fxyInfo.fqybhc_bhzj.split(',').map(item => parseInt(item));
+			if(this.fxyInfo.fengxianyuan.fqybhc_bhzj) {
+				let quyu = this.fxyInfo.fengxianyuan.fqybhc_bhzj.split(',').map(item => parseInt(item));
 				let parentList = this.quyuList
 				let parent = null
 				let depth = 0
@@ -48,8 +48,7 @@ export default {
 							map(quyu[depth])
 						}else {
 							console.log(parent)
-							this.fxyInfo.quyu = parent.label;
-							this.showInfoModel = true
+							this.fxyInfo.fengxianyuan.quyu = parent.label;
 							this.$nextTick(() => {
 								cb && cb()
 							})

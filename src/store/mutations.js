@@ -26,6 +26,9 @@ let mutations = {
   update_riskPoints(state, riskPoints) {
     state.riskPoints = riskPoints
   },
+  update_industry(state, industry) {
+    state.industry = industry
+  },
 }
 
 export default mutations

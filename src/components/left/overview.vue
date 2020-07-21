@@ -3,13 +3,6 @@
 		<div class="overview_pie">
 			<div id="overview_pie"></div>
 		</div>
-		<!-- <div class="overview_list">
-			<div class="overview_item1" v-for="(item, index) in overviewData" :key="item.name">
-				<img class="overview_item1_icon" :src="require(`@/assets/queer-${index + 1}.png`)">
-				<div class="overview_item1_name">{{item.name}}</div>
-				<div class="overview_item1_value" :style="{color: item.color}">{{item.value}}</div>
-			</div>
-		</div> -->
 	</div>
 </template>
 
@@ -28,23 +21,6 @@
 		name: '',
 		data() {
 			return {
-				overviewData: [{
-		            name: '工业风险源',
-		            value: 194,
-		            color: '#1C86F3'
-		        }, {
-		            name: '人员密集场所',
-		            value: 291,
-		            color: '#F25E5E'
-		        }, {
-		            name: '公共设施',
-		            value: 194,
-		            color: '#3BBC91'
-		        }, {
-		            name: '自然灾害',
-		            value: 478,
-		            color: '#E4B44E'
-		        }],
 		        myChart: null
 			}
 		},
@@ -57,29 +33,47 @@
 					this.drawOverview()
 				})
 			},
+			fxdjList(val) {
+				this.$nextTick(() => {
+					this.drawOverview()
+				})
+			}
 		},
 		computed: {
-
+			fxdjList() {
+				return this.$store.state.levelList.filter(item => item.selected).map(item => item.name)
+			}
 		},
 		methods: {
 			drawOverview() {
 				this.myChart = echarts.init(document.getElementById('overview_pie'));
-				let color = this.overviewData.map(item => item.color);
-				let data = this.$store.state.levelList.map(item => {
+				let data = this.$store.state.levelList.filter(item => item.selected).map(item => {
 					let { name, value, color } = item
-					return { name, value, color }
+					return { 
+						name, 
+						value: value || 0, 
+						color 
+					}
 				})
 				this.myChart.setOption({
-					color,
+					color: data.map(item => item.color),
 					tooltip: {
 
 					},
+				    legend: {
+				        orient: 'vertical',
+				        right: 10,
+				        textStyle: {
+				        	color: '#ffffff'
+				        },
+				        data: data.map(item => item.name),
+				    },
 		            series: [
 				        {
 				            name: '',
 				            type: 'pie',
-				            radius: '80%',
-				            center: ['50%', '50%'],
+				            radius: '70%',
+				            center: ['38%', '50%'],
 				            data,
 				            label: {
 				            	formatter: '{d}%'
@@ -110,7 +104,7 @@
 			align-items: center;
 			justify-content: center;
 			#overview_pie {
-				width: 300px;
+				width: 380px;
 				height: 200px;
 			}
 		}
