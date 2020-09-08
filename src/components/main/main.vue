@@ -2,7 +2,7 @@
 	<div class="container" id="container_test">
 		<Layout>
 			<!-- position: 'fixed',  -->
-            <Header :style="{width: '100%'}">
+            <Header :style="{width: '100%'}" v-if="!isDl">
 				<Row type="flex" align="middle" justify="space-between">
 					<Col>
 						<div class="header_left">
@@ -36,6 +36,7 @@
 		            :collapsed-width="64"
 		            class="left-sider"
 		            :style="{background: '#1E2657'}"
+		            v-if="!isDl"
 		        >
 		            <side-menu
 		                accordion
@@ -108,8 +109,8 @@
 	            password: '',
 	            confirmPassword: '',
 	            addUserLoading: false,
-	            contentHeight: window.innerHeight - 64 + 'px',
-	            overviewList: ['area', 'industry', 'poi']
+	            overviewList: ['area', 'industry', 'poi'],
+	            contentHeight: 0
 			}
 		},
 		watch: {
@@ -189,11 +190,11 @@
 	        }
 		},
 		created() {
-
+			this.contentHeight = window.innerHeight - (this.isDl ? 0 : 64) + 'px'
 		},
 		mounted() {
 			window.addEventListener('resize', () => {
-				this.contentHeight = window.innerHeight - 64 + 'px'
+				this.contentHeight = window.innerHeight - (this.isDl ? 0 : 64) + 'px'
 			})
 		}
 	}

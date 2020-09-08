@@ -13,7 +13,7 @@
 				<img src="@/assets/nstrument-3.png">
 				<span>图例</span>
 			</div>
-			<div class="screenfull" @click="save">
+			<div class="screenfull" @click="save('mapDiv')">
 				<img src="@/assets/nstrument-4.png">
 				<span>保存为图片</span>
 			</div>
@@ -86,26 +86,52 @@
 				location.reload()
 			},
 			screenfull() {
-				let de = document.querySelector('#mapDiv_box') || document.documentElement;
-				const requestFullScreen = element => {
-				    if (de.requestFullscreen) {
-				        de.requestFullscreen();
-				    } else if (de.mozRequestFullScreen) {
-				        de.mozRequestFullScreen();
-				    } else if (de.webkitRequestFullScreen) {
-				        de.webkitRequestFullScreen();
-					}else if(div.msRequestFullScreen){
-		                div.msRequestFullScreen();
-		            }else {
-				    	this.$Message.error('不支持全屏')
-				    	return false
-				    }
+				// let de = document.querySelector('#mapDiv_box') || document.documentElement;
+				// const requestFullScreen = element => {
+				//     if (de.requestFullscreen) {
+				//         de.requestFullscreen();
+				//     } else if (de.mozRequestFullScreen) {
+				//         de.mozRequestFullScreen();
+				//     } else if (de.webkitRequestFullScreen) {
+				//         de.webkitRequestFullScreen();
+				// 	}else if(div.msRequestFullScreen){
+		  //               div.msRequestFullScreen();
+		  //           }else {
+				//     	this.$Message.error('不支持全屏')
+				//     	return false
+				//     }
+				// }
+				// if(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement){
+    //             	this.$Message.info('当前窗口已全屏显示')
+    //         	}else {
+    //         		requestFullScreen();
+    //         	}
+    			function requesetFullScreen(elem) {
+				  if (elem.requestFullscreen) {
+				    elem.requestFullscreen();
+				  } else if (elem.mozRequestFullScreen) {
+				    elem.mozRequestFullScreen();
+				  } else if (elem.webkitRequestFullScreen) {
+				    elem.webkitRequestFullScreen();
+				  }else if(elem.msRequestFullScreen){
+				    elem.msRequestFullScreen();
+				  }else {
+				    alert('当前浏览器不支持全屏，请更换浏览器')
+				    return false
+				  }
 				}
-				if(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement){
-                	this.$Message.info('当前窗口已全屏显示')
-            	}else {
-            		requestFullScreen();
-            	}
+
+				function screenfull(elemId) {
+				  let elem = document.querySelector(elemId) || document.documentElement;
+				  if(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement){
+				    alert('当前窗口已全屏显示')
+				  }else {
+				    console.log(elem)
+				    requesetFullScreen(elem);
+				  }
+				}
+
+				screenfull('#mapDiv_box')
 			},
 			allMap() {
 				this.$parent.allMap()
@@ -128,8 +154,8 @@
 					var image = canvas.toDataURL("image/jpeg");
 					let img = document.createElement('img');
 					img.src = image
-				    img.style.width = '100%'
-				    img.style.height = '100%'
+				    img.style.width = '100vw'
+				    img.style.height = `${100 * img.height / img.width}vw`
 				   	var h = window.open('打印窗口', "_blank");
 				    h.document.write($(img).prop("outerHTML"));
 				    h.document.close();
@@ -140,8 +166,8 @@
 				    
 				});
 			},
-			save() {
-				html2canvas(document.getElementById('mapDiv'), {
+			save(elemId) {
+				html2canvas(document.getElementById(elemId), {
 					allowTaint: false,
                     useCORS: true,
 				}).then(canvas => {
@@ -203,6 +229,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			cursor: pointer;
 			img {
 				width: 24px;
 				height: 24px;

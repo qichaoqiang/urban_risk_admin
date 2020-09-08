@@ -50,6 +50,8 @@ router.beforeEach((to, from, next) => {
 					icon: 'el-icon-s-data',
 					meta: {
 						title: '总览',
+						hideInMenu: true,
+						notCache: true
 					},
 					component: resolve => require(['@/views/overview/index'], resolve),
 					children: [
@@ -58,7 +60,8 @@ router.beforeEach((to, from, next) => {
 							path: '/area',
 							meta: {
 								title: '区域风险分析',
-								parent: 'overview'
+								parent: 'overview',
+								hideInMenu: true,
 							},
 							component: resolve => require([`@/views/overview/area.vue`], resolve),
 						},
@@ -67,7 +70,8 @@ router.beforeEach((to, from, next) => {
 							path: '/industry',
 							meta: {
 								title: '行业风险分析',
-								parent: 'overview'
+								parent: 'overview',
+								hideInMenu: true,
 							},
 							component: resolve => require([`@/views/overview/industry.vue`], resolve),
 						},
@@ -76,7 +80,8 @@ router.beforeEach((to, from, next) => {
 							path: '/poi',
 							meta: {
 								title: '安全风险分布',
-								parent: 'overview'
+								parent: 'overview',
+								hideInMenu: true,
 							},
 							component: resolve => require([`@/views/overview/poi.vue`], resolve),
 						}
@@ -89,39 +94,69 @@ router.beforeEach((to, from, next) => {
 						icon: 'el-icon-notebook-1',
 						meta: {
 							title: '项目管理',
+							hideChildren: true
 						},
 						component: resolve => require(['@/views/city/index'], resolve),
+						children: [
+							{
+								name: 'city_xm',
+								path: '/',
+								meta: {
+									title: '项目列表',
+									parent: 'city'
+								},
+								component: resolve => require([`@/views/city/xm.vue`], resolve),
+							},
+							{
+								name: 'city_fxy',
+								path: '/fxy',
+								meta: {
+									title: '风险源列表',
+									parent: 'city'
+								},
+								component: resolve => require([`@/views/city/fxy.vue`], resolve),
+							},
+							{
+								name: 'city_import',
+								path: '/import',
+								meta: {
+									title: '风险源导入',
+									parent: 'city'
+								},
+								component: resolve => require([`@/views/city/import.vue`], resolve),
+							}
+						]
 					})
 				}
-				menu.push({
-					name: 'map',
-					path: '/map',
-					icon: 'el-icon-s-unfold',
-					meta: {
-						title: '地图管理',
-					},
-					component: resolve => require(['@/views/map/index'], resolve),
-					children: [
-						{
-							name: 'risk_source',
-							path: '/risk_source',
-							meta: {
-								title: '风险源分布',
-								parent: 'map'
-							},
-							component: resolve => require(['@/views/map/risk_source'], resolve),
-						},
-						{
-							name: 'risk_area',
-							path: '/risk_area',
-							meta: {
-								title: '风险区域',
-								parent: 'map'
-							},
-							component: resolve => require(['@/views/map/risk_area'], resolve),
-						}
-					]
-				})
+				// menu.push({
+				// 	name: 'map',
+				// 	path: '/map',
+				// 	icon: 'el-icon-s-unfold',
+				// 	meta: {
+				// 		title: '地图管理',
+				// 	},
+				// 	component: resolve => require(['@/views/map/index'], resolve),
+				// 	children: [
+				// 		{
+				// 			name: 'risk_source',
+				// 			path: '/risk_source',
+				// 			meta: {
+				// 				title: '风险源分布',
+				// 				parent: 'map'
+				// 			},
+				// 			component: resolve => require(['@/views/map/risk_source'], resolve),
+				// 		},
+				// 		{
+				// 			name: 'risk_area',
+				// 			path: '/risk_area',
+				// 			meta: {
+				// 				title: '风险区域',
+				// 				parent: 'map'
+				// 			},
+				// 			component: resolve => require(['@/views/map/risk_area'], resolve),
+				// 		}
+				// 	]
+				// })
 				if(authList.includes('juese') || authList.includes('guanliyuan') || authList.includes('caijizhanghao')) {
 					let item = {
 						name: 'user',
@@ -251,13 +286,15 @@ router.beforeEach((to, from, next) => {
 						meta: {
 							hideInMenu: true,
 							notCache: true,
-							title: '登录'
+							title: '风险源信息'
 						},
 					},
 					...menu
 				]
 			}])
-			storage.set('menu', menu)
+			let menu_ = [...menu]
+			menu_.shift()
+			storage.set('menu', menu_)
 			document.title = to.meta.title;
 			store.commit('update_hasMenu', true)
 			next({ ...to, replace: true })

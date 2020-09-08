@@ -63,7 +63,12 @@ let state = {
 		gaocenggonggongjianzhu: 'gcggjz',
 		chengzhenranqi: 'czrq',
 		changshuguanxianshuqi: 'csgxsq',
-		changshuguanxianshuyou: 'csgxsy'
+		changshuguanxianshuyou: 'csgxsy',
+		renfanggongchengdianwei: 'rfgc',
+		zhongyaojingjimubiaodianwei: 'zyjjmb',
+		fangkongjingbaoqidianwei: 'fkbjq',
+		shusanjidi: 'ssjd',
+		ditie: 'dt',
 	}
 }
 

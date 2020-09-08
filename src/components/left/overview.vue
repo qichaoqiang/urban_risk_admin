@@ -60,23 +60,23 @@
 					tooltip: {
 
 					},
-				    legend: {
-				        orient: 'vertical',
-				        right: 10,
-				        textStyle: {
-				        	color: '#ffffff'
-				        },
-				        data: data.map(item => item.name),
-				    },
+				    // legend: {
+				    //     orient: 'vertical',
+				    //     right: 10,
+				    //     textStyle: {
+				    //     	color: '#ffffff'
+				    //     },
+				    //     data: data.map(item => item.name),
+				    // },
 		            series: [
 				        {
 				            name: '',
 				            type: 'pie',
-				            radius: '70%',
-				            center: ['38%', '50%'],
+				            radius: '80%',
+				            center: ['50%', '50%'],
 				            data,
 				            label: {
-				            	formatter: '{d}%'
+				            	formatter: '{b}\n{d}%'
 				            }
 				        }
 				    ]

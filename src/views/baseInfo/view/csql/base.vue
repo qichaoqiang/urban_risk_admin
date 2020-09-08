@@ -71,7 +71,7 @@
 				        <FormItem label="竣工时间">
 				            <DatePicker type="date" v-model="baseInfo.jgsj"  placeholder="请选择"></DatePicker>
 				        </FormItem>
-				        <FormItem label="在役时间">
+				        <FormItem label="投用时间">
 				            <DatePicker type="date" v-model="baseInfo.zysj"  placeholder="请选择"></DatePicker>
 				        </FormItem>
 				        <FormItem label="桥梁简介">

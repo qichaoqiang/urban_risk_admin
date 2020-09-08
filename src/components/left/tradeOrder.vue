@@ -1,6 +1,6 @@
 <template>
 	<div class="trade_order">
-		<div class="trade_item" :class="{active: cityName == item.qxmc}" v-for="item in qyfxList" :key="item.qxmc" v-show="item.qxmc != '全市'">
+		<div class="trade_item" :class="{active: cityName == item.qxmc}" v-for="item in qyfxList" :key="item.qxmc" v-show="item.qxmc != '全市' && item.fxdj">
 			<div class="trade_item_name" :style="{color: cityName == item.qxmc ? getColor(item.fxdj) : '#fff'}">{{item.qxmc}}</div>
 			<div class="trade_item_rate_box">
 				<div class="trade_item_rate" :title="Number(item.fxz).toFixed(2)" :style="{width: getRate(item.fxz), background: getColor(item.fxdj)}"></div>

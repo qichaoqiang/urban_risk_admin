@@ -5,242 +5,20 @@
 				<Col> 
 					<Breadcrumb separator=">">
 				        <BreadcrumbItem>
-				        	<span class="link" @click="showListModel = false; showExcelModel = false">项目列表</span>
+				        	<span class="link" @click="$router.push('/city')">项目列表</span>
 				        </BreadcrumbItem>
-				        <BreadcrumbItem v-if="showListModel">
-				        	<span class="link" @click="showExcelModel = false">{{xmItem ? xmItem.xmmc : '项目名称'}}</span>
+				        <BreadcrumbItem v-if="$route.name == 'city_fxy' || $route.name == 'city_import'">
+				        	<span class="link" @click="$router.push({name: 'city_fxy', query: {id: $route.query.id}})">{{xmItem ? xmItem.xmmc : '项目名称'}}</span>
 				        </BreadcrumbItem>
 				        <!-- <BreadcrumbItem v-if="showListModel && !showExcelModel">风险源列表</BreadcrumbItem> -->
-				        <BreadcrumbItem v-if="showExcelModel">风险源导入</BreadcrumbItem>
+				        <BreadcrumbItem v-if="$route.name == 'city_import'">风险源导入</BreadcrumbItem>
 				    </Breadcrumb>
 					<!-- <div class="title">项目列表</div> -->
 				</Col>
 			</Row>
 			<Divider />
 		</div>
-		<div style="">
-			<Row type="flex" justify="center" v-if="hasAuth('xiangmu')" v-show="!showListModel && !showExcelModel">
-				<Col span="24">
-			 		<Row type="flex" justify="space-between">
-			 			<Form :model="searchXmForm" inline>
-							<FormItem>
-					        	<Input clearable v-model="searchXmForm.xmmc" placeholder="项目名称" style="width: 300px"></Input>
-					        </FormItem>
-					        <FormItem>
-				                <Button type="primary" @click="getXmList">查询</Button>
-				            </FormItem>
-						</Form>
-						<Col v-if="hasAuth('xiangmu_store')">
-							<Button type="primary" @click="openXmModel" style="width: 60px">
-								<Icon type="ios-add" size="28" />
-							</Button>
-						</Col>
-			 		</Row>
-					<Table ref="xmTable" :columns="xmColumns" :data="xmData" :loading="xmLoading">
-						<template slot-scope="{ row }" slot="xmmc">
-				            <span class="link" @click="openFxyList(row)">{{row.xmmc}}</span>
-				        </template>	
-						<template slot-scope="{ row }" slot="history">
-				            <span class="link" @click="openHistoryModel(row)">查看</span>
-				        </template>
-						<template slot-scope="{ row }" slot="action">
-				            <Button v-if="hasAuth('xiangmu_show')" type="primary" size="small" ghost style="margin-right: 5px" @click="viewXmModel(row)">查看</Button>
-				            <Button v-if="hasAuth('xiangmu_update')" type="primary" size="small" ghost style="margin-right: 5px" @click="editXmModel(row)">编辑</Button>
-				            <Poptip v-if="hasAuth('xiangmu_update')" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeXm(row)">
-						        <Button type="error" size="small" ghost>删除</Button>
-						    </Poptip>
-				        </template>
-					</Table>
-					<Row type="flex" justify="end">
-						<Page
-		                    size="small"
-		                    style="margin-top: 10px"
-		                    :page-size="xmPage.pageSize"
-		                    :total="xmPage.totalRow"
-		                    show-elevator
-		                    show-total
-		                    show-sizer
-		                    @on-change="handleChangeXmPage"
-		                    @on-page-size-change="handleChangeXmPageSize"
-		                />
-		            </Row>
-				</Col>
-			</Row>
-			<Modal width="820" :title="`${modelTypeList[modeType - 1]}项目`" v-model="showXmModel" @on-visible-change="xmModelChange">
-				<Form :disabled="modeType == 3" :model="xmForm" ref="xmForm" :rules="xmFormRules" hide-required-mark label-position="left" :label-width="120">
-					<FormItem label="项目名称" prop="xmmc">
-			        	<Input clearable v-model="xmForm.xmmc"></Input>
-			        </FormItem>
-			        <FormItem label="项目负责人" prop="xmfzr">
-			            <Input clearable v-model="xmForm.xmfzr"></Input>
-			        </FormItem>
-			        <FormItem label="联系电话" prop="lxdh">
-			            <Input clearable type="tel" v-model="xmForm.lxdh"></Input>
-			        </FormItem>
-			        <FormItem label="项目简介" prop="xmjj">
-			            <Input clearable type="textarea" :rows="4" v-model="xmForm.xmjj"></Input>
-			        </FormItem>
-			        <FormItem label="创建时间" prop="cjsj">
-			        	<DatePicker type="date" v-model="xmForm.cjsj"  placeholder="请选择"></DatePicker>
-			        </FormItem>
-				</Form>
-				<div slot="footer">
-		            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
-			        <Button v-if="modeType != 3" type="primary" size="large" :loading="xmFormLoading" @click="saveXm">保存</Button>
-		        </div>
-			</Modal>
-			<div v-show="showListModel && !showExcelModel">
-				<!-- <div slot="header" style="margin-top: 16px">
-					<Breadcrumb separator=">">
-				        <BreadcrumbItem>
-				        	<span class="link" @click="showListModel = false">项目列表</span>
-				        </BreadcrumbItem>
-				        <BreadcrumbItem>{{xmItem ? xmItem.xmmc : '项目名称'}}</BreadcrumbItem>
-				        <BreadcrumbItem>风险源列表</BreadcrumbItem>
-				    </Breadcrumb>
-				</div>
-				<Divider /> -->
-				<Row type="flex" justify="space-between" :gutter="24">
-					<Col span="12">
-						<Row type="flex" align="middle" :gutter="24">
-							<Col span="6">
-								<Select clearable v-model="searchFxyForm.fxdj" placeholder="风险源等级">
-					                <Option v-for="item in fxdjList" :key="item.name" :value="item.name">{{item.name}}</Option>
-					            </Select>
-							</Col>
-							<Col span="6">
-								<Cascader 
-					            	readonly 
-					            	change-on-select
-					            	:transfer="true"
-					            	v-model="searchFxyForm.fxylb" 
-					            	:data="fxylbList" 
-					            	:load-data="loadFxylb" 
-					            	placeholder="风险源类别"></Cascader>
-							</Col>
-							<Col span="6">
-								<Button type="primary" icon="ios-search" @click="getFxyList(1)">搜索</Button>
-							</Col>
-						</Row>
-					</Col>
-					<Col span="12">
-						<Row type="flex" justify="end" align="middle" :gutter="24">
-							<Col v-if="hasAuth('fengxianyuan_store')">
-								<Button type="primary" ghost  @click="importExcel">导入</Button>
-							</Col>
-							<Col v-if="hasAuth('fengxianyuan_export')">
-								<Button type="primary" ghost  @click="exportExcel">导出</Button>
-							</Col>
-							<Col v-if="hasAuth('fengxianyuan_store')">
-								<Button type="primary" @click="openFxyModel" style="width: 60px">
-									<Icon type="ios-add" size="28" />
-								</Button>
-							</Col>
-						</Row>
-					</Col>
-				</Row>
-				<div v-if="hasAuth('fengxianyuan')">
-					<Table :columns="fxyColumns" :data="fxyData" :loading="fxyLoading" style="margin-top: 16px">
-						<template slot-scope="{ row }" slot="fxdj">
-							<div class="fxdj" :style="{background: getFxdj(row.fxdj)}"></div>
-						</template>
-						<template slot-scope="{ row }" slot="action">
-							<!-- <Button v-if="hasAuth('fengxianyuan_show')" type="primary" size="small" ghost style="margin-right: 5px" @click="viewFxyModel(row)">查看</Button> -->
-							<Button v-if="hasAuth('fengxianyuan_update')" type="primary" size="small" ghost style="margin-right: 5px" @click="editFxyModel(row)">编辑</Button>
-				            <Poptip v-if="hasAuth('fengxianyuan_destroy')" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeFxy(row)">
-						        <Button type="error" size="small" ghost v-if="hasAuth('fengxianyuan')">删除</Button>
-						    </Poptip>
-						</template>
-					</Table>
-					<Row type="flex" justify="end">
-						<Page
-			                size="small"
-			                style="margin-top: 10px"
-			                :page-size="fxyPage.pageSize"
-			                :total="fxyPage.totalRow"
-			                show-elevator
-			                show-total
-			                show-sizer
-			                @on-change="handleChangeFxyPage"
-			                @on-page-size-change="handleChangeFxyPageSize"
-			            />
-			        </Row>
-				</div>
-				<Modal width="820" :title="`${modelTypeList[modeType - 1]}风险源`" v-model="showFxyModel" @on-visible-change="fxyModelChange">
-					<Form :disabled="modeType == 3" :model="fxyForm" ref="fxy" :rules="fxyRules" hide-required-mark label-position="left" :label-width="120">
-						<FormItem label="风险源名称" prop="fxymc">
-				        	<Input clearable v-model="fxyForm.fxymc"></Input>
-				        </FormItem>
-				        <FormItem label="风险源类别" prop="fxylb">
-				        	<Cascader 
-			            	readonly 
-			            	change-on-select
-			            	v-model="fxyForm.fxylb" 
-			            	:data="fxylbList" 
-			            	:load-data="loadFxylb" 
-			            	placeholder="请选择"></Cascader>
-				        </FormItem>
-				        <FormItem label="风险值">
-				            <InputNumber :min="0" v-model="fxyForm.fxz"></InputNumber>
-				        </FormItem>
-				        <FormItem label="风险等级">
-				            <Select clearable v-model="fxyForm.fxdj" placeholder="请选择">
-				                <Option v-for="item in fxdjList" :key="item.name" :value="item.name">{{item.name}}</Option>
-				            </Select>
-				        </FormItem>
-				        <FormItem label="所属区域" prop="quyu_id">
-				        	<Cascader 
-				            	readonly 
-				            	change-on-select
-				            	v-model="fxyForm.quyu_id" 
-				            	:data="areaList" 
-				            	:load-data="loadArea" 
-				            	placeholder="所属区域"></Cascader>
-				        </FormItem>
-				        <FormItem label="经纬度">
-				        	<lng :lngAndLat.sync="fxyForm.lngAndLat"></lng>
-				        </FormItem>
-				        <FormItem label="地址" prop="dz">
-				        	<Input clearable v-model="fxyForm.dz"></Input>
-				        </FormItem>
-					</Form>
-					<div slot="footer">
-				        <Button v-if="modeType != 3" type="primary" size="large" :loading="fxyLoading" @click="saveFxy">保存</Button>
-			        </div>
-				</Modal>
-			</div>
-		    <div v-show="showExcelModel">
-				<div style="color: #e23114">请按照以下格式导入数据</div>
-				<Table :columns="excelColumns" :data="listData" style="margin-top: 16px"></Table>
-				<Form label-position="left" :label-width="120" style="margin-top: 16px">
-			        <FormItem label="风险源类别">
-			        	<Cascader 
-		            	readonly 
-		            	change-on-select
-		            	v-model="fxylb" 
-		            	:data="fxylbList" 
-		            	:load-data="loadFxylb" 
-		            	placeholder="请选择"></Cascader>
-			        </FormItem>
-			        <FormItem label="excel文件">
-			        	<Upload
-							:before-upload="handleUpload"
-							action="xxx">
-					        <Button size="small" type="primary" ghost>选择文件</Button>
-					    </Upload>
-					    <Row type="flex" align="middle" v-for="(item, index) in files" :key="index">
-					    	<Col span="12">{{ item.name }}</Col>
-					    	<Col class="link">
-					    		<div class="link" style="color: #ed4014" @click="handleRemoveFile(index)">删除</div>
-					    	</Col>
-					    </Row>
-			        </FormItem>
-				</Form>
-				<Row type="flex" justify="center" style="margin-top: 16px;">
-					<Button type="primary" :disabled="files.length == 0 && fxylb.length > 0" icon="ios-cloud-upload-outline" @click="uploadFiles">开始导入</Button>
-				</Row>
-		    </div>
-		</div>
+		<router-view />
 	</div>
 </template>
 
@@ -347,7 +125,7 @@
 				        }
                     }, {
                         title: '风险源名称',
-                        key: 'fxymc',
+                        slot: 'fxymc',
                         minWidth: 200
                     }, {
                         title: '风险源类别',
@@ -380,7 +158,8 @@
 				},
 				searchFxyForm: {
 					fxdj: '',
-					fxylb: []
+					fxylb: [],
+					fxymc: ''
 				},
 				fxdjList: [{
 		            name: '重大风险',
@@ -641,6 +420,15 @@
 			openFxyModel() {
 				this.modeType = 1;
 				this.showFxyModel = true
+			},
+			goPoi(row) {
+				console.log(row)
+				this.$router.push({
+					path: '/poi',
+					query: {
+						id: row.gkdx_id
+					}
+				})
 			},
 			viewFxyModel(row) {
 				this.fxyForm = {

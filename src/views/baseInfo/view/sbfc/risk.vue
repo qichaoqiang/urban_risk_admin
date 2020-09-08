@@ -616,7 +616,7 @@
 					pageIndex: 1,
 					totalRow: 0
 				},
-				hzwxxdjList: ['甲', '乙', '丙', '丁', '戊'],
+				hzwxxdjList: ['一级', '二级', '三级', '四级', '否'],
 				hxpztList: ['气体', '液化气体', '液体', '固体'],
 				nzzldwList: ['吨', '立方', 'KG', 'L'],
 				whRiskColumns: [

@@ -2,7 +2,8 @@
 	<div class="title" :style="{'padding-left': left}">
 		<img class="title_icon" src="@/assets/decorate-1.png">
 		<div class="title_text">{{name}}</div>
-		<img class="title_bg"  src="@/assets/decorate-2.png">
+		<img class="title_bg" v-show="showBg" src="@/assets/decorate-2.png">
+		<slot></slot>
 	</div>
 </template>
 
@@ -22,6 +23,10 @@
 			left: {
 				default: '32px',
 				type: String
+			},
+			showBg: {
+				default: true,
+				type: Boolean
 			}
 		},
 		watch: {

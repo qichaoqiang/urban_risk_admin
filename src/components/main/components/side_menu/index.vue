@@ -24,7 +24,7 @@
         	background-color="#1E2657"
         	text-color="#FFFFFF">
         	<template v-for="(item, index) in menuList">
-        		<el-submenu :index="item.name" v-if="item.children && item.children.length > 0">
+        		<el-submenu :index="item.name" v-if="!item.meta.hideChildren && item.children && item.children.length > 0">
 					<template slot="title">
 	                    <!-- <Icon :type="item.icon" :size="isCollapsed ? 24 : 16" /> -->
 	                    <i :class="item.icon"></i>
@@ -94,8 +94,7 @@
 		watch: {
 			'$route.name': {
 				handler(val) {
-					// let item = this.menuList.find(item => item.name == val)
-					this.avtiveName = val || ''
+					this.avtiveName = val.split("_")[0] || ''
 				},
 				immediate: true
 			}

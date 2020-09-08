@@ -19,7 +19,7 @@
 		<div class="left" id="left">
 			<!-- <risk-detail :data="riskInfo" :currentRisk="currentRisk"  @drawRiskSource="handleDrawRiskSource"></risk-detail> -->
 			<div class="left_box">
-				<title-top name="选择区域"></title-top>
+				<title-top name="选择区域" :showBg="false"></title-top>
 				<div class="header_select_dropdown_list">
 					<div class="header_select_dropdown_item">
 						<div class="check" :class="{selected: cityName == '全市'}" @click="selectArea('all')"></div>
@@ -50,11 +50,20 @@
 				<div>
 					<overview></overview>
 				</div>
-				<title-top :name="cityName == '全市' ? '区域风险排序' : `${cityName}行业风险排序`"></title-top>
+				<!-- <title-top :name="cityName == '全市' ? '区域风险排序' : `${cityName}行业风险排序`"></title-top> -->
+				<div class="title">
+					<img class="title_icon" src="@/assets/decorate-1.png">
+					<div class="title_tab">
+						<Tabs v-model="tabValue">
+							<TabPane v-for="item in tabList" :key="item.name" :label="item.label" :name="item.name"></TabPane>
+							<!-- <TabPane label="区域风险排序" name="name1"></TabPane> -->
+						</Tabs>
+					</div>
+				</div>
 				<div class="trade_order_popup">
 					<div class="trade_order_content">
-						<trade-order :qyfxList="qyfxList" :cityName="cityName" v-show="cityName == '全市'"></trade-order>
-						<area-industry-order :qyfxList="areaIndustryList" :cityName="cityName" v-show="cityName != '全市'"></area-industry-order>
+						<trade-order :qyfxList="qyfxList" :cityName="cityName" v-show="cityName == '全市' && tabValue == 'name1'"></trade-order>
+						<area-industry-order :qyfxList="areaIndustryList" :cityName="cityName" v-show="tabValue == 'name2'"></area-industry-order>
 					</div>
 				</div>
 			</div>
@@ -84,6 +93,7 @@
 	import $ from 'jquery'
 	import tradeList from '@/utils/trade'
 	import api from '@/api/api'
+	import mixins from './mixins'
 	import quyu from '@/common/js/quyu_overview'
 	import storage from 'good-storage'
 	import TitleTop from '@/components/common/title'
@@ -101,7 +111,7 @@
 			TradeOrder,
 			AreaIndustryOrder
 		},
-		mixins: [quyu],
+		mixins: [mixins, quyu],
 		data() {
 			return {
 				showCityList: false,
@@ -284,7 +294,7 @@
 		        overCity: null,
 		        cityModelLeft: 0,
 		        cityModelTop: 0,
-		        xm_id: process.env.NODE_ENV === 'development' ? 11 : 1,
+		        xm_id: this.$storage.get('xm') ? this.$storage.get('xm').id : 11,
 		        markersList: [],
 		        showMarkers: false,
 		        riskPoints: [],
@@ -292,7 +302,8 @@
 		        markerList: [],
 		        qyfxList: [],
 		        areaIndustryList: [],
-		        labelList: []
+		        labelList: [],
+		        tabValue: 'name1'
 			}
 		},
 		watch: {
@@ -308,12 +319,22 @@
 						item.polygon.setFillOpacity(1)
 						item.polygon.setWeight(5)
 					}else {
-						item.polygon.setFillOpacity(0.8)
+						console.log(111)
+						item.polygon.setFillOpacity(0.5)
 						item.polygon.setWeight(2)
 					}
 				})
+				if(val == '全市') {
+					this.getAreaIndustryList()
+	            	this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10);
+				}else {
+					let item = this.cityList.find(item => item.name == val)
+					this.getAreaIndustryList()
+	            	this.map.centerAndZoom(item.latlng, item.zoom || 11);
+	            	this.tabValue = 'name2'
+				}
 				this.labelList.forEach(item => {
-            		let opacity = item.NP == this.cityName ? 1 : 0.01
+            		let opacity = item.NP == val ? 1 : 0.01
             		item.setOpacity(opacity)
             		item.setFontSize(this.map.getZoom() * 3)
             	})
@@ -342,15 +363,26 @@
 			}
 		},
 		computed: {
-
+			tabList() {
+				let list = [{
+					label: `${this.cityName}行业风险排序`,
+					name: 'name2'
+				}]
+				if(this.cityName == '全市') {
+					list.push({
+						label: `区域风险排序`,
+						name: 'name1'
+					})
+				}
+				return list
+			}
 		},
 		methods: {
 			init() {
 				let self = this;
-				let zoom = 9;
 
 	            this.map = new T.Map('mapDiv');
-	            this.map.centerAndZoom(new T.LngLat(119.886055, 29.996153), zoom); // 
+	            this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10); // 
 	            // this.map.setStyle('indigo') // 修改地图风格
 	            this.map.enableScrollWheelZoom();
 	            // this.map.disableDoubleClickZoom() // 禁止双击放大
@@ -375,7 +407,9 @@
             	})
 				this.getQyfxList(() => {
 					this.getFxysl(() => {
-						this.drawMunicipios();
+						this.getAreaIndustryList(() => {
+							this.drawMunicipios();
+						})
 					})
 				})
 				setTimeout(() => {
@@ -383,18 +417,15 @@
 				}, 100)
 			},
 			allMap() {
-				this.map.centerAndZoom(new T.LngLat(119.886055, 29.996153), 9);
+				this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10);;
 			},
 			// 区域选择
 			selectArea(name, zoom) {
 				if(name == 'all') {
 					this.cityName = '全市'
-	            	this.map.centerAndZoom(new T.LngLat(119.886055, 29.996153), 9);
 				}else {
 					let item = this.cityList.find(item => item.dropName == name)
 					this.cityName = item.name;
-					this.getAreaIndustryList()
-	            	this.map.centerAndZoom(item.latlng, zoom || 10);
 				}
 			},
 			visibleChange(status) {
@@ -411,7 +442,7 @@
 					let qyfx = this.qyfxList.find(qyfxItem => qyfxItem.qxmc == item.name)
 					let fxdj = qyfx ? qyfx.fxdj : ''
 					let level = this.levelList.find(levelItem => fxdj == levelItem.name)
-					item.color = level ? level.color : item.color
+					item.color = level ? level.color : '#999'
 			        item.data = all_county.features.find(item_ => item_.properties.NAME == item.name)
 			        let points = [];
 					item.data.geometry.coordinates[0][0].forEach(item_ => {
@@ -433,14 +464,18 @@
 					this.labelList.push(label)
 					item.polygon.addEventListener("click", () => {
 		            	this.cityName = item.name;
-		            	this.map.centerAndZoom(item.latlng, 10);
+		            	this.map.centerAndZoom(item.latlng, 11);
 		            });
 		            item.polygon.addEventListener("mouseover", e => {
 		            	item.polygon.setFillOpacity(1)
+		            	label.setOpacity(1)
 		            	// this.overCity = item
 		            });
 		            item.polygon.addEventListener("mouseout", e => {
-		            	item.polygon.setFillOpacity(0.8)
+		            	if(item.name !== this.cityName) {
+		            		item.polygon.setFillOpacity(0.5)
+		            		label.setOpacity(0.01)
+		            	}
 		            	// this.overCity = null
 		            });
 	            })
@@ -605,7 +640,7 @@
 			z-index: 1000;
 			// padding-top: 48px;
 			box-sizing: border-box;
-			width: 252px;
+			width: 200px;
 			background: rgba(5,27,74,0.87);
 			border: 1px solid #10388C;
 			box-shadow: inset 0 0 32px 0 rgba(0,163,255,0.30);
@@ -706,6 +741,41 @@
 			.right_box {
 				width: 420px;
 				height: 100%;
+				.title {
+					padding-left: 32px;
+					box-sizing: border-box;
+					display: flex;
+					// align-items: center;
+					.title_icon {
+						margin-top: 16px;
+						margin-right: 8px;
+						width: 16px;
+						height: 15px;
+					}
+					.title_tab {
+						flex: 1;
+						/deep/.ivu-tabs {
+							.ivu-tabs-bar {
+								border-bottom: none;
+								.ivu-tabs-nav {
+									.ivu-tabs-tab {
+										color: rgba(255,255,255,0.70);
+										&:hover {
+											color: #10F6FF;
+										}
+									}
+									.ivu-tabs-tab-active {
+										font-size: 18px;
+										color: #10F6FF;
+									}
+									.ivu-tabs-ink-bar {
+										background-color: #10F6FF;
+									}
+								}
+							}
+						}
+					}
+				}
 				.trade_order_popup {
 					width: 100%;
 					height: calc(100% - 342px);
@@ -909,5 +979,8 @@
 	}
 	/deep/.tdt-right {
 		right: 400px;
+	}
+	/deep/.tdt-bottom {
+		bottom: 0!important;
 	}
 </style>

@@ -7,7 +7,7 @@
 				<div class="level_item_color" :style="{background: item.color, width: '16px', height: '16px'}"></div>
 			</div>
 		</div> -->
-		<div class="trade_item" :class="{active: cityName == item.mc}" v-for="item in qyfxList" :key="item.mc" v-show="item.mc != '全市'">
+		<div class="trade_item" :class="{active: cityName == item.mc}" v-for="item in orderList" :key="item.mc" v-show="item.mc != '全市'">
 			<div class="trade_item_name">{{item.mc}}</div>
 			<div class="trade_item_rate_box">
 				<div 
@@ -55,6 +55,23 @@
 			},
 			fxdjList() {
 				return this.$store.state.levelList.filter(item => item.selected).map(item => item.name)
+			},
+			orderList() {
+				this.qyfxList.forEach(item => {
+					item.value = this.getSum(item)
+				})
+				function bubbleSort(arr){
+					for(var i=1; i<arr.length; i++){
+						for(var j=0; j<arr.length-i; j++){
+							if(arr[j].value<arr[j+1].value){
+								arr[j]=[arr[j+1],arr[j+1]=arr[j]][0];
+							}
+						}
+					}
+					return arr;
+				}
+				let list = bubbleSort(this.qyfxList)
+				return list
 			}
 		},
 		methods: {

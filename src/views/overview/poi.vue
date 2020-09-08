@@ -4,7 +4,7 @@
 		<div class="mapDiv">
 			<div id="mapDiv" style="width: 100%; height: 100%"></div>
 		</div>
-		<div class="level_box" ref="level_box">
+		<div class="level_box" ref="level_box" v-show="!isSearch">
 			<div class="level_item" v-for="item in $store.state.levelList" :key="item.color" style="width: 200px; height: 36px;">
 				<div class="check" :class="{selected: item.selected}"  @click="selectLevel(item)"></div>
 				<div class="level_item_name">{{item.name}}（{{item.value || 0}}）</div>
@@ -12,7 +12,7 @@
 			</div>
 		</div>
 		<tool :levelList="levelList"></tool>
-		<div class="left" id="left">
+		<div class="left" id="left1" v-show="!isSearch">
 			<!-- <risk-detail :data="riskInfo" :currentRisk="currentRisk"  @drawRiskSource="handleDrawRiskSource"></risk-detail> -->
 			<div class="left_box">
 				<div class="left_item" ref="areaBox">
@@ -41,7 +41,65 @@
 				</div>
 			</div>
 		</div>
-		<div class="trade_box" id="right">
+		<div class="left" id="left2" v-show="isSearch" style="width: 290px;">
+			<div class="left_box">
+				<div class="left_item" ref="areaBox" style="height: 100%;">
+					<title-top name="检索">
+						<div style="margin-right: 32px; flex: 1; text-align: right; font-size: 12px; color: #fff">共<span style="color: #10F6FF;">{{zsl}}</span>条</div>
+					</title-top>
+					<div class="search_form">
+						<div class="search_form_content">
+							<Form :model="searchForm" ref="fxy" label-position="left" :label-width="42">
+								<FormItem label="区域" v-if="isSearch">
+						            <Select clearable multiple v-model="searchForm.quyu_id" placeholder="" :max-tag-count="1" @on-change="handleQuyuChange">
+						            	<Option value="all">全市</Option>
+						                <Option v-for="item in cityList" :key="item.dropName" :value="item.id">{{item.name}}</Option>
+						            </Select>
+						        </FormItem>
+								<FormItem label="风险等级">
+						            <Select clearable multiple v-model="searchForm.fxdj" placeholder="" :max-tag-count="1" @on-change="handleFxdjChange">
+						                <Option v-for="item in $store.state.levelList" :key="item.name" :value="item.name">{{item.name}}</Option>
+						            </Select>
+						        </FormItem>
+						        <FormItem label="名称">
+						        	<Input clearable v-model="searchForm.fxymc"></Input>
+						        </FormItem>
+						        <FormItem label="行业">
+						        	<div style="overflow-x: hidden;">
+						        		<div style="width: 400px; max-height: 300px; overflow-y: scroll;">
+						        			<Tree ref="searchTradeTree" :data="tradeSearchData" show-checkbox multiple @on-check-change="handleTradeChange"></Tree>
+						        		</div>
+						        	</div>
+						        </FormItem>
+							</Form>
+						</div>
+						<div class="btn" @click="searchFxy">检索</div>
+						<div class="bottom_line"></div>
+					</div>
+					<div class="search_list">
+						<div 
+							class="search_item" 
+							:class="{is_select: selectGkdxId == item.gkdx_id}" 
+							v-for="item in searchFxyList" 
+							:key="item.id"
+							@click="selectIcon(item)"
+							@mouseenter="findIconLight($event, item)"  
+							@mouseleave="findIconDark($event, item)">
+							<img v-if="getIcon(item)" :src="getIcon(item)"/>
+							<div class="search_title">{{item.fxymc}}</div>
+							<div class="search_content">风险源类别：{{item.fxylbmc}}</div>
+							<div class="search_content">风险等级：{{item.fxdj}}</div>
+							<div class="search_content">详细地址：{{item.dz}}</div>
+							<div class="search_line"></div>
+						</div>
+					</div>
+					<div class="search_page">
+						<Page :total="totalSl" :current.sync="currentPage" size="small" @on-change="handleSearchPageChange" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="trade_box" id="right" v-show="!isSearch">
 			<div class="right_box">
 				<title-top :name="`${cityName}${$store.state.industry ? $store.state.industry.fxylbmc : ''}风险等级分布图`" :area="area"></title-top>
 				<div>
@@ -55,7 +113,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="info" v-show="showMarkers && !showInfoModel">
+		<div class="info" v-show="showMarkers && !showInfoModel" @click.stop.self="showMarkers = false">
 			<div class="info_model_box">
 				<div class="info_model marker_model">
 					<div class="marker_content">
@@ -65,7 +123,7 @@
 				<div class="close" @click="showMarkers = false"></div>
 			</div>
 		</div>
-		<div class="info" v-if="showInfoModel">
+		<div class="info" v-if="showInfoModel" @click.stop.self="showInfoModel = false">
 			<div class="info_model_box">
 				<div class="info_model">
 					<div class="info_name">{{fxyInfo.fengxianyuan.fxymc}}</div>
@@ -103,10 +161,12 @@
 											</div>
 											<p style="color: #10F6FF">图像信息：</p>
 											<div class="img_box">
-												<Carousel v-model="zdImg" loop arrow="always">
+												<Carousel v-model="zdImg" loop dots="none" arrow="always" @on-click="zoomImg(zdImg, item['图片'])">
 											        <CarouselItem v-for="(item_, index_) in item['图片']" :key="item_.url">
-											            <span style="color: #fff">&nbsp;&nbsp;{{item_.title}}</span>
-														<img style="margin-top: 8px; width: 100%" :src="item_.url">
+											        	<div>
+											        		<span style="color: #fff">&nbsp;&nbsp;{{item_.title}}</span>
+															<img style="margin-top: 8px; width: 100%" :src="item_.url">
+											        	</div>
 											        </CarouselItem>
 											    </Carousel>
 												<!-- <div >
@@ -127,12 +187,12 @@
 											<p style="margin-right: 32px;">风险值：<span class="red">{{Number(fxyInfo.fengxianyuan.fxz)}}</span></p>
 											<p>风险源类型：<span class="red">{{fxyInfo.fxylbmc}}</span></p>
 										</div>
-										<div class="radar" id="radar">
-											
-										</div>
 									</div> -->
 									<div class="baseInfo">
 										<p v-for="item in fxyInfo.fengxianxinxi" :key="item.fxmc">{{item.fxmc}}：{{item.value}}</p>
+										<div class="radar" id="radar" v-show="fxyInfo.fengxiangoucheng">
+											
+										</div>
 									</div>
 								</div>
 					        </TabPane>
@@ -153,6 +213,9 @@
 				</div>
 				<div class="close" @click="showInfoModel = false"></div>
 			</div>
+		</div>
+		<div class="info" v-if="showImg" @click.stop.self="showImg = false">
+			<img :src="imgUrl" style="width: 1000px" />
 		</div>
 		<div class="city_model" id="city_model" v-if="overCity" :style="{left: `${cityModelLeft}px`, top: `${cityModelTop}px`}">
 			<div class="city_name">{{overCity.name}}</div>
@@ -184,6 +247,7 @@
 	import $ from 'jquery'
 	import tradeList from '@/utils/trade'
 	import api from '@/api/api'
+	import mixins from './mixins'
 	import quyu from '@/common/js/quyu_overview'
 	import storage from 'good-storage'
 	import TitleTop from '@/components/common/title'
@@ -193,7 +257,6 @@
 	import PoiTj from '@/components/left/poi_tj'
 	import Trade from '@/components/right/trade'
 	import all_county from '@/common/area/all.json'
-	console.log(all_county)
 	export default {
 		name: 'poi',
 		components: {
@@ -204,9 +267,15 @@
 			Trade,
 			HeaderTitle
 		},
-		mixins: [quyu],
+		mixins: [mixins, quyu],
 		data() {
 			return {
+				searchForm: {
+					fxdj: [],
+					fxylb: [],
+					fxymc: '',
+					quyu_id: []
+				},
 				showCityList: false,
 				showInfoModel: false,
 				fxyInfo: {},
@@ -280,7 +349,7 @@
 		        overCity: null,
 		        cityModelLeft: 0,
 		        cityModelTop: 0,
-		        xm_id: process.env.NODE_ENV === 'development' ? 1 : 1,
+		        xm_id: this.$storage.get('xm') ? this.$storage.get('xm').id : 11,
 		        markersList: [],
 		        showMarkers: false,
 		        riskPoints: [],
@@ -288,10 +357,16 @@
 		        markerList: [],
 		        qyfxList: [],
 		        zsl: 0,
+		        totalSl: 0,
+		        currentPage: 1,
+				searchFxyList: [],
+				selectGkdxId: '',
 		        labelList: [],
 		        markers: null,
 		        markerArr: [],
 		        zdImg: 0,
+		        imgUrl: '',
+		        showImg: false,
 		        zdColumns: [
 		        	{
                         title: '匝道段名称',
@@ -357,6 +432,9 @@
 			showCityList(val) {
 				$('#header_select_dropdown').slideToggle('normal', 'swing');
 			},
+			'isSearch'(val) {
+				this.start()
+			},
 			'$store.state.industry'(val) {
 				this.clearOverlays()
 				if(val) {
@@ -385,20 +463,63 @@
 						getIntersection(list, ['14', '15', '16']).length > 0 && this.drawSubwayLine();
 					}
 				}, 300)
-			}
+			},
+			// 'searchForm.quyu_id'(val) {
+			// 	this.searchFxy(1)
+			// },
+			// 'searchForm.fxymc'(val) {
+			// 	this.searchFxy(1)
+			// },
+			// 'searchForm.fxylb'(val) {
+			// 	this.searchFxy(1)
+			// },
+			// 'searchForm.fxdj'(val) {
+			// 	this.searchFxy(1)
+			// }
 		},
 		computed: {
 			fxdjList() {
 				return this.$store.state.levelList.filter(item => item.selected).map(item => item.name)
+			},
+			isSearch() {
+				return this.$route.query.isSearch
+			},
+			tradeSearchData() {
+				return [
+                    {
+                        title: '全部',
+                        expand: false,
+                        children: JSON.parse(JSON.stringify(this.tradeList))
+                    }
+                ]
 			}
 		},
 		methods: {
+			handleQuyuChange(val) {
+				console.log(val)
+				if(val.includes('all')) {
+					let index = val.indexOf('all')
+					console.log(index, val.length - 1)
+					if(index == (val.length - 1)) {
+						this.searchForm.quyu_id = ['all']
+					}else {
+						this.searchForm.quyu_id.splice(index, 1)
+					}
+				}
+			},
+			handleFxdjChange(val) {
+				if(val[val.length - 1] === 'all') {
+					this.searchForm.fxdj = ['all']
+				}else if(val.includes('all')) {
+					this.searchForm.fxdj = this.searchForm.fxdj.join(',').replace('all,').split(',')
+				}
+			},
 			init() {
 				let self = this;
-				let zoom = 9;
+				let zoom = 10;
 
 	            this.map = new T.Map('mapDiv');
-	            this.map.centerAndZoom(new T.LngLat(119.886055, 29.996153), zoom); // 
+	            this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10);
 	            // this.map.setStyle('indigo') // 修改地图风格
 	            this.map.enableScrollWheelZoom();
 	            // this.map.disableDoubleClickZoom() // 禁止双击放大
@@ -425,7 +546,8 @@
 					this.getFxysl(() => {
 						this.drawMunicipios();
 						this.clearOverlays()
-						this.getFxy()
+						this.isSearch ? this.searchFxy() : this.getFxy()
+						
 					})
 				})
 				setTimeout(() => {
@@ -433,17 +555,17 @@
 				}, 100)
 			},
 			allMap() {
-				this.map.centerAndZoom(new T.LngLat(119.886055, 29.996153), 9);
+				this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10);
 			},
 			// 区域选择
 			selectArea(name, zoom) {
 				if(name == 'all') {
 					this.cityName = '全市'
-	            	this.map.centerAndZoom(new T.LngLat(119.886055, 29.996153), 9);
+	            	this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10);
 				}else {
 					let item = this.cityList.find(item => item.dropName == name)
 					this.cityName = item.name;
-	            	this.map.centerAndZoom(item.latlng, zoom || 10);
+	            	this.map.centerAndZoom(item.latlng, zoom || 12);
 				}
 			},
 			selectLevel(item) {
@@ -496,13 +618,17 @@
 					this.labelList.push(label)
 					item.polygon.addEventListener("click", () => {
 		            	this.cityName = item.name;
-		            	this.map.centerAndZoom(item.latlng, 10);
+		            	this.map.centerAndZoom(item.latlng, 12);
 		            });
 		            item.polygon.addEventListener("mouseover", e => {
 		            	item.polygon.setFillOpacity(1)
+		            	label.setOpacity(1)
 		            });
 		            item.polygon.addEventListener("mouseout", e => {
-		            	item.polygon.setFillOpacity(0.8)
+		            	if(item.name !== this.cityName) {
+		            		item.polygon.setFillOpacity(0.5)
+		            		label.setOpacity(0.01)
+		            	}
 		            });
 	            })
 			},
@@ -575,6 +701,49 @@
 					}, 1)
 				}
 			},
+			getIcon(item) {
+				if(item.fxdj && item.fxylb) {
+					let index = this.levelList.findIndex(levelItem => item.fxdj == levelItem.name)
+					let iconUrl
+					try {
+						iconUrl = require(`@/assets/risk-point/${item.fxylb}-${index + 1}.png`)
+					} 
+					catch {
+						iconUrl = require(`@/assets/risk-point/${item.fxylb}-${index + 1}.png`)
+					}
+					return iconUrl
+				}else {
+					return ''
+				}
+				
+			},
+			selectIcon(item) {
+				this.selectGkdxId = item.gkdx_id
+				this.markerArr.forEach(marker => {
+					 if(marker.item.gkdx_id !== this.selectGkdxId) {
+					 	marker.getIcon().setIconSize(new T.Point(29, 44))
+					 }else {
+					 	this.map.centerAndZoom(marker.item.LngLat, 15);
+					 	this.showInfo(item)
+					 }
+				})
+			},
+			findIconLight(e, item) {
+				console.log(item, this.markerArr)
+				let marker = this.markerArr.find(item_ => item_.item.gkdx_id === item.gkdx_id)
+				if(!marker) {
+					return 
+				}
+				marker.getIcon().setIconSize(new T.Point(58, 88))
+			},
+			findIconDark(e, item) {
+				console.log(111)
+				let marker = this.markerArr.find(item_ => item_.item.gkdx_id === item.gkdx_id)
+				if(!marker || marker.item.gkdx_id === this.selectGkdxId) {
+					return 
+				}
+				marker.getIcon().setIconSize(new T.Point(29, 44))
+			},
 			clearOverlays() {
 		        let allOverlay = this.map.getOverlays();
 		        for (let i = allOverlay.length -1; i >= 0 ; i--){
@@ -593,9 +762,9 @@
 			drawRiskPoints(list) {
 				let self = this
 				let markerArr = []
-		        this.markersList = []
 				list.forEach(item => {
 		            if(item.jd && item.wd) {
+						console.log(item.fxdj, index)
 		            	let iconItem =  this.levelList.find(item_ => item_.name == item.fxdj)
 						if(!iconItem) {
 							return
@@ -609,18 +778,18 @@
 							iconUrl = require(`../../assets/risk-point/${item.fxylb}-${index + 1}.png`)
 						} 
 						catch {
-							iconUrl = require(`../../assets/risk-point/fengxianyuan-${index + 1}.png`)
+							iconUrl = require(`../../assets/point_risk${index + 1}.png`)
 						}
 			            // 创建图片对象
 			            let icon = new T.Icon({
 			                iconUrl,
-			                iconSize: new T.Point(26, 27),
-			                iconAnchor: new T.Point(12, 27)
+			                iconSize: new T.Point(29, 44),
+			                iconAnchor: new T.Point(14, 44)
 			            });
 			            //向地图上添加自定义标注
 			            let param1 = new T.LngLat(item.jd, item.wd)
 			            let marker = new T.Marker(param1, {icon: icon});
-			            marker.item = item
+			            marker.item = {...item, LngLat: param1}
 			            marker.addEventListener("click", () => {
 			            	this.showInfo(item)
 			            });
@@ -628,6 +797,7 @@
 			            this.map.addOverLay(marker);
 		            }
 				})
+				this.markerArr = markerArr
 				// this.markers = new T.MarkerClusterer(this.map, {markers: markerArr});
 				// this.markerArr = markerArr
 				// for(let i = 0; i < Object.keys(this.markers).length; i++) {
@@ -693,71 +863,142 @@
 					this.fxyInfo = data
 					this.getQy(() => {
 						this.showInfoModel = true;
+						this.$nextTick(() => {
+							if(data.fengxiangoucheng) {
+								let list = data.fengxiangoucheng.map(item => {
+									return {
+										name: item.mc,
+										max: Math.ceil(item.value * 1.5) + 1,
+										value: item.value
+									}
+								})
+								let myChart = echarts.init(document.getElementById('radar'));
+								myChart.setOption({
+								    radar: {
+								        indicator: list,
+								        shape: 'circle',
+								    	radius: 60,
+								        splitNumber: 3,
+								        name: {
+								            textStyle: {
+								                color: '#fff',
+								                fontSize: 12
+								            }
+								        },
+								        splitLine: {
+								            lineStyle: {
+								                color: '#fff'
+								            }
+								        },
+								        splitArea: {
+								            show: false
+								        },
+								        axisLine: {
+								            lineStyle: {
+								                color: '#fff'
+								            }
+								        }
+								    },
+						            tooltip: {
+						                // trigger: 'axis'
+						                backgroundColor: '#10388C'
+						            },
+								    series: [
+								        {
+								            name: '风险点信息',
+								            type: 'radar',
+								            lineStyle: {
+											    normal: {
+											        width: 1,
+											        opacity: 0.5
+											    }
+											},
+								            data: [{
+								            	value: list.map(item => item.value)
+								            }],
+								            symbol: 'none',
+								            itemStyle: {
+								                color: 'rgb(16,246,255)'
+								            },
+								            lineStyle: {
+								            	color: '#10F6FF'
+								            },
+								            areaStyle: {
+								                opacity: 0.8
+								            }
+								        }
+								    ]
+								});
+							}
+						})
 					})
 				}
-				// this.getQy(() => {
-				// 	let myChart = echarts.init(document.getElementById('radar'));
-				// 	myChart.setOption({
-				// 	    radar: {
-				// 	        indicator: [
-				// 	            {name: '危险物质', max: 200},
-				// 	            {name: '人员', max: 200},
-				// 	            {name: '周边环境', max: 200},
-				// 	            {name: '设备', max: 200},
-				// 	        ],
-				// 	        shape: 'circle',
-				// 	    	radius: 60,
-				// 	        splitNumber: 3,
-				// 	        name: {
-				// 	            textStyle: {
-				// 	                color: '#fff',
-				// 	                fontSize: 12
-				// 	            }
-				// 	        },
-				// 	        splitLine: {
-				// 	            lineStyle: {
-				// 	                color: '#fff'
-				// 	            }
-				// 	        },
-				// 	        splitArea: {
-				// 	            show: false
-				// 	        },
-				// 	        axisLine: {
-				// 	            lineStyle: {
-				// 	                color: '#fff'
-				// 	            }
-				// 	        }
-				// 	    },
-			 //            tooltip: {
-			 //                trigger: 'axis'
-			 //            },
-				// 	    series: [
-				// 	        {
-				// 	            name: '风险点信息',
-				// 	            type: 'radar',
-				// 	            lineStyle: {
-				// 				    normal: {
-				// 				        width: 1,
-				// 				        opacity: 0.5
-				// 				    }
-				// 				},
-				// 	            data: [{
-				// 	            	value: [100, 120, 110, 160]
-				// 	            }],
-				// 	            symbol: 'none',
-				// 	            itemStyle: {
-				// 	                color: 'rgb(16,246,255)'
-				// 	            },
-				// 	            lineStyle: {
-				// 	            	color: '#10F6FF'
-				// 	            },
-				// 	            areaStyle: {
-				// 	                opacity: 0.8
-				// 	            }
-				// 	        }
-				// 	    ]
-				// 	});
-				// })
+			},
+			zoomImg(zdImg, list) {
+				// console.log(item)
+				console.log(list[zdImg])
+				this.imgUrl = list[zdImg].url
+				this.showImg = true
+				// console.log(this.zdImg)
+			},
+			start() {
+				if(!this.isSearch) {
+					$('#left1').slideDown();
+					$('#right').slideDown();
+					$('#left2').slideUp();
+					this.clearOverlays()
+					this.getFxy()
+					this.$nextTick(() => {
+						console.log('1111')
+						$('.tdt-bottom').css('right', '400px')
+					})
+				}else {
+					$('#left1').slideUp();
+					$('#right').slideUp();
+					$('#left2').slideDown();
+					this.clearOverlays()
+					this.searchFxy()
+					this.$nextTick(() => {
+						$('.tdt-bottom').css('right', '0px')
+					})
+				}
+			},
+			async searchFxy(isSl) {
+				let params = {
+					xm_id: this.xm_id,
+					per_page: 10,
+					page: this.currentPage,
+					quyu_id: this.searchForm.quyu_id.includes('all') ? '' : this.searchForm.quyu_id.join(','),
+					fxdj: this.searchForm.fxdj.includes('all') ? '' : this.searchForm.fxdj.join(','),
+					fxymc: this.searchForm.fxymc,
+					fxylb: this.searchForm.fxylb.join(',')
+				}
+				let { status_code, data, zsl } = await api.getFxyList(params)
+				if(status_code == 200) {
+					this.totalSl = zsl
+					this.searchFxyList = data.data
+					this.drawRiskPoints(this.searchFxyList)
+					this.$store.dispatch('save_riskPoints', this.searchFxyList)
+					// if(!isSl) {
+					// 	this.searchFxyList = data.data
+					// 	this.drawRiskPoints(this.searchFxyList)
+					// 	this.$store.dispatch('save_riskPoints', this.searchFxyList)
+					// }
+				}
+			},
+			handleSearchPageChange(val) {
+				console.log(val)
+				this.currentPage = val
+				this.clearOverlays()
+				this.searchFxy()
+			},
+			handleTradeChange(list) {
+				console.log(list)
+				let fxylb = []
+				list.forEach(item => {
+					item.dm && fxylb.push(item.dm)
+				})
+				this.searchForm.fxylb = fxylb
 			},
 			async getTradeList() {
 				let params = {
@@ -787,11 +1028,15 @@
 			    })
 			    var val = []
 			    data.forEach(function(item) {
+			    	item.title = item.fxylbmc
 			        // 以当前遍历项，的pid,去map对象中找到索引的id
 			        var parent = map[item.parent_id]
 			        // 如果找到索引，那么说明此项不在顶级当中,那么需要把此项添加到，他对应的父级中
 			        if (parent) {
-			            ;(parent.children || (parent.children = [])).push(item)
+			        	// if(!map[parent.parent_id]) {
+			        	// 	;(parent.children || (parent.children = [])).push(item)
+			        	// }
+			        	;(parent.children || (parent.children = [])).push(item)
 			        } else {
 			            //如果没有在map中找到对应的索引ID,那么直接把 当前的item添加到 val结果集中，作为顶级
 			            val.push(item)
@@ -828,15 +1073,17 @@
 				})
 			}
 			this.$nextTick(() => {
-				$('.tdt-bottom').css('bottom', document.getElementById('mapDiv').offsetHeight / 2 + 'px')
+				console.log(this.isSearch)
+				$('.tdt-bottom').css('right', this.isSearch ? '0px' : '400px')
+				this.init();
+	        	document.addEventListener('fullscreenchange', e => {
+	        		this.isScreenFull = !this.isScreenFull
+	        	})
 				// document.getElementsByClassName('tdt-bottom').style.bottom = document.getElementById('mapDiv').offsetHeight / 2 + 'px'
 			})
 		},
 		mounted() {
-			this.init();
-        	document.addEventListener('fullscreenchange', e => {
-        		this.isScreenFull = !this.isScreenFull
-        	})
+			
 		}
 	}
 </script>
@@ -907,7 +1154,7 @@
 			z-index: 1000;
 			// padding-top: 48px;
 			box-sizing: border-box;
-			width: 320px;
+			width: 240px;
 			background: rgba(5,27,74,0.87);
 			overflow: hidden;
 			.left_box {
@@ -922,6 +1169,8 @@
 					overflow: hidden;
 					border: 1px solid #10388C;
 					box-shadow: inset 0 0 32px 0 rgba(0,163,255,0.30);
+					display: flex;
+					flex-direction: column;
 					&:first-child {
 						height: 30%;
 					}
@@ -933,6 +1182,158 @@
 							cursor: s-resize;
 						}
 						flex: 1;
+					}
+					.search_form {
+						margin-top: 24px;
+						padding: 0 32px;
+						box-sizing: border-box;
+						width: 100%;
+						// border: 1px solid #10388C;
+						.btn {
+							margin: 10px auto 20px;
+							border: 1px solid #10F6FF;
+							border-radius: 2px;
+							height: 30px;
+							width: 148px;
+							font-family: PingFangSC-Medium;
+							font-size: 15px;
+							color: #10F6FF;
+							text-align: center;
+							line-height: 30px;
+						}
+						.bottom_line {
+							margin-bottom: 16px;
+							width: 100%;
+							height: 1px;
+							background: linear-gradient(270deg, rgba(255,255,255,0.00) 0%, #10F6FF 50%, rgba(255,255,255,0.00) 100%);
+						}
+						/deep/.ivu-form {
+							.ivu-form-item {
+								margin-bottom: 4px!important;
+								.ivu-form-item-label {
+									padding: 10px 12px 4px 0;
+									color: #ffffff;
+								}
+								.ivu-form-item-content {
+									.ivu-select {
+										color: #fff;
+										.ivu-select-selection {
+											border: 1px solid #FFFFFF;
+											border-radius: 2px;
+											background: transparent;
+											min-height: 0;
+											height: 28px;
+										}
+										.ivu-select-dropdown {
+											max-height: 10000px;
+										}
+									}
+									.ivu-input {
+										color: #fff;
+										border: 1px solid #FFFFFF;
+										border-radius: 2px;
+										background: transparent;
+									}
+									.ivu-tree {
+										.ivu-tree-children {
+											li {
+												margin: 0;
+												.ivu-checkbox-wrapper {
+													.ivu-checkbox-checked, .ivu-checkbox-indeterminate {
+														.ivu-checkbox-inner {
+															background-color: #214076;
+															border-color: #214076;
+														}
+													}
+												}
+												.ivu-tree-title {
+													color: #fff;
+													background: transparent!important;
+													&:hover {
+														background: transparent;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					.search_list {
+						padding-right: 40px;
+						padding-bottom: 42px;
+						box-sizing: content-box;
+						width: 100%;
+						flex: 1;
+						overflow-y: scroll;
+						.search_item {
+							position: relative;
+							padding-top: 16px;
+							padding-left: 56px;
+							padding-bottom: 12px;
+							box-sizing: border-box;
+							width: 100%;
+							&:last-child {
+								.search_line {
+									border-bottom: none;
+								}
+							}
+							img {
+								position: absolute;
+								top: 16px;
+								left: 16px;
+								width: 24px;
+								height: 37px;
+							}
+							.search_title {
+								margin-bottom: 16px;
+								font-family: PingFangSC-Medium;
+								font-size: 14px;
+								color: #10F6FF;
+								text-align: left;
+							}
+							.search_content {
+								margin-bottom: 8px;
+								font-family: PingFangSC-Regular;
+								font-size: 13px;
+								color: #FFFFFF;
+								text-align: left;
+							}	
+							.search_line {
+								position: absolute;
+								bottom: 0;
+								left: 50%;
+								transform: translateX(-50%);
+								width: 280px;
+								height: 0px;
+								border-bottom: 1px dashed rgba(255,255,255,0.38);
+							}
+						}
+						.is_select {
+							background: #214076;
+						}
+					}
+					.search_page {
+						position: absolute;
+						bottom: 0;
+						padding: 8px 0;
+						width: 100%;
+						background: #214076;
+						/deep/.ivu-page {
+							display: flex;
+							justify-content: center;
+							li {
+								margin: 0;
+								background: transparent;
+								a {
+									color: #fff;
+								}
+							}
+							.ivu-page-item-active {
+								background: #1C86F3;
+							}
+						}
 					}
 					.trade_list {
 						height: 100%;
@@ -1112,7 +1513,7 @@
 		}
 		.info {
 			position: absolute;
-			top: 40px;
+			top: 0;
 			bottom: 0;
 			left: 0;
 			right: 0;
@@ -1120,10 +1521,11 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
+			background: rgba(0, 0, 0, 0.38);
 			.info_model_box {
 				position: relative;
-				width: 840px;
-				height: 615px;
+				width: 560px;
+				height: 410px;
 				background: url('../../assets/point-up.png') center no-repeat;
 				background-size: contain;
 				.close {
@@ -1155,6 +1557,7 @@
 								border-bottom: none;
 								.ivu-tabs-nav {
 									.ivu-tabs-tab {
+										font-size: 18px;
 										color: rgba(255,255,255,0.70);
 										&:hover {
 											color: #10F6FF;
@@ -1171,16 +1574,18 @@
 						}
 						.baseInfo_box {
 							width: 100%;
-							height: 560px;
+							height: 280px;
 							overflow: hidden;
 							.baseInfo {
-								width: calc(100% + 20px);
-								height: 560px;
+								padding-right: 50px;
+								box-sizing: border-box;
+								width: calc(100% + 50px);
+								height: 280px;
 								overflow-y: scroll;
 								p {
 									margin-bottom: 8px;
 									font-family: PingFangSC-Regular;
-									font-size: 14px;
+									font-size: 16px;
 									color: #FFFFFF;
 									text-align: left;
 									.red {
@@ -1227,8 +1632,14 @@
 										}
 									}
 							    }
-							    .img_box {
+							    /deep/.img_box {
 							    	width: calc(100% - 20px);
+							    	.ivu-carousel-arrow {
+										background-color: rgba(31,45,61,.38);
+										&:hover {
+											background-color: rgba(31,45,61,.6);
+										}
+							    	}
 							    }
 							}
 						}
@@ -1309,7 +1720,7 @@
 			background: transparent;
 		}
 	}
-	/deep/.tdt-right {
-		right: 400px;
+	/deep/.tdt-bottom {
+		bottom: 0!important;
 	}
 </style>

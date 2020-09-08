@@ -51,6 +51,11 @@ import lybc from './lybc' // 旅游包车
 import czrq from './czrq' // 城镇燃气
 import csgxsq from './csgxsq' // 长输管线（输气）
 import csgxsy from './csgxsy' // 长输管线（输油）
+import rfgc from './rfgc' // 人防工程
+import fkbjq from './fkbjq' // 防空报警器
+import zyjjmb from './zyjjmb' // 重要经济目标
+import ssjd from './ssjd' // 重要经济目标
+import dt from './dt' // 重要经济目标
 
 
 export default {
@@ -89,6 +94,10 @@ export default {
   // 风险信息
   getFxxxList(params) {
     return fetchGet('/api/fengxianxinxi', params)
+  },
+  // 风险分级
+  fxfj(params) {
+    return fetchPost('/api/fengxianfenji', params)
   },
   ...role,
   ...cj_account,
@@ -140,5 +149,10 @@ export default {
   ...lybc,
   ...czrq,
   ...csgxsq,
-  ...csgxsy
+  ...csgxsy,
+  ...rfgc,
+  ...fkbjq,
+  ...zyjjmb,
+  ...ssjd,
+  ...dt
 }

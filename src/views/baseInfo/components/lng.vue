@@ -2,13 +2,13 @@
 	<div>
 		<div>
 			<Row type="flex" align="middle" justify="space-between" :gutter="20">
-            	<Col :span="20" style="text-align: left">
+            	<Col :span="18" style="text-align: left">
             		<Input 
 						v-model="baseInfo.lngAndLat" 
 						icon="md-pin" 
 						placeholder="经纬度" />
             	</Col>
-            	<Col :span="4" style="text-align: left">
+            	<Col :span="6" style="text-align: left">
             		<span @click="openLngModal" class="link">地图选取</span>
             	</Col>
             </Row>

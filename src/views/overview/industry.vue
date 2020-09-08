@@ -25,7 +25,7 @@
 						<trade ref="trade_list" :data="tradeList" left="32px" :level="1"></trade>
 					</div>
 				</div>
-				<div class="left_item" ref="areaBox">
+				<!-- <div class="left_item" ref="areaBox">
 					<div class="line" @mousedown="drag"></div>
 					<title-top name="选择区域"></title-top>
 					<div class="header_select_dropdown_list">
@@ -42,7 +42,7 @@
 	    					<span>名胜区</span>
 	    				</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- <left-box :area="cityName"></left-box> -->
 			</div>
 			<!-- <div class="close" @click="handleSelectLeft(false)"></div> -->
@@ -92,6 +92,7 @@
 	import $ from 'jquery'
 	import tradeList from '@/utils/trade'
 	import api from '@/api/api'
+	import mixins from './mixins'
 	import quyu from '@/common/js/quyu_overview'
 	import storage from 'good-storage'
 	import TitleTop from '@/components/common/title'
@@ -109,7 +110,7 @@
 			TradeOrder,
 			Trade
 		},
-		mixins: [quyu],
+		mixins: [mixins, quyu],
 		data() {
 			return {
 				showCityList: false,
@@ -292,7 +293,7 @@
 		        overCity: null,
 		        cityModelLeft: 0,
 		        cityModelTop: 0,
-		        xm_id: process.env.NODE_ENV === 'development' ? 11 : 1,
+		        xm_id: this.$storage.get('xm') ? this.$storage.get('xm').id : 11,
 		        markersList: [],
 		        showMarkers: false,
 		        riskPoints: [],
@@ -315,7 +316,7 @@
 						item.polygon.setFillOpacity(1)
 						item.polygon.setWeight(5)
 					}else {
-						item.polygon.setFillOpacity(0.8)
+						item.polygon.setFillOpacity(0.5)
 						item.polygon.setWeight(2)
 					}
 				})
@@ -335,7 +336,7 @@
 							let qyfx = this.qyfxList.find(qyfxItem => qyfxItem.qxmc == item.name)
 							let fxdj = qyfx ? qyfx.fxdj : ''
 							let level = this.levelList.find(levelItem => fxdj == levelItem.name)
-							item.color = level ? level.color : item.color
+							item.color = level ? level.color : '#999'
 							item.polygon.setFillColor(item.color)
 						})
 					})
@@ -358,10 +359,10 @@
 		methods: {
 			init() {
 				let self = this;
-				let zoom = 9;
+				let zoom = 10;
 
 	            this.map = new T.Map('mapDiv');
-	            this.map.centerAndZoom(new T.LngLat(119.886055, 29.996153), zoom); // 
+	            this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10);
 	            // this.map.setStyle('indigo') // 修改地图风格
 	            this.map.enableScrollWheelZoom();
 	            // this.map.disableDoubleClickZoom() // 禁止双击放大
@@ -394,17 +395,17 @@
 				}, 100)
 			},
 			allMap() {
-				this.map.centerAndZoom(new T.LngLat(119.886055, 29.996153), 9);
+				this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10);
 			},
 			// 区域选择
 			selectArea(name, zoom) {
 				if(name == 'all') {
 					this.cityName = '全市'
-	            	this.map.centerAndZoom(new T.LngLat(119.886055, 29.996153), 9);
+	            	this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10);
 				}else {
 					let item = this.cityList.find(item => item.dropName == name)
 					this.cityName = item.name;
-	            	this.map.centerAndZoom(item.latlng, zoom || 10);
+	            	this.map.centerAndZoom(item.latlng, zoom || 11);
 				}
 			},
 			visibleChange(status) {
@@ -421,7 +422,7 @@
 					let qyfx = this.qyfxList.find(qyfxItem => qyfxItem.qxmc == item.name)
 					let fxdj = qyfx ? qyfx.fxdj : ''
 					let level = this.levelList.find(levelItem => fxdj == levelItem.name)
-					item.color = level ? level.color : item.color
+					item.color = level ? level.color : '#999'
 			        item.data = all_county.features.find(item_ => item_.properties.NAME == item.name)
 			        let points = [];
 					item.data.geometry.coordinates[0][0].forEach(item_ => {
@@ -442,126 +443,30 @@
 				    label.setOpacity(0.01)
 					this.labelList.push(label)
 					item.polygon.addEventListener("click", () => {
+						if(item.color == '#999'){
+							return false
+						}
 		            	this.cityName = item.name;
-		            	this.map.centerAndZoom(item.latlng, 10);
+		            	this.map.centerAndZoom(item.latlng, 11);
 		            });
 		            item.polygon.addEventListener("mouseover", e => {
+		            	if(item.color == '#999'){
+							return false
+						}
 		            	item.polygon.setFillOpacity(1)
+		            	label.setOpacity(1)
 		            	// this.overCity = item
 		            });
 		            item.polygon.addEventListener("mouseout", e => {
-		            	item.polygon.setFillOpacity(0.8)
+		            	if(item.color == '#999'){
+							return false
+						}
+						if(item.name !== this.cityName) {
+		            		item.polygon.setFillOpacity(0.5)
+		            		label.setOpacity(0.01)
+		            	}
 		            	// this.overCity = null
 		            });
-					// if(item.data) {
-					// 	let result
-					// 	if(item.name != '钱塘新区') {
-					// 		result = await axios.get(`http://api.tianditu.gov.cn/administrative?postStr={"searchWord":"${searchWord}","searchType":"1","needSubInfo":"false","needAll":"false","needPolygon":"true","needPre":"true"}&tk=701640b81eacb6c191dd460f74393688`)
-					// 	}else {
-					// 		result = {
-					// 			data: [
-					// 				{
-					// 					bound: '120.50949079,30.29992731,120.50949079,30.29992731'
-					// 				}
-					// 			]
-					// 		}
-					// 	}
-					// 	let points = [];
-					// 	item.data.features[0].geometry.coordinates[0][0].forEach(item_ => {
-					// 		points.push(new T.LngLat(item_[0], item_[1]));
-					// 	})
-					// 	item.polygon = new T.Polygon(points, {
-			  //               color: '#ffffff', weight: 2, opacity: 1, fillColor: item.color, fillOpacity: 0.5
-			  //           });
-					// 	this.map.addOverLay(item.polygon);
-					// 	let bound = result.data[0].bound.split(',').map(item => {
-					// 		return item - 0;
-					// 	})
-					// 	// 显示区域名称
-					// 	item.latlng = new T.LngLat((bound[0] + bound[2]) / 2, (bound[1] + bound[3]) / 2);
-			  //           var label = new T.Label({
-			  //               text: item.name,
-			  //               position: item.latlng,
-			  //               offset: new T.Point(-20, 0)
-			  //           });
-			  //           label.setFontColor('#000')
-					// 	this.map.addOverLay(label);
-			  //           item.polygon.addEventListener("click", () => {
-			  //           	this.cityName = item.name;
-			  //           	this.map.centerAndZoom(item.latlng, 10);
-			  //           });
-			  //           item.polygon.addEventListener("mouseover", e => {
-			  //           	item.polygon.setFillOpacity(1)
-			  //           	// this.overCity = item
-			  //           });
-			  //           item.polygon.addEventListener("mouseout", e => {
-			  //           	item.polygon.setFillOpacity(0.8)
-			  //           	// this.overCity = null
-			  //           });
-			  //           // window.addEventListener("mousemove", e => {
-		   //          	// 	if(this.overCity) {
-		   //          	// 		this.cityModelTop = e.y - 60
-		   //          	// 		this.cityModelLeft = e.x - 180
-		   //          	// 	}
-		   //          	// })
-					// }else {
-					// 	bdary.get("杭州市" + item.name, async res => { //获取行政区域
-					// 		axios.get(`http://api.tianditu.gov.cn/administrative?postStr={"searchWord":"${searchWord}","searchType":"1","needSubInfo":"false","needAll":"false","needPolygon":"true","needPre":"true"}&tk=701640b81eacb6c191dd460f74393688`).then(result => {
-					// 	        // map.clearOverlays();        //清除地图覆盖物       
-					// 	        var count = res.boundaries.length; //行政区域的点有多少个
-					// 	        if (count === 0) {
-					// 	            // alert('未能获取当前输入行政区域');
-					// 	            return;
-					// 	        }	
-					// 	        let arr = res.boundaries[0].split(';')
-					// 			let points = [];
-					// 			arr.forEach(item => {
-					// 				let point = item.split(', ');
-					// 				points.push(new T.LngLat(point[0], point[1]));
-					// 			})
-					// 			item.polygon = new T.Polygon(points, {
-					//                 color: '#ffffff', weight: 2, opacity: 1, fillColor: item.color, fillOpacity: 0.8
-					//             });
-					// 			this.map.addOverLay(item.polygon);
-					// 			// let bound = result.data[item.name == '西湖区' ? 1 : 0].bound.split(',').map(item => {
-					// 			// 	return item - 0;
-					// 			// })
-					// 			item.latlng = new T.LngLat(result.data[item.name == '西湖区' ? 1 : 0].lnt, result.data[item.name == '西湖区' ? 1 : 0].lat);
-					// 			// 显示区域名称
-					// 			// item.latlng = new T.LngLat((bound[0] + bound[2]) / 2, (bound[1] + bound[3]) / 2);
-					//             var label = new T.Label({
-					//                 text: item.name,
-					//                 position: item.latlng,
-					//                 offset: new T.Point(-20, 0)
-					//             });
-					//             label.setFontColor('#000')
-					// 			this.map.addOverLay(label);
-					//             item.polygon.addEventListener("click", () => {
-					//             	this.cityName = item.name;
-					//             	this.map.centerAndZoom(item.latlng, item.zoom || 10);
-					//             });
-					//             item.polygon.addEventListener("mouseover", e => {
-					//             	item.polygon.setFillOpacity(1)
-					//             	item.polygon.setWeight(5)
-					//             	// this.overCity = item
-					//             });
-					//             item.polygon.addEventListener("mouseout", e => {
-					//             	if(this.cityName !== item.name) {
-					//             		item.polygon.setFillOpacity(0.8)
-					//             		item.polygon.setWeight(2)
-					//             	}
-					//             	// this.overCity = null
-					//             });
-					//             // window.addEventListener("mousemove", e => {
-				 //            	// 	if(this.overCity) {
-				 //            	// 		this.cityModelTop = e.y - 60
-				 //            	// 		this.cityModelLeft = e.x - 180
-				 //            	// 	}
-				 //            	// })
-					// 		})
-					//     });
-					// }
-				    
 	            })
 			},
 			async getAreaIndustryList(cb) {
@@ -740,7 +645,7 @@
 			z-index: 1000;
 			// padding-top: 48px;
 			box-sizing: border-box;
-			width: 320px;
+			width: 240px;
 			background: rgba(5,27,74,0.87);
 			overflow: hidden;
 			.left_box {
@@ -751,7 +656,7 @@
 				flex-direction: column;
 				.left_item {
 					width: 100%;
-					height: 50%;
+					height: 100%;
 					overflow: hidden;
 					border: 1px solid #10388C;
 					box-shadow: inset 0 0 32px 0 rgba(0,163,255,0.30);
@@ -1069,5 +974,8 @@
 	}
 	/deep/.tdt-right {
 		right: 400px;
+	}
+	/deep/.tdt-bottom {
+		bottom: 0!important;
 	}
 </style>

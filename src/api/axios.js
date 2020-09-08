@@ -52,7 +52,10 @@ axios_.interceptors.request.use((config) => {
   }
   return config
 }, (error) => {
-  Message.error('错误的传参')
+  if(!window.hasToast) {
+      window.hasToast = true
+      Message.error('错误的传参')
+    }
   return Promise.reject(error)
 })
 
@@ -64,7 +67,10 @@ axios_.interceptors.response.use((res) => {
     if(res.data.message) {
       info = res.data.message
     }
-    Message.error(info)
+    if(!window.hasToast) {
+      window.hasToast = true
+      Message.error(info)
+    }
   }
   return res.data
 }, (error) => {
@@ -73,18 +79,27 @@ axios_.interceptors.response.use((res) => {
     console.log(JSON.parse(JSON.stringify(error)))
     let status = JSON.parse(JSON.stringify(error)).response.status
     if(status == 401) {
-      Message.error('登录信息失效，请重新登录')
+      if(!window.hasToast) {
+        window.hasToast = true
+         Message.error('登录信息失效，请重新登录')
+      }
       setTimeout(() => {
         storage.clear();
         location.replace('/');
         // router.replace('/')
       }, 1000);
     }else {
-      Message.error('系统异常')
+      if(!window.hasToast) {
+        window.hasToast = true
+        Message.error('系统异常')
+      }
     }
   }
   catch {
-    Message.error('系统异常')
+    if(!window.hasToast) {
+      window.hasToast = true
+      Message.error('系统异常')
+    }
   }
   
   // return Promise.reject(error)

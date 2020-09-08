@@ -940,7 +940,17 @@
 					let lo = new T.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						let ctrl = new T.Control.MapType(); 
+		            	this.map.addControl(ctrl); // 增加地图类型控件
+		            	//移除图层
+		            	this.map.removeControl(TMAP_NORMAL_MAP);
+			            //添加图层
+			            this.map.addControl(TMAP_HYBRID_MAP);
+			            if(this.baseInfo.lngAndLat) {
+			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.lnglat.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.lnglat.lat), 10);
+			            }else {
+			            	this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+			            }
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

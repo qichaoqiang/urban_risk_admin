@@ -1,7 +1,7 @@
 <template>
 	<div class="trade_order">
-		<div class="trade_item" :class="{active: cityName == item.hymc}" v-for="item in qyfxList" :key="item.hymc">
-			<div class="trade_item_name" :style="{color: cityName == item.hymc ? getColor(item.fxdj) : '#fff'}">{{item.hymc}}</div>
+		<div class="trade_item" :class="{active: cityName == item.hymc}" v-for="item in qyfxList" :key="item.hymc" v-show="item.fxdj">
+			<div class="trade_item_name" :title="item.hymc" :style="{color: cityName == item.hymc ? getColor(item.fxdj) : '#fff'}">{{item.hymc}}</div>
 			<div class="trade_item_rate_box">
 				<div class="trade_item_rate" :title="Number(item.fxz).toFixed(2)" :style="{width: getRate(item.fxz), background: getColor(item.fxdj)}"></div>
 			</div>
@@ -76,11 +76,14 @@
 			display: flex;
 			align-items: center;
 			.trade_item_name {
-				width: 80px;
+				width: 100px;
 				font-family: PingFangSC-Regular;
 				font-size: 14px;
 				color: #FFFFFF;
 				text-align: left;
+				white-space: nowrap;
+			    text-overflow: ellipsis;
+			    overflow: hidden;
 			}
 			.trade_item_rate_box {
 				margin-right: 16px;

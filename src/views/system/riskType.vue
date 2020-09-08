@@ -8,14 +8,22 @@
 		</Row>
 		<div v-if="hasAuth('fengxianyuanleibie')">
 			<Divider />
-			<Breadcrumb separator=">">
-		        <BreadcrumbItem>
-		        	<span class="link" @click="navigate(0)">顶级</span>
-		        </BreadcrumbItem>
-		        <BreadcrumbItem v-for="(item, index) in parents" :key="item.id">
-		        	<span class="link" @click="navigate(index + 1)">{{item.fxylbmc}}</span>
-		        </BreadcrumbItem>
-		    </Breadcrumb>
+			<Row type="flex" justify="space-between" align="middle">
+				<Breadcrumb separator=">">
+			        <BreadcrumbItem>
+			        	<span class="link" @click="navigate(0)">顶级</span>
+			        </BreadcrumbItem>
+			        <BreadcrumbItem v-for="(item, index) in parents" :key="item.id">
+			        	<span class="link" @click="navigate(index + 1)">{{item.fxylbmc}}</span>
+			        </BreadcrumbItem>
+			    </Breadcrumb>
+			    <Row type="flex" align="middle">
+			    	<Col>显示隐藏风险源类别：</Col>
+			    	<Col span="2">
+			    		<i-switch v-model="show_yc" @on-change="handleShowYcChange" />
+			    	</Col>
+		        </Row>
+			</Row>
 			<Table :loading="loading" :columns="fxylbColumns" :data="fxylbData" style="margin-top: 16px">
 				<template slot-scope="{ row }" slot="fxylbmc">
 					<span class="link" @click="open(row)">{{row.fxylbmc}}</span>
@@ -68,6 +76,11 @@
 		        </FormItem>
 				<FormItem label="排序" prop="px">
 		        	<InputNumber :min="0" v-model="fxylbForm.px"></InputNumber>
+		        </FormItem>
+		        <FormItem label="是否隐藏">
+		        	<Select clearable v-model="fxylbForm.yc" placeholder="是否隐藏">
+		                <Option v-for="item in sfzgyyList" :key="item.value" :value="item.value">{{item.name}}</Option>
+		            </Select>
 		        </FormItem>
 			</Form>
 			<div slot="footer">
@@ -122,18 +135,29 @@
                         width: 200
                     }
 				],
+				show_yc: 0,
 				fxylbForm: {
 					parent_id: [],
 					fxylbmc: '',
 					dm: '',
 					icon: '',
 					px: 0,
+					yc: 0
 				},
 				fxylbPage: {
 					pageSize: 10,
 					pageIndex: 1,
 					totalRow: 0
 				},
+				sfzgyyList: [
+					{
+						value: 0,
+						name: '否'
+					}, {
+						value: 1,
+						name: '是'
+					}
+				],
 			}
 		},
 		watch: {
@@ -144,12 +168,15 @@
 				return {
 					fxylbmc: [{ required: true, message: '请选择', trigger: 'change' }],
 					dm: [{ required: true, message: '请输入', trigger: 'change' }],
-					icon: [{ required: true, message: '请输入', trigger: 'change' }],
+					// icon: [{ required: true, message: '请输入', trigger: 'change' }],
 					px: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
 				}
 			},
 		},
 		methods: {
+			handleShowYcChange() {
+				this.getFxylbData()
+			},
 			format(labels, selectedData) {
                 const index = labels.length - 1;
                 const data = selectedData[index] || false;
@@ -168,6 +195,7 @@
 				let params = {
 					per_page: this.fxylbPage.pageSize,
 					page: this.fxylbPage.pageIndex,
+					show_yc: this.show_yc ? 1 : 0
 				}
 				params.parent_id = this.parents[0] ? this.parents[this.parents.length - 1].id : ''
 				let { status_code, data } = await api.getFxylbList(params)
@@ -188,6 +216,7 @@
 					dm: row.dm,
 					icon: row.icon,
 					px: row.px ? Number(row.px) : 0,
+					yc: row.yc ? Number(row.yc) : 0,
 				}
 				this.id = row.id
 				this.modeType = 2;
@@ -200,6 +229,7 @@
 					dm: row.dm,
 					icon: row.icon,
 					px: row.px ? Number(row.px) : 0,
+					yc: row.yc ? Number(row.yc) : 0,
 				}
 				this.id = row.id
 				this.modeType = 3;
@@ -214,6 +244,7 @@
 							dm: '',
 							icon: '',
 							px: 0,
+							yc: 0,
 						}
 						this.$refs.fxylb.resetFields();
 					})

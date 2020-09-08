@@ -278,7 +278,15 @@
 	            </Row>
 	        </div>
 		</Modal>
-		<Modal width="1000" title="企业范围标注" v-model="showAreaModel">
+		<Modal width="1000" title="企业范围标注" v-model="showAreaModel" @on-visible-change="areaModelChange">
+			<Row type="flex" align="middle" justify="space-between" :gutter="20">
+            	<Col :span="22" style="text-align: left">
+            		<Input clearable autocomplete v-model="keyword" placeholder="请输入地址"></Input>
+            	</Col>
+            	<Col :span="2">
+            		<Button type="primary" size="large" @click="search">搜索</Button>
+            	</Col>
+            </Row>
 			<div id="area_box" class="area_box"></div>
 			<div slot="footer">
 	            <Row type="flex" align="middle" justify="space-between">
@@ -929,7 +937,8 @@
 					pageIndex: 1,
 					totalRow: 0
 				},
-				form: {}
+				form: {},
+				keyword: ''
 			}
 		},
 		watch: {
@@ -1004,7 +1013,17 @@
 					let lo = new T.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						let ctrl = new T.Control.MapType(); 
+		            	this.map.addControl(ctrl); // 增加地图类型控件
+		            	//移除图层
+		            	this.map.removeControl(TMAP_NORMAL_MAP);
+			            //添加图层
+			            this.map.addControl(TMAP_HYBRID_MAP);
+			            if(this.baseInfo.lngAndLat) {
+			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.lnglat.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.lnglat.lat), 10);
+			            }else {
+			            	this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+			            }
 						var config = {
 			                showLabel: true,
 			                color: "blue", 
@@ -1024,6 +1043,43 @@
 			            }
 		            });
 				})
+			},
+			areaModelChange(status) {
+				if(!status) {
+					this.keyword = ''
+				}
+			},
+			search() {
+				let self = this
+				$.ajax({
+					type: 'get',
+					url: 'http://api.tianditu.gov.cn/geocoder',
+					data: {
+						ds: `{"keyWord":"${this.keyword}"}`,
+						tk: '701640b81eacb6c191dd460f74393688'
+					},
+					dataType: 'json',
+					success(res) {
+						let {status, location, msg} = res
+						if(status == '0') {
+							self.addMark(location.lon, location.lat)
+						}else {
+							self.$Message.error(msg || '未查询到结果')
+						}
+					},
+					error(err) {
+						self.$Message.error('未查询到结果')
+					}
+				})
+			},
+			addMark(lng, lat){ //添加标注
+				// this.map.clearOverLays()
+				// var marker = new T.Marker(new T.LngLat(lng, lat));
+				// this.map.addOverLay(marker);
+				// this.lng = lng.toFixed(6)
+				// this.lat = lat.toFixed(6)
+				// this.baseInfo.lngAndLat = `${this.lng} ${this.lat}`
+				this.map.centerAndZoom(new T.LngLat(lng, lat), 13);
 			},
 			openArea() {
 				let self = this

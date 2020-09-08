@@ -141,7 +141,7 @@ export default {
                                                 if(res1.status_code == 0) {
                                                     storage.set('authList', res1.data.role_jurisdiction.split(','))
                                                 }
-                                                this.$router.replace('/area');
+                                                this.$router.replace(this.isDl ? '/area' : '/city');
                                             })
                                         }else if(res_.data.yhlx == 2) {
                                             storage.set('gkdx_id', res_.data.gkdx_id)

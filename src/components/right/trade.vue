@@ -157,8 +157,10 @@
 				})
 			},
 			setHeight() {
-				console.log(this.$refs.trade)
 				this.contentHeight = this.$refs.trade.offsetHeight - 38 * 3 - 20
+				this.$nextTick(() => {
+					$(`#trade_brother49`).stop().slideToggle();
+				})
 			}
 		},
 		created() {
@@ -183,6 +185,7 @@
 				align-items: center;
 				cursor: pointer;
 				.check {
+					flex-shrink: 0;
 					margin-right: 16px;
 					width: 20px;
 					height: 20px;
@@ -259,8 +262,13 @@
 				display: none;
 				width: 100%;
 				overflow: hidden;
+				&:first-child {
+					display: block;
+				}
 				.trade_brother_content {
-					width: calc(100% + 20px);
+					box-sizing: border-box;
+					padding-right: 20px;
+					width: 100%;
 					height: 100%;
 					padding-bottom: 24px;
 					overflow-y: scroll;
