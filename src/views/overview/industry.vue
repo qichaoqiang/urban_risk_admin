@@ -30,8 +30,8 @@
 					<title-top name="选择区域"></title-top>
 					<div class="header_select_dropdown_list">
 						<div class="header_select_dropdown_item">
-							<div class="check" :class="{selected: cityName == '全市'}" @click="selectArea('all')"></div>
-							<span :class="{active: cityName == '全市'}">全市</span>
+							<div class="check" :class="{selected: cityName == '全部'}" @click="selectArea('all')"></div>
+							<span :class="{active: cityName == '全部'}">全部</span>
 						</div>
 	    				<div class="header_select_dropdown_item" v-for="item in cityList" :key="item.dropName">
 	    					<div class="check" :class="{selected: cityName == item.name}" @click="selectArea(item.dropName, item.zoom)"></div>
@@ -101,6 +101,7 @@
 	import TradeOrder from '@/components/left/tradeOrder'
 	import Trade from '@/components/right/trade'
 	import all_county from '@/common/area/all.json'
+	import minhou from '@/common/area/minhou.json'
 	export default {
 		name: 'poi',
 		components: {
@@ -116,7 +117,7 @@
 				showCityList: false,
 				showInfoModel: false,
 				fxyInfo: {},
-				cityName: '全市',
+				cityName: '全部',
 				username: storage.get('username'),
 				area: '全部',
 				showLeft: false,
@@ -293,7 +294,7 @@
 		        overCity: null,
 		        cityModelLeft: 0,
 		        cityModelTop: 0,
-		        xm_id: this.$storage.get('xm') ? this.$storage.get('xm').id : 11,
+		        xm_id: this.$storage.get('xm') ? this.$storage.get('xm').xm_id : 11,
 		        markersList: [],
 		        showMarkers: false,
 		        riskPoints: [],
@@ -362,7 +363,7 @@
 				let zoom = 10;
 
 	            this.map = new T.Map('mapDiv');
-	            this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10);
+	            this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 9);
 	            // this.map.setStyle('indigo') // 修改地图风格
 	            this.map.enableScrollWheelZoom();
 	            // this.map.disableDoubleClickZoom() // 禁止双击放大
@@ -395,13 +396,13 @@
 				}, 100)
 			},
 			allMap() {
-				this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10);
+				this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 9);
 			},
 			// 区域选择
 			selectArea(name, zoom) {
 				if(name == 'all') {
-					this.cityName = '全市'
-	            	this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10);
+					this.cityName = '全部'
+	            	this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 9);
 				}else {
 					let item = this.cityList.find(item => item.dropName == name)
 					this.cityName = item.name;
@@ -423,8 +424,13 @@
 					let fxdj = qyfx ? qyfx.fxdj : ''
 					let level = this.levelList.find(levelItem => fxdj == levelItem.name)
 					item.color = level ? level.color : '#999'
-			        item.data = all_county.features.find(item_ => item_.properties.NAME == item.name)
+			        let jsonData = {
+						'11': all_county,
+						'13': minhou
+					}
+			        item.data = jsonData[this.xm_id].features.find(item_ => item_.properties.NAME == item.name)
 			        let points = [];
+			        console.log(item.data)
 					item.data.geometry.coordinates[0][0].forEach(item_ => {
 						points.push(new T.LngLat(item_[0], item_[1]));
 					})
@@ -560,8 +566,26 @@
 
 		},
 		async created() {
+			if(this.xm_id == 13) {
+				let colorList = ['#1C86F3', '#F25E5E', '#F49852', '#EFE850', ]
+				this.cityList = minhou.features.filter(item => item.properties.NAME !== '闽侯县').map((item_, index) => {
+					return {
+						name: item_.properties.NAME,
+						dropName: item_.properties.NAME,
+						polygon: null,
+						color: colorList[index % colorList.length],
+						index: 0,
+						point: {x: -20, y: -10},
+						zoom: 12
+					}
+				})
+			}
 			this.getTradeList()
-			let { status_code, data } = await api.getAreaList({parent_id: 28, per_page: 1000})
+			let parent_ids = {
+				'11': 28,
+				'13': 26
+			}
+			let { status_code, data } = await api.getAreaList({parent_id: parent_ids[this.xm_id], per_page: 1000})
 			if(status_code == 200) {
 				this.areaList = data.data
 				this.cityList.forEach(item => {

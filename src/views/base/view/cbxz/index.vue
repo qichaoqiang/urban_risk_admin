@@ -1110,6 +1110,10 @@
 		            	this.map.removeControl(TMAP_NORMAL_MAP);
 			            //添加图层
 			            this.map.addControl(TMAP_HYBRID_MAP);
+		            	let zoomCtrl = new T.Control.Zoom({
+		            		position: T_ANCHOR_BOTTOM_RIGHT
+		            	})
+		            	this.map.addControl(zoomCtrl);
 			            if(this.baseInfo.lngAndLat) {
 			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.lnglat.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.lnglat.lat), 10);
 			            }else {

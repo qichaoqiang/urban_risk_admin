@@ -65,7 +65,7 @@
 				        		</Col>
 				        	</Row>
 				        </FormItem>
-				        <FormItem label="地震区划等级（峰值加速度g）">
+				        <FormItem label="区域地震烈度">
 				            <InputNumber :min="0" v-model="baseInfo.dzqhdjfzjsdg"></InputNumber>
 				        </FormItem>
 				        <FormItem label="竣工时间">

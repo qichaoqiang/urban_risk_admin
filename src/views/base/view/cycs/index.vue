@@ -229,7 +229,7 @@
 					quyu: [],
 				},
 				jycslxList: ['独栋建筑', '地下商场', '商业综合体内', '沿街底商', '其他'],
-				jygmList: ['小餐饮店', '小型', '中型', '大型'],
+				jygmList: ['小餐饮店', '小型', '中型', '大型', '特大型'],
 				sjytList: ['社会餐饮（餐馆、快餐店、小吃店、饮品店）', '集体配送', '食堂', '家宴厨房'],
 				spaqdjList: ['A', 'B', 'C'],
 				yyztList: ['在营', '休业', '改造'],
@@ -394,10 +394,14 @@
 		            	this.map.removeControl(TMAP_NORMAL_MAP);
 			            //添加图层
 			            this.map.addControl(TMAP_HYBRID_MAP);
+		            	let zoomCtrl = new T.Control.Zoom({
+		            		position: T_ANCHOR_BOTTOM_RIGHT
+		            	})
+		            	this.map.addControl(zoomCtrl);
 			            if(this.baseInfo.lngAndLat) {
-			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.lnglat.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.lnglat.lat), 10);
+			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.lnglat.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.lnglat.lat), 17);
 			            }else {
-			            	this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+			            	this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 17);
 			            }
 						var config = {
 			                showLabel: true,

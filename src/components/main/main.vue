@@ -2,7 +2,7 @@
 	<div class="container" id="container_test">
 		<Layout>
 			<!-- position: 'fixed',  -->
-            <Header :style="{width: '100%'}" v-if="!isDl">
+            <Header :style="{width: '100%'}" v-show="!isDl">
 				<Row type="flex" align="middle" justify="space-between">
 					<Col>
 						<div class="header_left">
@@ -30,13 +30,12 @@
 		    		ref="side"
 		            collapsible
 		            hide-trigger
-		            v-show="!$route.meta.hideMenu"
+		            v-show="!$route.meta.hideMenu && !isDl"
 		            v-model="isCollapsed"
 		            :width="200"
 		            :collapsed-width="64"
 		            class="left-sider"
 		            :style="{background: '#1E2657'}"
-		            v-if="!isDl"
 		        >
 		            <side-menu
 		                accordion

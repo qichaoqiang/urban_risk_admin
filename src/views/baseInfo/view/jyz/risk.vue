@@ -8,14 +8,14 @@
 					<Tabs value="name1">
 				        <TabPane label="储存信息" name="name1">
 				        	<part-title text="储罐" :btns="['add']" @add="openCgModel"></part-title>
-				        	<div style="margin-bottom: 16px;">
+				        	<!-- <div style="margin-bottom: 16px;">
 				        		<span>汽油罐数量：{{cgSum.qygsl}}</span>
 				        		<span style="margin-left:24px">总容积：{{cgSum.qygzrj}}</span>
 				        	</div>
 				        	<div style="margin-bottom: 16px;">
 				        		<span>柴油罐数量：{{cgSum.cygsl}}</span>
 				        		<span style="margin-left:24px">总容积：{{cgSum.cygzrj}}</span>
-				        	</div>
+				        	</div> -->
 							<Table :columns="cgColumns" :data="cgData">
 								<template slot-scope="{ row }" slot="action">
 						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editCgModel(row)">编辑</Button>
@@ -645,12 +645,12 @@
 				  	if(cgRes.status_code == 200) {
 				  		this.cgData = cgRes.data.data.filter(item => item.gkdx_id == this.gkdx_id)
 				  		this.cgPage.totalRow = cgRes.data.total
-				  		this.cgSum = {
-				  			qygsl: cgRes.qygsl || 0,
-				  			qygzrj: cgRes.qygzrj || 0,
-				  			cygsl: cgRes.cygsl || 0,
-				  			cygzrj: cgRes.cygzrj || 0
-				  		}
+				  		// this.cgSum = {
+				  		// 	qygsl: cgRes.qygsl || 0,
+				  		// 	qygzrj: cgRes.qygzrj || 0,
+				  		// 	cygsl: cgRes.cygsl || 0,
+				  		// 	cygzrj: cgRes.cygzrj || 0
+				  		// }
 				  	}
 				  	if(jylRes.status_code == 200) {
 				  		this.jylData = jylRes.data.data.filter(item => item.gkdx_id == this.gkdx_id)

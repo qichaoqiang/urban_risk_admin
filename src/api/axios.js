@@ -13,17 +13,22 @@ let axios_ = {...axios}
 axios_.defaults.timeout = 100000
 
 
-
-
-let origin = location.origin
-
-if(origin === "http://hz.ser119.com") {
-  axios_.defaults.baseURL = "http://hz.ser119.com"
-}else if(origin === "http://minhou.ser119.com") {
-  axios_.defaults.baseURL = "http://minhou.ser119.com"
+if(process.env.NODE_ENV === 'production') {
+  axios_.defaults.baseURL = location.origin
 }else {
-  axios_.defaults.baseURL = "http://hz.ser119.com"
+  // axios_.defaults.baseURL = "http://risk_test.ser119.com"
+  axios_.defaults.baseURL = "http://minhou.ser119.com"
 }
+
+// let origin = location.origin
+
+// if(origin === "http://hz.ser119.com") {
+//   axios_.defaults.baseURL = "http://hz.ser119.com"
+// }else if(origin === "http://minhou.ser119.com") {
+//   axios_.defaults.baseURL = "http://minhou.ser119.com"
+// }else {
+//   axios_.defaults.baseURL = "http://hz.ser119.com"
+// }
 
 // 测试地址（内网)
 // axios_.defaults.baseURL = 'http://credit-api.int.anniu-tech.com'

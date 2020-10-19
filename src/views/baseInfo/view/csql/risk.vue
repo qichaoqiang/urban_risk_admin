@@ -36,6 +36,21 @@
 					        	<FormItem label="日均通行量">
 						        	<InputNumber :min="0" v-model="baseInfo.rjtxl"></InputNumber>
 						        </FormItem>
+					        	<FormItem label="重型车辆数量占日交通量的百分比（%）">
+						        	<InputNumber :min="0" v-model="baseInfo.zxclslzb"></InputNumber>
+						        </FormItem>
+						        <FormItem label="桥梁技术状况等级">
+						        	<Input clearable v-model="baseInfo.qljszkdj"></Input>
+						        </FormItem>
+						        <FormItem label="建设规模">
+						        	<Input clearable v-model="baseInfo.jsgm"></Input>
+						        </FormItem>
+						        <FormItem label="地质灾害情况">
+						        	<Input clearable type="textarea" v-model="baseInfo.zzzhqk"></Input>
+						        </FormItem>
+						        <FormItem label="病害情况">
+						        	<Input clearable type="textarea" v-model="baseInfo.bhqk"></Input>
+						        </FormItem>
 						    </Form>
 							<Row type="flex" justify="center" style="margin-top: 24px">
 								<Col>
@@ -447,6 +462,11 @@
 					this.baseInfo.qlsjcznl = data.qlsjcznl ? Number(data.qlsjcznl) : 0
 					this.baseInfo.qlyhdj = data.qlyhdj 
 					this.baseInfo.rjtxl = data.rjtxl ? Number(data.rjtxl) : 0
+					this.baseInfo.zxclslzb = data.zxclslzb ? Number(data.zxclslzb) : 0
+					this.baseInfo.qljszkdj = data.qljszkdj 
+					this.baseInfo.jsgm = data.jsgm 
+					this.baseInfo.zzzhqk = data.zzzhqk 
+					this.baseInfo.bhqk = data.bhqk 
 				}
 				this.loading = false
 			},
@@ -486,6 +506,11 @@
 							qlsjcznl: this.baseInfo.qlsjcznl,
 							qlyhdj: this.baseInfo.qlyhdj,
 							rjtxl: this.baseInfo.rjtxl,
+							zxclslzb: this.baseInfo.zxclslzb,
+							qljszkdj: this.baseInfo.qljszkdj,
+							jsgm: this.baseInfo.jsgm,
+							zzzhqk: this.baseInfo.zzzhqk,
+							bhqk: this.baseInfo.bhqk,
 						}
 						let { status_code, message } = await api.addCsqlBase(params);
 						if(status_code == 200) {

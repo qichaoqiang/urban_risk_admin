@@ -19,14 +19,14 @@
 					<title-top name="选择区域"></title-top>
 					<div class="header_select_dropdown_list">
 						<div class="header_select_dropdown_item">
-							<div class="check" :class="{selected: cityName == '全市'}" @click="selectArea('all')"></div>
-							<span :class="{active: cityName == '全市'}">全市</span>
+							<div class="check" :class="{selected: cityName == '全部'}" @click="selectArea('all')"></div>
+							<span :class="{active: cityName == '全部'}">全部</span>
 						</div>
 	    				<div class="header_select_dropdown_item" v-for="item in cityList" :key="item.dropName">
 	    					<div class="check" :class="{selected: cityName == item.name}" @click="selectArea(item.dropName, item.zoom)"></div>
 	    					<span :class="{active: cityName == item.name}">{{item.name}}</span>
 	    				</div>
-	    				<div class="header_select_dropdown_item">
+	    				<div class="header_select_dropdown_item" v-if="xm_id === 11">
 	    					<div class="check"></div>
 	    					<span>名胜区</span>
 	    				</div>
@@ -52,7 +52,7 @@
 							<Form :model="searchForm" ref="fxy" label-position="left" :label-width="42">
 								<FormItem label="区域" v-if="isSearch">
 						            <Select clearable multiple v-model="searchForm.quyu_id" placeholder="" :max-tag-count="1" @on-change="handleQuyuChange">
-						            	<Option value="all">全市</Option>
+						            	<Option value="all">全部</Option>
 						                <Option v-for="item in cityList" :key="item.dropName" :value="item.id">{{item.name}}</Option>
 						            </Select>
 						        </FormItem>
@@ -257,6 +257,7 @@
 	import PoiTj from '@/components/left/poi_tj'
 	import Trade from '@/components/right/trade'
 	import all_county from '@/common/area/all.json'
+	import minhou from '@/common/area/minhou.json'
 	export default {
 		name: 'poi',
 		components: {
@@ -279,7 +280,7 @@
 				showCityList: false,
 				showInfoModel: false,
 				fxyInfo: {},
-				cityName: '全市',
+				cityName: '全部',
 				username: storage.get('username'),
 				area: '全部',
 				showLeft: false,
@@ -349,7 +350,7 @@
 		        overCity: null,
 		        cityModelLeft: 0,
 		        cityModelTop: 0,
-		        xm_id: this.$storage.get('xm') ? this.$storage.get('xm').id : 11,
+		        xm_id: this.$storage.get('xm') ? this.$storage.get('xm').xm_id : 11,
 		        markersList: [],
 		        showMarkers: false,
 		        riskPoints: [],
@@ -409,25 +410,25 @@
 				// 	page: 1,
 				// }
 				// let quyu = this.areaList.find(areaItem => areaItem.mc == val)
-				this.cityList.forEach(item => {
-					if(item.polygon) {
-						if(item.name == val) {
-							item.polygon.setFillOpacity(1)
-							item.polygon.setWeight(5)
-						}else {
-							item.polygon.setFillOpacity(0.8)
-							item.polygon.setWeight(2)
-						}
-					}
-				})
-            	this.labelList.forEach(item => {
-            		let opacity = item.NP == this.cityName ? 1 : 0.01
-            		item.setOpacity(opacity)
-            	})
-				this.getFxysl(() => {
-					this.clearOverlays()
-					this.getFxy()
-				});
+				// this.cityList.forEach(item => {
+				// 	if(item.polygon) {
+				// 		if(item.name == val) {
+				// 			item.polygon.setFillOpacity(1)
+				// 			item.polygon.setWeight(5)
+				// 		}else {
+				// 			item.polygon.setFillOpacity(0.8)
+				// 			item.polygon.setWeight(2)
+				// 		}
+				// 	}
+				// })
+    //         	this.labelList.forEach(item => {
+    //         		let opacity = item.NP == this.cityName ? 1 : 0.01
+    //         		item.setOpacity(opacity)
+    //         	})
+				// this.getFxysl(() => {
+				// 	this.clearOverlays()
+				// 	this.getFxy()
+				// });
 			},
 			showCityList(val) {
 				$('#header_select_dropdown').slideToggle('normal', 'swing');
@@ -496,10 +497,8 @@
 		},
 		methods: {
 			handleQuyuChange(val) {
-				console.log(val)
 				if(val.includes('all')) {
 					let index = val.indexOf('all')
-					console.log(index, val.length - 1)
 					if(index == (val.length - 1)) {
 						this.searchForm.quyu_id = ['all']
 					}else {
@@ -519,7 +518,7 @@
 				let zoom = 10;
 
 	            this.map = new T.Map('mapDiv');
-	            this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10);
+	            this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 9);
 	            // this.map.setStyle('indigo') // 修改地图风格
 	            this.map.enableScrollWheelZoom();
 	            // this.map.disableDoubleClickZoom() // 禁止双击放大
@@ -555,13 +554,13 @@
 				}, 100)
 			},
 			allMap() {
-				this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10);
+				this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 9);
 			},
 			// 区域选择
 			selectArea(name, zoom) {
 				if(name == 'all') {
-					this.cityName = '全市'
-	            	this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 10);
+					this.cityName = '全部'
+	            	this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 9);
 				}else {
 					let item = this.cityList.find(item => item.dropName == name)
 					this.cityName = item.name;
@@ -575,9 +574,7 @@
 				})
 			},
 			handleMarkerShow() {
-				console.log(this.fxdjList)
 				this.markerArr.forEach(item => {
-					// console.log(this.fxdjList.includes(item.fxdj))
 					this.fxdjList.includes(item.item.fxdj) ? item.setOpacity(1) : item.setOpacity(0)
 				})
 				
@@ -597,10 +594,16 @@
 					let fxdj = qyfx ? qyfx.fxdj : ''
 					let level = this.levelList.find(levelItem => fxdj == levelItem.name)
 					item.color = level ? level.color : item.color
-			        item.data = all_county.features.find(item_ => item_.properties.NAME == item.name)
+					let jsonData = {
+						'11': all_county,
+						'13': minhou
+					}
+			        item.data = jsonData[this.xm_id].features.find(item_ => item_.properties.NAME == item.name)
 			        let points = [];
-					item.data.geometry.coordinates[0][0].forEach(item_ => {
-						points.push(new T.LngLat(item_[0], item_[1]));
+					item.data.geometry.coordinates[0][0].forEach((item_, index) => {
+						if(index % 5 === 0) {
+							points.push(new T.LngLat(item_[0], item_[1]));
+						}
 					})
 					item.polygon = new T.Polygon(points, {
 		                color: '#ffffff', weight: 2, opacity: 1, fillColor: 'transparent', fillOpacity: 0.5
@@ -729,7 +732,6 @@
 				})
 			},
 			findIconLight(e, item) {
-				console.log(item, this.markerArr)
 				let marker = this.markerArr.find(item_ => item_.item.gkdx_id === item.gkdx_id)
 				if(!marker) {
 					return 
@@ -737,7 +739,6 @@
 				marker.getIcon().setIconSize(new T.Point(58, 88))
 			},
 			findIconDark(e, item) {
-				console.log(111)
 				let marker = this.markerArr.find(item_ => item_.item.gkdx_id === item.gkdx_id)
 				if(!marker || marker.item.gkdx_id === this.selectGkdxId) {
 					return 
@@ -754,7 +755,6 @@
 		        if(this.markers) {
 		        	this.markers.clearMarkers()
 		        }
-		        // console.log(document.getElementsByClassName('tdt-cluster0'))
 		        // document.getElementsByClassName('tdt-interactive').remove()
 		        // this.map.clearOverLays()
 		        // this.drawMunicipios()
@@ -764,7 +764,6 @@
 				let markerArr = []
 				list.forEach(item => {
 		            if(item.jd && item.wd) {
-						console.log(item.fxdj, index)
 		            	let iconItem =  this.levelList.find(item_ => item_.name == item.fxdj)
 						if(!iconItem) {
 							return
@@ -935,11 +934,8 @@
 				}
 			},
 			zoomImg(zdImg, list) {
-				// console.log(item)
-				console.log(list[zdImg])
 				this.imgUrl = list[zdImg].url
 				this.showImg = true
-				// console.log(this.zdImg)
 			},
 			start() {
 				if(!this.isSearch) {
@@ -949,7 +945,6 @@
 					this.clearOverlays()
 					this.getFxy()
 					this.$nextTick(() => {
-						console.log('1111')
 						$('.tdt-bottom').css('right', '400px')
 					})
 				}else {
@@ -987,13 +982,11 @@
 				}
 			},
 			handleSearchPageChange(val) {
-				console.log(val)
 				this.currentPage = val
 				this.clearOverlays()
 				this.searchFxy()
 			},
 			handleTradeChange(list) {
-				console.log(list)
 				let fxylb = []
 				list.forEach(item => {
 					item.dm && fxylb.push(item.dm)
@@ -1063,8 +1056,27 @@
             }
 		},
 		async created() {
+
+			if(this.xm_id == 13) {
+				let colorList = ['#1C86F3', '#F25E5E', '#F49852', '#EFE850', ]
+				this.cityList = minhou.features.filter(item => item.properties.NAME !== '闽侯县').map((item_, index) => {
+					return {
+						name: item_.properties.NAME,
+						dropName: item_.properties.NAME,
+						polygon: null,
+						color: colorList[index % colorList.length],
+						index: 0,
+						point: {x: -20, y: -10},
+						zoom: 12
+					}
+				})
+			}
 			this.getTradeList()
-			let { status_code, data } = await api.getAreaList({parent_id: 28, per_page: 1000})
+			let parent_ids = {
+				'11': 28,
+				'13': 26
+			}
+			let { status_code, data } = await api.getAreaList({parent_id: parent_ids[this.xm_id], per_page: 1000})
 			if(status_code == 200) {
 				this.areaList = data.data
 				this.cityList.forEach(item => {
@@ -1073,7 +1085,6 @@
 				})
 			}
 			this.$nextTick(() => {
-				console.log(this.isSearch)
 				$('.tdt-bottom').css('right', this.isSearch ? '0px' : '400px')
 				this.init();
 	        	document.addEventListener('fullscreenchange', e => {
@@ -1719,6 +1730,9 @@
 			color: #2b85e4;
 			background: transparent;
 		}
+	}
+	/deep/.tdt-right {
+		right: 400px;
 	}
 	/deep/.tdt-bottom {
 		bottom: 0!important;

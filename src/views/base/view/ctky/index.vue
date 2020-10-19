@@ -8,6 +8,9 @@
 					<part-title text="基本信息"></part-title>
 					<Form :model="baseInfo" ref="baseInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 						<FormItem label="企业名称">
+				            {{baseInfo.mc}}
+				        </FormItem>
+						<FormItem label="企业名称">
 				            {{baseInfo.qymc}}
 				        </FormItem>
 				        <FormItem label="注册地址" prop="zcdz">
@@ -30,7 +33,7 @@
 				            <Input clearable v-model="baseInfo.jydz" placeholder="经营地址"></Input>
 				        </FormItem>
 				        <FormItem label="经营范围" prop="jyfw">
-				        	<Input clearable type="textarea" :rows="4" v-model="baseInfo.jyfw" placeholder="经营范围"></Input>
+				        	<Input clearable type="textarea" v-model="baseInfo.jyfw" placeholder="经营范围"></Input>
 				        </FormItem>
 				        <FormItem label="成立时间" prop="clsj">
 				            <DatePicker clearable type="date" v-model="baseInfo.clsj" placeholder="请选择"></DatePicker>
@@ -40,6 +43,30 @@
 				        </FormItem>
 				        <FormItem label="管理人员数量" prop="glrysl">
 				            <InputNumber :min="0" v-model="baseInfo.glrysl"></InputNumber>
+				        </FormItem>
+				        <FormItem label="占地面积（㎡）">
+				            <InputNumber :min="0" v-model="baseInfo.zdmj"></InputNumber>
+				        </FormItem>
+				        <FormItem label="客运班线数量">
+				            <InputNumber :min="0" v-model="baseInfo.kybxsl"></InputNumber>
+				        </FormItem>
+				        <FormItem label="投入运营车辆数量">
+				            <InputNumber :min="0" v-model="baseInfo.tryyclsl"></InputNumber>
+				        </FormItem>
+				        <FormItem label="夜间通行车辆数">
+				            <InputNumber :min="0" v-model="baseInfo.yjtxcls"></InputNumber>
+				        </FormItem>
+				        <FormItem label="日最多发客量人次">
+				            <InputNumber :min="0" v-model="baseInfo.rzdfklrc"></InputNumber>
+				        </FormItem>
+				        <FormItem label="站级划分">
+				            <Input clearable v-model="baseInfo.zjhf" placeholder="站级划分"></Input>
+				        </FormItem>
+				        <FormItem label="维修车间设置情况">
+				            <Input clearable type="textarea" v-model="baseInfo.wxcjszqk" placeholder="维修车间设置情况"></Input>
+				        </FormItem>
+				        <FormItem label="消防设施配置情况">
+				            <Input clearable type="textarea" v-model="baseInfo.xfsspzqk" placeholder="消防设施配置情况"></Input>
 				        </FormItem>
 				        <FormItem label="行业门类" prop="hyml">
 				        	<Cascader 
@@ -574,10 +601,15 @@
 				let { status_code, data, message } = await api.getCtkyBase(this.gkdx_id);
 				if(status_code == 0) {
 					this.form = data;
-					let { jbr, jbrdh, jbryx, qymc, tyshxydm, zcdz, jyfw, quyu_id, jd, wd, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, zgrs, glrysl, hyml, hydm, yxzt, jydz, clsj } = this.form
-					this.baseInfo = { qymc, hydm, jyfw, tyshxydm, yxzt, zcdz, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, jbr, jbrdh, jbryx, jydz }
+					let { jbr, jbrdh, jbryx, mc, qymc, tyshxydm, zcdz, jyfw, quyu_id, jd, wd, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, zgrs, glrysl, zdmj, kybxsl, tryyclsl, yjtxcls, rzdfklrc, hyml, hydm, yxzt, jydz, zjhf, wxcjszqk, xfsspzqk, clsj } = this.form
+					this.baseInfo = { mc, qymc, hydm, jyfw, tyshxydm, yxzt, zcdz, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, jbr, jbrdh, jbryx, jydz, zjhf, wxcjszqk, xfsspzqk }
 					this.baseInfo.zgrs = zgrs ? Number(zgrs) : 0
 					this.baseInfo.glrysl = glrysl ? Number(glrysl) : 0
+					this.baseInfo.zdmj = zdmj ? Number(zdmj) : 0
+					this.baseInfo.kybxsl = kybxsl ? Number(kybxsl) : 0
+					this.baseInfo.tryyclsl = tryyclsl ? Number(tryyclsl) : 0
+					this.baseInfo.yjtxcls = yjtxcls ? Number(yjtxcls) : 0
+					this.baseInfo.rzdfklrc = rzdfklrc ? Number(rzdfklrc) : 0
 					this.baseInfo.clsj = this.form.clsj ? new Date(this.form.clsj) : '';
 					this.baseInfo.jyfw = jyfw || ''
 					this.baseInfo.lngAndLat = `${(this.form.jd - 0).toFixed(6)} ${(this.form.wd - 0).toFixed(6)}`
@@ -641,10 +673,14 @@
 		            	this.map.removeControl(TMAP_NORMAL_MAP);
 			            //添加图层
 			            this.map.addControl(TMAP_HYBRID_MAP);
+		            	let zoomCtrl = new T.Control.Zoom({
+		            		position: T_ANCHOR_BOTTOM_RIGHT
+		            	})
+		            	this.map.addControl(zoomCtrl);
 			            if(this.baseInfo.lngAndLat) {
-			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.lnglat.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.lnglat.lat), 10);
+			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.lnglat.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.lnglat.lat), 17);
 			            }else {
-			            	this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+			            	this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 17);
 			            }
 						var config = {
 			                showLabel: true,

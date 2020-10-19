@@ -37,8 +37,14 @@
 				        <FormItem label="安全经营许可证编号">
 				        	<Input clearable v-model="baseInfo.aqjyxkzbh" placeholder="安全经营许可证编号"></Input>
 				        </FormItem>
-				        <FormItem label="有效期">
-				        	<DatePicker type="date" v-model="baseInfo.yxq"  placeholder="请选择"></DatePicker>
+				        <FormItem label="建站时间" prop="jzsj">
+				        	<DatePicker type="date" v-model="baseInfo.jzsj"  placeholder="请选择"></DatePicker>
+				        </FormItem>
+				        <FormItem label="有效期开始时间" prop="yxq_ks">
+				        	<DatePicker type="date" v-model="baseInfo.yxq_ks"  placeholder="请选择"></DatePicker>
+				        </FormItem>
+				        <FormItem label="有效期结束时间" prop="yxq_js">
+				        	<DatePicker type="date" v-model="baseInfo.yxq_js"  placeholder="请选择"></DatePicker>
 				        </FormItem>
 				        <FormItem label="站点地址">
 				        	<Input clearable v-model="baseInfo.zddz" placeholder="站点地址"></Input>
@@ -61,6 +67,18 @@
 				            <Select clearable v-model="baseInfo.jyzdj" placeholder="加油站等级">
 				                <Option v-for="item in jyzdjList" :key="item" :value="item">{{item}}</Option>
 				            </Select>
+				        </FormItem>
+				        <FormItem label="汽油罐数量">
+				        	<InputNumber :min="0" v-model="baseInfo.qygsl" placeholder="汽油罐数量"></InputNumber>
+				        </FormItem>
+				        <FormItem label="汽油罐总容积（㎡）">
+				        	<InputNumber :min="0" v-model="baseInfo.qygzrj" placeholder="汽油罐总容积"></InputNumber>
+				        </FormItem>
+				        <FormItem label="柴油罐数量">
+				        	<InputNumber :min="0" v-model="baseInfo.cygsl" placeholder="柴油罐数量"></InputNumber>
+				        </FormItem>
+				        <FormItem label="柴油罐总容积（㎡）">
+				        	<InputNumber :min="0" v-model="baseInfo.cygzrj" placeholder="柴油罐总容积"></InputNumber>
 				        </FormItem>
 				        <FormItem label="职工人数">
 				            <InputNumber :min="0" v-model="baseInfo.zdzgrs"></InputNumber>
@@ -962,13 +980,19 @@
 				let { status_code, data, message } = await api.getJyzBase(this.gkdx_id);
 				if(status_code == 0) {
 					this.form = data;
-					let { zcmc, jydw, tyshxydm, zcdz, zgrs, glrysl, hyml, hydm, aqjyxkzbh, yxq, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, zddz, lngAndLat, zdfw, zdmj, jzmj, jyfw, jyzdj } = this.form
-					this.baseInfo = { zcmc, jydw, tyshxydm, zcdz, hydm, aqjyxkzbh, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, zddz, zdfw, jyfw, jyzdj }
+					let { zcmc, jydw, tyshxydm, zcdz, zgrs, glrysl, hyml, hydm, aqjyxkzbh,  yxq_ks, yxq_js, jzsj, qygsl, qygzrj, cygsl, cygzrj, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, zddz, lngAndLat, zdfw, zdmj, jzmj, jyfw, jyzdj } = this.form
+					this.baseInfo = { zcmc, jydw, tyshxydm, zcdz, hydm, aqjyxkzbh, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, zddz, zdfw, jyfw, jyzdj, yxq_ks, yxq_js, jzsj, qygsl, qygzrj, cygsl, cygzrj }
 					this.baseInfo.zgrs = zgrs ? Number(zgrs) : 0
 					this.baseInfo.glrysl = glrysl ? Number(glrysl) : 0
 					this.baseInfo.zdmj = zdmj ? Number(zdmj) : 0
 					this.baseInfo.jzmj = jzmj ? Number(jzmj) : 0
-					this.baseInfo.yxq = yxq ? new Date(yxq) : ''
+					this.baseInfo.qygsl = qygsl ? Number(qygsl) : 0
+					this.baseInfo.qygzrj = qygzrj ? Number(qygzrj) : 0
+					this.baseInfo.cygsl = cygsl ? Number(cygsl) : 0
+					this.baseInfo.cygzrj = cygzrj ? Number(cygzrj) : 0
+					this.baseInfo.yxq_ks = yxq_ks ? new Date(yxq_ks) : ''
+					this.baseInfo.yxq_js = yxq_js ? new Date(yxq_js) : ''
+					this.baseInfo.jzsj = jzsj ? new Date(jzsj) : ''
 					this.baseInfo.lngAndLat = this.form.jd && this.form.wd ? `${(this.form.jd - 0).toFixed(6)} ${(this.form.wd - 0).toFixed(6)}` : ''
 					this.getHy();
 					this.getQy();

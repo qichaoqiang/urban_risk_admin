@@ -602,6 +602,7 @@
 				userInfo.gkdx_id = row.gkdx_id
 				userInfo.fxylb = row.fxylb
 				this.$storage.set('userInfo', userInfo)
+				this.$storage.set('fxyInfo', row)
 				location.href = process.env.NODE_ENV === "development" ? `${location.origin}/#/editInfo?type=2` : `${location.origin}/v2/#/editInfo?type=2`
 			},
 			fxyModelChange(status) {

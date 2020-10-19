@@ -70,9 +70,12 @@
 				        <FormItem label="地震区划等级（峰值加速度g）" prop="dzqhdjfzjsdg">
 				            <InputNumber :min="0" v-model="baseInfo.dzqhdjfzjsdg"></InputNumber>
 				        </FormItem>
-				        <FormItem label="竣工时间" prop="jgsj">
-				            <DatePicker type="date" v-model="baseInfo.jgsj"  placeholder="请选择"></DatePicker>
+				        <FormItem label="隧道技术状况等级">
+				        	<Input clearable v-model="baseInfo.sdjszkdj" placeholder="隧道技术状况等级"></Input>
 				        </FormItem>
+				        <!-- <FormItem label="竣工时间" prop="jgsj">
+				            <DatePicker type="date" v-model="baseInfo.jgsj"  placeholder="请选择"></DatePicker>
+				        </FormItem> -->
 				        <FormItem label="投用时间" prop="zysj">
 				            <DatePicker type="date" v-model="baseInfo.zysj"  placeholder="请选择"></DatePicker>
 				        </FormItem>
@@ -981,9 +984,16 @@
 	                    callback();
 	                }
 				}
+				const validatorLngAndLat = (rule, value, callback) => {
+					if (!this.baseInfo.lngAndLat) {
+						callback(new Error('请选取经纬度'));
+	                } else {
+	                    callback();
+	                }
+				}
 				return {
                 	quyu: [{ required: true, validator: validatorQuyu, trigger: 'change' }],
-                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	lngAndLat: [{ required: true, validator: validatorLngAndLat, trigger: 'change' }],
                 	dz: [{ required: true, message: '请输入', trigger: 'change' }],
                 	// gldw: [{ required: true, message: '请输入', trigger: 'change' }],
                 	// gldwtyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
@@ -1008,13 +1018,14 @@
 				let { status_code, data, message } = await api.getCssdBase(this.gkdx_id);
 				if(status_code == 0) {
 					this.form = data;
-					let { sdmc, tyshxydm, dzqhdjfzjsdg, jbr, jbrdh, jbryx, fzr, fzrdh, lngAndLat, jgsj, zysj, dz, sdjj, sjdw, sjdwtyshxydm, sgdw, sgdwtyshxydm, gldw, gldwtyshxydm } = this.form
-					this.baseInfo = { sdmc, tyshxydm, jbr, jbrdh, jbryx, fzr, fzrdh, dz, sdjj, sjdw, sjdwtyshxydm, sgdw, sgdwtyshxydm, gldw, gldwtyshxydm }
+					let { sdmc, tyshxydm, dzqhdjfzjsdg, jbr, jbrdh, jbryx, fzr, fzrdh, lngAndLat, jgsj, zysj, dz, sdjj, sjdw, sjdwtyshxydm, sgdw, sgdwtyshxydm, gldw, gldwtyshxydm, sdjszkdj } = this.form
+					this.baseInfo = { sdmc, tyshxydm, jbr, jbrdh, jbryx, fzr, fzrdh, dz, sdjj, sjdw, sjdwtyshxydm, sgdw, sgdwtyshxydm, gldw, gldwtyshxydm, sdjszkdj }
 					this.baseInfo.jgsj = jgsj ? new Date(jgsj) : ''
 					this.baseInfo.zysj = zysj ? new Date(zysj) : ''
 					this.baseInfo.dz = dz || ''
 					this.baseInfo.gldw = gldw || ''
 					this.baseInfo.gldwtyshxydm = gldwtyshxydm || ''
+					this.baseInfo.sdjszkdj = sdjszkdj || ''
 					this.baseInfo.sjdw = sjdw || ''
 					this.baseInfo.sjdwtyshxydm = sjdwtyshxydm || ''
 					this.baseInfo.sgdw = sgdw || ''
@@ -1088,10 +1099,14 @@
 		            	this.map.removeControl(TMAP_NORMAL_MAP);
 			            //添加图层
 			            this.map.addControl(TMAP_HYBRID_MAP);
+		            	let zoomCtrl = new T.Control.Zoom({
+		            		position: T_ANCHOR_BOTTOM_RIGHT
+		            	})
+		            	this.map.addControl(zoomCtrl);
 			            if(this.baseInfo.lngAndLat) {
-			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.lnglat.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.lnglat.lat), 10);
+			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.lnglat.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.lnglat.lat), 17);
 			            }else {
-			            	this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+			            	this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 17);
 			            }
 						var config = {
 			                showLabel: true,

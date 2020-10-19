@@ -48,6 +48,11 @@
 						                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
 						            </Select>
 						        </FormItem>
+						        <FormItem label="火灾高危单位" prop="hzgwdw">
+						            <Select clearable v-model="baseInfo.hzgwdw" placeholder="请选择">
+						                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
+						            </Select>
+						        </FormItem>
 						        <FormItem label="文物保护单位">
 						        	<Row type="flex" :gutter="20">
 						        		<Col span="6">
@@ -514,6 +519,7 @@
 						jzmj: data.jzmj ? Number(data.jzmj) : 0,
 						jzcs: data.jzcs ? Number(data.jzcs) : 0,
 						xfzddw: data.xfzddw ? Number(data.xfzddw) : 0,
+						hzgwdw: data.hzgwdw ? Number(data.hzgwdw) : 0,
 						yylc1: data.yylc1 + '',
 						yylc2: data.yylc2 + '',
 						wwbhdw: data.wwbhdw ? Number(data.wwbhdw) : 0,
@@ -559,6 +565,7 @@
 							jzmj: this.baseInfo.jzmj,
 							jzcs: this.baseInfo.jzcs,
 							xfzddw: this.baseInfo.xfzddw,
+							hzgwdw: this.baseInfo.hzgwdw,
 							yylc1: this.baseInfo.yylc1,
 							yylc2: this.baseInfo.yylc2,
 							jznd: this.baseInfo.jznd,

@@ -307,10 +307,10 @@
 						overflow-y: scroll;
 						display: flex;
 						.unit_item {
-							margin-right: 44px;
+							margin-right: 24px;
 							.unit_name {
 								float: left;
-								padding: 0 24px;
+								padding: 0 12px;
 								height: 38px;
 								background: #1C86F3;
 								border-radius: 2px;
@@ -319,6 +319,7 @@
 								color: #FFFFFF;
 								text-align: center;
 								line-height: 38px;
+								white-space: nowrap;
 							}
 							.industry_list {
 								padding-top: 8px;
@@ -327,7 +328,7 @@
 									display: flex;
 									align-items: center;
 									img {
-										margin-right: 17px;
+										margin-right: 8px;
 										width: 20px;
 										height: 20px;
 									}

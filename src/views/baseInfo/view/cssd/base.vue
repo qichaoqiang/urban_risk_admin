@@ -68,6 +68,9 @@
 				        <FormItem label="地震区划等级（峰值加速度g）">
 				            <InputNumber :min="0" v-model="baseInfo.dzqhdjfzjsdg"></InputNumber>
 				        </FormItem>
+				        <FormItem label="隧道技术状况等级">
+				        	<Input clearable v-model="baseInfo.sdjszkdj" placeholder="隧道技术状况等级"></Input>
+				        </FormItem>
 				        <FormItem label="竣工时间">
 				            <DatePicker type="date" v-model="baseInfo.jgsj"  placeholder="请选择"></DatePicker>
 				        </FormItem>
@@ -933,8 +936,8 @@
 				let { status_code, data, message } = await api.getCssdBase(this.gkdx_id);
 				if(status_code == 0) {
 					this.form = data;
-					let { sdmc, tyshxydm, dzqhdjfzjsdg, jbr, jbrdh, jbryx, fzr, fzrdh, lngAndLat, jgsj, zysj, dz, sdjj, sjdw, sjdwtyshxydm, sgdw, sgdwtyshxydm, gldw, gldwtyshxydm } = this.form
-					this.baseInfo = { sdmc, tyshxydm, jbr, jbrdh, jbryx, fzr, fzrdh, dz, sdjj, sjdw, sjdwtyshxydm, sgdw, sgdwtyshxydm, gldw, gldwtyshxydm }
+					let { sdmc, tyshxydm, dzqhdjfzjsdg, jbr, jbrdh, jbryx, fzr, fzrdh, lngAndLat, jgsj, zysj, dz, sdjj, sjdw, sjdwtyshxydm, sgdw, sgdwtyshxydm, gldw, gldwtyshxydm, sdjszkdj } = this.form
+					this.baseInfo = { sdmc, tyshxydm, jbr, jbrdh, jbryx, fzr, fzrdh, dz, sdjj, sjdw, sjdwtyshxydm, sgdw, sgdwtyshxydm, gldw, gldwtyshxydm, sdjszkdj }
 					this.baseInfo.jgsj = jgsj ? new Date(jgsj) : ''
 					this.baseInfo.zysj = zysj ? new Date(zysj) : ''
 					this.baseInfo.dzqhdjfzjsdg = dzqhdjfzjsdg ? Number(dzqhdjfzjsdg) : 0

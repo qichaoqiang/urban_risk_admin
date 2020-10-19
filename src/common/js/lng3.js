@@ -46,6 +46,10 @@ export default {
 					this.lng = this.baseInfo.lngAndLat.split(' ')[0]
                     this.lat = this.baseInfo.lngAndLat.split(' ')[1]
                     this.map = new T.Map(this.id);
+	            	let zoomCtrl = new T.Control.Zoom({
+	            		position: T_ANCHOR_BOTTOM_RIGHT
+	            	})
+	            	this.map.addControl(zoomCtrl);
                     let marker = new T.Marker(new T.LngLat(this.lng, this.lat));
                     this.map.addOverLay(marker);
 					this.map.centerAndZoom(new T.LngLat(this.lng, this.lat), 10);
@@ -59,6 +63,10 @@ export default {
 	                    this.lng = e.lnglat.lng.toFixed(6);
 	                    this.lat = e.lnglat.lat.toFixed(6);
 						this.map = new T.Map(this.id);
+		            	let zoomCtrl = new T.Control.Zoom({
+		            		position: T_ANCHOR_BOTTOM_RIGHT
+		            	})
+		            	this.map.addControl(zoomCtrl);
 	                    let marker = new T.Marker(e.lnglat);
 	                    this.map.addOverLay(marker);
 						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);

@@ -80,6 +80,31 @@
 				                />
 							</Row>
 				        </TabPane>
+				        <TabPane label="周边环境" name="name4">
+				        	<part-title text="周边环境" :btns="['add']" @add="openRimModel"></part-title>
+				        	<div style="margin-bottom: 16px;">说明：调查周边200m范围</div>
+							<Table :columns="rimColumns" :data="rimData">
+								<template slot-scope="{ row }" slot="action">
+						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editRimModel(row)">编辑</Button>
+						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeRim(row)">
+								        <Button type="error" size="small" ghost>删除</Button>
+								    </Poptip>
+						        </template>
+							</Table>
+							<Row type="flex" justify="end">
+								<Page
+				                    size="small"
+				                    style="margin-top: 10px"
+				                    :page-size="rimPage.pageSize"
+				                    :total="rimPage.totalRow"
+				                    show-elevator
+				                    show-total
+				                    show-sizer
+				                    @on-change="handleChangeRimPage"
+				                    @on-page-size-change="handleChangeRimPageSize"
+				                />
+							</Row>
+				        </TabPane>
 				    </Tabs>
 				</Col>	
 			</Row>	
@@ -206,6 +231,41 @@
 		        <Button type="primary" size="large" :loading="yyqkLoading" @click="saveYyqk">保存</Button>
 	        </div>
 		</Modal>
+		<Modal width="820" :title="`${modeType == 1 ? '新增' : '编辑'}周边环境`" v-model="showRimModel"  @on-visible-change="rimModelChange">
+			<div>
+				<Form :model="rimForm" ref="rim" :rules="rimRules" hide-required-mark label-position="left" :label-width="140">
+					<FormItem label="敏感目标名称" prop="mgmbmc">
+			        	<Input clearable v-model="rimForm.mgmbmc"></Input>
+			        </FormItem>
+			        <FormItem label="方位" prop="fw">
+			        	<Select clearable v-model="rimForm.fw" placeholder="请选择">
+			                <Option v-for="item in fwList" :key="item" :value="item">{{item}}</Option>
+			            </Select>
+			        </FormItem>
+			        <FormItem label="敏感目标类型" prop="mgmblx">
+			            <Select clearable v-model="rimForm.mgmblx" placeholder="请选择">
+			                <Option v-for="item in mgmblxList" :key="item" :value="item">{{item}}</Option>
+			            </Select>
+			        </FormItem>
+			        <FormItem label="敏感目标距离(m)" prop="mgmbjl">
+			        	<InputNumber :min="0" v-model="rimForm.mgmbjl"></InputNumber>
+			        </FormItem>	
+			        <FormItem label="人员数量" prop="rysl">
+			        	<InputNumber :min="0" v-model="rimForm.rysl"></InputNumber>
+			        </FormItem>
+			        <FormItem label="经纬度" prop="lngAndLat">
+			        	<lng :lngAndLat.sync="rimForm.lngAndLat"></lng>
+			        </FormItem>
+			        <FormItem label="区域范围" prop="qyfw">
+			        	<qyfw :qyfw.sync="rimForm.qyfw"></qyfw>
+			        </FormItem>
+				</Form>
+			</div>
+			<div slot="footer">
+	            <!-- <Button type="text" size="large" @click="showWhModel = false">取消</Button> -->
+		        <Button type="primary" size="large" :loading="rimLoading" @click="saveRim">保存</Button>
+	        </div>
+		</Modal>
 	</div>
 </template>
 
@@ -238,9 +298,11 @@
 				showClxxctModel: false,
 				showXlxxModel: false,
 				showYyqkModel: false,
+				showRimModel: false,
 				clxxctLoading: false,
 				xlxxLoading: false,
 				yyqkLoading: false,
+				rimLoading: false,
 				modeType: '',
 				modeType2: '',
 				map: null,
@@ -426,6 +488,56 @@
 					pageIndex: 1,
 					totalRow: 0
 				},
+				rimColumns: [
+					{
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.rimPage.pageIndex- 1) * this.rimPage.pageSize + 1);
+				        }
+                    }, {
+                        title: '敏感目标名称',
+                        key: 'mgmbmc',
+                         minWidth: 120
+                    }, {
+                        title: '方位',
+                        key: 'fw',
+                         minWidth: 80
+                    }, {
+                        title: '目标类型',
+                        key: 'mgmblx',
+                         minWidth: 100
+                    }, {
+                        title: '人员数量',
+                        key: 'rysl',
+                         minWidth: 100
+                    },{
+                        title: '操作',
+                        fixed: 'right',
+                        width: 150,
+                        slot: 'action',
+                    }, 
+				],
+				rimData: [],
+				rimForm: {
+					mgmbmc: '',
+					mgmblx: '',
+					fw: '',
+					mgmbjl: 0,
+					rysl: 0,
+					lngAndLat: '',
+					qyfw: ''
+				},
+				fwList: ['东', '南', '西', '北', '东北', '东南', '西北', '西南'],
+				mgmblxList: ['医院', '养老院', '学校', '政府机构', '商场', '居住区', '监狱', '宗教', '车站', '码头', '铁路', '公路', '林区', '工厂', '矿山', '河流', '其他'],
+				rimPage: {
+					pageSize: 10,
+					pageIndex: 1,
+					totalRow: 0
+				},
 				form: {}
 			}
 		},
@@ -459,6 +571,24 @@
 					tbsj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
 				}
 			},
+			rimRules() {
+				const validatorQyfw = (rule, value, callback) => {
+					if (!this.rimForm.qyfw) {
+	                    callback(new Error('请选择'));
+	                } else {
+	                    callback();
+	                }
+				}
+				return {
+					mgmbmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					// fw: [{ required: true, message: '请选择', trigger: 'change' }],
+					// mgmblx: [{ required: true, message: '请选择', trigger: 'change' }],
+                	// lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	// qyfw: [{ required: true, validator: validatorQyfw, trigger: 'change' }],
+					// mgmbjl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					// rysl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+				}
+			},
 		},
 		methods: {
 			async getBaseInfo() {
@@ -478,8 +608,13 @@
 					per_page: this.yyqkPage.pageSize,
 					page: this.yyqkPage.pageIndex,
 				}
-				Promise.all([api.getClxxctList(clxxctParams), api.getXlxxList(xlxxParams), api.getYyqkList(xlxxParams)]).then((result) => {
-				  	let clxxctRes = result[0], xlxxRes = result[1], yyqkRes = result[2]
+				let rimParams = {
+					gkdx_id: this.gkdx_id,
+					per_page: this.rimPage.pageSize,
+					page: this.rimPage.pageIndex,
+				}
+				Promise.all([api.getClxxctList(clxxctParams), api.getXlxxList(xlxxParams), api.getYyqkList(xlxxParams), api.getRimList(rimParams)]).then((result) => {
+				  	let clxxctRes = result[0], xlxxRes = result[1], yyqkRes = result[2], rimRes = result[3]
 				  	if(clxxctRes.status_code == 200) {
 				  		this.clxxctData = clxxctRes.data.data
 				  		this.clslhj = clxxctRes.clslhj || 0
@@ -493,6 +628,10 @@
 				  	if(yyqkRes.status_code == 200) {
 				  		this.yyqkData = yyqkRes.data.data
 				  		this.yyqkPage.totalRow = yyqkRes.data.total
+				  	}
+				  	if(rimRes.status_code == 200) {
+				  		this.rimData = rimRes.data.data.filter(item => item.gkdx_id == this.gkdx_id)
+				  		this.rimPage.totalRow = rimRes.data.total
 				  	}
 				  	this.loading = false   
 				}).catch((error) => {
@@ -847,6 +986,89 @@
 							this.getYyqkList()
 						}
                     	this.yyqkLoading = false
+                    }
+                })
+			},
+			handleChangeRimPage(val) {
+				this.rimPage.pageIndex = val
+				this.getRimList()
+			},
+			handleChangeRimPageSize(val) {
+				this.rimPage.pageSize = val
+				this.getRimList()
+			},
+			async getRimList() {
+				let params = {
+					gkdx_id: this.gkdx_id,
+					per_page: this.rimPage.pageSize,
+					page: this.rimPage.pageIndex,
+				}
+				let { status_code, data } = await api.getRimList(params)
+				if(status_code == 200) {
+					this.rimData = data.data.filter(item => item.gkdx_id == this.gkdx_id)
+					this.rimPage.totalRow = data.total
+				}
+			},
+			openRimModel() {
+				this.modeType = 1;
+				this.showRimModel = true
+			},
+			editRimModel(row) {
+				this.rimForm = {
+					mgmbmc: row.mgmbmc,
+					mgmblx: row.mgmblx,
+					fw: row.fw,
+					mgmbjl: row.mgmbjl - 0,
+					rysl: row.rysl,
+					lngAndLat: row.jd && row.wd ? `${(row.jd - 0).toFixed(2)} ${(row.wd - 0).toFixed(2)}` : '',
+					qyfw: row.qyfw,
+				}
+				this.id = row.id
+				this.modeType = 2;
+				this.showRimModel = true
+			},
+			rimModelChange(status) {
+				if(!status) {
+					this.$nextTick(() => {
+						this.rimForm = {
+							mgmbmc: '',
+							mgmblx: '',
+							fw: '',
+							mgmbjl: 0,
+							rysl: 0,
+							lngAndLat: '',
+							qyfw: ''
+						}
+						this.$refs.rim.resetFields();
+					})
+				}
+			},
+			async removeRim(row) {
+				let { status_code } = await api.deleteRimInfo(row.id)
+				status_code == 200 && this.$Message.success('删除成功')
+				this.getRimList()
+			},
+			async saveRim() {
+				this.$refs.rim.validate(async valid => {
+                    if (valid) {
+                    	this.rimLoading = true
+						let params = {
+							...this.rimForm,
+							jd: this.rimForm.lngAndLat.split(' ')[0],
+							wd: this.rimForm.lngAndLat.split(' ')[1],
+							gkdx_id: this.gkdx_id
+						}
+						delete params.lngAndLat
+						if(this.modeType == 2) {
+							params.id = this.id
+						}
+						let { status_code, message } = await api.addRimInfo(params);
+						if(status_code == 200) {
+							this.$Message.success(message)
+							this.showRimModel = false
+							this.getRimList()
+						}
+							this.rimLoading = false
                     }
                 })
 			},

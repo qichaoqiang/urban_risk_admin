@@ -62,8 +62,8 @@
 				tab: '基本信息',
 				hasReload: false,
 				form: {
-					fxz: 0,
-					fxdj: ''
+					fxz: this.$storage.get('fxyInfo') ? this.$storage.get('fxyInfo').fxz - 0 : 0,
+					fxdj: this.$storage.get('fxyInfo') ? this.$storage.get('fxyInfo').fxdj : '',
 				},
 				fxdjList: ['重大风险', '较大风险', '一般风险', '低风险'],
 				noRisk: ['rfgc', 'fkjbq']

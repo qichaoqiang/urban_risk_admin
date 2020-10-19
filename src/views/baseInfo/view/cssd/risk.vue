@@ -24,13 +24,19 @@
 						                <Option v-for="item in jxxsList" :key="item" :value="item">{{item}}</Option>
 						            </Select>
 						        </FormItem>
-						        <FormItem label="隧道养护等级" prop="sdyhdj">
+						        <FormItem label="技术状况" prop="sdyhdj">
 						        	<Select clearable :transfer="true" v-model="baseInfo.sdyhdj" placeholder="请选择">
 						                <Option v-for="item in sdyhdjList" :key="item" :value="item">{{item}}</Option>
 						            </Select>
 						        </FormItem>
 					        	<FormItem label="日均通行量" prop="rjtxl">
 						        	<InputNumber :min="0" v-model="baseInfo.rjtxl"></InputNumber>
+						        </FormItem>
+						        <FormItem label="气象情况">
+						        	<Input clearable type="textarea" v-model="baseInfo.qxqk"></Input>
+						        </FormItem>
+						        <FormItem label="病害情况">
+						        	<Input clearable type="textarea" v-model="baseInfo.bhqk"></Input>
 						        </FormItem>
 						    </Form>
 							<Row type="flex" justify="center" style="margin-top: 24px">
@@ -240,9 +246,9 @@
 					jb: '',
 					jzwjg: ''
 				},
-				sdxsList: ['单向交通', '双向交通', '人车混行'],
+				sdxsList: ['单向', '双向', '人车混行'],
 				sdcdList: ['特长隧道', '长隧道', '中长隧道', '短隧道'],
-				jxxsList: ['毗邻隧道', '连续隧道', '桥隧相接', '坡路隧道相连（上坡）', '坡路隧道相连（下坡）', '坡路隧道相接'],
+				jxxsList: ['毗邻隧道', '连续隧道', '桥隧相接', '坡路隧道相接'],
 				sdyhdjList: ['一类', '二类', '三类', '四类', '五类', '未评定'],
 				sfzgyyqList: [
 					{
@@ -522,7 +528,9 @@
 						sdcd: data.sdcd,
 						jxxs: data.jxxs,
 						sdyhdj: data.sdyhdj,
-						rjtxl: data.rjtxl ? Number(data.rjtxl) : 0
+						rjtxl: data.rjtxl ? Number(data.rjtxl) : 0,
+						qxqk: data.qxqk,
+						bhqk: data.bhqk
 					}
 				}
 				this.loading = false
@@ -562,6 +570,8 @@
 							jxxs: this.baseInfo.jxxs,
 							sdyhdj: this.baseInfo.sdyhdj,
 							rjtxl: this.baseInfo.rjtxl,
+							qxqk: this.baseInfo.qxqk,
+							bhqk: this.baseInfo.bhqk,
 						}
 						let { status_code, message } = await api.addCssdBase(params);
 						if(status_code == 200) {

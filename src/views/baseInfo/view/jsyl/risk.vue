@@ -293,11 +293,29 @@
 					<FormItem label="设备名称" prop="sbmc">
 			        	<Input clearable v-model="zysbForm.sbmc"></Input>
 			        </FormItem>
+			        <FormItem label="设备类型" prop="sblx">
+			            <Select clearable v-model="zysbForm.sblx" placeholder="请选择">
+			                <Option v-for="item in sblxList" :key="item" :value="item">{{item}}</Option>
+			            </Select>
+			        </FormItem>	
 			        <FormItem label="数量" prop="sl">
 			            <InputNumber :min="0" v-model="zysbForm.sl"></InputNumber>
 			        </FormItem>
-			        <FormItem label="规格/大小" prop="gg">
-			            <Input clearable v-model="zysbForm.gg"></Input>
+			        <FormItem label="规格/大小">
+			            <Row type="flex" align="middle">
+	            			<Col>
+	            				<FormItem prop="gg">
+	            					<InputNumber :min="0" v-model="zysbForm.gg"></InputNumber>
+		            			</FormItem>
+	            			</Col>
+	            			<Col>
+		            			<FormItem>
+		            				<Select clearable v-model="zysbForm.dw" placeholder="单位">
+						                <Option v-for="item in dwList" :key="item" :value="item">{{item}}</Option>
+						            </Select>
+						        </FormItem>
+	            			</Col>
+	            		</Row>
 			        </FormItem>
 			        <FormItem label="投用时间" prop="tysj">
 			            <DatePicker type="datetime" v-model="zysbForm.tysj"  placeholder="请选择"></DatePicker>
@@ -635,13 +653,17 @@
                         key: 'sbmc',
                          minWidth: 100
                     }, {
+                        title: '设备类型',
+                        key: 'sblx',
+                         minWidth: 100
+                    }, {
                         title: '数量',
                         key: 'sl',
                          minWidth: 80
                     }, {
-                        title: '规格/大小',
+                        title: '规格/大小（吨）',
                         key: 'gg',
-                         minWidth: 110
+                        minWidth: 140
                     }, {
                         title: '投用时间',
                         key: 'tysj',
@@ -660,15 +682,19 @@
 				zysbData: [],
 				zysbForm: {
 					sbmc: '',
+					sblx: '',
 					sl: 0,
-					gg: '',
+					gg: 0,
 					tysj: '',
 					dqyxzt: '',
+					dw: '吨'
 				},
 				csfbxList: ['封闭式', '半封闭式', '开放式（露天）'],
 				ptfsList: ['高压喷涂', '静电喷涂', '中等压力喷涂', '浸涂、淋涂、滚涂', '其它'],
 				zdhcdList: ['人工', '自动'],
 				tlzlList: ['水性', '油性', '塑粉'],
+				sblxList: ['高温熔炉', '转运容器', '起重设备', '气柜'],
+				dwList: ['吨'],
 				zysbPage: {
 					pageSize: 10,
 					pageIndex: 1,
@@ -771,7 +797,6 @@
 					tysj: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
 					dqyxzt: [{ required: true, message: '请选择', trigger: 'change' }],
 					sl: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
-					gg: [{ required: true, message: '请输入', trigger: 'change' }],
 				}
 			},
 			rimRules() {
@@ -1152,8 +1177,10 @@
 			editZysbModel(row) {
 				this.zysbForm = {
 					sbmc: row.sbmc,
+					sblx: row.sblx,
 					sl: row.sl ? Number(row.sl) : 0,
-					gg: row.gg,
+					gg: row.gg ? Number(row.gg) : 0,
+					dw: row.dw,
 					tysj: row.tysj ? new Date(row.tysj) : '',
 					dqyxzt: row.dqyxzt,
 				}
@@ -1166,10 +1193,12 @@
 					this.$nextTick(() => {
 						this.zysbForm = {
 							sbmc: '',
+							sblx: '',
 							sl: 0,
-							gg: '',
+							gg: 0,
 							tysj: '',
 							dqyxzt: '',
+							dw: '吨'
 						}
 						this.$refs.zysb.resetFields();
 					})
