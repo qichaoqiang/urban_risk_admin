@@ -106,7 +106,7 @@
 				        <FormItem label="企业负责人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input clearable v-model="baseInfo.qyfzr" :data="areaList" placeholder="姓名"></Input>
+				        			<Input clearable v-model="baseInfo.qyfzr" placeholder="姓名"></Input>
 				        		</Col>
 				        		<Col span="16">
 				        			<Input clearable v-model="baseInfo.qyfzrdh" placeholder="电话"></Input>
@@ -116,7 +116,7 @@
 				        <FormItem label="分管安全负责人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input clearable v-model="baseInfo.fgaqfzr" :data="areaList" placeholder="姓名"></Input>
+				        			<Input clearable v-model="baseInfo.fgaqfzr" placeholder="姓名"></Input>
 				        		</Col>
 				        		<Col span="16">
 				        			<Input clearable v-model="baseInfo.fgaqfzrdh" placeholder="电话"></Input>
@@ -126,7 +126,7 @@
 				        <FormItem label="经办人">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-				        			<Input clearable v-model="baseInfo.jbr" :data="areaList" placeholder="姓名"></Input>
+				        			<Input clearable v-model="baseInfo.jbr" placeholder="姓名"></Input>
 				        		</Col>
 				        		<Col span="16">
 				        			<Input clearable v-model="baseInfo.jbrdh" placeholder="电话"></Input>
@@ -271,9 +271,16 @@
 		},
 		computed: {
 			rules() {
+				const validatorLng = (rule, value, callback) => {
+					if (!this.baseInfo.lngAndLat) {
+	                    callback(new Error('请输入'));
+	                } else {
+	                    callback();
+	                }
+				}
 				return {
                 	scdz: [{ required: true, message: '请输入', trigger: 'change' }],
-                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	// lngAndLat: [{ required: true, validator: validatorLng, trigger: 'change' }],
                 	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
                 }
             }
@@ -283,8 +290,8 @@
 				let { status_code, data, message } = await api.getSptqyBase(this.gkdx_id);
 				if(status_code == 0) {
 					this.form = data;
-					let { qymc, tyshxydm, zcdz, sfzgyyq, yqmc, zgrs, glrysl, hyml, hydm, aqscbzh, qyjbjk, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, scdz, lngAndLat, qyfw, zdmj, jzmj } = this.form
-					this.baseInfo = { qymc, tyshxydm, zcdz, sfzgyyq, yqmc, hydm, aqscbzh, qyjbjk, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, scdz, qyfw }
+					let { qymc, tyshxydm, zcdz, sfzgyyq, yqmc, zgrs, glrysl, hydm, aqscbzh, qyjbjk, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, scdz, lngAndLat, qyfw, zdmj, jzmj } = this.form
+					this.baseInfo = { qymc, tyshxydm, zcdz, sfzgyyq, yqmc, hydm, aqscbzh, qyjbjk, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, scdz, qyfw, quyu: [], hyml: [] }
 					this.baseInfo.zgrs = zgrs ? Number(zgrs) : 0
 					this.baseInfo.glrysl = glrysl ? Number(glrysl) : 0
 					this.baseInfo.zdmj = zdmj ? Number(zdmj) : 0
@@ -292,6 +299,7 @@
 					this.baseInfo.lngAndLat = this.form.jd && this.form.wd ? `${(this.form.jd - 0).toFixed(6)} ${(this.form.wd - 0).toFixed(6)}` : ''
 					this.getHy();
 					this.getQy();
+					
 				}
 			},
 			nextStep() {
@@ -306,8 +314,8 @@
 					...this.baseInfo,
 					...this.baseInfo,
 					...this.baseInfo,
-					hyml: this.baseInfo.hyml[this.baseInfo.hyml.length - 1],
-					quyu_id: this.baseInfo.quyu[this.baseInfo.quyu.length - 1],
+					hyml: this.baseInfo.hyml.length > 0 ? this.baseInfo.hyml[this.baseInfo.hyml.length - 1] : '',
+					quyu_id: this.baseInfo.quyu.length > 0 ? this.baseInfo.quyu[this.baseInfo.quyu.length - 1] : '',
 					jd: this.baseInfo.lngAndLat.split(' ')[0],
 					wd: this.baseInfo.lngAndLat.split(' ')[1],
 				}	 
@@ -841,12 +849,14 @@
 			this.getArea('', list => {
 				this.areaList = list
 				if(this.industryList.length > 0) {
+					console.log(1111)
 					this.getBaseInfo()
 				}
 			})
 			this.getIndustry('', list => {
 				this.industryList = list
 				if(this.areaList.length > 0) {
+					console.log(1111)
 					this.getBaseInfo()
 				}
 			})

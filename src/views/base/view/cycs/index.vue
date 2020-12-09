@@ -51,7 +51,8 @@
 				            </Select>
 				        </FormItem>
 				        <FormItem label="营业时间" prop="yysj">
-				        	<TimePicker type="timerange" confirm v-model="baseInfo.yysj" placeholder="营业时间"></TimePicker>
+				        	<TimePicker type="time" confirm v-model="baseInfo.yysjks" placeholder="开始时间" style="width: 168px"></TimePicker>
+				        	<TimePicker type="time" confirm v-model="baseInfo.yysjjz" placeholder="结束时间" style="margin-left: 20px; width: 168px"></TimePicker>
 				        </FormItem>
 				        <FormItem label="营业状态" prop="yyzt">
 				        	<Select clearable v-model="baseInfo.yyzt" placeholder="营业状态">
@@ -276,10 +277,17 @@
 	                    callback();
 	                }
 				}
+				const validatorLng = (rule, value, callback) => {
+					if (!this.baseInfo.lngAndLat) {
+	                    callback(new Error('请输入'));
+	                } else {
+	                    callback();
+	                }
+				}
 				return {
                 	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
                 	spdz: [{ required: true, message: '请输入', trigger: 'change' }],
-                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	// lngAndLat: [{ required: true,  validator: validatorLng, trigger: 'change' }],
                 	// hyml: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
                 	// zcdz: [{ required: true, message: '请输入', trigger: 'change' }],
                 	// hydm: [{ required: true, message: '请输入', trigger: 'change' }],
@@ -319,9 +327,6 @@
 						this.baseInfo.jycslx = ''
 						this.baseInfo.jycslx_ = ''
 					}
-					yysjks = yysjks ? yysjks : ''
-					yysjjz = yysjjz ? yysjjz : ''
-					this.baseInfo.yysj = [yysjks, yysjjz];
 					this.baseInfo.zgrs = zgrs ? Number(zgrs) : 0
 					this.baseInfo.jcrs = jcrs ? Number(jcrs) : 0
 					this.baseInfo.jycsmj = jycsmj ? Number(jycsmj) : 0
@@ -350,8 +355,8 @@
 			async submit() {
 				let params = {
 					...this.baseInfo,
-					yysjks: this.baseInfo.yysj[0],
-					yysjjz: this.baseInfo.yysj[1],
+					yysjks: this.baseInfo.yysjks,
+					yysjjz: this.baseInfo.yysjjz,
 					jycslx: this.baseInfo.jycslx != '其他' ? this.baseInfo.jycslx : this.baseInfo.jycslx_,
 					hyml: this.baseInfo.hyml[this.baseInfo.hyml.length - 1],
 					quyu_id: this.baseInfo.quyu[this.baseInfo.quyu.length - 1],

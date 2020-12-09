@@ -16,8 +16,9 @@ axios_.defaults.timeout = 100000
 if(process.env.NODE_ENV === 'production') {
   axios_.defaults.baseURL = location.origin
 }else {
-  // axios_.defaults.baseURL = "http://risk_test.ser119.com"
-  axios_.defaults.baseURL = "http://minhou.ser119.com"
+  axios_.defaults.baseURL = "http://risk_test.ser119.com"
+  // axios_.defaults.baseURL = "http://minhou.ser119.com"
+  // axios_.defaults.baseURL = "http://hz.ser119.com"
 }
 
 // let origin = location.origin

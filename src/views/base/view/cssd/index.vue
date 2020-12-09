@@ -993,7 +993,7 @@
 				}
 				return {
                 	quyu: [{ required: true, validator: validatorQuyu, trigger: 'change' }],
-                	lngAndLat: [{ required: true, validator: validatorLngAndLat, trigger: 'change' }],
+                	// lngAndLat: [{ required: true, validator: validatorLngAndLat, trigger: 'change' }],
                 	dz: [{ required: true, message: '请输入', trigger: 'change' }],
                 	// gldw: [{ required: true, message: '请输入', trigger: 'change' }],
                 	// gldwtyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],

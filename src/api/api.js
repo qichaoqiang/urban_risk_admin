@@ -55,7 +55,16 @@ import rfgc from './rfgc' // 人防工程
 import fkbjq from './fkbjq' // 防空报警器
 import zyjjmb from './zyjjmb' // 重要经济目标
 import ssjd from './ssjd' // 重要经济目标
-import dt from './dt' // 重要经济目标
+import dt from './dt' // 地铁
+import zd from './zd' // 匝道
+import dtjs from './dtjs' // 地铁建设
+import dtyx from './dtyx' // 地铁运行
+import sshy from './sshy' // 水上货运
+import glkyz from './glkyz' // 公路客运站
+import wf from './wf' // 危房
+import hp from './hp' // 滑坡
+import dwyldd from './dwyldd' // 低洼易涝地带
+import ddzhyhd from './ddzhyhd' // 地质灾害隐患点
 
 
 export default {
@@ -154,5 +163,14 @@ export default {
   ...fkbjq,
   ...zyjjmb,
   ...ssjd,
-  ...dt
+  ...dt,
+  ...zd,
+  ...dtjs,
+  ...dtyx,
+  ...sshy,
+  ...glkyz,
+  ...wf,
+  ...hp,
+  ...dwyldd,
+  ...ddzhyhd
 }

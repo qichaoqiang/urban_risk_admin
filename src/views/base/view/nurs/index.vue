@@ -453,9 +453,16 @@
 		},
 		computed: {
 			rules() {
+				const validatorLng = (rule, value, callback) => {
+					if (!this.baseInfo.lngAndLat) {
+	                    callback(new Error('请输入'));
+	                } else {
+	                    callback();
+	                }
+				}
 				return {
                 	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
-                	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
+                	// lngAndLat: [{ required: true, validator: validatorLng, trigger: 'change' }],
                 	dz: [{ required: true, message: '请输入', trigger: 'change' }],
                 	// hyml: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
                 	// csfw: [{ required: true, message: '请选择', trigger: 'change' }],

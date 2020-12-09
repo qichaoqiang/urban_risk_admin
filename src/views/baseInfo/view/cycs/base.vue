@@ -51,7 +51,8 @@
 				            </Select>
 				        </FormItem>
 				        <FormItem label="营业时间">
-				        	<TimePicker type="timerange" confirm v-model="baseInfo.yysj" placeholder="营业时间"></TimePicker>
+				        	<TimePicker type="time" confirm v-model="baseInfo.yysjks" placeholder="开始时间" style="width: 168px"></TimePicker>
+				        	<TimePicker type="time" confirm v-model="baseInfo.yysjjz" placeholder="结束时间" style="margin-left: 20px; width: 168px"></TimePicker>
 				        </FormItem>
 				        <FormItem label="营业状态">
 				        	<Select clearable v-model="baseInfo.yyzt" placeholder="营业状态">
@@ -960,7 +961,6 @@
 					this.form = data;
 					let { sjmc, tyshxydm, zcdz, zgrs, jcrs, hydm, jygm, sjyt, spaqdj, yysjks, yysjjz, yyzt, jydw, jycslx, jbr, jbrdh, jbryx, spdz, lngAndLat, jycsmj, zyrllx } = this.form
 					this.baseInfo = { sjmc, tyshxydm, zcdz, hydm, jygm, sjyt, spaqdj, yysjks, yysjjz, yyzt, jydw, jbr, jbrdh, jbryx, spdz, lngAndLat, zyrllx }
-					this.baseInfo.yysj = [yysjks, yysjjz]
 					if(jycslx) {
 						this.baseInfo.jycslx = this.jycslxList.includes(jycslx) ? jycslx : '其他'
 						this.baseInfo.jycslx_ = this.jycslxList.includes(jycslx) ? '' : jycslx
@@ -968,9 +968,6 @@
 						this.baseInfo.jycslx = ''
 						this.baseInfo.jycslx_ = ''
 					}
-					yysjks = yysjks ? yysjks : ''
-					yysjjz = yysjjz ? yysjjz : ''
-					this.baseInfo.yysj = [yysjks, yysjjz];
 					this.baseInfo.zgrs = zgrs ? Number(zgrs) : 0
 					this.baseInfo.jcrs = jcrs ? Number(jcrs) : 0
 					this.baseInfo.jycsmj = jycsmj ? Number(jycsmj) : 0

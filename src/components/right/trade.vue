@@ -4,7 +4,7 @@
 			<div class="trade_father" @click="handleClickItem(item)" :class="{selected: $store.state.industry && $store.state.industry.id == item.id}">
 				<div class="check" v-if="level != 1" @click.stop.prevent="handleSelect(item)"></div>
 				<img class="icon" v-if="level == 2" :src="iconUrl(item)">	
-				<span :class="`text${level}`">{{item.fxylbmc}}</span>
+				<span :class="`text${level}`" :title="item.fxylbmc">{{item.fxylbmc}}</span>
 				<div class="arrow" v-if="item.children && item.children.length >= 1 && level < 2" :class="{arrow_rotate1: item.showChildren, arrow_rotate2: !item.showChildren}">
 					<Icon type="md-arrow-dropdown" size="12px" :color="item.selected ? '#10F6FF' : '#fff'" />
 				</div>
@@ -157,7 +157,7 @@
 				})
 			},
 			setHeight() {
-				this.contentHeight = this.$refs.trade.offsetHeight - 38 * 3 - 20
+				this.contentHeight = this.$refs.trade.offsetHeight - 38 * document.getElementsByClassName('trade_item1').length - 20
 				this.$nextTick(() => {
 					$(`#trade_brother49`).stop().slideToggle();
 				})
@@ -202,6 +202,10 @@
 					font-size: 16px;
 					color: #FFFFFF;
 					text-align: left;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					overflow: hidden;
+
 				}
 				.text1 {
 					font-family: PingFangSC-Semibold;

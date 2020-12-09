@@ -209,7 +209,7 @@
 			        <FormItem label="数量">
 			        	<Row type="flex" align="middle">
 	            			<Col>
-			        			InputNumber :min="0" v-model="whsysForm.sl"></InputNumber>
+			        			<InputNumber :min="0" v-model="whsysForm.sl"></InputNumber>
 	            			</Col>
 	            			<Col>
 	            				<Select clearable v-model="whsysForm.jldw" placeholder="单位">

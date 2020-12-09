@@ -6,8 +6,8 @@
 				<Col span="22">
 					<div class="title">请完善风险信息</div>
 					<Tabs value="name1">
-				        <TabPane label="人流信息" name="name1">
-				        	<part-title text="人流信息" :btns="['add']" @add="openRltzModel"></part-title>
+				        <TabPane label="场所信息" name="name1">
+				        	<part-title text="场所信息" :btns="['add']" @add="openRltzModel"></part-title>
 				        	<Form :model="baseInfo" label-position="left" inline>
 				        		<FormItem label="经营楼层" :label-width="76" style="margin-right: 24px">
 						        	<Select clearable multiple :transfer="true" v-model="baseInfo.jylc" placeholder="请选择">

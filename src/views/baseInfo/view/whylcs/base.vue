@@ -88,7 +88,7 @@
 					<part-title text="建筑物信息"></part-title>
 					<Form disabled :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
 				        <FormItem label="场所占地面积（㎡）">
-				        	InputNumber :min="0" v-model="baseInfo.zdmj"></InputNumber>
+				        	<InputNumber :min="0" v-model="baseInfo.zdmj"></InputNumber>
 				        </FormItem>
 				        <FormItem label="场所建筑面积（㎡）">
 				        	<InputNumber :min="0" v-model="baseInfo.csjzmj"></InputNumber>

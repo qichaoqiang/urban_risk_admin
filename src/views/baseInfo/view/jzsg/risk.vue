@@ -603,24 +603,24 @@
 		computed: {
 			wxxjdRules() {
 				return {
-					fbfxgcmc: [{ required: true, message: '请输入', trigger: 'change' }],
-					gclx: [{ required: true, message: '请选择', trigger: 'change' }],
-					sgdw: [{ required: true, message: '请输入', trigger: 'change' }],
-					jldw: [{ required: true, message: '请输入', trigger: 'change' }],
-					gcqdsj: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
-					yjjssj: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
-					dqjd: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					// fbfxgcmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					// gclx: [{ required: true, message: '请选择', trigger: 'change' }],
+					// sgdw: [{ required: true, message: '请输入', trigger: 'change' }],
+					// jldw: [{ required: true, message: '请输入', trigger: 'change' }],
+					// gcqdsj: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
+					// yjjssj: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
+					// dqjd: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
 				}
 			},
 			ydgmRules() {
 				return {
-					fbfxgcmc: [{ required: true, message: '请输入', trigger: 'change' }],
-					gclx: [{ required: true, message: '请选择', trigger: 'change' }],
-					sgdw: [{ required: true, message: '请输入', trigger: 'change' }],
-					jldw: [{ required: true, message: '请输入', trigger: 'change' }],
-					gcqdsj: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
-					yjjssj: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
-					dqjd: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
+					// fbfxgcmc: [{ required: true, message: '请输入', trigger: 'change' }],
+					// gclx: [{ required: true, message: '请选择', trigger: 'change' }],
+					// sgdw: [{ required: true, message: '请输入', trigger: 'change' }],
+					// jldw: [{ required: true, message: '请输入', trigger: 'change' }],
+					// gcqdsj: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
+					// yjjssj: [{ required: true, type: 'date', message: '请输入', trigger: 'change' }],
+					// dqjd: [{ required: true, type: 'number', message: '请输入', trigger: 'change' }],
 				}
 			},
 		},
@@ -647,7 +647,7 @@
 				  	if(ydgmRes.status_code == 200) {
 				  		this.ydgmData = ydgmRes.data.data.filter(item => item.gkdx_id == this.gkdx_id)
 				  		this.ydgmPage.totalRow = ydgmRes.data.total
-				  		this.YdgmSum.ydgmgcsl = ydgmRes.ydgmgcsl || 0
+				  		this.ydgmSum.ydgmgcsl = ydgmRes.ydgmgcsl || 0
 				  	}
 				  	this.loading = false   
 				}).catch((error) => {

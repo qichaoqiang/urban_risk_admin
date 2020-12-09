@@ -149,6 +149,9 @@
 			                <Option v-for="item in cllxList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
 			        </FormItem>	
+					<FormItem label="同类型车辆数量" prop="tlxclsl">
+			        	<InputNumber :min="0" v-model="clxxctForm.tlxclsl"></InputNumber>
+			        </FormItem>	
 					<FormItem label="载客人数" prop="zkrs">
 			        	<InputNumber :min="0" v-model="clxxctForm.zkrs"></InputNumber>
 			        </FormItem>	
@@ -355,6 +358,10 @@
                         key: 'cllx',
                         minWidth: 100,
                     }, {
+                        title: '同类型车辆数量',
+                        key: 'tlxclsl',
+                        minWidth: 140,
+                    }, {
                         title: '载客人数',
                         key: 'zkrs',
                         minWidth: 100,
@@ -380,6 +387,7 @@
 				clxxctData: [],
 				clxxctForm: {
 					cllx: '',
+					tlxclsl: 0,
 					zkrs: 0,
 					cljsdj: '',
 					cltysj: '',
@@ -779,6 +787,7 @@
 			editClxxctModel(row) {
 				this.clxxctForm = {
 					cllx: row.cllx,
+					tlxclsl: row.tlxclsl ? Number(row.tlxclsl) : 0,
 					zkrs: row.zkrs ? Number(row.zkrs) : 0,
 					cljsdj: row.cljsdj,
 					cltysj: row.cltysj ? new Date(row.cltysj) : '',
@@ -793,6 +802,7 @@
 					this.$nextTick(() => {
 						this.clxxctForm = {
 							cllx: '',
+							tlxclsl: 0,
 							zkrs: 0,
 							cljsdj: '',
 							cltysj: '',

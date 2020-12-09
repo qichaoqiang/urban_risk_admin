@@ -1009,8 +1009,15 @@
 	                    callback();
 	                }
 				}
+				const validatorLng = (rule, value, callback) => {
+					if (!this.baseInfo.lngAndLat) {
+	                    callback(new Error('请输入'));
+	                } else {
+	                    callback();
+	                }
+				}
 				return {
-                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	// lngAndLat: [{ required: true, validator: validatorLng, trigger: 'change' }],
                 	quyu: [{ required: true, validator: validatorQuyu, trigger: 'change' }],
                 	zddz: [{ required: true, message: '请输入', trigger: 'change' }],
 					// yxzt: [{ required: true, message: '请选择', trigger: 'change' }],

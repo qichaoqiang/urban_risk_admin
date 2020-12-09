@@ -12,7 +12,7 @@
 			</div>
 		</div>
 		<tool :levelList="levelList"></tool>
-		<div class="left" id="left1" v-show="!isSearch">
+		<div class="left" id="left1" ref="left1" v-show="!isSearch">
 			<!-- <risk-detail :data="riskInfo" :currentRisk="currentRisk"  @drawRiskSource="handleDrawRiskSource"></risk-detail> -->
 			<div class="left_box">
 				<div class="left_item" ref="areaBox">
@@ -40,12 +40,13 @@
 					</div>
 				</div>
 			</div>
+			<div class="drag_line" @mousedown="dragLeft"></div>
 		</div>
-		<div class="left" id="left2" v-show="isSearch" style="width: 290px;">
+		<div class="left" id="left2" ref="left2" v-show="isSearch" style="width: 290px;">
 			<div class="left_box">
 				<div class="left_item" ref="areaBox" style="height: 100%;">
 					<title-top name="检索">
-						<div style="margin-right: 32px; flex: 1; text-align: right; font-size: 12px; color: #fff">共<span style="color: #10F6FF;">{{zsl}}</span>条</div>
+						<div style="margin-right: 32px; flex: 1; text-align: right; font-size: 12px; color: #fff">共<span style="color: #10F6FF;">{{totalSl}}</span>条</div>
 					</title-top>
 					<div class="search_form">
 						<div class="search_form_content">
@@ -73,7 +74,7 @@
 						        </FormItem>
 							</Form>
 						</div>
-						<div class="btn" @click="searchFxy">检索</div>
+						<div class="btn" @click="searchFxy(1)">检索</div>
 						<div class="bottom_line"></div>
 					</div>
 					<div class="search_list">
@@ -98,6 +99,7 @@
 					</div>
 				</div>
 			</div>
+			<div class="drag_line" @mousedown="dragLeft"></div>
 		</div>
 		<div class="trade_box" id="right" v-show="!isSearch">
 			<div class="right_box">
@@ -257,7 +259,7 @@
 	import PoiTj from '@/components/left/poi_tj'
 	import Trade from '@/components/right/trade'
 	import all_county from '@/common/area/all.json'
-	import minhou from '@/common/area/minhou.json'
+	import minhou from '@/common/area/mh.json'
 	export default {
 		name: 'poi',
 		components: {
@@ -289,22 +291,7 @@
 				reset: false,
 				map: null, // 地图
 				polygon: null, // 面对象
-				cityList: [
-					{"name": "上城区", dropName: "sc", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
-					{"name": "下城区", dropName: "xc", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
-					{"name": "西湖区", dropName: "xh", "polygon": null, color: '#1C86F3', index: 1, point: {x: -20, y: -10}, zoom: 11},
-					{"name": "江干区", dropName: "jg", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
-					{"name": "拱墅区", dropName: "gs", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
-					{"name": "滨江区", dropName: "bj", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
-					{"name": "萧山区", dropName: "xs", "polygon": null, color: '#F25E5E', index: 0, point: {x: -20, y: -10}},
-					{"name": "余杭区", dropName: "yh", "polygon": null, color: '#F49852', index: 0, point: {x: -20, y: -10}},
-					{"name": "临安区", dropName: "la", "polygon": null, color: '#EFE850', index: 0, point: {x: -20, y: -10}},
-					{"name": "富阳区", dropName: "fy", "polygon": null, color: '#F49852', index: 0, point: {x: -20, y: -10}},
-					{"name": "建德市", dropName: "jd", "polygon": null, color: '#F25E5E', index: 0, point: {x: -20, y: -10}},
-					{"name": "桐庐县", dropName: "tl", "polygon": null, color: '#EFE850', index: 0, point: {x: -20, y: -10}},
-					{"name": "淳安县", dropName: "ca", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}},
-					{"name": "钱塘新区", dropName: "qt", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 11}
-				],
+				cityList: [],
 				iconList: [{
 		            name: '风险点',
 		            id: 1,
@@ -421,10 +408,11 @@
 				// 		}
 				// 	}
 				// })
-    //         	this.labelList.forEach(item => {
-    //         		let opacity = item.NP == this.cityName ? 1 : 0.01
-    //         		item.setOpacity(opacity)
-    //         	})
+            	this.labelList.forEach(item => {
+            		let opacity = item.NP == this.cityName ? 1 : 0.01
+            		item.setOpacity(opacity)
+            	})
+				console.log(111)
 				// this.getFxysl(() => {
 				// 	this.clearOverlays()
 				// 	this.getFxy()
@@ -545,7 +533,7 @@
 					this.getFxysl(() => {
 						this.drawMunicipios();
 						this.clearOverlays()
-						this.isSearch ? this.searchFxy() : this.getFxy()
+						this.isSearch ? this.searchFxy(1) : this.getFxy()
 						
 					})
 				})
@@ -561,10 +549,13 @@
 				if(name == 'all') {
 					this.cityName = '全部'
 	            	this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 9);
+	            	this.getFxysl(this.getFxy)
+	            	
 				}else {
 					let item = this.cityList.find(item => item.dropName == name)
 					this.cityName = item.name;
 	            	this.map.centerAndZoom(item.latlng, zoom || 12);
+	            	this.getFxysl(this.getFxy)
 				}
 			},
 			selectLevel(item) {
@@ -595,15 +586,17 @@
 					let level = this.levelList.find(levelItem => fxdj == levelItem.name)
 					item.color = level ? level.color : item.color
 					let jsonData = {
-						'11': all_county,
+						'1': all_county,
 						'13': minhou
 					}
+					console.log(jsonData[this.xm_id].features)
 			        item.data = jsonData[this.xm_id].features.find(item_ => item_.properties.NAME == item.name)
 			        let points = [];
-					item.data.geometry.coordinates[0][0].forEach((item_, index) => {
-						if(index % 5 === 0) {
-							points.push(new T.LngLat(item_[0], item_[1]));
-						}
+					item.data.geometry.coordinates[0].forEach((item_, index) => {
+						// if(index % 5 === 0) {
+						// 	points.push(new T.LngLat(item_[0], item_[1]));
+						// }
+						points.push(new T.LngLat(item_[0], item_[1]));
 					})
 					item.polygon = new T.Polygon(points, {
 		                color: '#ffffff', weight: 2, opacity: 1, fillColor: 'transparent', fillOpacity: 0.5
@@ -621,7 +614,8 @@
 					this.labelList.push(label)
 					item.polygon.addEventListener("click", () => {
 		            	this.cityName = item.name;
-		            	this.map.centerAndZoom(item.latlng, 12);
+
+		            	this.map.centerAndZoom(item.latlng, 10);
 		            });
 		            item.polygon.addEventListener("mouseover", e => {
 		            	item.polygon.setFillOpacity(1)
@@ -650,7 +644,7 @@
 				}
 			},
 			async getFxysl(cb) {
-				let quyu = this.areaList.find(areaItem => areaItem.mc == this.cityName)
+				let quyu = this.cityList.find(item => item.dropName == this.cityName)
 				let params = {
 					xm_id: this.xm_id,
 					per_page: 10,
@@ -660,6 +654,7 @@
 				this.$store.state.industry && (params.fxylb = this.$store.state.industry.dm)
 				let { status_code: status_code_, fxdjsl, zsl } = await api.getFxyList(params)
 				this.zsl = zsl
+				console.log(this.zsl)
 				if(params.fxylb == 'jiayouzhan') {
 					let obj = {
 						'一级': '重大风险',
@@ -683,7 +678,8 @@
 			getFxy() {
 				let times = Math.ceil(this.zsl / 100)
 				this.riskPoints = []
-				let quyu = this.areaList.find(areaItem => areaItem.mc == this.cityName)
+				let quyu = this.cityList.find(item => item.dropName == this.cityName)
+				this.clearIcons()
 				for(let i = 0; i < times; i++) {
 					setTimeout(async () => {
 						let params = {
@@ -696,6 +692,7 @@
 						let { status_code, data } = await api.getFxyList(params)
 						if(status_code == 200) {
 							this.riskPoints = [...this.riskPoints, ...data.data]
+							console.log(this.riskPoints.length, this.zsl)
 							if(this.riskPoints.length == this.zsl) {
 								this.$store.dispatch('save_riskPoints', this.riskPoints)
 								this.drawRiskPoints(this.riskPoints)
@@ -759,7 +756,21 @@
 		        // this.map.clearOverLays()
 		        // this.drawMunicipios()
 			},
+			clearIcons() {
+		        let allOverlay = this.map.getOverlays();
+		        console.log(allOverlay)
+		        for (let i = allOverlay.length -1; i >= 0 ; i--){
+		            if(allOverlay[i].isIcon) {
+		        		console.log(allOverlay[i].isIcon)
+		                this.map.removeOverLay(allOverlay[i]);
+		            }
+		        }
+		        // document.getElementsByClassName('tdt-interactive').remove()
+		        // this.map.clearOverLays()
+		        // this.drawMunicipios()
+			},
 			drawRiskPoints(list) {
+				console.log(list)
 				let self = this
 				let markerArr = []
 				list.forEach(item => {
@@ -788,6 +799,7 @@
 			            //向地图上添加自定义标注
 			            let param1 = new T.LngLat(item.jd, item.wd)
 			            let marker = new T.Marker(param1, {icon: icon});
+			            marker.isIcon = true
 			            marker.item = {...item, LngLat: param1}
 			            marker.addEventListener("click", () => {
 			            	this.showInfo(item)
@@ -952,13 +964,14 @@
 					$('#right').slideUp();
 					$('#left2').slideDown();
 					this.clearOverlays()
-					this.searchFxy()
+					this.searchFxy(1)
 					this.$nextTick(() => {
 						$('.tdt-bottom').css('right', '0px')
 					})
 				}
 			},
 			async searchFxy(isSl) {
+				isSl && (this.currentPage = 1)
 				let params = {
 					xm_id: this.xm_id,
 					per_page: 10,
@@ -1051,15 +1064,30 @@
 					})
 				}
 			},
+			dragLeft(e) {
+				let elem = e.target
+				let distance = e.clientX - e.target.offsetLeft
+				document.onmousemove = e => {
+					this.$refs.left1.style.width = (e.clientX - distance) + 'px'
+					this.$refs.left2.style.width = (e.clientX - distance) + 'px'
+				}
+				document.onmouseup = e => {
+					document.onmousemove = null
+					document.onmouseup = null
+					// this.$nextTick(() => {
+					// 	this.$refs.trade_list.setHeight()
+					// })
+				}
+			},
 			rowClassName (row, index) {
                 return 'demo-table-info-row';
             }
 		},
 		async created() {
-
+			let cityList = []
 			if(this.xm_id == 13) {
 				let colorList = ['#1C86F3', '#F25E5E', '#F49852', '#EFE850', ]
-				this.cityList = minhou.features.filter(item => item.properties.NAME !== '闽侯县').map((item_, index) => {
+				cityList = minhou.features.filter(item => item.properties.NAME !== '闽侯县').map((item_, index) => {
 					return {
 						name: item_.properties.NAME,
 						dropName: item_.properties.NAME,
@@ -1070,19 +1098,38 @@
 						zoom: 12
 					}
 				})
+			}else if(this.xm_id == 1) {
+				cityList = [
+					{"name": "上城区", dropName: "sc", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
+					{"name": "下城区", dropName: "xc", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
+					{"name": "西湖区", dropName: "xh", "polygon": null, color: '#1C86F3', index: 1, point: {x: -20, y: -10}, zoom: 11},
+					{"name": "江干区", dropName: "jg", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
+					{"name": "拱墅区", dropName: "gs", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
+					{"name": "滨江区", dropName: "bj", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
+					{"name": "萧山区", dropName: "xs", "polygon": null, color: '#F25E5E', index: 0, point: {x: -20, y: -10}},
+					{"name": "余杭区", dropName: "yh", "polygon": null, color: '#F49852', index: 0, point: {x: -20, y: -10}},
+					{"name": "临安区", dropName: "la", "polygon": null, color: '#EFE850', index: 0, point: {x: -20, y: -10}},
+					{"name": "富阳区", dropName: "fy", "polygon": null, color: '#F49852', index: 0, point: {x: -20, y: -10}},
+					{"name": "建德市", dropName: "jd", "polygon": null, color: '#F25E5E', index: 0, point: {x: -20, y: -10}},
+					{"name": "桐庐县", dropName: "tl", "polygon": null, color: '#EFE850', index: 0, point: {x: -20, y: -10}},
+					{"name": "淳安县", dropName: "ca", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}},
+					{"name": "钱塘新区", dropName: "qt", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 11}
+				]
+
 			}
 			this.getTradeList()
 			let parent_ids = {
-				'11': 28,
+				'1': 28,
 				'13': 26
 			}
 			let { status_code, data } = await api.getAreaList({parent_id: parent_ids[this.xm_id], per_page: 1000})
 			if(status_code == 200) {
 				this.areaList = data.data
-				this.cityList.forEach(item => {
+				cityList.forEach(item => {
 					let item_ = this.areaList.find(areaItem => areaItem.mc == item.name)
 					item_ && (item.id = item_.id)
 				})
+				this.cityList = cityList
 			}
 			this.$nextTick(() => {
 				$('.tdt-bottom').css('right', this.isSearch ? '0px' : '400px')
@@ -1168,6 +1215,15 @@
 			width: 240px;
 			background: rgba(5,27,74,0.87);
 			overflow: hidden;
+			.drag_line {
+				position: absolute;
+				top: 0;
+				right: 0;
+				width: 3px;
+				height: 100%;
+				background: transparent;
+				cursor: ew-resize;
+			}
 			.left_box {
 				box-sizing: border-box;
 				width: 100%;
@@ -1349,7 +1405,7 @@
 					.trade_list {
 						height: 100%;
 						box-sizing: border-box;
-						padding-bottom: 24px;
+						// padding-bottom: 24px;
 					}
 					.header_select_dropdown_list {
 						padding-right: 20px;

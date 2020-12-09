@@ -373,9 +373,10 @@
 			},
 			overviewXm(row) {
 				this.$storage.set('xm', row)
-				this.$router.push({
-					name: 'area'
-				})
+				// this.$router.push({
+				// 	name: 'area'
+				// })
+				window.open(location.href.split('/#')[0] + '/#/area')
 			},
 			viewXmModel(row) {
 				this.xmForm = {

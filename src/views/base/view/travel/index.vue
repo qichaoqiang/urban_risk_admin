@@ -27,7 +27,8 @@
 				            </Select>
 				        </FormItem>
 				        <FormItem label="景区营业时间">
-				        	<TimePicker type="timerange" confirm v-model="baseInfo.jqyysj" placeholder="景区营业时间"></TimePicker>
+				        	<TimePicker type="time" confirm v-model="baseInfo.jqyysj1" placeholder="开始时间" style="width: 168px"></TimePicker>
+				        	<TimePicker type="time" confirm v-model="baseInfo.jqyysj2" placeholder="结束时间" style="margin-left: 20px; width: 168px"></TimePicker>
 				        </FormItem>
 				        <FormItem label="地址" prop="dz">
 				        	<Input clearable v-model="baseInfo.dz" placeholder="请输入地址"></Input>
@@ -684,9 +685,16 @@
 		},
 		computed: {
 			rules() {
+				const validatorLng = (rule, value, callback) => {
+					if (!this.baseInfo.lngAndLat) {
+	                    callback(new Error('请输入'));
+	                } else {
+	                    callback();
+	                }
+				}
 				return {
                 	dz: [{ required: true, message: '请输入', trigger: 'change' }],
-                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	// lngAndLat: [{ required: true, validator: validatorLng, trigger: 'change' }],
                 	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
                 }
             }
@@ -697,11 +705,8 @@
 				if(status_code == 0) {
 					this.form = data;
 					let { jbr, jbrdh, jbryx, lyjdmc, tyshxydm, jydw, quyu_id, jd, wd, jqdj, hydm, yxzt, jqyysj1, jqyysj2, jqjs, kjdzdlksl, rjrl, dyfw, dz} = this.form
-					this.baseInfo = { lyjdmc, tyshxydm, jydw, jqdj, hydm, yxzt, jqjs, dyfw, dz, jbr, jbrdh, jbryx }
+					this.baseInfo = { lyjdmc, tyshxydm, jydw, jqdj, hydm, yxzt, jqyysj1, jqyysj2, jqjs, dyfw, dz, jbr, jbrdh, jbryx }
 					this.baseInfo.kysj = this.form.kysj ? new Date(this.form.kysj) : '';
-					jqyysj1 = jqyysj1 ? jqyysj1 : ''
-					jqyysj2 = jqyysj2 ? jqyysj2 : ''
-					this.baseInfo.jqyysj = [jqyysj1, jqyysj2];
 					this.baseInfo.lngAndLat = jd && wd ? `${(jd - 0).toFixed(6)} ${(wd - 0).toFixed(6)}` : ''
 					this.mostForm = { kjdzdlksl, rjrl }
 					this.getQy()
@@ -720,8 +725,8 @@
 					quyu_id: this.baseInfo.quyu[this.baseInfo.quyu.length - 1],
 					...this.baseInfo,
 					kysj: this.baseInfo.kysj ? getDate(new Date(this.baseInfo.kysj).getTime(), 'date') : '',
-					jqyysj1: this.baseInfo.jqyysj[0],
-					jqyysj2: this.baseInfo.jqyysj[1],
+					jqyysj1: this.baseInfo.jqyysj1,
+					jqyysj2: this.baseInfo.jqyysj2,
 					// hyml: this.baseInfo.hyml[this.baseInfo.hyml.length - 1],
 					jd: this.baseInfo.lngAndLat.split(' ')[0],
 					wd: this.baseInfo.lngAndLat.split(' ')[1],

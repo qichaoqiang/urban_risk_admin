@@ -31,7 +31,7 @@
 					            	placeholder="风险源类别"></Cascader>
 							</Col>
 							<Col span="6">
-								<Input clearable type="tel" v-model="searchFxyForm.fxymc"></Input>
+								<Input clearable type="tel" v-model="searchFxyForm.fxymc" placeholder="风险源名称"></Input>
 							</Col>
 							<Col span="6">
 								<Button type="primary" icon="ios-search" @click="getFxyList(1)">搜索</Button>
@@ -41,7 +41,7 @@
 					<Col span="12">
 						<Row type="flex" justify="end" align="middle" :gutter="24">
 				            <Poptip v-if="selectFxyList.length > 0"" confirm placement="left-end" :transfer="true" title="确认删除选中数据吗？" @on-ok="deleteFxy" style="padding: 0 12px">
-						        <Button type="error" ghost>批量删除</Button>
+						        <Button type="error" ghost v-if="hasAuth('fxylb_destroy')">批量删除</Button>
 						    </Poptip>
 							<Col v-else>
 								<Button type="error" ghost  @click="deleteFxy">批量删除</Button>
@@ -261,43 +261,6 @@
 					pageIndex: 1,
 					totalRow: 0
 				},
-				fxyColumns: [
-					{
-                        type: 'selection',
-                        width: 60,
-                        align: 'center'
-                    }, {
-                        title: "序号",
-						// fixed: 'left',
-				        key: "id",
-				        width: 80,
-				        align: "center",
-				        render: (h, params) => {
-				            return h('span',params.index + (this.fxyPage.pageIndex- 1) * this.fxyPage.pageSize + 1);
-				        }
-                    }, {
-                        title: '风险源名称',
-                        slot: 'fxymc',
-                        minWidth: 200
-                    }, {
-                        title: '风险源类别',
-                        key: 'fxylbmc',
-                        minWidth: 180
-                    }, {
-                        title: '风险值',
-                        key: 'fxz',
-                        minWidth: 100
-                    }, {
-                        title: '风险源等级',
-                        slot: 'fxdj',
-                        minWidth: 120
-                    }, {
-                        title: '操作',
-                        slot: 'action',
-                        width: 200,
-                        fixed: 'right'
-                    }
-				],
 				fxyData: [],
 				fxyForm: {
 					fxymc: '',
@@ -433,6 +396,49 @@
 					dz: [{ required: true, message: '请输入', trigger: 'change' }],
 				}
 			},
+			fxyColumns() {
+				let list = [
+					{
+                        title: "序号",
+						// fixed: 'left',
+				        key: "id",
+				        width: 80,
+				        align: "center",
+				        render: (h, params) => {
+				            return h('span',params.index + (this.fxyPage.pageIndex- 1) * this.fxyPage.pageSize + 1);
+				        }
+                    }, {
+                        title: '风险源名称',
+                        slot: 'fxymc',
+                        minWidth: 200
+                    }, {
+                        title: '风险源类别',
+                        key: 'fxylbmc',
+                        minWidth: 180
+                    }, {
+                        title: '风险值',
+                        key: 'fxz',
+                        minWidth: 100
+                    }, {
+                        title: '风险源等级',
+                        slot: 'fxdj',
+                        minWidth: 120
+                    }, {
+                        title: '操作',
+                        slot: 'action',
+                        width: 200,
+                        fixed: 'right'
+                    }
+				]
+				if(this.hasAuth('fxylb_destroy')) {
+					list.unshift({
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    })
+				}
+				return list
+			}
 		},
 		methods: {
 			handleChangeXmPage(val) {

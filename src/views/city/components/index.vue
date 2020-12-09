@@ -6,7 +6,7 @@
 					<Button type="primary" ghost icon="md-arrow-back" @click="$router.back()"></Button>
 					<RadioGroup v-model="tab" type="button">
 						<Radio label="基本信息"></Radio>
-						<Radio label="风险信息" v-if="!noRisk.includes($route.name)"></Radio>
+						<Radio label="风险信息" v-if="!noRisk.includes(path)"></Radio>
 						<Radio label="风险分级"></Radio>
 					</RadioGroup>
 				</Row>
@@ -66,7 +66,8 @@
 					fxdj: this.$storage.get('fxyInfo') ? this.$storage.get('fxyInfo').fxdj : '',
 				},
 				fxdjList: ['重大风险', '较大风险', '一般风险', '低风险'],
-				noRisk: ['rfgc', 'fkjbq']
+				noRisk: ['rfgc', 'fkjbq', 'wf', 'hp', 'dwyldd', 'dzzhyhd'],
+				path,
 			}
 		},
 		methods: {

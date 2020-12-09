@@ -102,7 +102,15 @@
 	import TradeOrder from '@/components/left/tradeOrder'
 	import AreaIndustryOrder from '@/components/left/areaIndustryOrder'
 	import all_county from '@/common/area/all.json'
-	import minhou from '@/common/area/minhou.json'
+	import minhou from '@/common/area/mh.json'
+	all_county.features.forEach(item => {
+		console.log(item.properties.NAME, item.geometry.coordinates[0][0].filter((item_, index_) => index_ % 5 === 0))
+	})
+	// item.data = jsonData[this.xm_id].features.find(item_ => item_.properties.NAME == item.name)
+ //    let points = [];
+	// item.data.geometry.coordinates[0][0].forEach(item_ => {
+	// 	points.push(new T.LngLat(item_[0], item_[1]));
+	// })
 	export default {
 		name: 'poi',
 		components: {
@@ -127,22 +135,7 @@
 				reset: false,
 				map: null, // 地图
 				polygon: null, // 面对象
-				cityList: [
-					{"name": "上城区", dropName: "sc", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
-					{"name": "下城区", dropName: "xc", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
-					{"name": "西湖区", dropName: "xh", "polygon": null, color: '#1C86F3', index: 1, point: {x: -20, y: -10}, zoom: 11},
-					{"name": "江干区", dropName: "jg", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
-					{"name": "拱墅区", dropName: "gs", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
-					{"name": "滨江区", dropName: "bj", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
-					{"name": "萧山区", dropName: "xs", "polygon": null, color: '#F25E5E', index: 0, point: {x: -20, y: -10}},
-					{"name": "余杭区", dropName: "yh", "polygon": null, color: '#F49852', index: 0, point: {x: -20, y: -10}},
-					{"name": "临安区", dropName: "la", "polygon": null, color: '#EFE850', index: 0, point: {x: -20, y: -10}},
-					{"name": "富阳区", dropName: "fy", "polygon": null, color: '#F49852', index: 0, point: {x: -20, y: -10}},
-					{"name": "建德市", dropName: "jd", "polygon": null, color: '#F25E5E', index: 0, point: {x: -20, y: -10}},
-					{"name": "桐庐县", dropName: "tl", "polygon": null, color: '#EFE850', index: 0, point: {x: -20, y: -10}},
-					{"name": "淳安县", dropName: "ca", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}},
-					{"name": "钱塘新区", dropName: "qt", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 11}
-				],
+				cityList: [],
 				riskPoints: [
 					{
 						id: 1,
@@ -445,12 +438,12 @@
 					let level = this.levelList.find(levelItem => fxdj == levelItem.name)
 					item.color = level ? level.color : '#999'
 			        let jsonData = {
-						'11': all_county,
+						'1': all_county,
 						'13': minhou
 					}
 			        item.data = jsonData[this.xm_id].features.find(item_ => item_.properties.NAME == item.name)
 			        let points = [];
-					item.data.geometry.coordinates[0][0].forEach(item_ => {
+					item.data.geometry.coordinates[0].forEach(item_ => {
 						points.push(new T.LngLat(item_[0], item_[1]));
 					})
 					console.log(points)
@@ -471,7 +464,7 @@
 					this.labelList.push(label)
 					item.polygon.addEventListener("click", () => {
 		            	this.cityName = item.name;
-		            	this.map.centerAndZoom(item.latlng, 11);
+		            	this.map.centerAndZoom(item.latlng, 1);
 		            });
 		            item.polygon.addEventListener("mouseover", e => {
 		            	item.polygon.setFillOpacity(1)
@@ -501,6 +494,7 @@
 				let { status_code, data } = await api.getQyfxList({})
 				if(status_code == 200) {
 					this.qyfxList = data
+					console.log(this.qyfxList)
 					cb && cb()
 				}
 			},
@@ -562,10 +556,10 @@
 
 		},
 		async created() {
+			let cityList = []
 			if(this.xm_id == 13) {
 				let colorList = ['#1C86F3', '#F25E5E', '#F49852', '#EFE850', ]
-				this.cityList = minhou.features.filter(item => item.properties.NAME !== '闽侯县').map((item_, index) => {
-					console.log(colorList[index % colorList.length])
+				cityList = minhou.features.filter(item => item.properties.NAME !== '闽侯县').map((item_, index) => {
 					return {
 						name: item_.properties.NAME,
 						dropName: item_.properties.NAME,
@@ -576,19 +570,38 @@
 						zoom: 12
 					}
 				})
+			}else if(this.xm_id == 1) {
+				cityList = [
+					{"name": "上城区", dropName: "sc", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
+					{"name": "下城区", dropName: "xc", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
+					{"name": "西湖区", dropName: "xh", "polygon": null, color: '#1C86F3', index: 1, point: {x: -20, y: -10}, zoom: 11},
+					{"name": "江干区", dropName: "jg", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
+					{"name": "拱墅区", dropName: "gs", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
+					{"name": "滨江区", dropName: "bj", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 12},
+					{"name": "萧山区", dropName: "xs", "polygon": null, color: '#F25E5E', index: 0, point: {x: -20, y: -10}},
+					{"name": "余杭区", dropName: "yh", "polygon": null, color: '#F49852', index: 0, point: {x: -20, y: -10}},
+					{"name": "临安区", dropName: "la", "polygon": null, color: '#EFE850', index: 0, point: {x: -20, y: -10}},
+					{"name": "富阳区", dropName: "fy", "polygon": null, color: '#F49852', index: 0, point: {x: -20, y: -10}},
+					{"name": "建德市", dropName: "jd", "polygon": null, color: '#F25E5E', index: 0, point: {x: -20, y: -10}},
+					{"name": "桐庐县", dropName: "tl", "polygon": null, color: '#EFE850', index: 0, point: {x: -20, y: -10}},
+					{"name": "淳安县", dropName: "ca", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}},
+					{"name": "钱塘新区", dropName: "qt", "polygon": null, color: '#1C86F3', index: 0, point: {x: -20, y: -10}, zoom: 11}
+				]
+
 			}
 			this.getTradeList()
 			let parent_ids = {
-				'11': 28,
+				'1': 28,
 				'13': 26
 			}
 			let { status_code, data } = await api.getAreaList({parent_id: parent_ids[this.xm_id], per_page: 1000})
 			if(status_code == 200) {
 				this.areaList = data.data
-				this.cityList.forEach(item => {
+				cityList.forEach(item => {
 					let item_ = this.areaList.find(areaItem => areaItem.mc == item.name)
 					item_ && (item.id = item_.id)
 				})
+				this.cityList = cityList
 			}
 		},
 		mounted() {

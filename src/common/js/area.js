@@ -44,6 +44,7 @@ export default {
 							map(quyu[depth])
 						}else {
 							this.baseInfo.quyu = quyu;
+							console.log(this.baseInfo.quyu)
 							if(this.baseInfo.hyml && this.form.fhybhc_bhzj) {
 								this.loading = this.baseInfo.hyml.length == 0
 							}else {

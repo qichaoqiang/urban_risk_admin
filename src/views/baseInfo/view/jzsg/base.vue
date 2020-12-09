@@ -39,7 +39,7 @@
 				        	<DatePicker type="date" v-model="baseInfo.lxsj"  placeholder="立项时间"></DatePicker>
 				        </FormItem>
 				        <FormItem label="工程造价(元)">
-				            InputNumber :min="0" v-model="baseInfo.gczj" placeholder="工程造价"></InputNumber>
+				            <InputNumber :min="0" v-model="baseInfo.gczj" placeholder="工程造价"></InputNumber>
 				        </FormItem>
 				        <FormItem label="地址">
 				        	<Input clearable v-model="baseInfo.dz" placeholder="地址"></Input>
@@ -92,7 +92,7 @@
 					<part-title text="建筑物信息"></part-title>
 					<Form disabled :model="baseInfo" label-position="left" :label-width="140" style="width: 600px">
 				        <FormItem label="建筑面积（㎡）">
-				        	InputNumber :min="0" v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	

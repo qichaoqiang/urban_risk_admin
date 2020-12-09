@@ -58,6 +58,9 @@
 		        <FormItem label="密码" prop="password">
 		        	<Input autocomplete="new-password" clearable type="password" v-model="adminForm.password"></Input>
 		        </FormItem>
+		        <FormItem label="确认密码" prop="password">
+		        	<Input autocomplete="new-password" clearable type="password" v-model="confirmPassword"></Input>
+		        </FormItem>
 		        <FormItem label="姓名" prop="nickname">
 		        	<Input clearable v-model="adminForm.nickname"></Input>
 		        </FormItem>
@@ -163,6 +166,7 @@
 					quyu: [],
 					xm_id: []
 				},
+				confirmPassword: '',
 				adminPage: {
 					pageSize: 10,
 					pageIndex: 1,
@@ -283,6 +287,10 @@
 			async saveAdmin() {
 				this.$refs.admin.validate(async valid => {
                     if (valid) {
+                    	if(this.adminForm.password !== this.confirmPassword) {
+                    		this.$Message.error('两次密码输入不一致')
+                    		return
+                    	}
                     	this.adminLoading = true
 						let params = {
 							...this.adminForm,
@@ -314,6 +322,7 @@
 	        },
 	        async getRoleList() {
 				let params = {
+					from: 'create_account',
 					per_page: 1000,
 					page: 1
 				}

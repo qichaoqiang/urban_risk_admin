@@ -34,7 +34,7 @@
 				        	<DatePicker type="date" v-model="baseInfo.lxsj"  placeholder="立项时间"></DatePicker>
 				        </FormItem>
 				        <FormItem label="工程造价(元)" prop="gczj">
-				            InputNumber :min="0" v-model="baseInfo.gczj" placeholder="工程造价"></InputNumber>
+				            <InputNumber :min="0" v-model="baseInfo.gczj" placeholder="工程造价"></InputNumber>
 				        </FormItem>
 				        <FormItem label="地址" prop="dz">
 				        	<Input clearable v-model="baseInfo.dz" placeholder="地址"></Input>
@@ -109,7 +109,7 @@
 					<part-title text="建筑物信息"></part-title>
 					<Form :model="baseInfo" ref="jzInfo" :rules="rules" hide-required-mark label-position="left" :label-width="120" style="width: 600px">
 						<FormItem label="建筑面积（㎡）" prop="jzmj">
-				        	InputNumber :min="0" v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
+				        	<InputNumber :min="0" v-model="baseInfo.jzmj" placeholder="建筑面积"></InputNumber>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -651,9 +651,16 @@
 				return this.unitType ? list[this.unitType - 1] : ''
 			},
 			rules() {
+				const validatorLng = (rule, value, callback) => {
+					if (!this.baseInfo.lngAndLat) {
+	                    callback(new Error('请输入'));
+	                } else {
+	                    callback();
+	                }
+				}
 				return {
                 	dz: [{ required: true, message: '请输入', trigger: 'change' }],
-                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	// lngAndLat: [{ required: true, validator: validatorLng, trigger: 'change' }],
                 	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
 					// xmsslx: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
      //            	lxspbm: [{ required: true, message: '请输入', trigger: 'change' }],

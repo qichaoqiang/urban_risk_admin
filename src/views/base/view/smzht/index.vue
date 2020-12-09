@@ -23,7 +23,8 @@
 				            <DatePicker type="date" v-model="baseInfo.tysj"  placeholder="请选择"></DatePicker>
 				        </FormItem>
 				        <FormItem label="营业时间">
-				        	<TimePicker type="timerange" confirm v-model="baseInfo.yysj" placeholder="营业时间"></TimePicker>
+				        	<TimePicker type="time" placeholder="开始时间" v-model="baseInfo.yysj1" style="width: 168px"></TimePicker>
+				        	<TimePicker type="time" placeholder="结束时间" v-model="baseInfo.yysj2" style="margin-left: 20px; width: 168px"></TimePicker>
 				        </FormItem>
 				        <FormItem label="业态">
 				        	<Select clearable multiple v-model="baseInfo.yt" placeholder="业态">
@@ -968,9 +969,16 @@
 		},
 		computed: {
 			rules() {
+				const validatorLng = (rule, value, callback) => {
+					if (!this.baseInfo.lngAndLat) {
+	                    callback(new Error('请输入'));
+	                } else {
+	                    callback();
+	                }
+				}
 				return {
                 	dz: [{ required: true, message: '请输入', trigger: 'change' }],
-                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	// lngAndLat: [{ required: true, validator: validatorLng, trigger: 'change' }],
                 	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
                 }
             }
@@ -982,11 +990,7 @@
 					this.form = data;
 					let { mc, tyshxydm, hydm, yysj1, yysj2, yxzt, yydw, kfdw, splx, jbr, jbrdh, jbryx, zhtfzr, zhtfzrdh, fgaqfzr, fgaqfzrdh, dz, lngAndLat, dyfw, jzzdmj, ztjzcs, tysj, jzlx, yt, gm } = this.form
 					this.baseInfo = { mc, tyshxydm, hydm, yysj1, yysj2, yxzt, yydw, kfdw, splx, jbr, jbrdh, jbryx, zhtfzr, zhtfzrdh, fgaqfzr, fgaqfzrdh, dz, lngAndLat, dyfw, jzlx, gm }
-					this.baseInfo.yysj = [yysj1, yysj2]
-					yysj1 = yysj1 ? yysj1 : ''
-					yysj2 = yysj2 ? yysj2 : ''
 					this.baseInfo.tysj = tysj ? new Date(tysj) : ''
-					this.baseInfo.yysj = [yysj1, yysj2];
 					this.baseInfo.jzzdmj = jzzdmj ? Number(jzzdmj) : 0
 					this.baseInfo.ztjzcs = ztjzcs ? Number(ztjzcs) : 0
 					this.baseInfo.yt = yt ? yt.split(',') : []
@@ -1005,8 +1009,8 @@
 			async submit() {
 				let params = {
 					...this.baseInfo,
-					yysj1: this.baseInfo.yysj[0],
-					yysj2: this.baseInfo.yysj[1],
+					yysj1: this.baseInfo.yysj1,
+					yysj2: this.baseInfo.yysj2,
 					tysj: this.baseInfo.tysj ? getDate(new Date(this.baseInfo.tysj).getTime(), 'date') : '',
 					yt: this.baseInfo.yt.join(','),
 					hyml: this.baseInfo.hyml[this.baseInfo.hyml.length - 1],

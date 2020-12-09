@@ -7,8 +7,11 @@
 					<div class="title">请完善{{step == 1 ? '企业' : '风险'}}信息</div>
 					<part-title text="基本信息"></part-title>
 					<Form :model="baseInfo" ref="baseInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
-						<FormItem label="企业名称">
-				            {{baseInfo.qymc}}
+						<FormItem label="码头名称">
+				            {{baseInfo.mtmc}}
+				        </FormItem>
+				        <FormItem label="企业名称">
+				        	<Input clearable v-model="baseInfo.qymc" placeholder="企业名称"></Input>
 				        </FormItem>
 				        <FormItem label="所属区域" prop="quyu">
 				            <Cascader 
@@ -59,6 +62,15 @@
 				        </FormItem>
 				        <FormItem label="注册地址" prop="zcdz">
 				        	<Input clearable v-model="baseInfo.zcdz" placeholder="注册地址"></Input>
+				        </FormItem>
+				        <FormItem label="所在港区名称" prop="szgqmc">
+				        	<Input clearable v-model="baseInfo.szgqmc" placeholder="所在港区名称"></Input>
+				        </FormItem>
+
+				        <FormItem label="是否开展夜间作业" prop="sfkzyjzy">
+				        	<Select clearable v-model="baseInfo.sfkzyjzy">
+				                <Option v-for="item in sfzgyyList" :key="item.value" :value="item.value">{{item.name}}</Option>
+				            </Select>
 				        </FormItem>
 					</Form>
 				</Col>	
@@ -948,9 +960,16 @@
 		},
 		computed: {
 			rules() {
+				const validatorLng = (rule, value, callback) => {
+					if (!this.baseInfo.lngAndLat) {
+	                    callback(new Error('请输入'));
+	                } else {
+	                    callback();
+	                }
+				}
 				return {
                 	mtdz: [{ required: true, message: '请输入', trigger: 'change' }],
-                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	// lngAndLat: [{ required: true, validator: validatorLng, trigger: 'change' }],
                 	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
 					// yxzt: [{ required: true, message: '请选择', trigger: 'change' }],
      //            	hyml: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
@@ -978,11 +997,12 @@
 				let { status_code, data, message } = await api.getKymtBase(this.gkdx_id);
 				if(status_code == 0) {
 					this.form = data;
-					let { qymc, tyshxydm, zcdz, zgrs, glrysl, hyml, hydm, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, lngAndLat, jydyfw, tysj, mtdz } = this.form
-					this.baseInfo = { qymc, tyshxydm, zcdz, hydm, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, jydyfw, mtdz, zgrs, glrysl }
+					let { mtmc, qymc, tyshxydm, zcdz, zgrs, glrysl, hyml, hydm, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, lngAndLat, jydyfw, tysj, mtdz, szgqmc, sfkzyjzy } = this.form
+					this.baseInfo = { mtmc, qymc, tyshxydm, zcdz, hydm, yxzt, jbr, jbrdh, jbryx, qyfzr, qyfzrdh, fgaqfzr, fgaqfzrdh, jydyfw, mtdz, szgqmc, sfkzyjzy, zgrs, glrysl }
 					this.baseInfo.tysj = tysj ? new Date(tysj) : ''
 					this.baseInfo.zgrs = zgrs ? Number(zgrs) : 0
 					this.baseInfo.glrysl = glrysl ? Number(glrysl) : 0
+					this.baseInfo.sfkzyjzy = sfkzyjzy ? Number(sfkzyjzy) : 0
 					this.baseInfo.yxzt = yxzt || ''
 					this.baseInfo.jydyfw = jydyfw || ''
 					this.baseInfo.jbr = jbr || ''

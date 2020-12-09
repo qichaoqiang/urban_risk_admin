@@ -31,7 +31,8 @@
 				            <DatePicker type="date" v-model="baseInfo.tysj"  placeholder="请选择"></DatePicker>
 				        </FormItem>
 				        <FormItem label="营业时间">
-				        	<TimePicker type="timerange" confirm v-model="baseInfo.yysj" placeholder="营业时间"></TimePicker>
+				        	<TimePicker type="time" confirm v-model="baseInfo.yysj1" placeholder="开始时间" style="width: 168px"></TimePicker>
+				        	<TimePicker type="time" confirm v-model="baseInfo.yysj2" placeholder="结束时间" style="margin-left: 20px; width: 168px"></TimePicker>
 				        </FormItem>
 				        <FormItem label="运营状态">
 				        	<Select clearable v-model="baseInfo.yyzt" placeholder="运营状态">
@@ -243,9 +244,16 @@
 		},
 		computed: {
 			rules() {
+				const validatorLng = (rule, value, callback) => {
+					if (!this.baseInfo.lngAndLat) {
+	                    callback(new Error('请输入'));
+	                } else {
+	                    callback();
+	                }
+				}
 				return {
                 	dz: [{ required: true, message: '请输入', trigger: 'change' }],
-                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	// lngAndLat: [{ required: true, validator: validatorLng, trigger: 'change' }],
                 	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
                 }
             }
@@ -256,10 +264,7 @@
 				if(status_code == 0) {
 					this.form = data;
 					let { cgmc, tyshxydm, hydm, yyzt, jbr, jbrdh, jbryx, cgfzr, cgfzrdh, fgaqfzr, fgaqfzrdh, lngAndLat, tysj, dz, dyfw, gldw, cglx, zdmj, yysj1, yysj2, cgjj } = this.form
-					this.baseInfo = { cgmc, tyshxydm, hydm, yyzt, jbr, jbrdh, jbryx, cgfzr, cgfzrdh, fgaqfzr, fgaqfzrdh, lngAndLat, dz, dyfw, gldw, cglx, cgjj }
-					yysj1 = yysj1 ? yysj1 : ''
-					yysj2 = yysj2 ? yysj2 : ''
-					this.baseInfo.yysj = [yysj1, yysj2];
+					this.baseInfo = { cgmc, tyshxydm, hydm, yyzt, jbr, jbrdh, jbryx, cgfzr, cgfzrdh, fgaqfzr, fgaqfzrdh, lngAndLat, dz, dyfw, gldw, cglx,  yysj1, yysj2, cgjj }
 					this.baseInfo.tysj = tysj ? new Date(tysj) : ''
 					this.baseInfo.zdmj = zdmj ? Number(zdmj): 0
 					this.baseInfo.lngAndLat = this.form.jd && this.form.wd ? `${this.form.jd} ${this.form.wd}` : ''
@@ -277,8 +282,8 @@
 			async submit() {
 				let params = {
 					...this.baseInfo,
-					yysj1: this.baseInfo.yysj[0],
-					yysj2: this.baseInfo.yysj[1],
+					yysj1: this.baseInfo.yysj1,
+					yysj2: this.baseInfo.yysj2,
 					tysj: this.baseInfo.tysj ? getDate(new Date(this.baseInfo.tysj).getTime(), 'date') : '',
 					// hyml: this.baseInfo.hyml[this.baseInfo.hyml.length - 1],
 					quyu_id: this.baseInfo.quyu[this.baseInfo.quyu.length - 1],

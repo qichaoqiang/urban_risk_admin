@@ -8,9 +8,6 @@
 					<part-title text="基本信息"></part-title>
 					<Form :model="baseInfo" ref="baseInfo" :rules="rules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 						<FormItem label="企业名称">
-				            {{baseInfo.mc}}
-				        </FormItem>
-						<FormItem label="企业名称">
 				            {{baseInfo.qymc}}
 				        </FormItem>
 				        <FormItem label="注册地址" prop="zcdz">
@@ -573,10 +570,17 @@
 	                    callback();
 	                }
 				}
+				const validatorLng = (rule, value, callback) => {
+					if (!this.baseInfo.lngAndLat) {
+	                    callback(new Error('请输入'));
+	                } else {
+	                    callback();
+	                }
+				}
 				return {
                 	quyu: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
                 	jydz: [{ required: true, message: '请输入', trigger: 'change' }],
-                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	// lngAndLat: [{ required: true,  validator: validatorLng, trigger: 'change' }],
                 	// hyml: [{ required: true, type: 'array', message: '请选择', trigger: 'change' }],
                 	// zcdz: [{ required: true, message: '请输入', trigger: 'change' }],
                 	// hydm: [{ required: true, message: '请输入', trigger: 'change' }],

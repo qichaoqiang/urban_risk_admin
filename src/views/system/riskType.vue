@@ -2,7 +2,7 @@
 	<div class="user_container">
 		<Row type="flex" justify="space-between" align="middle">
 			<div class="title">风险源类别</div>
-			<Button v-if="hasAuth(`${parents[0] ? parents[parents.length - 1].dm : 'fengxianyuanleibie'}_store`)" type="primary" @click="openFxylbModel" style="width: 60px">
+			<Button v-if="hasAuth('fengxianyuanleibie')" type="primary" @click="openFxylbModel" style="width: 60px">
 				<Icon type="ios-add" size="28" />
 			</Button>
 		</Row>
@@ -32,9 +32,9 @@
 					<span>{{row.created_at.split(' ')[0]}}</span>
 				</template>
 				<template slot-scope="{ row }" slot="action">
-					<Button v-if="hasAuth(`${row.dm}_show`)" type="primary" size="small" ghost style="margin-right: 5px" @click="viewFxylbModel(row)">查看</Button>
-					<Button v-if="hasAuth(`${row.dm}_update`)" type="primary" size="small" ghost style="margin-right: 5px" @click="editFxylbModel(row)">编辑</Button>
-		            <Poptip v-if="hasAuth(`${row.dm}_destroy`)" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeFxylb(row)">
+					<Button type="primary" size="small" ghost style="margin-right: 5px" @click="viewFxylbModel(row)">查看</Button>
+					<Button type="primary" size="small" ghost style="margin-right: 5px" @click="editFxylbModel(row)">编辑</Button>
+		            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeFxylb(row)">
 				        <Button type="error" size="small" ghost>删除</Button>
 				    </Poptip>
 				</template>
@@ -161,7 +161,6 @@
 			}
 		},
 		watch: {
-
 		},
 		computed: {
 			fxylbRules() {
@@ -284,10 +283,10 @@
                 })
 			},
 			open(row) {
-				if(!this.hasAuth(row.dm)) {
-					this.$Message.warning('暂无权限查看该项子列表')
-					return
-				}
+				// if(!this.hasAuth(row.dm)) {
+				// 	this.$Message.warning('暂无权限查看该项子列表')
+				// 	return
+				// }
 				this.parents.push(row)
 				this.getFxylbData()
 			},
@@ -310,7 +309,6 @@
 			}, 'id')
 		},
 		mounted() {
-
 		}
 	}
 </script>

@@ -69,6 +69,15 @@ let state = {
 		fangkongjingbaoqidianwei: 'fkbjq',
 		shusanjidi: 'ssjd',
 		ditie: 'dt',
+		ditiejianshe: 'dtjs',
+		ditieyunxing: 'dtyx',
+		zadao: 'zd',
+		shuishanghuoyun: 'sshy',
+		gonglukeyunzhan: 'glkyz',
+		weifang: 'wf',
+		huapo: 'hp',
+		diwayilaodidai: 'dwyldd',
+		dizhizaihaiyinhuandian: 'dzzhyhd'
 	}
 }
 

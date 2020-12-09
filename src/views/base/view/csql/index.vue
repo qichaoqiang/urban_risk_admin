@@ -70,8 +70,8 @@
 				        <FormItem label="地震区划等级（峰值加速度g）">
 				            <InputNumber :min="0" v-model="baseInfo.dzqhdjfzjsdg"></InputNumber>
 				        </FormItem>
-				        <FormItem label="投用时间" prop="zysj">
-				            <DatePicker type="date" v-model="baseInfo.zysj"  placeholder="请选择"></DatePicker>
+				        <FormItem label="投用时间" prop="tysj">
+				            <DatePicker type="date" v-model="baseInfo.tysj"  placeholder="请选择"></DatePicker>
 				        </FormItem>
 				        <FormItem label="桥梁简介" prop="qljj">
 				        	<Input clearable type="textarea" :rows="4" v-model="baseInfo.qljj" placeholder="桥梁简介"></Input>
@@ -966,15 +966,22 @@
 	                }
 				}
 				const validatorZysj = (rule, value, callback) => {
-					if (!this.baseInfo.zysj) {
+					if (!this.baseInfo.tysj) {
 						callback(new Error('请选择'));
+	                } else {
+	                    callback();
+	                }
+				}
+				const validatorLng = (rule, value, callback) => {
+					if (!this.baseInfo.lngAndLat) {
+	                    callback(new Error('请输入'));
 	                } else {
 	                    callback();
 	                }
 				}
 				return {
                 	quyu: [{ required: true, validator: validatorQuyu, trigger: 'change' }],
-                	lngAndLat: [{ required: true, message: '请选择', trigger: 'change' }],
+                	// lngAndLat: [{ required: true,  validator: validatorLng, trigger: 'change' }],
                 	dz: [{ required: true, message: '请输入', trigger: 'change' }],
                 	// aqscbzh: [{ required: true, message: '请输入', trigger: 'change' }],
                 	// gldw: [{ required: true, message: '请输入', trigger: 'change' }],
@@ -984,7 +991,7 @@
                 	// sgdw: [{ required: true, message: '请输入', trigger: 'change' }],
                 	// sgdwtyshxydm: [{ required: true, message: '请输入', trigger: 'change' }],
                 	// jgsj: [{ required: true, validator: validatorJgsj, trigger: 'change' }],
-                	// zysj: [{ required: true, validator: validatorZysj, trigger: 'change' }],
+                	// tysj: [{ required: true, validator: validatorZysj, trigger: 'change' }],
                 	// qljj: [{ required: true, message: '请输入', trigger: 'change' }],
                 	// jbr: [{ required: true, message: '请输入', trigger: 'change' }],
                 	// jbrdh: [{ required: true, message: '请输入', trigger: 'change' }],
@@ -999,10 +1006,10 @@
 				let { status_code, data, message } = await api.getCsqlBase(this.gkdx_id);
 				if(status_code == 0) {
 					this.form = data;
-					let { qlmc, tyshxydm, dzqhdjfzjsdg, jbr, jbrdh, jbryx, fzr, fzrdh, lngAndLat, jgsj, zysj, dz, qljj, sjdw, sjdwtyshxydm, sgdw, sgdwtyshxydm, gldw, gldwtyshxydm } = this.form
+					let { qlmc, tyshxydm, dzqhdjfzjsdg, jbr, jbrdh, jbryx, fzr, fzrdh, lngAndLat, jgsj, tysj, dz, qljj, sjdw, sjdwtyshxydm, sgdw, sgdwtyshxydm, gldw, gldwtyshxydm } = this.form
 					this.baseInfo = { qlmc, tyshxydm, jbr, jbrdh, jbryx, fzr, fzrdh, dz, qljj, sjdw, sjdwtyshxydm, sgdw, sgdwtyshxydm, gldw, gldwtyshxydm }
 					this.baseInfo.jgsj = jgsj ? new Date(jgsj) : ''
-					this.baseInfo.zysj = zysj ? new Date(zysj) : ''
+					this.baseInfo.tysj = tysj ? new Date(tysj) : ''
 					this.baseInfo.dzqhdjfzjsdg = dzqhdjfzjsdg ? Number(dzqhdjfzjsdg) : 0
 					this.baseInfo.lngAndLat = this.form.jd && this.form.wd ? `${this.form.jd} ${this.form.wd}` : ''
 					// this.getHy();
@@ -1026,7 +1033,7 @@
 				let params = {
 					...this.baseInfo,
 					jgsj: this.baseInfo.jgsj ? getDate(new Date(this.baseInfo.jgsj).getTime(), 'date') : '',
-					zysj: this.baseInfo.zysj ? getDate(new Date(this.baseInfo.zysj).getTime(), 'date') : '',
+					tysj: this.baseInfo.tysj ? getDate(new Date(this.baseInfo.tysj).getTime(), 'date') : '',
 					// hyml: this.baseInfo.hyml[this.baseInfo.hyml.length - 1],
 					quyu_id: this.baseInfo.quyu[this.baseInfo.quyu.length - 1],
 					jd: this.baseInfo.lngAndLat.split(' ')[0],
