@@ -26,14 +26,14 @@ export default {
                     	this.lat = e.lnglat.getLat().toFixed(6);
 					})
 				}else {
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
-	                    this.lng = e.lnglat.lng.toFixed(6);
-	                    this.lat = e.lnglat.lat.toFixed(6);
+	                    this.lng = e.point.lng.toFixed(6);
+	                    this.lat = e.point.lat.toFixed(6);
 						this.map = new T.Map('lng_box');
 	                    let marker = new T.Marker(e.lnglat);
 	                    this.map.addOverLay(marker);
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						marker.enableDragging();
 						marker.addEventListener('mouseup', (e) => {
 							this.lng = e.lnglat.getLng().toFixed(6);

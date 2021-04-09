@@ -4,6 +4,9 @@ import store from './store/index'
 
 router.beforeEach((to, from, next) => {
 	if(storage.get('access_token_v2_')) {
+		if(from.path !== '/fxy' && to.path !== '/editInfo' && from.path !== '/fxy' && from.path !== '/editInfo') {
+			storage.remove('searchFxyForm')
+		}
 		if(store.state.hasMenu) {
 			document.title = to.meta.title;
 			next()
@@ -283,6 +286,15 @@ router.beforeEach((to, from, next) => {
 						path: '/editInfo',
 						name: 'editInfo',
 						component: resolve => require(['@/views/city/components/index.vue'], resolve),
+						meta: {
+							hideInMenu: true,
+							notCache: true,
+							title: '风险源信息'
+						},
+					}, {
+						path: '/disEditInfo',
+						name: 'disEditInfo',
+						component: resolve => require(['@/views/city/components/index_disabled.vue'], resolve),
 						meta: {
 							hideInMenu: true,
 							notCache: true,

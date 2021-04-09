@@ -4,11 +4,11 @@
 		<div>
 			<Row type="flex" justify="center" style="height: 100%">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="隧道信息" name="name1">
 				        	<part-title text="隧道信息"></part-title>
-				        	<Form :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules1" hide-required-mark label-position="left" :label-width="170">
+				        	<Form :disabled="isDisEditInfo" :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules1" hide-required-mark label-position="left" :label-width="170">
 				        		<FormItem label="隧道形式" prop="sdxs">
 						        	<Select clearable :transfer="true" v-model="baseInfo.sdxs" placeholder="请选择">
 						                <Option v-for="item in sdxsList" :key="item" :value="item">{{item}}</Option>
@@ -39,7 +39,7 @@
 						        	<Input clearable type="textarea" v-model="baseInfo.bhqk"></Input>
 						        </FormItem>
 						    </Form>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo1">完成</Button>
 								</Col>
@@ -49,8 +49,8 @@
 				        	<part-title text="养护信息" :btns="['add']" @add="openYhxxModel"></part-title>
 							<Table :columns="yhxxColumns" :data="yhxxData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editYhxxModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeYhxx(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editYhxxModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeYhxx(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -594,10 +594,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

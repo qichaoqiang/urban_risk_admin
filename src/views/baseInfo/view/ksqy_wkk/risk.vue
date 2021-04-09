@@ -4,14 +4,14 @@
 		<div v-show="step == 2">
 			<Row type="flex" justify="center">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="尾矿库规模" name="name1">
 						    <part-title text="尾矿库规模" ref="xxx" :btns="['add']" @add="openWkkgmModel"></part-title>
 							<Table :columns="wkkgmColumns" :data="wkkgmData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editWkkgmModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWkkgm(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editWkkgmModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWkkgm(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -35,8 +35,8 @@
 							<div style="margin-bottom: 16px;">说明：统计下游5km</div>
 							<Table :columns="xyqkwkkColumns" :data="xyqkwkkData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editXyqkwkkModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeXyqkwkk(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editXyqkwkkModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeXyqkwkk(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -693,10 +693,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

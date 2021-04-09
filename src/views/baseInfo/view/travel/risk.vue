@@ -4,11 +4,11 @@
 		<div>
 			<Row type="flex" justify="center">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="旅客承载量" name="name1">
 							<part-title text="旅客承载量"></part-title>
-							<Form :model="baseInfo" label-position="left" inline style="width: 600px">
+							<Form :disabled="isDisEditInfo" :model="baseInfo" label-position="left" inline style="width: 600px">
 						        <FormItem label="可接待最大旅客数量" :label-width="160" style="margin-right: 120px">
 						        	<InputNumber :min="0" clearable v-model="baseInfo.kjdzdlksl"></InputNumber>
 						        </FormItem>
@@ -16,7 +16,7 @@
 						        	<InputNumber :min="0" clearable v-model="baseInfo.rjrl"></InputNumber>
 						        </FormItem>
 							</Form>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo">完成</Button>
 								</Col>
@@ -36,8 +36,8 @@
 						            <span>{{`${row.yysj1}-${row.yysj2}`}}</span>
 						        </template>
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editTravelModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeTravel(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editTravelModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeTravel(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -66,9 +66,9 @@
 							</div>
 							<Table :columns="wwColumns" :data="wwData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editWwModel(row)">编辑</Button>
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editWwModel(row)">编辑</Button>
 						            
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWw(row)">
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWw(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -98,8 +98,8 @@
 						            <span class="link">{{row.name}}</span>
 						        </template>
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editXfModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeXf(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editXfModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeXf(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -130,8 +130,8 @@
 						            <span class="link">{{row.name}}</span>
 						        </template>
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editSpecialModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeSpecial(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editSpecialModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeSpecial(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -227,7 +227,10 @@
 			            </Select>
 			        </FormItem>
 			        <FormItem label="时代">
-			        	<DatePicker type="date" v-model="wwForm.sd" placeholder="请选择"></DatePicker>
+                <Select clearable v-model="wwForm.sd" placeholder="请选择">
+                        <Option v-for="item in sdList" :key="item" :value="item">{{item}}</Option>
+                    </Select>
+                </FormItem>
 			        </FormItem>
 				</Form>
 			</div>
@@ -490,6 +493,7 @@
 					totalRow: 0
 				},
 				jbList: ['国家级', '省级', '市级', '县级'],
+        sdList: ['明代前', '明代', '清代', '民国', '近现代'],
 				xfColumns: [
 					{
                         title: "序号",
@@ -790,10 +794,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 
@@ -951,7 +955,7 @@
 				this.wwForm = {
 					mc: row.mc,
 					jb: row.jb,
-					sd: row.sd ? new Date(row.sd) : '',
+					sd: row.sd
 				}
 				this.id = row.id
 				this.modeType = 2;
@@ -965,7 +969,6 @@
 			async saveWw() {
 				let params = {
 					...this.wwForm,
-					sd: this.wwForm.sd ? getDate(new Date(this.wwForm.sd).getTime(), 'date') : '',
 					gkdx_id: this.gkdx_id
 				}
 				if(this.modeType == 2) {

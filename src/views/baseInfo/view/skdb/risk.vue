@@ -10,8 +10,8 @@
 						    <part-title text="库容信息" :btns="['add']" @add="openKrxxModel"></part-title>
 							<Table :columns="krxxColumns" :data="krxxData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editKrxxModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeKrxx(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editKrxxModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeKrxx(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -34,8 +34,8 @@
 				        	<part-title text="安全鉴定" :btns="['add']" @add="openAqjdModel"></part-title>
 							<Table :columns="aqjdColumns" :data="aqjdData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editAqjdModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeAqjd(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editAqjdModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeAqjd(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -58,8 +58,8 @@
 				        	<part-title text="下游信息" :btns="['add']" @add="openXyxxModel"></part-title>
 							<Table :columns="xyxxColumns" :data="xyxxData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editXyxxModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeXyxx(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editXyxxModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeXyxx(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -446,10 +446,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

@@ -14,7 +14,9 @@
 		        	<Input clearable v-model="searchForm.username" placeholder="用户名" style="width: 300px"></Input>
 		        </FormItem>
 		        <FormItem>
-		        	<Input clearable v-model="searchForm.fxylb" placeholder="风险源类别"></Input>
+              <Cascader readonly change-on-select :transfer="true" v-model="searchForm.fxylb" :data="fxylbList"
+                :load-data="loadFxylb" placeholder="风险源类别"></Cascader>
+		        	<!-- <Input clearable v-model="searchForm.fxylb" placeholder="风险源类别"></Input> -->
 		        </FormItem>
 		        <FormItem>
 	                <Button type="primary" @click="getAccountList">查询</Button>
@@ -64,8 +66,10 @@
 
 <script>
 	import api from '@/api/api'
+  import fxylbjs from '@/common/js/fxylb'
 	export default {
 		name: '',
+    mixins: [fxylbjs],
 		data() {
 			return {
 				showAcccountModel: false,
@@ -76,7 +80,7 @@
 				admin_id: '',
 				searchForm: {
 					username: '',
-					fxylb: ''
+					fxylb: []
 				},
 				files: [],
 				accountData: [],
@@ -149,6 +153,54 @@
 
 		},
 		methods: {
+      async getFxylbData() {
+        let list = []
+        let {
+          status_code,
+          data
+        } = await api.getFxylbList({
+          act: 'getall'
+        })
+        if (status_code == 200) {
+          this.fxylbData = data
+          this.fxylbList = this.toTree(data, 1);
+          this.getAccountList()
+        }
+      },
+      toTree(data, index) {
+        // 删除 所有 children,以防止多次调用
+        data.forEach(function(item) {
+          item.selected = false
+          item.showChildren = false
+          delete item.children
+        })
+        // 将数据存储为 以 id 为 KEY 的 map 索引数据列
+        var map = {}
+        data.forEach(function(item) {
+          map[item.id] = item
+        })
+        var val = []
+        data.forEach(function(item) {
+          item.title = item.fxylbmc
+          item.value = item.dm
+          item.parent_id = item.parent_id
+          item.label = item.fxylbmc
+          // 以当前遍历项，的pid,去map对象中找到索引的id
+          var parent = map[item.parent_id]
+          // 如果找到索引，那么说明此项不在顶级当中,那么需要把此项添加到，他对应的父级中
+          if (parent) {
+            // if(!map[parent.parent_id]) {
+            // 	;(parent.children || (parent.children = [])).push(item)
+            // }
+            ;
+            (parent.children || (parent.children = [])).push(item)
+          } else {
+            //如果没有在map中找到对应的索引ID,那么直接把 当前的item添加到 val结果集中，作为顶级
+            val.push(item)
+          }
+        })
+        return val
+      },
 			handleChangeAccountPage(val) {
 				this.accountPage.pageIndex = val
 				this.getAccountList()
@@ -160,6 +212,7 @@
 			async getAccountList() {
 				let params = {
 					...this.searchForm,
+          fxylb: this.searchForm.fxylb[0] ? this.searchForm.fxylb[this.searchForm.fxylb.length - 1] : '',
 					per_page: this.accountPage.pageSize,
 					page: this.accountPage.pageIndex,
 				}
@@ -184,7 +237,7 @@
                     if (valid) {
 			            if(this.passwordForm.password1 !== this.passwordForm.password2) {
 			                this.$Message.error('请输入相同密码，完成密码确认')
-			                return 
+			                return
 			            }
 			            console.log(this.admin_id)
 			            let params = {
@@ -219,11 +272,12 @@
 
 	        },
 	        exportExcel() {
-	        	
+
 	        }
 		},
 		created() {
-			this.getAccountList()
+			// this.getAccountList()
+      this.getFxylbData()
 		},
 		mounted() {
 
@@ -233,6 +287,6 @@
 
 <style lang="scss" scoped>
 	.user_container {
-		
+
 	}
 </style>

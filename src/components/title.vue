@@ -11,7 +11,7 @@
 			</Row>
 		</Col>
 		<Col>
-			<Button v-if="btns.includes('add')" type="primary" icon="ios-add" @click="$emit('add')"></Button>
+			<Button v-if="btns.includes('add') && !isDisEditInfo" type="primary" icon="ios-add" @click="$emit('add')"></Button>
 		</Col>
 	</Row>
 </template>

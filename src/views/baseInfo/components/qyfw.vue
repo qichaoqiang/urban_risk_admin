@@ -67,7 +67,7 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map(this.id);
 						let ctrl = new T.Control.MapType(); 
@@ -76,7 +76,7 @@
 		            	this.map.removeControl(TMAP_NORMAL_MAP);
 			            //添加图层
 			            this.map.addControl(TMAP_HYBRID_MAP);
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

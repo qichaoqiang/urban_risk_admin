@@ -4,7 +4,7 @@
 		<div v-show="step == 2">
 			<Row type="flex" justify="center">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="危险化学品" name="name1">
 							<part-title text="危险化学品" :btns="['add']" @add="openWhModel"></part-title>
@@ -16,8 +16,8 @@
 									<span>{{sfzgyyqList.find(item => item.value === row.sfbzp).name}}</span>
 								</template>
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editWhModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWh(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editWhModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWh(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -46,9 +46,9 @@
 						            <div :style="{ margin: '0 auto', width: '40px', height: '20px', background: row.color}"></div>
 						        </template>
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editWhRiskModel(row)">编辑</Button>
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editWhRiskModel(row)">编辑</Button>
 						            
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWhRisk(row)">
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWhRisk(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -78,8 +78,8 @@
 									</Row>
 									<Table :columns="sbfcgyColumns" :data="sbfcgyData">
 										<template slot-scope="{ row }" slot="action">
-								            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editSbfcgyModel(row)">编辑</Button>
-								            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeSbfcgy(row)">
+								            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editSbfcgyModel(row)">编辑</Button>
+								            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeSbfcgy(row)">
 										        <Button type="error" size="small" ghost>删除</Button>
 										    </Poptip>
 								        </template>
@@ -129,8 +129,8 @@
 							<part-title text="周边环境" :btns="['add']" @add="openRimModel"></part-title>
 							<Table :columns="rimColumns" :data="rimData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editRimModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeRim(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editRimModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeRim(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -977,10 +977,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

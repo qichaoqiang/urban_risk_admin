@@ -4,11 +4,6 @@
 		<div>
 			<Row type="flex" justify="center">
 				<Col>
-					<Row type="flex" justify="end" style="margin-top: 12px">
-						<Col>
-							<Button type="primary" @click="edit">编辑</Button>
-						</Col>
-					</Row>
 					<part-title text="基本信息"></part-title>
 					<Form :model="baseInfo" label-position="left" disabled :label-width="140" style="width: 600px">
 						<FormItem label="场所名称">
@@ -256,10 +251,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 
@@ -298,14 +293,14 @@
 				this.showLngModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
-	                    this.lng = e.lnglat.lng.toFixed(1);
-	                    this.lat = e.lnglat.lat.toFixed(1);
+	                    this.lng = e.point.lng.toFixed(1);
+	                    this.lat = e.point.lat.toFixed(1);
 						this.map = new T.Map('lng_box');
 	                    let marker = new T.Marker(e.lnglat);
 	                    this.map.addOverLay(marker);
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						marker.enableDragging();
 						marker.addEventListener('mouseup', (e) => {
 							console.log(e.lnglat.getLng() + "," + e.lnglat.getLat());

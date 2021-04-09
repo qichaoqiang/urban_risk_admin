@@ -4,11 +4,11 @@
 		<div>
 			<Row type="flex" justify="center" style="height: 100%">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="管道信息" name="name1">
 				        	<part-title text="管道信息" :btns="['add']" @add="openGdxxsyModel"></part-title>
-				        	<Form :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules1" hide-required-mark label-position="left" :label-width="180">
+				        	<Form :disabled="isDisEditInfo" :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules1" hide-required-mark label-position="left" :label-width="180">
 				        		<FormItem label="输送介质" prop="ssjz">
 						            <Select clearable v-model="baseInfo.ssjz" placeholder="请选择" style="width: 160px">
 						                <Option v-for="item in ssjzList" :key="item" :value="item">{{item}}</Option>
@@ -23,8 +23,8 @@
 						    </Form>
 							<Table :columns="gdxxsyColumns" :data="gdxxsyData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editGdxxsyModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeGdxxsy(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editGdxxsyModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeGdxxsy(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -42,7 +42,7 @@
 				                    @on-page-size-change="handleChangeGdxxsyPageSize"
 				                />
 							</Row>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo1">完成</Button>
 								</Col>
@@ -52,8 +52,8 @@
 				        	<part-title text="高后果区" :btns="['add']" @add="openGhgqModel"></part-title>
 							<Table :columns="ghgqColumns" :data="ghgqData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editGhgqModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeGhgq(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editGhgqModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeGhgq(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -483,10 +483,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

@@ -4,11 +4,11 @@
 		<div>
 			<Row type="flex" justify="center" style="height: 100%">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="建筑物信息" name="name1">
 				        	<part-title text="建筑物信息"></part-title>
-				        	<Form :model="baseInfo" label-position="left" :label-width="120">
+				        	<Form :disabled="isDisEditInfo" :model="baseInfo" label-position="left" :label-width="120">
 					        	<FormItem label="所在建筑名称">
 						        	<Input clearable v-model="baseInfo.szjzmc"></Input>
 						        </FormItem>
@@ -69,7 +69,7 @@
 						            </Select>
 						        </FormItem>
 						    </Form>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo1">完成</Button>
 								</Col>
@@ -77,15 +77,15 @@
 				        </TabPane>
 				        <TabPane label="营业状况" name="name2">
 				        	<part-title text="营业状况" :btns="['add']" @add="openYyzkModel"></part-title>
-							<Form :model="baseInfo" label-position="left" inline>
+							<Form :disabled="isDisEditInfo" :model="baseInfo" label-position="left" inline>
 						        <FormItem label="房间数" :label-width="118" style="margin-right: 24px">
 						        	<InputNumber :min="0" v-model="baseInfo.fjs"></InputNumber>
 						        </FormItem>
 							</Form>
 							<Table :columns="yyzkColumns" :data="yyzkData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editYyzkModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeYyzk(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editYyzkModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeYyzk(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -103,7 +103,7 @@
 				                    @on-page-size-change="handleChangeYyzkPageSize"
 				                />
 							</Row>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo2">完成</Button>
 								</Col>
@@ -615,10 +615,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

@@ -4,11 +4,11 @@
 		<div v-show="step == 2" style="height: 100%">
 			<Row type="flex" justify="center" style="height: 100%">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="营业位置" name="name1">
 				        	<part-title text="营业位置"></part-title>
-				        	<Form :model="baseInfo" label-position="left" inline>
+				        	<Form :disabled="isDisEditInfo" :model="baseInfo" label-position="left" inline>
 					        	<FormItem label="所在建筑名称" :label-width="104" style="margin-right: 24px">
 						        	<Input clearable v-model="baseInfo.szjzmc"></Input>
 						        </FormItem>
@@ -51,7 +51,7 @@
 				                    @on-page-size-change="handleChangeRltzPageSize"
 				                />
 							</Row> -->
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo1">完成</Button>
 								</Col>
@@ -59,7 +59,7 @@
 				        </TabPane>
 				        <TabPane label="使用负荷" name="name2">
 				        	<part-title text="使用负荷"></part-title>
-							<Form :model="baseInfo" label-position="left" inline>
+							<Form :disabled="isDisEditInfo" :model="baseInfo" label-position="left" inline>
 						        <FormItem label="设备数量（台）" :label-width="118" style="margin-right: 24px">
 						        	<InputNumber :min="0" v-model="baseInfo.sbsl"></InputNumber>
 						        </FormItem>
@@ -67,7 +67,7 @@
 						        	<InputNumber :min="0" v-model="baseInfo.rjsysl"></InputNumber>
 						        </FormItem>
 							</Form>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo2">完成</Button>
 								</Col>
@@ -579,10 +579,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

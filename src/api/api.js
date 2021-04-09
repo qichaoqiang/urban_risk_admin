@@ -65,6 +65,10 @@ import wf from './wf' // 危房
 import hp from './hp' // 滑坡
 import dwyldd from './dwyldd' // 低洼易涝地带
 import ddzhyhd from './ddzhyhd' // 地质灾害隐患点
+import yjjydw from './yjjydw' // 应急救援队伍
+import yjjyzb from './yjjyzb' // 应急救援装备
+import shyjll from './shyjll' // 社会应急力量
+import bncs from './bncs' // 社会应急力量
 
 
 export default {
@@ -108,6 +112,11 @@ export default {
   fxfj(params) {
     return fetchPost('/api/fengxianfenji', params)
   },
+  // 当前项目名称
+  getXmName(params) {
+    return fetchGet('/api/dangqianxiangmumingcheng', params)
+  },
+
   ...role,
   ...cj_account,
   ...admin,
@@ -172,5 +181,9 @@ export default {
   ...wf,
   ...hp,
   ...dwyldd,
-  ...ddzhyhd
+  ...ddzhyhd,
+  ...yjjydw,
+  ...yjjyzb,
+  ...shyjll,
+  ...bncs
 }

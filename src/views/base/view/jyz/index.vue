@@ -62,7 +62,7 @@
 				                <Option v-for="item in jyzdjList" :key="item" :value="item">{{item}}</Option>
 				            </Select>
 				        </FormItem>
-				        <FormItem label="汽油罐数量">
+				       <!--  <FormItem label="汽油罐数量">
 				        	<InputNumber :min="0" v-model="baseInfo.qygsl" placeholder="汽油罐数量"></InputNumber>
 				        </FormItem>
 				        <FormItem label="汽油罐总容积（㎡）">
@@ -73,7 +73,7 @@
 				        </FormItem>
 				        <FormItem label="柴油罐总容积（㎡）">
 				        	<InputNumber :min="0" v-model="baseInfo.cygzrj" placeholder="柴油罐总容积"></InputNumber>
-				        </FormItem>
+				        </FormItem> -->
 				        <FormItem label="站点职工人数" prop="zdzgrs">
 				            <InputNumber :min="0" v-model="baseInfo.zdzgrs"></InputNumber>
 				        </FormItem>
@@ -1125,7 +1125,7 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
 						let ctrl = new T.Control.MapType(); 
@@ -1139,9 +1139,9 @@
 		            	})
 		            	this.map.addControl(zoomCtrl);
 			            if(this.baseInfo.lngAndLat) {
-			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.lnglat.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.lnglat.lat), 17);
+			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.point.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.point.lat), 17);
 			            }else {
-			            	this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 17);
+			            	this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 17);
 			            }
 						var config = {
 			                showLabel: true,

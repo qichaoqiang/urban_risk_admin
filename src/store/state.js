@@ -3,20 +3,36 @@ let state = {
 	selectIds: '',
 	levelIds: '',
 	levelList: [],
+	currentLevelList: [],
 	resizeCount: 0,
 	hasMenu: false,
 	fxylb: '',
 	fxySum: '',
 	riskPoints: [],
 	industry: {
-		id: 77,
-		fxylbmc: "危化企业",
-		parent_id: 49,
-		dm: "weihuaqiye",
-		icon: null,
-		selected: false,
-		showChildren: false
+		dm:"xuexiao",
+		fxylbmc:"学校",
+		icon:null,
+		id:16,
+		parent_id:50,
+		selected:false,
+		sffj:1,
+		tckdj: 0,
+		showChildren:false,
+		yc:0,
 	},
+	industryList: [{
+		dm:"xuexiao",
+		fxylbmc:"学校",
+		icon:null,
+		id:16,
+		parent_id:50,
+		selected:false,
+		sffj:1,
+		tckdj: 0,
+		showChildren:false,
+		yc:0,
+	}],
 	path: {
 		chuanboxiuzaoqiye: 'cbxz',
 		zhuanyeshichang: 'zysc',
@@ -77,7 +93,11 @@ let state = {
 		weifang: 'wf',
 		huapo: 'hp',
 		diwayilaodidai: 'dwyldd',
-		dizhizaihaiyinhuandian: 'dzzhyhd'
+		dizhizaihaiyinhuandian: 'dzzhyhd',
+    yingjijiuyuanduiwu: 'yjjydw',
+    yingjijiuyuanzhuangbei: 'yjjyzb',
+    shehuiyingjililiang: 'shyjll',
+    binanchangsuo: 'bncs'
 	}
 }
 

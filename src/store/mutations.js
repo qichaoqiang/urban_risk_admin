@@ -11,6 +11,9 @@ let mutations = {
   update_levelList(state, levelList) {
     state.levelList = levelList
   }, 
+  update_currentLevelList(state, currentLevelList) {
+    state.currentLevelList = currentLevelList
+  }, 
   update_resizeCount(state, resizeCount) {
     state.resizeCount = resizeCount
   },
@@ -28,6 +31,9 @@ let mutations = {
   },
   update_industry(state, industry) {
     state.industry = industry
+  },
+  update_industryList(state, industryList) {
+    state.industryList = industryList
   },
 }
 

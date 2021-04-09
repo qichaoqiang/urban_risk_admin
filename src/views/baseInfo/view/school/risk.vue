@@ -7,7 +7,7 @@
 					<Tabs value="name1">
 				        <TabPane label="人员信息" name="name1">
 							<part-title text="人员组成"></part-title>
-							<Form :model="mostForm" label-position="left" inline>
+							<Form :disabled="isDisEditInfo" :model="mostForm" label-position="left" inline>
 						        <FormItem label="教职工人数" :label-width="100" style="margin-right: 40px">
 						        	<InputNumber :min="0" v-model="mostForm.jzgrs"></InputNumber>
 						        </FormItem>
@@ -31,8 +31,8 @@
 						            <span class="link">{{row.name}}</span>
 						        </template>
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editWhsysModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWhsys(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editWhsysModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWhsys(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -53,7 +53,7 @@
 				        </TabPane>
 				        <TabPane label="消防重点单位" name="name3">
 				        	<part-title text="消防重点单位"></part-title>
-							<Form :model="mostForm" label-position="left" inline>
+							<Form :disabled="isDisEditInfo" :model="mostForm" label-position="left" inline>
 						        <FormItem label="消防重点单位" :label-width="160">
 						            <Select clearable v-model="mostForm.xfzddw" placeholder="请选择">
 						                <Option v-for="item in xfzddwList" :key="item.value" :value="item.value">{{item.name}}</Option>
@@ -64,7 +64,7 @@
 				    </Tabs>
 				</Col>	
 			</Row>	
-			<Row type="flex" justify="center" style="margin-top: 24px">
+			<Row type="flex" justify="center" style="margin-top: 24px" v-show="!isDisEditInfo">
 				<Col>
 					<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo">完成</Button>
 				</Col>
@@ -370,10 +370,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

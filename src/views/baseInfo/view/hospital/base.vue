@@ -4,11 +4,6 @@
 		<div>
 			<Row type="flex" justify="center">
 				<Col>
-					<Row type="flex" justify="end" style="margin-top: 12px">
-						<Col>
-							<Button type="primary" @click="edit">编辑</Button>
-						</Col>
-					</Row>
 					<part-title text="基本信息"></part-title>
 					<Form :model="baseInfo" disabled label-position="left" :label-width="140" style="width: 600px">
 						<FormItem label="医院名称">
@@ -267,7 +262,7 @@
 			openAreaModal() {	
 				this.showAreaModel = true;
 				this.$nextTick(() => {
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
 			            if(this.addressInfo.yyfw) {
@@ -291,10 +286,10 @@
 			            		lat += item.lat - 0
 			            	})
 			            	this.map.centerAndZoom(new T.LngLat(lng / yyfw.length, lat / yyfw.length), 10);
-			            	// this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+			            	// this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 			            	this.map.addOverLay(new T.Polygon(points, config));
 			            }else {
-							this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+							this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 			            }
 		            });
 				})

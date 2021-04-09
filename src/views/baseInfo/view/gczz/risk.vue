@@ -4,11 +4,11 @@
 		<div v-show="step == 2" style="height: 100%">
 			<Row type="flex" justify="center" style="height: 100%">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="建筑物信息" name="name1">
 				        	<part-title text="建筑物信息"></part-title>
-				        	<Form :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules1" hide-required-mark label-position="left" :label-width="140">
+				        	<Form :disabled="isDisEditInfo" :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules1" hide-required-mark label-position="left" :label-width="140">
 					        	<FormItem label="建筑占地面积（㎡）" prop="jzzdmj">
 						        	<InputNumber :min="0" v-model="baseInfo.jzzdmj"></InputNumber>
 						        </FormItem>
@@ -27,7 +27,7 @@
 						        	<InputNumber :min="0" v-model="baseInfo.zhsl"></InputNumber>
 						        </FormItem>
 						    </Form>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo1">完成</Button>
 								</Col>
@@ -533,10 +533,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

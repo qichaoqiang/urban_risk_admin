@@ -4,19 +4,19 @@
 		<div v-show="step == 2">
 			<Row type="flex" justify="center">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="码头规模" name="name1">
 				        	<part-title text="码头规模" ref="xxx" :btns="['add']" @add="openMtgmModel"></part-title>
-				        	<Form :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="200">
+				        	<Form :disabled="isDisEditInfo" :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="200">
 						        <FormItem label="设计年周转量（吨/年）" prop="sjnzzl">
 						        	<InputNumber :min="0" v-model="baseInfo.sjnzzl"></InputNumber>
 						        </FormItem>
 						    </Form>
 							<Table :columns="mtgmColumns" :data="mtgmData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editMtgmModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeMtgm(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editMtgmModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeMtgm(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -34,7 +34,7 @@
 				                    @on-page-size-change="handleChangeMtgmPageSize"
 				                />
 							</Row>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo1">完成</Button>
 								</Col>
@@ -47,8 +47,8 @@
 									<span>{{handleWxhwzl(row)}}</span>
 								</template>
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editBwxxModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeBwxx(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editBwxxModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeBwxx(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -71,8 +71,8 @@
 				        	<part-title text="仓储信息" :btns="['add']" @add="openCcxxphModel"></part-title>
 							<Table :columns="ccxxphColumns" :data="ccxxphData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editCcxxphModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeCcxxph(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editCcxxphModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeCcxxph(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -99,8 +99,8 @@
 				        	</div>
 							<Table :columns="zxsbColumns" :data="zxsbData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editZxsbModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeZxsb(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editZxsbModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeZxsb(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -245,7 +245,7 @@
 			        <FormItem label="货物名称" prop="hwmc">
 			        	<Input clearable v-model="ccxxphForm.hwmc"></Input>
 			        </FormItem>
-			       <FormItem label="存储量" prop="ccl">
+			       <FormItem label="存储量（吨）" prop="ccl">
 			        	<InputNumber :min="0" v-model="ccxxphForm.ccl"></InputNumber>
 			        </FormItem>
 				</Form>
@@ -577,7 +577,7 @@
                         key: 'dchzckmc',
                         minWidth: 160
                     }, {
-                        title: '容积（m³）',
+                        title: '面积（㎡）',
                         key: 'mj',
                         minWidth: 120
                     }, {
@@ -589,7 +589,7 @@
                         key: 'hwmc',
                         minWidth: 100
                     }, {
-                        title: '存储量',
+                        title: '存储量（吨）',
                         key: 'ccl',
                         minWidth: 80
                     },{
@@ -811,10 +811,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

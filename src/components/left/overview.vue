@@ -28,26 +28,32 @@
 			'$store.state.resizeCount'(val) {
 				this.myChart.resize();
 			},
-			'$store.state.levelList'(val) {
+			'$store.state.currentLevelList'(val) {
 				this.$nextTick(() => {
-					this.drawOverview()
+					this.$route.name === 'poi' && this.drawOverview()
 				})
 			},
-			fxdjList(val) {
+			'$store.state.levelList'(val) {
 				this.$nextTick(() => {
-					this.drawOverview()
+					this.$route.name !== 'poi' && this.drawOverview()
 				})
-			}
+			},
+			// fxdjList(val) {
+			// 	this.$nextTick(() => {
+			// 		this.drawOverview()
+			// 	})
+			// }
 		},
 		computed: {
 			fxdjList() {
-				return this.$store.state.levelList.filter(item => item.selected).map(item => item.name)
+				return this.$store.state.currentLevelList.filter(item => item.selected).map(item => item.name)
 			}
 		},
 		methods: {
 			drawOverview() {
 				this.myChart = echarts.init(document.getElementById('overview_pie'));
-				let data = this.$store.state.levelList.filter(item => item.selected).map(item => {
+				let levelList = this.$route.name === 'poi' ? this.$store.state.currentLevelList : this.$store.state.levelList
+				let data = levelList.filter(item => item.selected && item.name !== '不分级' && item.value).map(item => {
 					let { name, value, color } = item
 					return { 
 						name, 
@@ -55,6 +61,7 @@
 						color 
 					}
 				})
+				console.log(data)
 				this.myChart.setOption({
 					color: data.map(item => item.color),
 					tooltip: {
@@ -72,7 +79,7 @@
 				        {
 				            name: '',
 				            type: 'pie',
-				            radius: '80%',
+				            radius: '70%',
 				            center: ['50%', '50%'],
 				            data,
 				            label: {

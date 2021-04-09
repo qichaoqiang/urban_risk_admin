@@ -4,7 +4,7 @@
 		<div v-show="step == 2">
 			<Row type="flex" justify="center">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="人员信息" name="name1">
 							<part-title text="人员信息"></part-title>
@@ -16,8 +16,8 @@
 								            <span class="link">{{row.name}}</span>
 								        </template>
 										<template slot-scope="{ row }" slot="action">
-								            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editGzfhModel(row)">编辑</Button>
-								            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeGzfh(row)">
+								            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editGzfhModel(row)">编辑</Button>
+								            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeGzfh(row)">
 										        <Button type="error" size="small" ghost>删除</Button>
 										    </Poptip>
 								        </template>
@@ -28,8 +28,8 @@
 								            <span class="link">{{row.name}}</span>
 								        </template>
 										<template slot-scope="{ row }" slot="action">
-								            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editSzdxModel(row)">编辑</Button>
-								            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeSzdx(row)">
+								            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editSzdxModel(row)">编辑</Button>
+								            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeSzdx(row)">
 										        <Button type="error" size="small" ghost>删除</Button>
 										    </Poptip>
 								        </template>
@@ -39,7 +39,7 @@
 				        </TabPane>
 				        <TabPane label="场所危险性" name="name2">
 							<part-title text="场所危险性"></part-title>
-							<Form :model="mostForm" label-position="left" inline :label-width="100">
+							<Form :disabled="isDisEditInfo" :model="mostForm" label-position="left" inline :label-width="100">
 						        <FormItem label="消防重点单位" style="margin-right: 120px">
 						            <Select clearable v-model="mostForm.xfzddw" placeholder="请选择">
 						                <Option v-for="item in xfzddwList" :key="item.value" :value="item.value">{{item.name}}</Option>
@@ -51,7 +51,7 @@
 						            </Select>
 						        </FormItem>
 							</Form>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo">完成</Button>
 								</Col>
@@ -354,10 +354,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", weight: 3, opacity: 0.5, fillColor: "#FFFFFF", fillOpacity: 0.5
@@ -381,14 +381,14 @@
 				this.showLngModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
-	                    this.lng = e.lnglat.lng.toFixed(1);
-	                    this.lat = e.lnglat.lat.toFixed(1);
+	                    this.lng = e.point.lng.toFixed(1);
+	                    this.lat = e.point.lat.toFixed(1);
 						this.map = new T.Map('lng_box');
 	                    let marker = new T.Marker(e.lnglat);
 	                    this.map.addOverLay(marker);
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						marker.enableDragging();
 						marker.addEventListener('mouseup', (e) => {
 							console.log(e.lnglat.getLng() + "," + e.lnglat.getLat());

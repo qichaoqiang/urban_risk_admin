@@ -4,11 +4,11 @@
 		<div v-show="step == 2" style="height: 100%">
 			<Row type="flex" justify="center" style="height: 100%">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="场所信息" name="name1">
 				        	<part-title text="场所信息" :btns="['add']" @add="openRltzModel"></part-title>
-				        	<Form :model="baseInfo" label-position="left" inline>
+				        	<Form :disabled="isDisEditInfo" :model="baseInfo" label-position="left" inline>
 				        		<FormItem label="经营楼层" :label-width="76" style="margin-right: 24px">
 						        	<Select clearable multiple :transfer="true" v-model="baseInfo.jylc" placeholder="请选择">
 						                <Option v-for="item in jylcList" :key="item" :value="item">{{item}}</Option>
@@ -27,8 +27,8 @@
 						    <div style="margin-top: 16px;">人流特征</div>
 							<Table :columns="rltzColumns" :data="rltzData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editRltzModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeRltz(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editRltzModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeRltz(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -46,7 +46,7 @@
 				                    @on-page-size-change="handleChangeRltzPageSize"
 				                />
 							</Row>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo1">完成</Button>
 								</Col>
@@ -54,7 +54,7 @@
 				        </TabPane>
 				        <TabPane label="场所危险性" name="name2">
 				        	<part-title text="场所危险性"></part-title>
-							<Form :model="baseInfo" label-position="left" inline>
+							<Form :disabled="isDisEditInfo" :model="baseInfo" label-position="left" inline>
 						        <FormItem label="消防重点单位" :label-width="104" style="margin-right: 24px">
 						            <Select clearable v-model="baseInfo.xfzddw" placeholder="请选择">
 						                <Option v-for="item in sfzgyyqList" :key="item.value" :value="item.value">{{item.name}}</Option>
@@ -66,7 +66,7 @@
 						            </Select>
 						        </FormItem>
 							</Form>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo2">完成</Button>
 								</Col>
@@ -575,10 +575,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

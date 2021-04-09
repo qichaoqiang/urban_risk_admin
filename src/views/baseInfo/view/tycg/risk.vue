@@ -4,11 +4,11 @@
 		<div>
 			<Row type="flex" justify="center" style="height: 100%">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="场馆容量" name="name1">
 				        	<part-title text="场馆容量"></part-title>
-				        	<Form :model="baseInfo" label-position="left" inline>
+				        	<Form :disabled="isDisEditInfo" :model="baseInfo" label-position="left" inline>
 				        		<FormItem label="场馆固定座位数" :label-width="118" style="margin-right: 24px">
 						        	<InputNumber :min="0" v-model="baseInfo.cggdzws"></InputNumber>
 						        </FormItem>
@@ -16,7 +16,7 @@
 						        	<InputNumber :min="0" v-model="baseInfo.sjzdrnrs"></InputNumber>
 						        </FormItem>
 						    </Form>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo1">完成</Button>
 								</Col>
@@ -24,7 +24,7 @@
 				        </TabPane>
 				        <TabPane label="活动安排" name="name2">
 				        	<part-title text="活动安排" :btns="['add']" @add="openHdapModel"></part-title>
-							<Form :model="baseInfo" label-position="left">
+							<Form :disabled="isDisEditInfo" :model="baseInfo" label-position="left">
 				        		<FormItem label="可举办活动级别">
 						        	<Select clearable multiple :transfer="true" v-model="baseInfo.kjbhdjb" placeholder="请选择">
 						                <Option v-for="item in kjbhdjbList" :key="item" :value="item">{{item}}</Option>
@@ -33,8 +33,8 @@
 							</Form>
 							<Table :columns="hdapColumns" :data="hdapData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editHdapModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeHdap(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editHdapModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeHdap(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -52,7 +52,7 @@
 				                    @on-page-size-change="handleChangeHdapPageSize"
 				                />
 							</Row>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo2">完成</Button>
 								</Col>
@@ -565,10 +565,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

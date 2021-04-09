@@ -77,6 +77,16 @@
 				<FormItem label="排序" prop="px">
 		        	<InputNumber :min="0" v-model="fxylbForm.px"></InputNumber>
 		        </FormItem>
+				<FormItem label="图层可叠加" prop="px" v-show="parents.length > 0">
+		        	<Select clearable v-model="fxylbForm.tckdj">
+		                <Option v-for="item in sfzgyyList" :key="item.value" :value="item.value">{{item.name}}</Option>
+		            </Select>
+		        </FormItem>
+		        <FormItem label="是否分级">
+		        	<Select clearable v-model="fxylbForm.sffj" placeholder="是否隐藏">
+		                <Option v-for="item in sfzgyyList" :key="item.value" :value="item.value">{{item.name}}</Option>
+		            </Select>
+		        </FormItem>
 		        <FormItem label="是否隐藏">
 		        	<Select clearable v-model="fxylbForm.yc" placeholder="是否隐藏">
 		                <Option v-for="item in sfzgyyList" :key="item.value" :value="item.value">{{item.name}}</Option>
@@ -142,7 +152,9 @@
 					dm: '',
 					icon: '',
 					px: 0,
-					yc: 0
+					tckdj: 0,
+					yc: 0,
+					sffj: 0
 				},
 				fxylbPage: {
 					pageSize: 10,
@@ -215,7 +227,9 @@
 					dm: row.dm,
 					icon: row.icon,
 					px: row.px ? Number(row.px) : 0,
+					tckdj: row.tckdj ? Number(row.tckdj) : 0,
 					yc: row.yc ? Number(row.yc) : 0,
+					sffj: row.sffj ? Number(row.sffj) : 0,
 				}
 				this.id = row.id
 				this.modeType = 2;
@@ -228,7 +242,9 @@
 					dm: row.dm,
 					icon: row.icon,
 					px: row.px ? Number(row.px) : 0,
+					tckdj: row.tckdj ? Number(row.tckdj) : 0,
 					yc: row.yc ? Number(row.yc) : 0,
+					sffj: row.sffj ? Number(row.sffj) : 0,
 				}
 				this.id = row.id
 				this.modeType = 3;
@@ -243,7 +259,9 @@
 							dm: '',
 							icon: '',
 							px: 0,
+							tckdj: 0,
 							yc: 0,
+							sffj: 0
 						}
 						this.$refs.fxylb.resetFields();
 					})

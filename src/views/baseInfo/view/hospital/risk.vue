@@ -3,11 +3,11 @@
 		<div>
 			<Row type="flex" justify="center">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="医院规模" name="name1">
 							<part-title text="医院规模"></part-title>
-							<Form :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules" hide-required-mark label-position="left" inline :label-width="120">
+							<Form :disabled="isDisEditInfo" :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules" hide-required-mark label-position="left" inline :label-width="120">
 						        <FormItem label="从业人员" prop="cyrs" style="margin-right: 100px">
 						        	<InputNumber :min="0" v-model="baseInfo.cyrs"></InputNumber>
 						        </FormItem>
@@ -21,7 +21,7 @@
 						        	<InputNumber :min="0" v-model="baseInfo.rjcwsyl"></InputNumber>
 						        </FormItem>
 							</Form>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo1">完成</Button>
 								</Col>
@@ -34,9 +34,9 @@
 					                <part-title text="化学品" :btns="['add']" @add="openWhModel"></part-title>
 									<Table :columns="whColumns" :data="whData">
 										<template slot-scope="{ row }" slot="action">
-								            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editWhModel(row)">编辑</Button>
+								            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editWhModel(row)">编辑</Button>
 								            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWh(row)">
-										        <Button type="error" size="small" ghost>删除</Button>
+										        <Button v-show="!isDisEditInfo" type="error" size="small" ghost>删除</Button>
 										    </Poptip>
 								        </template>
 									</Table>
@@ -56,8 +56,8 @@
 									<part-title text="液氧" :btns="['add']" @add="openYdModel"></part-title>
 									<Table :columns="ydColumns" :data="ydData">
 										<template slot-scope="{ row }" slot="action">
-								            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editYdModel(row)">编辑</Button>
-								            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeYd(row)">
+								            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editYdModel(row)">编辑</Button>
+								            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeYd(row)">
 										        <Button type="error" size="small" ghost>删除</Button>
 										    </Poptip>
 								        </template>
@@ -84,9 +84,9 @@
 								            <div :style="{ margin: '0 auto', width: '40px', height: '20px', background: row.color}"></div>
 								        </template>
 										<template slot-scope="{ row }" slot="action">
-								            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editRiskLiauidModel(row)">编辑</Button>
+								            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editRiskLiauidModel(row)">编辑</Button>
 								            
-								            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeRiskLiauid(row)">
+								            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeRiskLiauid(row)">
 										        <Button type="error" size="small" ghost>删除</Button>
 										    </Poptip>
 								        </template>
@@ -109,7 +109,7 @@
 				        </TabPane>
 				        <TabPane label="火灾危险" name="name3">
 				        	<part-title text="火灾危险"></part-title>
-							<Form :model="baseInfo" ref="baseInfo2" :rules="baseInfoRules" hide-required-mark label-position="left" inline :label-width="100">
+							<Form :disabled="isDisEditInfo" :model="baseInfo" ref="baseInfo2" :rules="baseInfoRules" hide-required-mark label-position="left" inline :label-width="100">
 						        <FormItem label="消防重点单位" prop="xfzddw" style="margin-right: 120px">
 						            <Select clearable v-model="baseInfo.xfzddw" placeholder="请选择">
 						                <Option v-for="item in xfzddwList" :key="item.value" :value="item.value">{{item.name}}</Option>
@@ -121,7 +121,7 @@
 						            </Select>
 						        </FormItem>
 							</Form>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo2">完成</Button>
 								</Col>
@@ -711,10 +711,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

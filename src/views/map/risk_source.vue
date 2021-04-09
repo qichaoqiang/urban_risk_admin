@@ -98,10 +98,10 @@
 				}
 			},
 			mapInit() {
-				let lo = new T.Geolocation();
+				let lo = new BMap.Geolocation();
 		        lo.getCurrentPosition((e) => {
 					this.map = new T.Map('risk_map');
-					this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 9);
+					this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 9);
 					// this.map.setStyle('indigo')
 					let ctrl = new T.Control.MapType([{
 						title: '地图', //地图控件上所要显示的图层名称

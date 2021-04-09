@@ -8,7 +8,7 @@
 					<Tabs value="name1">
 				        <TabPane label="开采规模" name="name1">
 						    <part-title text="开采规模" ref="xxx" :btns="['add']" @add="openKcgmltkModel"></part-title>
-							<Form :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
+							<Form :disabled="isDisEditInfo" :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 						        <FormItem label="设计开采深度（米）" prop="sjkcsd">
 						        	<InputNumber :min="0" v-model="baseInfo.sjkcsd"></InputNumber>
 						        </FormItem>
@@ -21,8 +21,8 @@
 						    </Form>
 							<Table :columns="kcgmltkColumns" :data="kcgmltkData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editKcgmltkModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeKcgmltk(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editKcgmltkModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeKcgmltk(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -40,14 +40,14 @@
 				                    @on-page-size-change="handleChangeKcgmltkPageSize"
 				                />
 							</Row>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo1">完成</Button>
 								</Col>
 							</Row>
 				        </TabPane>
 				        <TabPane label="作业情况" name="name2">
-				        	<Form :model="baseInfo" ref="baseInfo2" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
+				        	<Form :disabled="isDisEditInfo" :model="baseInfo" ref="baseInfo2" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 						        <FormItem label="机械化程度（凿岩）" prop="jxhcdzy">
 						        	<Select clearable v-model="baseInfo.jxhcdzy" placeholder="机械化程度（凿岩）">
 						                <Option v-for="item in ptcList" :key="item.value" :value="item.value">{{item.name}}</Option>
@@ -77,14 +77,14 @@
 						        	<InputNumber :min="0" clearable v-model="baseInfo.ptcgd"></InputNumber>
 						        </FormItem>
 						    </Form>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo2">完成</Button>
 								</Col>
 							</Row>
 				        </TabPane>
 				        <TabPane label="矿山条件" name="name3">
-				        	<Form :model="baseInfo" ref="baseInfo3" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
+				        	<Form :disabled="isDisEditInfo" :model="baseInfo" ref="baseInfo3" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 						        <FormItem label="水文条件" prop="swtj">
 						        	<Input clearable v-model="baseInfo.swtj" type="textarea" placeholder="水文条件"></Input>
 						        </FormItem>
@@ -92,7 +92,7 @@
 						        	<Input clearable v-model="baseInfo.dztj" type="textarea" placeholder="地质条件"></Input>
 						        </FormItem>
 						    </Form>
-						    <Row type="flex" justify="center" style="margin-top: 24px">
+						    <Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo3">完成</Button>
 								</Col>
@@ -793,10 +793,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

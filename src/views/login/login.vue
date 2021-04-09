@@ -10,7 +10,7 @@
         <Col :xs="{span:22}" style="padding: 0 40px; width: 400px; border-radius: 8px; background: rgba(255, 255, 255, 0.7">
             <Row class="header" type="flex" justify="center" align="middle">
                 <!-- <img class="mr-10" width="70px" src="../../assets/images/1024.png" /> -->
-                <h1>城市安全风险管理平台</h1>
+                <h1>{{xmName}}</h1>
             </Row>
             <Row class="login-form">
                 <Tabs v-model="tabName">
@@ -82,6 +82,7 @@ export default {
             error: false,
             errorMsg: '',
             tabName: 'username',
+            xmName: '',
             saveLogin: true,
             loading: false,
             time: 60,
@@ -159,6 +160,12 @@ export default {
                 })
             }
         },
+    },
+    created() {
+        api.getXmName().then(res => {
+            this.xmName = res.xmmc
+            this.$storage.set('xmName', res.xmmc)
+        })
     },
     mounted() {
         storage.clear()

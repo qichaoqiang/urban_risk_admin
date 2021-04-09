@@ -19,7 +19,14 @@ let actions = {
   }, 
   save_levelList(context, levelList) {
     return new Promise((resolve) => {
+      console.log('save_levelList')
       context.commit('update_levelList', levelList)
+      resolve()
+    })
+  }, 
+  save_currentLevelList(context, currentLevelList) {
+    return new Promise((resolve) => {
+      context.commit('update_currentLevelList', currentLevelList)
       resolve()
     })
   }, 
@@ -56,6 +63,12 @@ let actions = {
   save_industry(context, industry) {
     return new Promise((resolve) => {
       context.commit('update_industry', industry)
+      resolve()
+    })
+  },
+  save_industryList(context, industryList) {
+    return new Promise((resolve) => {
+      context.commit('update_industryList', industryList)
       resolve()
     })
   }

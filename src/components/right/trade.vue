@@ -1,13 +1,13 @@
 <template>
 	<div class="trade" ref="trade">
 		<div class="trade_item" :class="{trade_item1: level == 1}" v-for="item in data" v-show="item.children || level != 1" :style="{'padding-left': left}">
-			<div class="trade_father" @click="handleClickItem(item)" :class="{selected: $store.state.industry && $store.state.industry.id == item.id}">
+			<div class="trade_father" @click="handleClickItem(item)" :class="{selected: ($store.state.industry && $store.state.industry.id == item.id) || $store.state.industryList.find(item_ => item_.id == item.id)}">
 				<div class="check" v-if="level != 1" @click.stop.prevent="handleSelect(item)"></div>
 				<img class="icon" v-if="level == 2" :src="iconUrl(item)">	
 				<span :class="`text${level}`" :title="item.fxylbmc">{{item.fxylbmc}}</span>
 				<div class="arrow" v-if="item.children && item.children.length >= 1 && level < 2" :class="{arrow_rotate1: item.showChildren, arrow_rotate2: !item.showChildren}">
 					<Icon type="md-arrow-dropdown" size="12px" :color="item.selected ? '#10F6FF' : '#fff'" />
-				</div>
+				</div>	
 			</div>
 			<div 
 				class="trade_brother" 
@@ -86,10 +86,10 @@
 			iconUrl(item) {
 				let iconUrl
 				try {
-					iconUrl = require(`../../assets/risk-point/${item.dm}-${this.$store.state.industry && this.$store.state.industry.id == item.id ? '5' : '6'}.png`)
+					iconUrl = require(`../../assets/risk-point/${item.dm}-${(this.$store.state.industry && this.$store.state.industry.id == item.id) || this.$store.state.industryList.find(item_ => item_.id == item.id) ? '5' : '6'}.png`)
 				} 
 				catch {
-					iconUrl = require(`../../assets/risk-point/fengxianyuan-${this.$store.state.industry && this.$store.state.industry.id == item.id ? '5' : '6'}.png`)
+					iconUrl = require(`../../assets/risk-point/fengxianyuan-${(this.$store.state.industry && this.$store.state.industry.id == item.id) || this.$store.state.industryList.find(item_ => item_.id == item.id) ? '5' : '6'}.png`)
 				}
 				return iconUrl
 			},
@@ -114,9 +114,48 @@
 			},
 			handleSelect(item) {
 				if(this.$store.state.industry && this.$store.state.industry.id == item.id) {
-					this.$store.dispatch('save_industry', null)
+					let industryList = this.$store.state.industryList.filter(item_ => item_.id !== item.id)
+					console.log(industryList)
+					// if(item.tckdj) {
+					// 	this.$store.dispatch('save_industryList', industryList)
+					// }
+					this.$store.dispatch('save_industryList', industryList)
+					this.$store.dispatch('save_industry', industryList[0] || null)
 				}else {
-					this.$store.dispatch('save_industry', item)
+					if(item.tckdj == 1) {
+						if(!this.$store.state.industryList.find(item_ => item_.id == item.id)) {
+							let industryList = [...this.$store.state.industryList, item]
+							console.log(industryList)
+							this.$store.dispatch('save_industryList', industryList)
+							this.$store.dispatch('save_industry', item)
+						}else {
+							let index = this.$store.state.industryList.findIndex(item_ => item_.id == item.id)
+							let industryList = [...this.$store.state.industryList]
+							console.log(index)
+							industryList.splice(index, 1)
+							console.log(industryList)
+							this.$store.dispatch('save_industryList', industryList)
+							this.$store.dispatch('save_industry', industryList[0] || null)
+						}
+					}else {
+						let index = this.$store.state.industryList.findIndex(item_ => item_.tckdj == 0)
+						if(index > -1) {
+							let industryList = JSON.parse(JSON.stringify(this.$store.state.industryList))
+							if(!this.$store.state.industryList.find(item_ => item_.id == item.id)) {
+								industryList.splice(index, 1, item)
+								this.$store.dispatch('save_industry', item)
+							}else {
+								industryList.splice(index, 1)
+								console.log(industryList)
+								this.$store.dispatch('save_industry', industryList[0] || null)
+							}
+							this.$store.dispatch('save_industryList', industryList)
+						}else {
+							let industryList = [...this.$store.state.industryList, item]
+							this.$store.dispatch('save_industryList', industryList)
+							this.$store.dispatch('save_industry', item)
+						}
+					}
 				}
 			},
 			setCurrentData(item) {
@@ -157,9 +196,11 @@
 				})
 			},
 			setHeight() {
-				this.contentHeight = this.$refs.trade.offsetHeight - 38 * document.getElementsByClassName('trade_item1').length - 20
+				console.log(this.$refs.trade.offsetHeight)
+				let elemList = Array.from(document.getElementsByClassName('trade_item1')).filter(item => item.style.display !== 'none')
+				this.contentHeight = this.$refs.trade.offsetHeight - 38 * elemList.length - 20
 				this.$nextTick(() => {
-					$(`#trade_brother49`).stop().slideToggle();
+					$(`#trade_brother50`).stop().slideToggle();
 				})
 			}
 		},
@@ -272,7 +313,7 @@
 				.trade_brother_content {
 					box-sizing: border-box;
 					padding-right: 20px;
-					width: 100%;
+					width: calc(100% + 24px);
 					height: 100%;
 					padding-bottom: 24px;
 					overflow-y: scroll;

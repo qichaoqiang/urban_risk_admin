@@ -715,7 +715,7 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
 						let ctrl = new T.Control.MapType(); 
@@ -729,9 +729,9 @@
 		            	})
 		            	this.map.addControl(zoomCtrl);
 			            if(this.baseInfo.lngAndLat) {
-			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.lnglat.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.lnglat.lat), 17);
+			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.point.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.point.lat), 17);
 			            }else {
-			            	this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 17);
+			            	this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 17);
 			            }
 						var config = {
 			                showLabel: true,

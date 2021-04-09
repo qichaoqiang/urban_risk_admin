@@ -3,9 +3,9 @@
 		<div>
 			<Row type="flex" justify="center">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<part-title text="人员活动"></part-title>
-					<Form :model="mostForm" label-position="left" :label-width="140">
+					<Form :disabled="isDisEditInfo" :model="mostForm" label-position="left" :label-width="140">
 				        <FormItem label="最多容纳人数">
 				        	<InputNumber :min="0" v-model="mostForm.zdkrnrs"></InputNumber>
 				        </FormItem>
@@ -14,7 +14,7 @@
 				        </FormItem>
 					</Form>
 					<part-title text="消防重点单位"></part-title>
-					<Form :model="mostForm" label-position="left" :label-width="140">
+					<Form :disabled="isDisEditInfo" :model="mostForm" label-position="left" :label-width="140">
 				        <FormItem label="消防重点单位">
 				            <Select clearable v-model="mostForm.xfzddw" placeholder="请选择">
 				                <Option v-for="item in xfzddwList" :key="item.value" :value="item.value">{{item.name}}</Option>
@@ -43,7 +43,7 @@
 					</Form>
 				</Col>	
 			</Row>	
-			<Row type="flex" justify="center" style="margin-top: 24px">
+			<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 				<Col>
 					<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo">完成</Button>
 				</Col>
@@ -234,10 +234,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

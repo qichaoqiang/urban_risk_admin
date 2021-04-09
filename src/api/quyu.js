@@ -6,7 +6,7 @@ export default {
 	},
 	// 区域保存
 	addQuyuItem(params) {
-		return fetchPost('/api/quyu', params)
+		return fetchPostFile('/api/quyu', params)
 	},
   	// 区域删除
   	deleteQuyuItem(id) {

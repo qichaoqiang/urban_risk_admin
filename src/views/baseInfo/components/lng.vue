@@ -8,7 +8,7 @@
 						icon="md-pin" 
 						placeholder="经纬度" />
             	</Col>
-            	<Col :span="6" style="text-align: left">
+            	<Col :span="6" style="text-align: left" v-show="canEdit && !isDisEditInfo">
             		<span @click="openLngModal" class="link">地图选取</span>
             	</Col>
             </Row>

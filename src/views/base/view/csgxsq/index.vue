@@ -11,12 +11,12 @@
 				            {{baseInfo.mc}}
 				        </FormItem>
 				        <FormItem label="所属区域" prop="quyu">
-				            <Cascader 
-				            	readonly 
+				            <Cascader
+				            	readonly
 				            	change-on-select
-				            	v-model="baseInfo.quyu" 
-				            	:data="areaList" 
-				            	:load-data="loadArea" 
+				            	v-model="baseInfo.quyu"
+				            	:data="areaList"
+				            	:load-data="loadArea"
 				            	placeholder="所属区域"></Cascader>
 				        </FormItem>
 				        <FormItem label="起点">
@@ -96,8 +96,8 @@
 				            <DatePicker type="date" v-model="baseInfo.jgtysj"  placeholder="请选择"></DatePicker>
 				        </FormItem>
 					</Form>
-				</Col>	
-			</Row>	
+				</Col>
+			</Row>
 			<div class="line"></div>
 			<Row type="flex" justify="center">
 				<Col>
@@ -151,8 +151,8 @@
 				        	</Row>
 				        </FormItem>
 					</Form>
-				</Col>	
-			</Row>	
+				</Col>
+			</Row>
 			<Row type="flex" justify="center">
 				<Col>
 					<Button type="primary" style="margin: 0 auto; width: 200px;" @click="nextStep">完成</Button>
@@ -404,7 +404,7 @@
 			            <Select clearable v-model="mainRiskForm.name" placeholder="请选择">
 			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
 			            </Select>
-			        </FormItem>	
+			        </FormItem>
 			        <FormItem label="安全系统">
 			            <Select clearable v-model="mainRiskForm.name" placeholder="请选择">
 			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
@@ -435,7 +435,7 @@
 			        </FormItem>
 			        <FormItem label="目标距离(m)">
 			        	<InputNumber :min="0" v-model="rimForm.num"></InputNumber>
-			        </FormItem>	
+			        </FormItem>
 			        <FormItem label="人员数量">
 			        	<InputNumber :min="0" v-model="rimForm.num"></InputNumber>
 			        </FormItem>
@@ -471,7 +471,7 @@
 				id: '',
 				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				loading: true,
-				step: 1,	
+				step: 1,
 				showAreaModel: false,
 				showLngModel: false,
 				showWhModel: false,
@@ -574,7 +574,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				whData: [],
 				whForm: {
@@ -630,7 +630,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				whRiskData: [],
 				whRiskForm: {
@@ -676,7 +676,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				sbfcgyData: [],
 				sbfcgyForm: {
@@ -724,7 +724,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				deviceData: [],
 				deviceForm: {
@@ -768,7 +768,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				mainRiskData: [],
 				mainRiskForm: {
@@ -807,10 +807,10 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				rimData: [
-					{	
+					{
 						name: 'hahaha',
 						cas: 1111,
 						color: 'red'
@@ -897,7 +897,7 @@
                     }
                 })
                 this.$refs.contactInfo.validate((valid) => {})
-				
+
 			},
 			async submit() {
 				let params = {
@@ -909,7 +909,7 @@
 					wd: this.baseInfo.lngAndLat.split(' ')[1],
 					zdjd: this.baseInfo.zdlngAndLat.split(' ')[0],
 					zdwd: this.baseInfo.zdlngAndLat.split(' ')[1],
-				}	 
+				}
 				if(this.$route.query.type == 2) {
 					params.gkdx_id = this.form.gkdx_id
 				}
@@ -933,14 +933,14 @@
 					this.$router.replace('/baseInfo')
 				}
 			},
-			openAreaModal() {	
+			openAreaModal() {
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						let ctrl = new T.Control.MapType(); 
+						let ctrl = new T.Control.MapType();
 		            	this.map.addControl(ctrl); // 增加地图类型控件
 		            	//移除图层
 		            	this.map.removeControl(TMAP_NORMAL_MAP);
@@ -951,18 +951,18 @@
 		            	})
 		            	this.map.addControl(zoomCtrl);
 			            if(this.baseInfo.lngAndLat) {
-			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.lnglat.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.lnglat.lat), 17);
+			            	this.map.centerAndZoom(new T.LngLat(this.baseInfo.lngAndLat.split(' ')[0] || e.point.lng, this.baseInfo.lngAndLat.split(' ')[1] || e.point.lat), 17);
 			            }else {
-			            	this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 17);
+			            	this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 17);
 			            }
 						var config = {
 			                showLabel: true,
-			                color: "blue", 
-			                weight: 3, 
-			                opacity: 0.5, 
-			                fillColor: "#FFFFFF", 
+			                color: "blue",
+			                weight: 3,
+			                opacity: 0.5,
+			                fillColor: "#FFFFFF",
 			                fillOpacity: 0.5
-			            };	
+			            };
 			            //创建标注工具对象
 			            this.polygonTool = new T.PolygonTool(this.map, config);
 			            if(this.baseInfo.cdfw) {

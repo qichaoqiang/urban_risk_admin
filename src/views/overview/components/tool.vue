@@ -38,7 +38,7 @@
 								<div style="overflow: hidden; clear: both"></div>
 								<div class="industry_list">
 									<div class="industry_item" v-for="item_ in item.children" :key="item_.id">
-										<img :src="require(`@/assets/risk-point/${item_.dm}-6.png`)">
+										<img :src="getIcon(item_.dm)">
 										<span>{{item_.fxylbmc}}</span>
 									</div>
 								</div>
@@ -82,6 +82,15 @@
 			...mapState(['tradeList']),
 		},
 		methods: {
+      getIcon(dm) {
+        let iconUrl
+        try {
+          iconUrl = require(`@/assets/risk-point/${dm}-6.png`)
+        } catch {
+          iconUrl = require(`@/assets/risk-point/fengxianyuan-6.png`)
+        }
+        return iconUrl
+      },
 			reload() {
 				location.reload()
 			},
@@ -163,7 +172,7 @@
 				    	h.print();
 				    	h.close();
 				    }, 1000)
-				    
+
 				});
 			},
 			save(elemId) {
@@ -262,7 +271,7 @@
 		top: 70px;
 		right: 489px;
 		z-index: 1001;
-		width: 788px;
+		width: 880px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -333,10 +342,12 @@
 										height: 20px;
 									}
 									span {
+                    display: block;
 										font-family: PingFangSC-Regular;
 										font-size: 14px;
 										color: #FFFFFF;
 										text-align: left;
+                    max-width: 95px;
 									}
 								}
 							}

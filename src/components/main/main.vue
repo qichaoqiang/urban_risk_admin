@@ -1,13 +1,13 @@
 <template>
-	<div class="container" id="container_test">
+	<div class="container" id="container_test" :class="{model_container: $route.name === 'disEditInfo'}">
 		<Layout>
 			<!-- position: 'fixed',  -->
-            <Header :style="{width: '100%'}" v-show="!isDl">
+            <Header :style="{width: '100%'}" v-show="!isDl && this.$route.name !== 'disEditInfo'">
 				<Row type="flex" align="middle" justify="space-between">
 					<Col>
 						<div class="header_left">
 							<img class="logo" src="@/assets/login-logo.png" />
-							<p v-show="!isCollapsed" class="name">城市安全风险管理平台</p>
+							<p v-show="!isCollapsed" class="name">{{$storage.get('xmName')}}</p>
 							<Icon v-show="!$route.meta.hideMenu" @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '0 20px'}" type="md-menu" size="24"></Icon>
 						</div>
 					</Col>
@@ -30,7 +30,7 @@
 		    		ref="side"
 		            collapsible
 		            hide-trigger
-		            v-show="!$route.meta.hideMenu && !isDl"
+		            v-show="!$route.meta.hideMenu && !isDl && this.$route.name !== 'disEditInfo'"
 		            v-model="isCollapsed"
 		            :width="200"
 		            :collapsed-width="64"
@@ -160,11 +160,11 @@
 	        async savePassword() {
 	            if(!this.oldPassword || !this.password || !this.confirmPassword) {
 	                this.$Message.error('请先完成输入')
-	                return 
+	                return
 	            }
 	            if(this.password !== this.confirmPassword) {
 	                this.$Message.error('密码确认有误，请重新确认')
-	                return 
+	                return
 	            }
 	            this.addUserLoading = true
 	            let { data, status_code } = await api.changeUserInfo({ act: 'change_password', oldpassword: this.oldPassword, password: this.password })
@@ -203,6 +203,11 @@
 	.container {
 		width: 100%;
 		// min-height: 100vh;
+    &.model_container {
+      .ivu-layout {
+        // background-color: transparent;
+      }
+    }
 		.ivu-layout-header {
 			background: #1E2657;
 		}

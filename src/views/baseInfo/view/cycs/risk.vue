@@ -4,18 +4,18 @@
 		<div v-show="step == 2" style="height: 100%">
 			<Row type="flex" justify="center" style="height: 100%">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 						<TabPane label="位置信息" name="name1">
 				        	<part-title text="位置信息"></part-title>
-							<Form :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
+							<Form :disabled="isDisEditInfo" :model="baseInfo" ref="baseInfo1" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 					        	<FormItem label="经营楼层" prop="jylc">
 						        	<Select clearable multiple :transfer="true" v-model="baseInfo.jylc" placeholder="请选择">
 						                <Option v-for="item in jylcList" :key="item" :value="item">{{item}}</Option>
 						            </Select>
 						        </FormItem>
 						    </Form>
-						    <Row type="flex" justify="center" style="margin-top: 24px">
+						    <Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo1">完成</Button>
 								</Col>
@@ -25,8 +25,8 @@
 				        	<part-title text="人流信息" :btns="['add']" @add="openRlxxModel"></part-title>
 							<Table :columns="rlxxColumns" :data="rlxxData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editRlxxModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeRlxx(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editRlxxModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeRlxx(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -50,7 +50,7 @@
 			        		<part-title text="燃料信息" :btns="['add']" @add="openGdtrqModel" v-if="baseInfo.zyrllx == '管道天然气'"></part-title>
 			        		<part-title text="燃料信息" :btns="['add']" @add="openYhsyqModel" v-if="baseInfo.zyrllx == '液化石油气'"></part-title>
 				        	<part-title text="燃料信息" :btns="['add']" @add="openElseModel" v-if="baseInfo.zyrllx == '其他'"></part-title>
-			        		<Form :model="baseInfo" ref="baseInfo2" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="120" style="width: 600px">
+			        		<Form :disabled="isDisEditInfo" :model="baseInfo" ref="baseInfo2" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="120" style="width: 600px">
 			        			<FormItem label="主要燃料类型" prop="zyrllx">
 						        	<Select :transfer="true" clearable v-model="baseInfo.zyrllx" placeholder="主要燃料类型">
 						                <Option v-for="item in zyrllxList" :key="item" :value="item">{{item}}</Option>
@@ -72,8 +72,8 @@
 				        	<div v-if="baseInfo.zyrllx == '管道天然气'">
 								<Table :columns="gdtrqColumns" :data="gdtrqData">
 									<template slot-scope="{ row }" slot="action">
-							            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editGdtrqModel(row)">编辑</Button>
-							            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeGdtrq(row)">
+							            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editGdtrqModel(row)">编辑</Button>
+							            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeGdtrq(row)">
 									        <Button type="error" size="small" ghost>删除</Button>
 									    </Poptip>
 							        </template>
@@ -91,7 +91,7 @@
 					                    @on-page-size-change="handleChangeGdtrqPageSize"
 					                />
 								</Row>
-							    <Row type="flex" justify="center" style="margin-top: 24px">
+							    <Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 									<Col>
 										<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo2">完成</Button>
 									</Col>
@@ -100,8 +100,8 @@
 				        	<div v-if="baseInfo.zyrllx == '液化石油气'">
 								<Table :columns="yhsyqColumns" :data="yhsyqData">
 									<template slot-scope="{ row }" slot="action">
-							            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editYhsyqModel(row)">编辑</Button>
-							            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeYhsyq(row)">
+							            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editYhsyqModel(row)">编辑</Button>
+							            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeYhsyq(row)">
 									        <Button type="error" size="small" ghost>删除</Button>
 									    </Poptip>
 							        </template>
@@ -119,7 +119,7 @@
 					                    @on-page-size-change="handleChangeYhsyqPageSize"
 					                />
 								</Row>
-							    <Row type="flex" justify="center" style="margin-top: 24px">
+							    <Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 									<Col>
 										<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo3">完成</Button>
 									</Col>
@@ -128,8 +128,8 @@
 				        	<div v-if="baseInfo.zyrllx == '醇基燃料'">
 								<Table :columns="cjrlColumns" :data="cjrlData">
 									<template slot-scope="{ row }" slot="action">
-							            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editCjrlModel(row)">编辑</Button>
-							            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeCjrl(row)">
+							            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editCjrlModel(row)">编辑</Button>
+							            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeCjrl(row)">
 									        <Button type="error" size="small" ghost>删除</Button>
 									    </Poptip>
 							        </template>
@@ -147,7 +147,7 @@
 					                    @on-page-size-change="handleChangeCjrlPageSize"
 					                />
 								</Row>
-								<Row type="flex" justify="center" style="margin-top: 24px">
+								<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 									<Col>
 										<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo4">完成</Button>
 									</Col>
@@ -156,8 +156,8 @@
 				        	<div v-if="baseInfo.zyrllx == '其他'">
 								<Table :columns="elseColumns" :data="elseData">
 									<template slot-scope="{ row }" slot="action">
-							            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editElseModel(row)">编辑</Button>
-							            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeElse(row)">
+							            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editElseModel(row)">编辑</Button>
+							            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeElse(row)">
 									        <Button type="error" size="small" ghost>删除</Button>
 									    </Poptip>
 							        </template>
@@ -175,7 +175,7 @@
 					                    @on-page-size-change="handleChangeElsePageSize"
 					                />
 								</Row>
-								<Row type="flex" justify="center" style="margin-top: 24px">
+								<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 									<Col>
 										<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo5">完成</Button>
 									</Col>
@@ -808,10 +808,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

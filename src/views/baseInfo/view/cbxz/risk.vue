@@ -4,7 +4,7 @@
 		<div v-show="step == 2">
 			<Row type="flex" justify="center">
 				<Col span="22">
-					<div class="title">请完善风险信息</div>
+					<div v-show="!isDisEditInfo" class="title">请完善风险信息</div>
 					<Tabs value="name1">
 				        <TabPane label="危险化学品" name="name1">
 				        	<part-title text="危险化学品" ref="xxx" :btns="['add']" @add="openWhModel"></part-title>
@@ -16,8 +16,8 @@
 									<span>{{sfzgyyqList.find(item => item.value === row.sfbzp).name}}</span>
 								</template>
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editWhModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWh(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editWhModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWh(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -40,8 +40,8 @@
 				        	<part-title text="主要生产作业" :btns="['add']" @add="openZysczyModel"></part-title>
 							<Table :columns="zysczyColumns" :data="zysczyData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editZysczyModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeZysczy(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editZysczyModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeZysczy(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -64,8 +64,8 @@
 				        	<part-title text="主要设备" :btns="['add']" @add="openZysbModel"></part-title>
 								<Table :columns="zysbColumns" :data="zysbData">
 									<template slot-scope="{ row }" slot="action">
-							            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editZysbModel(row)">编辑</Button>
-							            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeZysb(row)">
+							            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editZysbModel(row)">编辑</Button>
+							            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeZysb(row)">
 									        <Button type="error" size="small" ghost>删除</Button>
 									    </Poptip>
 							        </template>
@@ -85,14 +85,14 @@
 								</Row>
 				        </TabPane>
 				        <TabPane label="重大危险源" name="name4">
-				        	<Form :model="baseInfo" ref="baseInfo" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
+				        	<Form :disabled="isDisEditInfo" :model="baseInfo" ref="baseInfo" :rules="baseInfoRules" hide-required-mark label-position="left" :label-width="140" style="width: 600px">
 					        	<FormItem label="重大危险源" prop="zdwxy">
 						        	<Select clearable v-model="baseInfo.zdwxy" placeholder="请选择">
 						                <Option v-for="item in zdwxyList" :key="item" :value="item">{{item}}</Option>
 						            </Select>
 						        </FormItem>
 						    </Form>
-							<Row type="flex" justify="center" style="margin-top: 24px">
+							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo">完成</Button>
 								</Col>
@@ -103,8 +103,8 @@
 				        	<div style="margin-bottom: 16px;">说明：调查周边200m范围</div>
 							<Table :columns="rimColumns" :data="rimData">
 								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editRimModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeRim(row)">
+						            <Button v-show="!isDisEditInfo" type="primary" size="small" ghost style="margin-right: 5px" @click="editRimModel(row)">编辑</Button>
+						            <Poptip v-show="!isDisEditInfo" confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeRim(row)">
 								        <Button type="error" size="small" ghost>删除</Button>
 								    </Poptip>
 						        </template>
@@ -923,10 +923,10 @@
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
-					let lo = new T.Geolocation();
+					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						this.map.centerAndZoom(new T.LngLat(e.lnglat.lng, e.lnglat.lat), 10);
+						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
 			                color: "blue", 

@@ -14,6 +14,9 @@ Vue.mixin({
 		isDl() {
 			console.log(this.$route.name)
 			return location.pathname.indexOf('dashboard') > -1 || ['area', 'industry', 'poi'].includes(this.$route.name)
+		},
+		isDisEditInfo() {
+			return this.$route.name === 'disEditInfo'
 		}
 	},
 	methods: {
