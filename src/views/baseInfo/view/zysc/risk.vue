@@ -938,6 +938,9 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.zyscRlxxColumns.pop()
+      }
 		},
 		mounted() {
 			

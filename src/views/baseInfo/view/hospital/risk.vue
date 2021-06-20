@@ -1004,6 +1004,11 @@
 				this.areaList = list
 				this.getBaseInfo()
 			})
+      if(this.isDisEditInfo) {
+        this.whColumns.pop()
+        this.ydColumns.pop()
+        this.riskLiauidColumns.pop()
+      }
 		},
 		mounted() {
 

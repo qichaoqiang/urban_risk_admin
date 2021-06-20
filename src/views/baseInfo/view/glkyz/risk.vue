@@ -1204,6 +1204,9 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.rimColumns.pop()
+      }
 		},
 		mounted() {
 			

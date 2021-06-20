@@ -904,6 +904,10 @@
     },
     created() {
       this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.shyjdwgcColumns.pop()
+        this.shyjjyjlColumns.pop()
+      }
     },
     mounted() {
 

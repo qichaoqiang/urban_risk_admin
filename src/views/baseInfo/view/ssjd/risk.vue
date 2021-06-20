@@ -884,6 +884,9 @@
     },
     created() {
       this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.spxhColumns.pop()
+      }
     },
     mounted() {
 

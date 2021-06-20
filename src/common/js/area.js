@@ -60,6 +60,7 @@ export default {
 			
 		},
 		loadArea(item, cb) {
+      console.log(item)
 			item.loading = true;
 			this.getArea(item.value, list => {
 				item.children = list

@@ -33,6 +33,9 @@
 						                <Option v-for="item in qlyhdjList" :key="item" :value="item">{{item}}</Option>
 						            </Select>
 						        </FormItem>
+                    <FormItem label="完好状态等级">
+                    	<Input clearable v-model="baseInfo.whztdj"></Input>
+                    </FormItem>
 					        	<FormItem label="日均通行量">
 						        	<InputNumber :min="0" v-model="baseInfo.rjtxl"></InputNumber>
 						        </FormItem>
@@ -83,8 +86,8 @@
 							</Row>
 				        </TabPane>
 				    </Tabs>
-				</Col>	
-			</Row>	
+				</Col>
+			</Row>
 		</div>
 		<Modal width="1000" title="企业经纬度标注" v-model="showLngModel">
 			<div id="lng_box" class="area_box"></div>
@@ -160,10 +163,10 @@
 				id: '',
 				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				zaqId: '',
-				gdtrq_id: '',	
+				gdtrq_id: '',
 				ccss_id: '',
 				loading: true,
-				step: 2,	
+				step: 2,
 				showAreaModel: false,
 				showLngModel: false,
 				showYhxxModel: false,
@@ -235,7 +238,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				yhxxData: [],
 				yhxxForm: {
@@ -276,7 +279,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				gdtrqData: [],
 				gdtrqForm: {
@@ -328,7 +331,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				yhsyqData: [],
 				yhsyqForm: {
@@ -364,7 +367,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				cjrlData: [],
 				cjrlForm: {
@@ -399,7 +402,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				elseData: [],
 				elseForm: {
@@ -447,7 +450,7 @@
 				  		this.yhxxData = yhxxRes.data.data.filter(item => item.gkdx_id == this.gkdx_id)
 				  		this.yhxxPage.totalRow = yhxxRes.data.total
 				  	}
-				  	this.loading = false   
+				  	this.loading = false
 				}).catch((error) => {
 				  	console.log(error)
 				  	this.loading = false
@@ -455,18 +458,19 @@
 				let { status_code, data, message } = await api.getCsqlBase(this.gkdx_id);
 				if(status_code == 0) {
 					console.log(data)
-					this.baseInfo.qllb = data.qllb 
+					this.baseInfo.qllb = data.qllb
 					this.baseInfo.sfxcql = data.sfxcql ? Number(data.sfxcql) : 0
 					this.baseInfo.qlcd = data.qlcd ? Number(data.qlcd) : 0
 					this.baseInfo.qldkkj = data.qldkkj ? Number(data.qldkkj) : 0
 					this.baseInfo.qlsjcznl = data.qlsjcznl ? Number(data.qlsjcznl) : 0
-					this.baseInfo.qlyhdj = data.qlyhdj 
+					this.baseInfo.qlyhdj = data.qlyhdj
+          this.baseInfo.whztdj = data.whztdj
 					this.baseInfo.rjtxl = data.rjtxl ? Number(data.rjtxl) : 0
 					this.baseInfo.zxclslzb = data.zxclslzb ? Number(data.zxclslzb) : 0
-					this.baseInfo.qljszkdj = data.qljszkdj 
-					this.baseInfo.jsgm = data.jsgm 
-					this.baseInfo.zzzhqk = data.zzzhqk 
-					this.baseInfo.bhqk = data.bhqk 
+					this.baseInfo.qljszkdj = data.qljszkdj
+					this.baseInfo.jsgm = data.jsgm
+					this.baseInfo.zzzhqk = data.zzzhqk
+					this.baseInfo.bhqk = data.bhqk
 				}
 				this.loading = false
 			},
@@ -478,7 +482,7 @@
 					hyml: this.baseInfo.hyml[this.baseInfo.hyml.length - 1],
 					jd: this.addressInfo.lngAndLat.split(' ')[0],
 					wd: this.addressInfo.lngAndLat.split(' ')[1],
-				}	 
+				}
 				if(this.$route.query.type == 2) {
 					params.gkdx_id = this.form.gkdx_id
 				}
@@ -505,6 +509,7 @@
 							qldkkj: this.baseInfo.qldkkj,
 							qlsjcznl: this.baseInfo.qlsjcznl,
 							qlyhdj: this.baseInfo.qlyhdj,
+              whztdj: this.baseInfo.whztdj,
 							rjtxl: this.baseInfo.rjtxl,
 							zxclslzb: this.baseInfo.zxclslzb,
 							qljszkdj: this.baseInfo.qljszkdj,
@@ -529,7 +534,7 @@
 					this.$Message.success('保存成功')
 				}
 			},
-			openAreaModal() {	
+			openAreaModal() {
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
@@ -539,10 +544,10 @@
 						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
-			                color: "blue", 
-			                weight: 3, 
-			                opacity: 0.5, 
-			                fillColor: "#FFFFFF", 
+			                color: "blue",
+			                weight: 3,
+			                opacity: 0.5,
+			                fillColor: "#FFFFFF",
 			                fillOpacity: 0.5
 			            };
 			            //创建标注工具对象
@@ -925,9 +930,13 @@
 		},
 		created() {
 			this.getBaseInfo()
+			if(this.isDisEditInfo) {
+			  this.gdxxsyColumns.pop()
+			  this.ghgqColumns.pop()
+			}
 		},
 		mounted() {
-			
+
 		}
 	}
 </script>

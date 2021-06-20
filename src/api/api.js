@@ -4,6 +4,7 @@ import role from './role' // 角色管理
 import cj_account from './cj_account' // 采集账号管理
 import admin from './admin' // 管理员账号管理
 import project from './project' // 项目管理
+import fxjs from './fxjs' // 风险计算方法
 import quyu from './quyu' // 区域管理
 import sbfc from './sbfc' // 涉爆粉尘
 import ctky from './ctky' // 长途客运
@@ -69,6 +70,11 @@ import yjjydw from './yjjydw' // 应急救援队伍
 import yjjyzb from './yjjyzb' // 应急救援装备
 import shyjll from './shyjll' // 社会应急力量
 import bncs from './bncs' // 社会应急力量
+import glql from './glql' // 公路桥梁
+import cs from './cs' // 超市
+import yxkjzyqy from './yxkjzyqy' // 有限空间作业企业
+import yjwzcc from './yjwzcc' // 应急物资储存
+import yjwzsc from './yjwzsc' // 应急物资生产
 
 
 export default {
@@ -185,5 +191,11 @@ export default {
   ...yjjydw,
   ...yjjyzb,
   ...shyjll,
-  ...bncs
+  ...bncs,
+  ...glql,
+  ...cs,
+  ...yxkjzyqy,
+  ...yjwzcc,
+  ...yjwzsc,
+  ...fxjs
 }

@@ -1559,9 +1559,14 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.whColumns.pop()
+        this.ptgyColumns.pop()
+        this.rimColumns.pop()
+      }
 		},
 		mounted() {
-			this.$refs.xxx.onLoad();
+			
 		}
 	}
 </script>

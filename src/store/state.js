@@ -94,10 +94,15 @@ let state = {
 		huapo: 'hp',
 		diwayilaodidai: 'dwyldd',
 		dizhizaihaiyinhuandian: 'dzzhyhd',
-    yingjijiuyuanduiwu: 'yjjydw',
-    yingjijiuyuanzhuangbei: 'yjjyzb',
-    shehuiyingjililiang: 'shyjll',
-    binanchangsuo: 'bncs'
+		yingjijiuyuanduiwu: 'yjjydw',
+		yingjijiuyuanzhuangbei: 'yjjyzb',
+		shehuiyingjililiang: 'shyjll',
+		binanchangsuo: 'bncs',
+		gongluqiaoliang: 'glql',
+		chaoshi: 'cs',
+		youxiankongjianzuoyeqiye: 'yxkjzyqy',
+		yingjiwuzichucun: 'yjwzcc',
+		yingjiwuzishengchan: 'yjwzsc'
 	}
 }
 

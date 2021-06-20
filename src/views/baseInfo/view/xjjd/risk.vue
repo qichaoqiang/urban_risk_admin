@@ -995,6 +995,9 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.yyzkColumns.pop()
+      }
 		},
 		mounted() {
 			

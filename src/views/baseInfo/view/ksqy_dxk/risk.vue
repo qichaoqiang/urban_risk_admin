@@ -1202,6 +1202,10 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.kcgmdxkColumns.pop()
+        this.sjcccpColumns.pop()
+      }
 		},
 		mounted() {
 			

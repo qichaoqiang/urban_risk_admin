@@ -1600,9 +1600,15 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.whColumns.pop()
+        this.ydzlxtColumns.pop()
+        this.rimColumns.pop()
+        this.zaqColumns.pop()
+      }
 		},
 		mounted() {
-			this.$refs.xxx.onLoad();
+			
 		}
 	}
 </script>

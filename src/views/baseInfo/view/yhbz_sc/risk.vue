@@ -1209,6 +1209,12 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.cpyhbzscColumns.pop()
+        this.ckyhbzscColumns.pop()
+        this.rimColumns.pop()
+        this.sjcccpColumns.pop()
+      }
 		},
 		mounted() {
 			this.$refs.xxx.onLoad();

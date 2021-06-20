@@ -1067,9 +1067,15 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.mtgmColumns.pop()
+        this.bwxxColumns.pop()
+        this.ccxxwhColumns.pop()
+        this.sjwxhwzlColumns.pop()
+      }
 		},
 		mounted() {
-			this.$refs.xxx.onLoad();
+			
 		}
 	}
 </script>

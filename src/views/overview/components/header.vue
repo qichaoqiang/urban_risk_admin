@@ -1,6 +1,6 @@
 <template>
 	<div class="header">
-		<div class="header_title">{{$storage.get('xm') ? $storage.get('xm').dtbt : '杭州市安全风险地图平台'}}</div>
+		<div class="header_title">{{$storage.get('xm') ? $storage.get('xm').dtbt : '安全风险地图平台'}}</div>
 		<div class="header_left">
 			<!-- <div class="btn" @click="back">
 				<a><Icon type="md-arrow-back" /></a>

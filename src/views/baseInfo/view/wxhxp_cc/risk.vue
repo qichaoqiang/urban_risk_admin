@@ -148,7 +148,7 @@
 				        </template>
 						<template slot-scope="{ row }" slot="action">
 				            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editWhRiskModel(row)">编辑</Button>
-				            
+
 				            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWhRisk(row)">
 						        <Button type="error" size="small" ghost>删除</Button>
 						    </Poptip>
@@ -198,8 +198,8 @@
 							</Row>
 						</Col>
 					</Row> -->
-				</Col>	
-			</Row>	
+				</Col>
+			</Row>
 		</div>
 		<Modal width="1000" title="企业经纬度标注" v-model="showLngModel">
 			<div id="lng_box" class="area_box"></div>
@@ -322,7 +322,7 @@
 			            <Select clearable v-model="mainRiskForm.zkxt" placeholder="请选择">
 			                <Option v-for="item in zkxtList" :key="item" :value="item">{{item}}</Option>
 			            </Select>
-			        </FormItem>	
+			        </FormItem>
 			        <FormItem label="安全系统">
 			            <Select clearable v-model="mainRiskForm.aqxt" placeholder="请选择">
 			                <Option v-for="item in aqxtList" :key="item" :value="item">{{item}}</Option>
@@ -418,20 +418,20 @@
 			        <FormItem label="经纬度">
 			        	<lng :lngAndLat.sync="sczzForm.lngAndLat"></lng>
 			        	<!-- <div @click="openLngModal">
-		        			<Input 
-		        				readonly 
-		        				v-model="rimForm.lngAndLat" 
-		        				icon="md-pin" 
+		        			<Input
+		        				readonly
+		        				v-model="rimForm.lngAndLat"
+		        				icon="md-pin"
 		        				placeholder="经纬度" />
 		        		</div> -->
 			        </FormItem>
 			        <FormItem label="区域范围">
 			        	<qyfw :qyfw.sync="sczzForm.dtfw"></qyfw>
 			        	<!-- <div @click.stop="openAreaModal">
-		        			<Input 
-		        				readonly 
-		        				v-model="rimForm.qyfw" 
-		        				icon="md-pin" 
+		        			<Input
+		        				readonly
+		        				v-model="rimForm.qyfw"
+		        				icon="md-pin"
 		        				placeholder="区域范围" />
 		        		</div> -->
 			        </FormItem>
@@ -487,20 +487,20 @@
 			        <FormItem label="经纬度">
 			        	<lng :lngAndLat.sync="ccssForm.lngAndLat" id="lng_box_ccss"></lng>
 			        	<!-- <div @click="openLngModal">
-		        			<Input 
-		        				readonly 
-		        				v-model="rimForm.lngAndLat" 
-		        				icon="md-pin" 
+		        			<Input
+		        				readonly
+		        				v-model="rimForm.lngAndLat"
+		        				icon="md-pin"
 		        				placeholder="经纬度" />
 		        		</div> -->
 			        </FormItem>
 			        <FormItem label="区域范围">
 			        	<qyfw :qyfw.sync="ccssForm.dtfw" id="area_box_ccss"></qyfw>
 			        	<!-- <div @click.stop="openAreaModal">
-		        			<Input 
-		        				readonly 
-		        				v-model="rimForm.qyfw" 
-		        				icon="md-pin" 
+		        			<Input
+		        				readonly
+		        				v-model="rimForm.qyfw"
+		        				icon="md-pin"
 		        				placeholder="区域范围" />
 		        		</div> -->
 			        </FormItem>
@@ -632,27 +632,27 @@
 			        </FormItem>
 			        <FormItem label="敏感目标距离(m)">
 			        	<InputNumber :min="0" v-model="rimForm.mgmbjl"></InputNumber>
-			        </FormItem>	
+			        </FormItem>
 			        <FormItem label="人员数量">
 			        	<InputNumber :min="0" v-model="rimForm.rysl"></InputNumber>
 			        </FormItem>
 			        <FormItem label="经纬度">
 			        	<lng :lngAndLat.sync="rimForm.lngAndLat" id="lng_box_wxhxpcc"></lng>
 			        	<!-- <div @click="openLngModal">
-		        			<Input 
-		        				readonly 
-		        				v-model="rimForm.lngAndLat" 
-		        				icon="md-pin" 
+		        			<Input
+		        				readonly
+		        				v-model="rimForm.lngAndLat"
+		        				icon="md-pin"
 		        				placeholder="经纬度" />
 		        		</div> -->
 			        </FormItem>
 			        <FormItem label="区域范围">
 			        	<qyfw :qyfw.sync="rimForm.qyfw" id="area_box_wxhxpcc"></qyfw>
 			        	<!-- <div @click.stop="openAreaModal">
-		        			<Input 
-		        				readonly 
-		        				v-model="rimForm.qyfw" 
-		        				icon="md-pin" 
+		        			<Input
+		        				readonly
+		        				v-model="rimForm.qyfw"
+		        				icon="md-pin"
 		        				placeholder="区域范围" />
 		        		</div> -->
 			        </FormItem>
@@ -686,10 +686,10 @@
 				id: '',
 				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				sjwxhxpId: '',
-				sczz_id: '',	
+				sczz_id: '',
 				ccss_id: '',
 				loading: true,
-				step: 2,	
+				step: 2,
 				showAreaModel: false,
 				showLngModel: false,
 				showWhModel: false,
@@ -800,7 +800,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				whData: [],
 				whForm: {
@@ -861,7 +861,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				whRiskData: [],
 				whRiskForm: {
@@ -916,7 +916,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				sczzData: [],
 				sczzForm: {
@@ -985,7 +985,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				ccssData: [],
 				ccssForm: {
@@ -1027,7 +1027,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				sjwxhxpData: [],
 				sjwxhxpForm: {
@@ -1079,7 +1079,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				gqscData: [],
 				gqscForm: {
@@ -1125,7 +1125,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				mainRiskData: [],
 				mainRiskForm: {
@@ -1174,7 +1174,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				rimData: [],
 				rimForm: {
@@ -1254,7 +1254,7 @@
 				  		this.rimData = rimRes.data.data.filter(item => item.gkdx_id == this.gkdx_id)
 				  		this.rimPage.totalRow = rimRes.data.total
 				  	}
-				  	this.loading = false   
+				  	this.loading = false
 				}).catch((error) => {
 				  	console.log(error)
 				  	this.loading = false
@@ -1268,7 +1268,7 @@
 					hyml: this.baseInfo.hyml[this.baseInfo.hyml.length - 1],
 					jd: this.addressInfo.lngAndLat.split(' ')[0],
 					wd: this.addressInfo.lngAndLat.split(' ')[1],
-				}	 
+				}
 				if(this.$route.query.type == 2) {
 					params.gkdx_id = this.form.gkdx_id
 				}
@@ -1292,7 +1292,7 @@
 					this.$router.replace('/baseInfo')
 				}
 			},
-			openAreaModal() {	
+			openAreaModal() {
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
@@ -1302,10 +1302,10 @@
 						this.map.centerAndZoom(new T.LngLat(e.point.lng, e.point.lat), 10);
 						var config = {
 			                showLabel: true,
-			                color: "blue", 
-			                weight: 3, 
-			                opacity: 0.5, 
-			                fillColor: "#FFFFFF", 
+			                color: "blue",
+			                weight: 3,
+			                opacity: 0.5,
+			                fillColor: "#FFFFFF",
 			                fillOpacity: 0.5
 			            };
 			            //创建标注工具对象
@@ -1967,9 +1967,18 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.whColumns.pop()
+        this.mainRiskColumns.pop()
+        this.ccssColumns.pop()
+        this.rimColumns.pop()
+        this.sjwxhxpColumns.pop()
+        this.gqscColumns.pop()
+        this.sjwxhxpColumns.pop()
+      }
 		},
 		mounted() {
-			this.$refs.xxx.onLoad();
+
 		}
 	}
 </script>

@@ -5,8 +5,8 @@
       <div id="mapDiv" style="width: 100%; height: 100%"></div>
     </div>
     <div class="level_box" ref="level_box" v-show="!isSearch">
-      <div class="level_item" v-for="item in stateCurrentLevelList" :key="item.color" v-show="item.name !== '不分级' || item.value > 0"
-        style="width: 200px; height: 36px;">
+      <div class="level_item" v-for="item in stateCurrentLevelList" :key="item.color"
+        v-show="item.name !== '不分级' || item.value > 0" style="width: 200px; height: 36px;">
         <div class="check" :class="{selected: item.selected}" @click="selectLevel(item)"></div>
         <div class="level_item_name">{{item.name}}（{{item.value || 0}}）</div>
         <div class="level_item_color" :style="{background: item.color, width: '16px', height: '16px'}"></div>
@@ -35,7 +35,8 @@
               <span :class="{active: cityName == '全部'}">全部</span>
             </div>
             <div class="header_select_dropdown_item" v-for="item in cityList" :key="item.dropName">
-              <div class="check" :class="{selected: cityName == item.name}" @click="selectArea(item.dropName, item.zoom)"></div>
+              <div class="check" :class="{selected: cityName == item.name}"
+                @click="selectArea(item.dropName, item.zoom)"></div>
               <span :class="{active: cityName == item.name}">{{item.name}}</span>
             </div>
             <div class="header_select_dropdown_item" v-if="xm_id === 11">
@@ -58,19 +59,22 @@
       <div class="left_box">
         <div class="left_item" style="height: 100%;">
           <title-top name="检索">
-            <div style="margin-right: 32px; flex: 1; text-align: right; font-size: 12px; color: #fff">共<span style="color: #10F6FF;">{{totalSl}}</span>条</div>
+            <div style="margin-right: 32px; flex: 1; text-align: right; font-size: 12px; color: #fff">共<span
+                style="color: #10F6FF;">{{totalSl}}</span>条</div>
           </title-top>
           <div class="search_form">
             <div class="search_form_content">
               <Form :model="searchForm" ref="fxy" label-position="left" :label-width="42">
                 <FormItem label="区域" v-if="isSearch">
-                  <Select clearable multiple v-model="searchForm.quyu_id" placeholder="" :max-tag-count="1" @on-change="handleQuyuChange">
+                  <Select clearable multiple v-model="searchForm.quyu_id" placeholder="" :max-tag-count="1"
+                    @on-change="handleQuyuChange">
                     <Option value="all">全部</Option>
                     <Option v-for="item in cityList" :key="item.dropName" :value="item.id">{{item.name}}</Option>
                   </Select>
                 </FormItem>
                 <FormItem label="风险等级">
-                  <Select clearable multiple v-model="searchForm.fxdj" placeholder="" :max-tag-count="1" @on-change="handleFxdjChange">
+                  <Select clearable multiple v-model="searchForm.fxdj" placeholder="" :max-tag-count="1"
+                    @on-change="handleFxdjChange">
                     <Option v-for="item in stateLevelList" :key="item.name" :value="item.name">{{item.name}}</Option>
                   </Select>
                 </FormItem>
@@ -80,7 +84,8 @@
                 <FormItem label="行业">
                   <div style="overflow-x: hidden;">
                     <div style="width: 400px; max-height: 300px; overflow-y: scroll;">
-                      <Tree ref="searchTradeTree" :data="tradeSearchData" show-checkbox multiple @on-check-change="handleTradeChange"></Tree>
+                      <Tree ref="searchTradeTree" :data="tradeSearchData" show-checkbox multiple
+                        @on-check-change="handleTradeChange"></Tree>
                     </div>
                   </div>
                 </FormItem>
@@ -91,7 +96,8 @@
           </div>
           <div class="search_list">
             <div class="search_item" :class="{is_select: selectGkdxId == item.gkdx_id}" v-for="item in searchFxyList"
-              :key="item.id" @click="selectIcon(item)" @mouseenter="findIconLight($event, item)" @mouseleave="findIconDark($event, item)">
+              :key="item.id" @click="selectIcon(item)" @mouseenter="findIconLight($event, item)"
+              @mouseleave="findIconDark($event, item)">
               <img v-if="getIcon(item)" :src="getIcon(item)" />
               <div class="search_title">{{item.fxymc}}</div>
               <div class="search_content">风险源类别：{{item.fxylbmc}}</div>
@@ -109,7 +115,8 @@
     </div>
     <div class="trade_box" id="right" v-show="!isSearch">
       <div class="right_box">
-        <title-top :name="`${cityName}${$store.state.industry ? $store.state.industry.fxylbmc : ''}风险等级分布图`" :area="area"></title-top>
+        <title-top :name="`${cityName}${$store.state.industry ? $store.state.industry.fxylbmc : ''}风险等级分布图`"
+          :area="area"></title-top>
         <div>
           <overview></overview>
         </div>
@@ -198,7 +205,8 @@
     <div class="info" v-if="showImg" @click.stop.self="showImg = false">
       <img :src="imgUrl" style="width: 1000px" />
     </div>
-    <div class="city_model" id="city_model" v-if="overCity" :style="{left: `${cityModelLeft}px`, top: `${cityModelTop}px`}">
+    <div class="city_model" id="city_model" v-if="overCity"
+      :style="{left: `${cityModelLeft}px`, top: `${cityModelTop}px`}">
       <div class="city_name">{{overCity.name}}</div>
       <div class="city_level" v-for="(item, index) in levelList" :key="item.color">
         <div class="city_level_color" :style="{background: item.color, width: '16px', height: '16px'}"></div>
@@ -389,187 +397,187 @@
       quyuList: async function(val) {
         if (val.length > 0) {
           let cityList = []
-          if (this.xm_id == 13) {
-            let colorList = ['#1C86F3', '#F25E5E', '#F49852', '#EFE850', ]
-            cityList = minhou.features.filter(item => item.properties.NAME !== '闽侯县').map((item_, index) => {
-              return {
-                name: item_.properties.NAME,
-                dropName: item_.properties.NAME,
-                polygon: null,
-                color: colorList[index % colorList.length],
-                index: 0,
-                point: {
-                  x: -20,
-                  y: -10
-                },
-                zoom: 12
-              }
-            })
-          } else if (this.xm_id == 1) {
-            cityList = [{
-                "name": "上城区",
-                dropName: "sc",
-                "polygon": null,
-                color: '#1C86F3',
-                index: 0,
-                point: {
-                  x: -20,
-                  y: -10
-                },
-                zoom: 12
-              },
-              {
-                "name": "下城区",
-                dropName: "xc",
-                "polygon": null,
-                color: '#1C86F3',
-                index: 0,
-                point: {
-                  x: -20,
-                  y: -10
-                },
-                zoom: 12
-              },
-              {
-                "name": "西湖区",
-                dropName: "xh",
-                "polygon": null,
-                color: '#1C86F3',
-                index: 1,
-                point: {
-                  x: -20,
-                  y: -10
-                },
-                zoom: 11
-              },
-              {
-                "name": "江干区",
-                dropName: "jg",
-                "polygon": null,
-                color: '#1C86F3',
-                index: 0,
-                point: {
-                  x: -20,
-                  y: -10
-                },
-                zoom: 12
-              },
-              {
-                "name": "拱墅区",
-                dropName: "gs",
-                "polygon": null,
-                color: '#1C86F3',
-                index: 0,
-                point: {
-                  x: -20,
-                  y: -10
-                },
-                zoom: 12
-              },
-              {
-                "name": "滨江区",
-                dropName: "bj",
-                "polygon": null,
-                color: '#1C86F3',
-                index: 0,
-                point: {
-                  x: -20,
-                  y: -10
-                },
-                zoom: 12
-              },
-              {
-                "name": "萧山区",
-                dropName: "xs",
-                "polygon": null,
-                color: '#F25E5E',
-                index: 0,
-                point: {
-                  x: -20,
-                  y: -10
-                }
-              },
-              {
-                "name": "余杭区",
-                dropName: "yh",
-                "polygon": null,
-                color: '#F49852',
-                index: 0,
-                point: {
-                  x: -20,
-                  y: -10
-                }
-              },
-              {
-                "name": "临安区",
-                dropName: "la",
-                "polygon": null,
-                color: '#EFE850',
-                index: 0,
-                point: {
-                  x: -20,
-                  y: -10
-                }
-              },
-              {
-                "name": "富阳区",
-                dropName: "fy",
-                "polygon": null,
-                color: '#F49852',
-                index: 0,
-                point: {
-                  x: -20,
-                  y: -10
-                }
-              },
-              {
-                "name": "建德市",
-                dropName: "jd",
-                "polygon": null,
-                color: '#F25E5E',
-                index: 0,
-                point: {
-                  x: -20,
-                  y: -10
-                }
-              },
-              {
-                "name": "桐庐县",
-                dropName: "tl",
-                "polygon": null,
-                color: '#EFE850',
-                index: 0,
-                point: {
-                  x: -20,
-                  y: -10
-                }
-              },
-              {
-                "name": "淳安县",
-                dropName: "ca",
-                "polygon": null,
-                color: '#1C86F3',
-                index: 0,
-                point: {
-                  x: -20,
-                  y: -10
-                }
-              },
-              {
-                "name": "钱塘新区",
-                dropName: "qt",
-                "polygon": null,
-                color: '#1C86F3',
-                index: 0,
-                point: {
-                  x: -20,
-                  y: -10
-                },
-                zoom: 11
-              }
-            ]
+          // if (this.xm_id == 13) {
+          //   let colorList = ['#1C86F3', '#F25E5E', '#F49852', '#EFE850', ]
+          //   cityList = minhou.features.filter(item => item.properties.NAME !== '闽侯县').map((item_, index) => {
+          //     return {
+          //       name: item_.properties.NAME,
+          //       dropName: item_.properties.NAME,
+          //       polygon: null,
+          //       color: colorList[index % colorList.length],
+          //       index: 0,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       },
+          //       zoom: 12
+          //     }
+          //   })
+          // } else if (this.xm_id == 1) {
+          //   cityList = [{
+          //       "name": "上城区",
+          //       dropName: "sc",
+          //       "polygon": null,
+          //       color: '#1C86F3',
+          //       index: 0,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       },
+          //       zoom: 12
+          //     },
+          //     {
+          //       "name": "下城区",
+          //       dropName: "xc",
+          //       "polygon": null,
+          //       color: '#1C86F3',
+          //       index: 0,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       },
+          //       zoom: 12
+          //     },
+          //     {
+          //       "name": "西湖区",
+          //       dropName: "xh",
+          //       "polygon": null,
+          //       color: '#1C86F3',
+          //       index: 1,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       },
+          //       zoom: 11
+          //     },
+          //     {
+          //       "name": "江干区",
+          //       dropName: "jg",
+          //       "polygon": null,
+          //       color: '#1C86F3',
+          //       index: 0,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       },
+          //       zoom: 12
+          //     },
+          //     {
+          //       "name": "拱墅区",
+          //       dropName: "gs",
+          //       "polygon": null,
+          //       color: '#1C86F3',
+          //       index: 0,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       },
+          //       zoom: 12
+          //     },
+          //     {
+          //       "name": "滨江区",
+          //       dropName: "bj",
+          //       "polygon": null,
+          //       color: '#1C86F3',
+          //       index: 0,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       },
+          //       zoom: 12
+          //     },
+          //     {
+          //       "name": "萧山区",
+          //       dropName: "xs",
+          //       "polygon": null,
+          //       color: '#F25E5E',
+          //       index: 0,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       }
+          //     },
+          //     {
+          //       "name": "余杭区",
+          //       dropName: "yh",
+          //       "polygon": null,
+          //       color: '#F49852',
+          //       index: 0,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       }
+          //     },
+          //     {
+          //       "name": "临安区",
+          //       dropName: "la",
+          //       "polygon": null,
+          //       color: '#EFE850',
+          //       index: 0,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       }
+          //     },
+          //     {
+          //       "name": "富阳区",
+          //       dropName: "fy",
+          //       "polygon": null,
+          //       color: '#F49852',
+          //       index: 0,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       }
+          //     },
+          //     {
+          //       "name": "建德市",
+          //       dropName: "jd",
+          //       "polygon": null,
+          //       color: '#F25E5E',
+          //       index: 0,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       }
+          //     },
+          //     {
+          //       "name": "桐庐县",
+          //       dropName: "tl",
+          //       "polygon": null,
+          //       color: '#EFE850',
+          //       index: 0,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       }
+          //     },
+          //     {
+          //       "name": "淳安县",
+          //       dropName: "ca",
+          //       "polygon": null,
+          //       color: '#1C86F3',
+          //       index: 0,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       }
+          //     },
+          //     {
+          //       "name": "钱塘新区",
+          //       dropName: "qt",
+          //       "polygon": null,
+          //       color: '#1C86F3',
+          //       index: 0,
+          //       point: {
+          //         x: -20,
+          //         y: -10
+          //       },
+          //       zoom: 11
+          //     }
+          //   ]
 
-          }
+          // }
           this.getTradeList()
           let parent_ids = {
             '1': 28,
@@ -584,10 +592,26 @@
           })
           if (status_code == 200) {
             this.areaList = data.data
-            cityList.forEach(item => {
-              let item_ = this.areaList.find(areaItem => areaItem.mc == item.name)
-              item_ && (item.id = item_.id)
+            let colorList = ['#1C86F3', '#F25E5E', '#F49852', '#EFE850', ]
+            cityList = data.data.map((item, index) => {
+              return {
+                id: item.id,
+                name: item.mc,
+                dropName: item.mc,
+                polygon: null,
+                color: colorList[index % colorList.length],
+                index: 0,
+                point: {
+                  x: -20,
+                  y: -10
+                },
+                zoom: 12
+              }
             })
+            // cityList.forEach(item => {
+            //   let item_ = this.areaList.find(areaItem => areaItem.mc == item.name)
+            //   item_ && (item.id = item_.id)
+            // })
             this.cityList = cityList
           }
           this.$nextTick(() => {
@@ -607,17 +631,38 @@
         // 	page: 1,
         // }
         // let quyu = this.areaList.find(areaItem => areaItem.mc == val)
-        // this.cityList.forEach(item => {
-        // 	if(item.polygon) {
-        // 		if(item.name == val) {
-        // 			item.polygon.setFillOpacity(1)
-        // 			item.polygon.setWeight(5)
-        // 		}else {
-        // 			item.polygon.setFillOpacity(0.8)
-        // 			item.polygon.setWeight(2)
-        // 		}
-        // 	}
-        // })
+        this.cityList.forEach(item => {
+        	if (item.name == val) {
+        	  if(Array.isArray(item.polygon)) {
+        	    item.polygon.forEach(item_ => {
+        	      item_.setFillOpacity(1)
+        	      item_.setWeight(5)
+        	    })
+        	  }else {
+        	    item.polygon.setFillOpacity(1)
+        	    item.polygon.setWeight(5)
+        	  }
+        	} else {
+        	  if(Array.isArray(item.polygon)) {
+        	    item.polygon.forEach(item_ => {
+        	      item_.setFillOpacity(0.5)
+        	      item_.setWeight(2)
+        	    })
+        	  }else {
+        	    item.polygon.setFillOpacity(0.5)
+        	    item.polygon.setWeight(2)
+        	  }
+        	}
+        })
+        if (val == '全部') {
+          this.getAreaIndustryList()
+          this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 9);
+        } else {
+          let item = this.cityList.find(item => item.name == val)
+          this.getAreaIndustryList()
+          this.map.centerAndZoom(item.latlng, item.zoom || 11);
+          this.tabValue = 'name2'
+        }
         this.labelList.forEach(item => {
           let opacity = item.NP == this.cityName ? 1 : 0.01
           item.setOpacity(opacity)
@@ -648,7 +693,6 @@
             // })
           })
         })
-
       },
       '$store.state.levelIds'(val) {
         setTimeout(() => {
@@ -765,7 +809,8 @@
       selectArea(name, zoom) {
         if (name == 'all') {
           this.cityName = '全部'
-          this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom || 9);
+          this.map.centerAndZoom(this.mapConfig.center || new T.LngLat(119.886055, 29.996153), this.mapConfig.zoom ||
+          9);
           this.getFxysl(this.getFxy)
 
         } else {
@@ -795,7 +840,7 @@
         let self = this;
         let times = Math.ceil(this.zsl / 1000)
         let url = axios.defaults.baseURL + this.quyuList[0].map_file
-        $.getJSON(url,{},res => {
+        $.getJSON(url, {}, res => {
           let bdary = new BMap.Boundary();
           this.labelList = []
           this.cityList.forEach(async item => {
@@ -806,45 +851,95 @@
             item.color = level ? level.color : item.color
             item.data = res.features.find(item_ => item_.properties.NAME == item.name)
             let points = [];
-            item.data.geometry.coordinates[0].forEach((item_, index) => {
-              // if(index % 5 === 0) {
-              // 	points.push(new T.LngLat(item_[0], item_[1]));
-              // }
-              points.push(new T.LngLat(item_[0], item_[1]));
-            })
-            item.polygon = new T.Polygon(points, {
-              color: '#ffffff',
-              weight: 2,
-              opacity: 1,
-              fillColor: 'transparent',
-              fillOpacity: 0.5
-            });
-            this.map.addOverLay(item.polygon);
-            item.latlng = new T.LngLat(item.data.properties.centerLon, item.data.properties.centerLat);
-            let label = new T.Label({
-              text: item.name,
-              position: item.latlng,
-              offset: new T.Point(-20, 0)
-            });
-            label.setFontColor('#000')
-            this.map.addOverLay(label);
-            label.setOpacity(0.01)
-            this.labelList.push(label)
-            item.polygon.addEventListener("click", () => {
-              this.cityName = item.name;
-
-              this.map.centerAndZoom(item.latlng, 10);
-            });
-            item.polygon.addEventListener("mouseover", e => {
-              item.polygon.setFillOpacity(1)
-              label.setOpacity(1)
-            });
-            item.polygon.addEventListener("mouseout", e => {
-              if (item.name !== this.cityName) {
-                item.polygon.setFillOpacity(0.5)
+            if(item.data) {
+              // let list = item.data.geometry.type === 'Polygon' ? item.data.geometry.coordinates[0] : item.data.geometry.coordinates[0][0]
+              // list.forEach(item_ => {
+              //   points.push(new T.LngLat(item_[0], item_[1]));
+              // })
+              if(item.data.geometry.type === 'Polygon') {
+                let points = [];
+                item.data.geometry.coordinates[0].forEach(item_ => {
+                  points.push(new T.LngLat(item_[0], item_[1]));
+                })
+                item.polygon = new T.Polygon(points, {
+                  color: '#ffffff',
+                  weight: 2,
+                  opacity: 1,
+                  fillColor: 'transparent',
+                  fillOpacity: 0.5
+                });
+                this.map.addOverLay(item.polygon);
+                item.latlng = new T.LngLat(item.data.properties.centerLon, item.data.properties.centerLat);
+                let label = new T.Label({
+                  text: item.name,
+                  position: item.latlng,
+                  offset: new T.Point(-20, 0)
+                });
+                label.setFontColor('#000')
+                this.map.addOverLay(label);
                 label.setOpacity(0.01)
+                this.labelList.push(label)
+                item.polygon.addEventListener("click", () => {
+                  this.cityName = item.name;
+                  // this.map.centerAndZoom(item.latlng, 11);
+                });
+                item.polygon.addEventListener("mouseover", e => {
+                  item.polygon.setFillOpacity(1)
+                  label.setOpacity(1)
+                  // this.overCity = item
+                });
+                item.polygon.addEventListener("mouseout", e => {
+                  if (item.name !== this.cityName) {
+                    item.polygon.setFillOpacity(0.5)
+                    label.setOpacity(0.01)
+                  }
+                  // this.overCity = null
+                });
+              }else {
+                item.polygon = []
+                item.data.geometry.coordinates.forEach((item_, index_) => {
+                  let points = [];
+                  item_[0].forEach(item__ => {
+                    points.push(new T.LngLat(item__[0], item__[1]));
+                  })
+                  let polygon = new T.Polygon(points, {
+                    color: '#ffffff',
+                    weight: 2,
+                    opacity: 1,
+                    fillColor: 'transparent',
+                    fillOpacity: 0.5
+                  })
+                  item.polygon.push(polygon)
+                  this.map.addOverLay(polygon);
+                  item.latlng = new T.LngLat(item.data.properties.centerLon, item.data.properties.centerLat);
+                  let label = new T.Label({
+                    text: item.name,
+                    position: item.latlng,
+                    offset: new T.Point(-20, 0)
+                  });
+                  label.setFontColor('#000')
+                  this.map.addOverLay(label);
+                  label.setOpacity(0.01)
+                  this.labelList.push(label)
+                  polygon.addEventListener("click", () => {
+                    this.cityName = item.name;
+                    // this.map.centerAndZoom(item.latlng, 11);
+                  });
+                  polygon.addEventListener("mouseover", e => {
+                    polygon.setFillOpacity(1)
+                    label.setOpacity(1)
+                    // this.overCity = item
+                  });
+                  polygon.addEventListener("mouseout", e => {
+                    if (item.name !== this.cityName) {
+                      polygon.setFillOpacity(0.5)
+                      label.setOpacity(0.01)
+                    }
+                    // this.overCity = null
+                  });
+                })
               }
-            });
+            }
           })
         })
 
@@ -913,7 +1008,6 @@
         let levelList = JSON.parse(JSON.stringify(this.levelList))
         levelList.forEach(item => {
           item.value = fxdjsl[item.name]
-          console.log(item.value)
         })
         this.$store.dispatch('save_currentLevelList', [...levelList])
         let levelList_
@@ -925,15 +1019,11 @@
         levelList_.forEach((item, index) => {
           item.value = fxdjsl[item.name]
           // if(!this.$store.state.industry.tckdj) {
-          // 	console.log(1)
           // 	item.value = fxdjsl[item.name]
           // }else {
-          // 	console.log(2)
           // 	if(fxdjsl[item.name] && !this.riskPoints.find(item => params.fxylb === item.fxylb)) {
-          // 		console.log(fxdjsl[item.name])
           // 		item.value = item.value ? (item.value + fxdjsl[item.name]) : fxdjsl[item.name]
           // 	}else {
-          // 		console.log({...this.$store.state.levelList[index]})
           // 		item.value = this.$store.state.levelList[index] ? this.$store.state.levelList[index].value : 0
           // 	}
           // }
@@ -979,7 +1069,6 @@
               // 	!riskPoints_.find(item_ => item_.gkdx_id === item.gkdx_id) && riskPoints_.push(item)
               // })
               this.riskPoints = [...this.riskPoints, ...data.data]
-              console.log(this.riskPoints.length)
               if (this.riskPoints.length == this.zsl) {
                 this.$store.dispatch('save_riskPoints', this.riskPoints)
                 this.drawRiskPoints(this.riskPoints)
@@ -1069,7 +1158,6 @@
             }
             let iconUrl
             try {
-              console.log(`${item.fxylb}-${fxdj === '不分级' ? 7 : (index + 1)}.png`)
               iconUrl = require(`../../assets/risk-point/${item.fxylb}-${fxdj === '不分级' ? 7 : (index + 1)}.png`)
             } catch {
               iconUrl = require(`../../assets/risk-point/fengxianyuan-${index + 1}.png`)
@@ -1086,7 +1174,8 @@
               icon: icon
             });
             marker.isIcon = true
-            marker.item = { ...item,
+            marker.item = {
+              ...item,
               LngLat: param1
             }
             marker.addEventListener("click", () => {
@@ -1154,6 +1243,7 @@
         return distance
       },
       async showInfo(item) {
+        console.log(item)
         let params = {
           gkdx_id: item.gkdx_id
         }
@@ -1168,8 +1258,12 @@
           this.$storage.set('userInfo', userInfo)
           item.fxgc = data.fengxiangoucheng
           this.$storage.set('fxyInfo', item)
-          this.fxyInfoSrc = process.env.NODE_ENV === "development" ? `${location.origin}/#/disEditInfo?type=2` :
+          let fxyInfoSrc = process.env.NODE_ENV === "development" ? `${location.origin}/#/disEditInfo?type=2` :
             `${location.origin}/v2/#/disEditInfo?type=2`
+          if(item.fxdj === '不分级') {
+            fxyInfoSrc += '&fxdj=bfj'
+          }
+          this.fxyInfoSrc = fxyInfoSrc
           this.showInfoModel = true;
           // this.fxyInfo = data
           // this.getQy(() => {
@@ -1792,7 +1886,7 @@
           }
 
           .header_select_dropdown_list {
-            padding-right: 20px;
+            padding: 0 20px 0 24px;
             box-sizing: border-box;
             width: calc(100% + 24px);
             height: calc(100% - 58px);
@@ -1800,11 +1894,10 @@
             // min-height: 100%;
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
 
             .header_select_dropdown_item {
               margin-top: 28px;
-              width: 40%;
+              width: 45%;
               box-sizing: border-box;
               display: flex;
               align-items: center;

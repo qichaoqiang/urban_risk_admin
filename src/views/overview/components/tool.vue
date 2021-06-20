@@ -182,7 +182,7 @@
 				}).then(canvas => {
 					//将图片保存到变量
 					var image = canvas.toDataURL("image/jpeg");
-					downloadFile('杭州市风险地图', image);
+					downloadFile(this.$storage.get('xm').dtbt || '风险地图', image);
 				});
 				function downloadFile(fileName, content) { //下载base64图片
 				    var base64ToBlob = function(code) {

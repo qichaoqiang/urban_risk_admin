@@ -29,28 +29,6 @@
 						            </Select>
 						        </FormItem>
 						    </Form>
-						    <!-- <div style="margin-top: 16px;">人流特征</div>
-							<Table :columns="rltzColumns" :data="rltzData">
-								<template slot-scope="{ row }" slot="action">
-						            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editRltzModel(row)">编辑</Button>
-						            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeRltz(row)">
-								        <Button type="error" size="small" ghost>删除</Button>
-								    </Poptip>
-						        </template>
-							</Table>
-							<Row type="flex" justify="end">
-								<Page
-				                    size="small"
-				                    style="margin-top: 10px"
-				                    :page-size="rltzPage.pageSize"
-				                    :total="rltzPage.totalRow"
-				                    show-elevator
-				                    show-total
-				                    show-sizer
-				                    @on-change="handleChangeRltzPage"
-				                    @on-page-size-change="handleChangeRltzPageSize"
-				                />
-							</Row> -->
 							<Row v-show="!isDisEditInfo" type="flex" justify="center" style="margin-top: 24px">
 								<Col>
 									<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo1">完成</Button>

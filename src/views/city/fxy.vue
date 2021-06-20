@@ -666,8 +666,12 @@
         this.$storage.set('searchFxyForm', this.searchFxyForm)
         this.$storage.set('userInfo', userInfo)
         this.$storage.set('fxyInfo', row)
-        location.href = process.env.NODE_ENV === "development" ? `${location.origin}/#/editInfo?type=2` :
+        let url = process.env.NODE_ENV === "development" ? `${location.origin}/#/editInfo?type=2` :
           `${location.origin}/v2/#/editInfo?type=2`
+        if(row.fxdj === '不分级') {
+          url += '&fxdj=bfj'
+        }
+        location.href = url
       },
       fxyModelChange(status) {
         if (!status) {
@@ -782,7 +786,7 @@
         let params = new FormData();
         params.append("xls_file", this.files[0]);
         params.append("fxylb", this.fxylb[0] ? this.fxylb[this.fxylb.length - 1] : '');
-        params.append("xm_id", this.xmItem.xm_id);
+        params.append("xm_id", this.$route.query.id);
         let {
           status_code,
           message
@@ -797,7 +801,7 @@
           ...this.searchFxyForm,
           act: 'export',
           fxylb: this.searchFxyForm.fxylb.join(','),
-          xm_id: this.xmItem.xm_id,
+          xm_id: this.$route.query.id,
           per_page: this.fxyPage.pageSize,
           page: this.fxyPage.pageIndex,
         }

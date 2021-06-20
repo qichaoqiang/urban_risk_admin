@@ -1328,6 +1328,12 @@
 		},
 		created() {
 			this.getBaseInfo()
+			if(this.isDisEditInfo) {
+			  this.whColumns.pop()
+			  this.zysczyColumns.pop()
+			  this.zysbColumns.pop()
+			  this.rimColumns.pop()
+			}
 		},
 		mounted() {
 			this.$refs.xxx.onLoad();

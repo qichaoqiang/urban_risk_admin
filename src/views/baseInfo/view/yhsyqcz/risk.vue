@@ -1048,6 +1048,12 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.cpzColumns.pop()
+        this.gyzColumns.pop()
+        this.jyzkColumns.pop()
+        this.rimColumns.pop()
+      }
 		},
 		mounted() {
 			

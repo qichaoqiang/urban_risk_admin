@@ -25,9 +25,9 @@
 				<template slot-scope="{ row }" slot="role_id">
 					<span>{{getRole(row.role_id)}}</span>
 				</template>
-				<template slot-scope="{ row }" slot="quyu">
+				<!-- <template slot-scope="{ row }" slot="quyu">
 					<span>{{getQuyu(row.quyu_id)}}</span>
-				</template>
+				</template> -->
 				<template slot-scope="{ row }" slot="action">
 					<Button v-if="hasAuth('guanliyuan_show')" type="primary" size="small" ghost style="margin-right: 5px" @click="viewAdminModel(row)">查看</Button>
 					<Button v-if="hasAuth('guanliyuan_update')" type="primary" size="small" ghost style="margin-right: 5px" @click="editAdminModel(row)">编辑</Button>
@@ -76,11 +76,11 @@
 		            </Select>
 		        </FormItem>
 		        <FormItem label="管辖区域">
-		        	<Cascader 
-		            	clearable 
+		        	<Cascader
+		            	clearable
 		            	change-on-select
-		            	v-model="adminForm.quyu" 
-		            	:data="areaList" 
+		            	v-model="adminForm.quyu"
+		            	:data="areaList"
 		            	:load-data="loadArea"></Cascader>
 		        </FormItem>
 		        <FormItem label="管辖项目" prop="xm_id">
@@ -147,8 +147,8 @@
                         minWidth: 120
                     }, {
                         title: '管辖区域',
-                        slot: 'quyu',
-                        minWidth: 100
+                        key: 'gxqy',
+                        minWidth: 160
                     }, {
                         title: '操作',
                         slot: 'action',
@@ -184,7 +184,9 @@
 			}
 		},
 		watch: {
-
+      'adminForm.quyu'(val) {
+        console.log(val)
+      },
 		},
 		computed: {
 			adminRules() {
@@ -232,6 +234,12 @@
 				this.showAdminModel = true
 			},
 			editAdminModel(row) {
+        let quyu
+        if(!row.gxqy || !row.quyu_id) {
+          quyu = []
+        }else {
+          quyu = row.quyu_id === this.areaList[0].value ? [row.quyu_id] : [this.areaList[0].value, row.quyu_id]
+        }
 				this.adminForm = {
 					username: row.username,
 					password: row.password,
@@ -239,7 +247,7 @@
 					email: row.email,
 					tel: row.tel,
 					role_id: row.role_id,
-					quyu: [row.quyu_id],
+					quyu,
 					xm_id: row.xm_id.split(',').map(item => item - 0)
 				}
 				this.admin_id = row.admin_id
@@ -247,6 +255,12 @@
 				this.showAdminModel = true
 			},
 			viewAdminModel(row) {
+        let quyu
+        if(!row.gxqy || !row.quyu_id) {
+          quyu = []
+        }else {
+          quyu = row.quyu_id === this.areaList[0].value ? [row.quyu_id] : [this.areaList[0].value, row.quyu_id]
+        }
 				this.adminForm = {
 					username: row.username,
 					password: row.password,
@@ -254,7 +268,7 @@
 					email: row.email,
 					tel: row.tel,
 					role_id: row.role_id,
-					quyu: [row.quyu_id],
+					quyu,
 					xm_id: row.xm_id.split(',').map(item => item - 0)
 				}
 				this.admin_id = row.admin_id
@@ -350,7 +364,9 @@
 		},
 		created() {
 			this.getArea('', list => {
-				this.areaList = list
+        this.loadArea(list[0], () => {
+          this.areaList = list
+        })
 			})
 			this.getRoleList()
 			this.getProjectList()
@@ -364,6 +380,6 @@
 
 <style lang="scss" scoped>
 	.user_container {
-		
+
 	}
 </style>

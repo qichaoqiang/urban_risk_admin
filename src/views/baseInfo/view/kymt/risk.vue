@@ -990,6 +990,9 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.mtrlColumns.pop()
+      }
 		},
 		mounted() {
 			this.$refs.xxx.onLoad();

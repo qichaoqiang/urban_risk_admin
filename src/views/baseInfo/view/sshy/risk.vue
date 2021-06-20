@@ -682,6 +682,9 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.sshycbxxColumns.pop()
+      }
 		},
 		mounted() {
 			

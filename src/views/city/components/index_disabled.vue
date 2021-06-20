@@ -7,7 +7,7 @@
           <RadioGroup v-model="tab" type="button">
             <Radio label="基本信息"></Radio>
             <Radio label="风险信息" v-if="!noRisk.includes(path)"></Radio>
-            <Radio label="风险评估"></Radio>
+            <Radio label="风险评估" v-if="$route.query.fxdj !== 'bfj'"></Radio>
           </RadioGroup>
         </Row>
       </div>

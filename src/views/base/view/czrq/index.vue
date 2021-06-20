@@ -10,7 +10,7 @@
 						<FormItem label="名称">
 				            {{baseInfo.mc}}
 				        </FormItem>
-				        <FormItem label="所属区域" prop="quyu">
+				        <FormItem label="所属区域">
 				            <Cascader 
 				            	readonly 
 				            	change-on-select
@@ -22,12 +22,12 @@
 				        <FormItem label="起点">
 				        	<Row type="flex" :gutter="20">
 					        	<Col span="8">
-					        		<FormItem prop="qd">
+					        		<FormItem>
 					        			<Input clearable v-model="baseInfo.qd" placeholder="名称"></Input>
 					        		</FormItem>
 				        		</Col>
 				        		<Col span="16">
-				        			<FormItem prop="lngAndLat">
+				        			<FormItem>
 				        				<lng id="lng_box_qd" :lngAndLat.sync="baseInfo.lngAndLat" :dz="baseInfo.qd"></lng>
 				        			</FormItem>
 				        		</Col>

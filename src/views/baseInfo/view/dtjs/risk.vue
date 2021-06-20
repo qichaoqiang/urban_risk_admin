@@ -728,6 +728,10 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.dtjszdxxColumns.pop()
+        this.dtjsqjxxColumns.pop()
+      }
 		},
 		mounted() {
 			

@@ -14,10 +14,15 @@ axios_.defaults.timeout = 100000
 
 
 if(process.env.NODE_ENV === 'production') {
-  axios_.defaults.baseURL = location.origin
+  if(location.origin.indexOf('localhost') > -1) {
+    axios_.defaults.baseURL = "http://risk_test.ser119.com"
+  }else {
+    axios_.defaults.baseURL = location.origin
+  }
 }else {
-  axios_.defaults.baseURL = "http://risk_test.ser119.com"
+  // axios_.defaults.baseURL = "http://risk_test.ser119.com"
   // axios_.defaults.baseURL = "http://minhou.ser119.com"
+  axios_.defaults.baseURL = "http://minqing.ser119.com"
   // axios_.defaults.baseURL = "http://hz.ser119.com"
 }
 
@@ -61,6 +66,9 @@ axios_.interceptors.request.use((config) => {
   if(!window.hasToast) {
       window.hasToast = true
       Message.error('错误的传参')
+      setTimeout(() => {
+        window.hasToast = false
+      }, 1500)
     }
   return Promise.reject(error)
 })
@@ -76,6 +84,9 @@ axios_.interceptors.response.use((res) => {
     if(!window.hasToast) {
       window.hasToast = true
       Message.error(info)
+      setTimeout(() => {
+        window.hasToast = false
+      }, 1500)
     }
   }
   return res.data
@@ -88,6 +99,9 @@ axios_.interceptors.response.use((res) => {
       if(!window.hasToast) {
         window.hasToast = true
          Message.error('登录信息失效，请重新登录')
+         setTimeout(() => {
+           window.hasToast = false
+         }, 1500)
       }
       setTimeout(() => {
         storage.clear();
@@ -98,6 +112,9 @@ axios_.interceptors.response.use((res) => {
       if(!window.hasToast) {
         window.hasToast = true
         Message.error('系统异常')
+        setTimeout(() => {
+          window.hasToast = false
+        }, 1500)
       }
     }
   }
@@ -105,6 +122,9 @@ axios_.interceptors.response.use((res) => {
     if(!window.hasToast) {
       window.hasToast = true
       Message.error('系统异常')
+      setTimeout(() => {
+        window.hasToast = false
+      }, 1500)
     }
   }
 

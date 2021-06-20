@@ -1150,6 +1150,12 @@
 					this.getBaseInfo()
 				}
 			})
+      if(this.isDisEditInfo) {
+        this.travelColumns.pop()
+        this.wwColumns.pop()
+        this.xfColumns.pop()
+        this.specialColumns.pop()
+      }
 		},
 		mounted() {
 

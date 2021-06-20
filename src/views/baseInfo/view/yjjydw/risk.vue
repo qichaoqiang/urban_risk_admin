@@ -933,6 +933,9 @@
     },
     created() {
       this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.dwgcColumns.pop()
+      }
     },
     mounted() {
 

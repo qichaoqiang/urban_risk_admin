@@ -28,7 +28,7 @@
 				        <FormItem label="影响户数">
 				        	<InputNumber :min="0" v-model="baseInfo.yxrs"></InputNumber>
 				        </FormItem>
-				        <FormItem label="影响户数">
+				        <FormItem label="影响人数">
 				        	<InputNumber :min="0" v-model="baseInfo.yxhs"></InputNumber>
 				        </FormItem>
 				        <FormItem label="户主">

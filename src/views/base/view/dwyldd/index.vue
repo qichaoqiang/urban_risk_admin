@@ -26,10 +26,10 @@
 				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat" :dz="baseInfo.jydz"></lng>
 				        </FormItem>
 				        <FormItem label="影响户数">
-				        	<InputNumber :min="0" v-model="baseInfo.yxrs"></InputNumber>
-				        </FormItem>
-				        <FormItem label="影响户数">
 				        	<InputNumber :min="0" v-model="baseInfo.yxhs"></InputNumber>
+				        </FormItem>
+				        <FormItem label="影响人数">
+				        	<InputNumber :min="0" v-model="baseInfo.yxrs"></InputNumber>
 				        </FormItem>
 				        <FormItem label="户主">
 				            <Input clearable v-model="baseInfo.hz" placeholder="户主"></Input>

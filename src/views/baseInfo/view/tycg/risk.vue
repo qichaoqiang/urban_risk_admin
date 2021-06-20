@@ -954,6 +954,9 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.hdapColumns.pop()
+      }
 		},
 		mounted() {
 			

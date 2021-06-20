@@ -1256,6 +1256,10 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.kcgmltkColumns.pop()
+        this.sjcccpColumns.pop()
+      }
 		},
 		mounted() {
 			

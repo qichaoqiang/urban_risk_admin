@@ -896,6 +896,9 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.gdxxczColumns.pop()
+      }
 		},
 		mounted() {
 			

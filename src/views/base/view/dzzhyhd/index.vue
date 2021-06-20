@@ -11,12 +11,12 @@
 				            {{baseInfo.mc}}
 				        </FormItem>
 				        <FormItem label="所属区域" prop="quyu">
-				            <Cascader 
-				            	clearable 
+				            <Cascader
+				            	clearable
 				            	change-on-select
-				            	v-model="baseInfo.quyu" 
-				            	:data="areaList" 
-				            	:load-data="loadArea" 
+				            	v-model="baseInfo.quyu"
+				            	:data="areaList"
+				            	:load-data="loadArea"
 				            	placeholder="所属区域"></Cascader>
 				        </FormItem>
 				        <FormItem label="地址">
@@ -26,10 +26,10 @@
 				        	<lng id="lng_box" :lngAndLat.sync="baseInfo.lngAndLat" :dz="baseInfo.jydz"></lng>
 				        </FormItem>
 				        <FormItem label="影响户数">
-				        	<InputNumber :min="0" v-model="baseInfo.yxrs"></InputNumber>
-				        </FormItem>
-				        <FormItem label="影响户数">
 				        	<InputNumber :min="0" v-model="baseInfo.yxhs"></InputNumber>
+				        </FormItem>
+				        <FormItem label="影响人数">
+				        	<InputNumber :min="0" v-model="baseInfo.yxrs"></InputNumber>
 				        </FormItem>
 				        <FormItem label="户主">
 				            <Input clearable v-model="baseInfo.hz" placeholder="户主"></Input>
@@ -38,8 +38,8 @@
 				            <Input clearable v-model="baseInfo.aqzyd" placeholder="安全转移点"></Input>
 				        </FormItem>
 					</Form>
-				</Col>	
-			</Row>	
+				</Col>
+			</Row>
 			<Row type="flex" justify="center">
 				<Col>
 					<Button type="primary" style="margin: 0 auto; width: 200px;" @click="nextStep">完成</Button>
@@ -88,7 +88,7 @@
 				        </template>
 						<template slot-scope="{ row }" slot="action">
 				            <Button type="primary" size="small" ghost style="margin-right: 5px" @click="editWhRiskModel(row)">编辑</Button>
-				            
+
 				            <Poptip confirm placement="left-end" :transfer="true" title="确认删除该条数据吗？" @on-ok="removeWhRisk(row)">
 						        <Button type="error" size="small" ghost>删除</Button>
 						    </Poptip>
@@ -188,8 +188,8 @@
 		                    @on-page-size-change="handleChangeRimPageSize"
 		                />
 					</Row>
-				</Col>	
-			</Row>	
+				</Col>
+			</Row>
 			<Row type="flex" justify="center" style="margin-top: 24px">
 				<Col>
 					<Button type="primary" style="margin: 0 auto; width: 200px;" @click="saveInfo">完成</Button>
@@ -441,7 +441,7 @@
 			            <Select clearable v-model="mainRiskForm.name" placeholder="请选择">
 			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
 			            </Select>
-			        </FormItem>	
+			        </FormItem>
 			        <FormItem label="安全系统">
 			            <Select clearable v-model="mainRiskForm.name" placeholder="请选择">
 			                <Option v-for="item in statusList" :key="item.value" :value="item.value">{{item.name}}</Option>
@@ -472,7 +472,7 @@
 			        </FormItem>
 			        <FormItem label="目标距离(m)">
 			        	<InputNumber :min="0" v-model="rimForm.num"></InputNumber>
-			        </FormItem>	
+			        </FormItem>
 			        <FormItem label="人员数量">
 			        	<InputNumber :min="0" v-model="rimForm.num"></InputNumber>
 			        </FormItem>
@@ -508,7 +508,7 @@
 				id: '',
 				gkdx_id: this.$storage.get('userInfo').gkdx_id,
 				loading: true,
-				step: 1,	
+				step: 1,
 				showAreaModel: false,
 				showLngModel: false,
 				showWhModel: false,
@@ -599,7 +599,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				whData: [],
 				whForm: {
@@ -655,7 +655,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				whRiskData: [],
 				whRiskForm: {
@@ -701,7 +701,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				sbfcgyData: [],
 				sbfcgyForm: {
@@ -749,7 +749,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				deviceData: [],
 				deviceForm: {
@@ -793,7 +793,7 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				mainRiskData: [],
 				mainRiskForm: {
@@ -832,10 +832,10 @@
                         fixed: 'right',
                         width: 150,
                         slot: 'action',
-                    }, 
+                    },
 				],
 				rimData: [
-					{	
+					{
 						name: 'hahaha',
 						cas: 1111,
 						color: 'red'
@@ -899,7 +899,7 @@
 					quyu_id: this.baseInfo.quyu[this.baseInfo.quyu.length - 1],
 					jd: this.baseInfo.lngAndLat.split(' ')[0],
 					wd: this.baseInfo.lngAndLat.split(' ')[1],
-				}	 
+				}
 				if(this.$route.query.type == 2) {
 					params.gkdx_id = this.form.gkdx_id
 				}
@@ -923,14 +923,14 @@
 					this.$router.replace('/baseInfo')
 				}
 			},
-			openAreaModal() {	
+			openAreaModal() {
 				this.showAreaModel = true;
 				this.$nextTick(() => {
 					let self = this;
 					let lo = new BMap.Geolocation();
 		            lo.getCurrentPosition((e) => {
 						this.map = new T.Map('area_box');
-						let ctrl = new T.Control.MapType(); 
+						let ctrl = new T.Control.MapType();
 		            	this.map.addControl(ctrl); // 增加地图类型控件
 		            	//移除图层
 		            	this.map.removeControl(TMAP_NORMAL_MAP);
@@ -947,12 +947,12 @@
 			            }
 						var config = {
 			                showLabel: true,
-			                color: "blue", 
-			                weight: 3, 
-			                opacity: 0.5, 
-			                fillColor: "#FFFFFF", 
+			                color: "blue",
+			                weight: 3,
+			                opacity: 0.5,
+			                fillColor: "#FFFFFF",
 			                fillOpacity: 0.5
-			            };	
+			            };
 			            //创建标注工具对象
 			            this.polygonTool = new T.PolygonTool(this.map, config);
 			            if(this.baseInfo.csfw) {

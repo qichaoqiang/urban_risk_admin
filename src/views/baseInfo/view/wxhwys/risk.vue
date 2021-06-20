@@ -920,9 +920,13 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.clxxColumns.pop()
+        this.ysxxColumns.pop()
+      }
 		},
 		mounted() {
-			this.$refs.xxx.onLoad();
+			
 		}
 	}
 </script>

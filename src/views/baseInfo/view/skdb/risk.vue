@@ -707,6 +707,11 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.krxxColumns.pop()
+        this.aqjdColumns.pop()
+        this.xyxxColumns.pop()
+      }
 		},
 		mounted() {
 			

@@ -75,7 +75,7 @@
 							<Table :columns="unitColumns" :data="sjdw" style="width: 600px"></Table>
 							<part-title text="施工单位"></part-title>
 							<Table :columns="unitColumns" :data="sgdw" style="width: 600px"></Table>
-							<part-title text="监管单位"></part-title>
+							<part-title text="监理单位"></part-title>
 							<Table :columns="unitColumns" :data="jldw" style="width: 600px"></Table>
 						</Col>
 					</Row>

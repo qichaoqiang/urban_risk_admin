@@ -1232,6 +1232,13 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.rlxxColumns.pop()
+        this.gdtrqColumns.pop()
+        this.yhsyqColumns.pop()
+        this.cjrlColumns.pop()
+        this.elseColumns.pop()
+      }
 		},
 		mounted() {
 			

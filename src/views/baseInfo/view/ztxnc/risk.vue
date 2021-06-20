@@ -622,6 +622,10 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.dcxxColumns.pop()
+        this.rimColumns.pop()
+      }
 		},
 		mounted() {
 			

@@ -1223,6 +1223,13 @@
 		},
 		created() {
 			this.getBaseInfo()
+      if(this.isDisEditInfo) {
+        this.mtgmColumns.pop()
+        this.bwxxColumns.pop()
+        this.ccxxphColumns.pop()
+        this.zxsbColumns.pop()
+        this.sjwxhwzlColumns.pop()
+      }
 		},
 		mounted() {
 			this.$refs.xxx.onLoad();
