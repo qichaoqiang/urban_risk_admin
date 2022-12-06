@@ -22,7 +22,7 @@
     "good-storage": "^1.1.0",
     "html2canvas": "^1.0.0-rc.5",
     "jquery": "^3.4.1",
-    "qs": "^6.7.0",
+    "qs": "^6.9.7",
     "screenfull": "^5.0.2",
     "swiper": "^5.2.1",
     "vant": "^1.6.17",
